@@ -84,7 +84,16 @@ class kb_uploadmethodsTest(unittest.TestCase):
         # self.assertEqual(ret[...], ...) or other unittest methods
         pass
 
+    def test_contructor(self):
+        print '------ Testing Contructor Method ------'
+        ret = self.getImpl()
+        print 'self.scratch: %s' % ret.scratch
+        print 'self.callback_url: %s' % ret.callback_url
+        self.assertIsNotNone(ret.scratch)
+        self.assertIsNotNone(ret.callback_url)
+        print '------ Testing Contructor Method OK ------'
+
     def test_demo(self):
-        print 'testing demo'
+        # print 'testing demo'
         # import pdb; pdb.set_trace()
         self.assertEqual(3+5, 8)

@@ -87,6 +87,17 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN upload_fastq_url
+
+
+        fastq_file_path = inputParamUploadFile.get('fastq_file_path')
+        secondary_file_path = inputParamUploadFile.get('secondary_fastq_file_path')
+        reads_file_name = inputParamUploadFile.get('reads_file_name')
+
+
+        ru = ReadsUtils(self.callback_url, token=ctx['token'])
+        fs = ftp_service(self.callback_url, token=ctx['token'])
+        dfu = DataFileUtil(self.callback_url, token=ctx['token'])
+        
         #END upload_fastq_url
 
         # At some point might do deeper type checking...
