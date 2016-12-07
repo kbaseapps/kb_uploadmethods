@@ -83,3 +83,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
         pass
+
+    def test_demo(self):
+        print 'testing demo'
+        # import pdb; pdb.set_trace()
+        self.assertEqual(3+5, 8)
