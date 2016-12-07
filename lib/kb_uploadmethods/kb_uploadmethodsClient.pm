@@ -12,6 +12,7 @@ eval {
     $get_time = sub { Time::HiRes::gettimeofday() };
 };
 
+use Bio::KBase::AuthToken;
 
 # Client version should match Impl version
 # This is a Semantic Version number,
@@ -74,6 +75,28 @@ sub new
 	push(@{$self->{headers}}, 'Kbrpc-Errordest', $self->{kbrpc_error_dest});
     }
 
+    #
+    # This module requires authentication.
+    #
+    # We create an auth token, passing through the arguments that we were (hopefully) given.
+
+    {
+	my $token = Bio::KBase::AuthToken->new(@args);
+	
+	if (!$token->error_message)
+	{
+	    $self->{token} = $token->token;
+	    $self->{client}->{token} = $token->token;
+	}
+        else
+        {
+	    #
+	    # All methods in this module require authentication. In this case, if we
+	    # don't have a token, we can't continue.
+	    #
+	    die "Authentication failed: " . $token->error_message;
+	}
+    }
 
     my $ua = $self->{client}->ua;	 
     my $timeout = $ENV{CDMI_TIMEOUT} || (30 * 60);	 
@@ -84,6 +107,218 @@ sub new
 }
 
 
+
+
+=head2 upload_fastq_file
+
+  $return = $obj->upload_fastq_file($inputParamUploadFile)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$inputParamUploadFile is a kb_uploadmethods.inputParamUploadFile
+$return is a kb_uploadmethods.outParam
+inputParamUploadFile is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	fastq_file_path has a value which is a kb_uploadmethods.fastq_file_path
+	secondary_fastq_file_path has a value which is a kb_uploadmethods.secondary_fastq_file_path
+	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+workspace_name is a string
+fastq_file_path is a string
+secondary_fastq_file_path is a string
+reads_file_name is a string
+outParam is a reference to a hash where the following keys are defined:
+	uploaded has a value which is a kb_uploadmethods.uploaded
+uploaded is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$inputParamUploadFile is a kb_uploadmethods.inputParamUploadFile
+$return is a kb_uploadmethods.outParam
+inputParamUploadFile is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	fastq_file_path has a value which is a kb_uploadmethods.fastq_file_path
+	secondary_fastq_file_path has a value which is a kb_uploadmethods.secondary_fastq_file_path
+	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+workspace_name is a string
+fastq_file_path is a string
+secondary_fastq_file_path is a string
+reads_file_name is a string
+outParam is a reference to a hash where the following keys are defined:
+	uploaded has a value which is a kb_uploadmethods.uploaded
+uploaded is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub upload_fastq_file
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function upload_fastq_file (received $n, expecting 1)");
+    }
+    {
+	my($inputParamUploadFile) = @args;
+
+	my @_bad_arguments;
+        (ref($inputParamUploadFile) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"inputParamUploadFile\" (value was \"$inputParamUploadFile\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to upload_fastq_file:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'upload_fastq_file');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "kb_uploadmethods.upload_fastq_file",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'upload_fastq_file',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method upload_fastq_file",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'upload_fastq_file',
+				       );
+    }
+}
+ 
+
+
+=head2 upload_fastq_url
+
+  $return = $obj->upload_fastq_url($inputParamUploadURL)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$inputParamUploadURL is a kb_uploadmethods.inputParamUploadURL
+$return is a kb_uploadmethods.outParam
+inputParamUploadURL is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	fastq_file_url has a value which is a kb_uploadmethods.fastq_file_url
+	secondary_fastq_file_url has a value which is a kb_uploadmethods.secondary_fastq_file_url
+	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+workspace_name is a string
+fastq_file_url is a string
+secondary_fastq_file_url is a string
+reads_file_name is a string
+outParam is a reference to a hash where the following keys are defined:
+	uploaded has a value which is a kb_uploadmethods.uploaded
+uploaded is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$inputParamUploadURL is a kb_uploadmethods.inputParamUploadURL
+$return is a kb_uploadmethods.outParam
+inputParamUploadURL is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	fastq_file_url has a value which is a kb_uploadmethods.fastq_file_url
+	secondary_fastq_file_url has a value which is a kb_uploadmethods.secondary_fastq_file_url
+	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+workspace_name is a string
+fastq_file_url is a string
+secondary_fastq_file_url is a string
+reads_file_name is a string
+outParam is a reference to a hash where the following keys are defined:
+	uploaded has a value which is a kb_uploadmethods.uploaded
+uploaded is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub upload_fastq_url
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function upload_fastq_url (received $n, expecting 1)");
+    }
+    {
+	my($inputParamUploadURL) = @args;
+
+	my @_bad_arguments;
+        (ref($inputParamUploadURL) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"inputParamUploadURL\" (value was \"$inputParamUploadURL\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to upload_fastq_url:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'upload_fastq_url');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "kb_uploadmethods.upload_fastq_url",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'upload_fastq_url',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method upload_fastq_url",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'upload_fastq_url',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -119,7 +354,7 @@ sub status
 sub version {
     my ($self) = @_;
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-        method => "${last_module.module_name}.version",
+        method => "kb_uploadmethods.version",
         params => [],
     });
     if ($result) {
@@ -127,16 +362,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => '${last_method.name}',
+                method_name => 'upload_fastq_url',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method ${last_method.name}",
+            error => "Error invoking method upload_fastq_url",
             status_line => $self->{client}->status_line,
-            method_name => '${last_method.name}',
+            method_name => 'upload_fastq_url',
         );
     }
 }
@@ -170,6 +405,305 @@ sub _validate_version {
 }
 
 =head1 TYPES
+
+
+
+=head2 uploaded
+
+=over 4
+
+
+
+=item Description
+
+indicates true or false values, false <= 0, true >=1
+
+
+=item Definition
+
+=begin html
+
+<pre>
+an int
+</pre>
+
+=end html
+
+=begin text
+
+an int
+
+=end text
+
+=back
+
+
+
+=head2 workspace_name
+
+=over 4
+
+
+
+=item Description
+
+workspace name of the object
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 fastq_file_path
+
+=over 4
+
+
+
+=item Description
+
+input and output file path/url
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 secondary_fastq_file_path
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 fastq_file_url
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 secondary_fastq_file_url
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 reads_file_name
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 inputParamUploadFile
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+workspace_name has a value which is a kb_uploadmethods.workspace_name
+fastq_file_path has a value which is a kb_uploadmethods.fastq_file_path
+secondary_fastq_file_path has a value which is a kb_uploadmethods.secondary_fastq_file_path
+reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+workspace_name has a value which is a kb_uploadmethods.workspace_name
+fastq_file_path has a value which is a kb_uploadmethods.fastq_file_path
+secondary_fastq_file_path has a value which is a kb_uploadmethods.secondary_fastq_file_path
+reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+
+
+=end text
+
+=back
+
+
+
+=head2 inputParamUploadURL
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+workspace_name has a value which is a kb_uploadmethods.workspace_name
+fastq_file_url has a value which is a kb_uploadmethods.fastq_file_url
+secondary_fastq_file_url has a value which is a kb_uploadmethods.secondary_fastq_file_url
+reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+workspace_name has a value which is a kb_uploadmethods.workspace_name
+fastq_file_url has a value which is a kb_uploadmethods.fastq_file_url
+secondary_fastq_file_url has a value which is a kb_uploadmethods.secondary_fastq_file_url
+reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+
+
+=end text
+
+=back
+
+
+
+=head2 outParam
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+uploaded has a value which is a kb_uploadmethods.uploaded
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+uploaded has a value which is a kb_uploadmethods.uploaded
+
+
+=end text
+
+=back
 
 
 

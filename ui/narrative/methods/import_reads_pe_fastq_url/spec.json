@@ -1,0 +1,80 @@
+{
+  "ver" : "1.0.0",
+  "authors" : ["tgu"],
+  "contact" : "help@kbase.us",
+  "visble" : true,
+  "categories" : [ "importers" ],
+  "widgets" : 
+  {
+    "input" : null,
+    "output" : "kbaseReportView"
+  },
+  "parameters" : 
+  [ 
+    {
+      "id" : "fastqURL1",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text"
+    }, 
+    {
+      "id" : "fastqURL2",
+      "optional" : true,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text"
+    }, 
+    {
+      "id" : "outputObject",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : 
+      {
+        "valid_ws_types" : [ "KBaseAssembly.PairedEndLibrary" ],
+        "is_output_name" : true
+      }
+    }
+  ],
+  "behavior" : 
+  {
+    "service-mapping" : 
+    {
+      "url" : "",
+      "name" : "kb_uploadmethods",
+      "method" : "upload_fastq_url",
+      "input_mapping" : 
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "fastqURL1",
+          "target_property": "fastq_file_url"
+        },
+        {
+          "input_parameter": "fastqURL2",
+          "target_property": "secondary_fastq_file_url"
+        },
+        {
+          "input_parameter": "outputObject",
+          "target_property": "reads_file_name"
+        }
+      ],
+      "output_mapping" : 
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        }
+      ]
+    }
+  },
+  "job_id_output_field": "docker"
+}

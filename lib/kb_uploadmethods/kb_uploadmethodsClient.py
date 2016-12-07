@@ -33,6 +33,38 @@ class kb_uploadmethods(object):
             trust_all_ssl_certificates=trust_all_ssl_certificates,
             auth_svc=auth_svc)
 
+    def upload_fastq_file(self, inputParamUploadFile, context=None):
+        """
+        :param inputParamUploadFile: instance of type "inputParamUploadFile"
+           -> structure: parameter "workspace_name" of type "workspace_name"
+           (workspace name of the object), parameter "fastq_file_path" of
+           type "fastq_file_path" (input and output file path/url), parameter
+           "secondary_fastq_file_path" of type "secondary_fastq_file_path",
+           parameter "reads_file_name" of type "reads_file_name"
+        :returns: instance of type "outParam" -> structure: parameter
+           "uploaded" of type "uploaded" (indicates true or false values,
+           false <= 0, true >=1)
+        """
+        return self._client.call_method(
+            'kb_uploadmethods.upload_fastq_file',
+            [inputParamUploadFile], self._service_ver, context)
+
+    def upload_fastq_url(self, inputParamUploadURL, context=None):
+        """
+        :param inputParamUploadURL: instance of type "inputParamUploadURL" ->
+           structure: parameter "workspace_name" of type "workspace_name"
+           (workspace name of the object), parameter "fastq_file_url" of type
+           "fastq_file_url", parameter "secondary_fastq_file_url" of type
+           "secondary_fastq_file_url", parameter "reads_file_name" of type
+           "reads_file_name"
+        :returns: instance of type "outParam" -> structure: parameter
+           "uploaded" of type "uploaded" (indicates true or false values,
+           false <= 0, true >=1)
+        """
+        return self._client.call_method(
+            'kb_uploadmethods.upload_fastq_url',
+            [inputParamUploadURL], self._service_ver, context)
+
     def status(self, context=None):
         return self._client.call_method('kb_uploadmethods.status',
                                         [], self._service_ver, context)
