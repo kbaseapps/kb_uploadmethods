@@ -33,7 +33,7 @@ module kb_uploadmethods {
 
 	typedef structure {
 		uploaded uploaded;
-	} outParam;
+	} outParam; 
 
     funcdef upload_fastq_file(inputParamUploadFile)
     	returns (outParam) authentication required;
