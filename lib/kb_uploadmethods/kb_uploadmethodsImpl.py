@@ -97,7 +97,7 @@ class kb_uploadmethods:
         ru = ReadsUtils(self.callback_url, token=ctx['token'])
         fs = ftp_service(self.callback_url, token=ctx['token'])
         dfu = DataFileUtil(self.callback_url, token=ctx['token'])
-        
+
         #END upload_fastq_url
 
         # At some point might do deeper type checking...
@@ -106,6 +106,7 @@ class kb_uploadmethods:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
+        
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",
