@@ -38,9 +38,10 @@ class kb_uploadmethods(object):
         :param inputParamUploadFile: instance of type "inputParamUploadFile"
            -> structure: parameter "workspace_name" of type "workspace_name"
            (workspace name of the object), parameter "fastq_file_path" of
-           type "fastq_file_path" (input and output file path/url), parameter
-           "secondary_fastq_file_path" of type "secondary_fastq_file_path",
-           parameter "reads_file_name" of type "reads_file_name"
+           type "fastq_file_path" (input and output file path/url) -> list of
+           String, parameter "secondary_fastq_file_path" of type
+           "secondary_fastq_file_path" -> list of String, parameter
+           "reads_file_name" of type "reads_file_name"
         :returns: instance of type "outParam" -> structure: parameter
            "uploaded" of type "uploaded" (indicates true or false values,
            false <= 0, true >=1)

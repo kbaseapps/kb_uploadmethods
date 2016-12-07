@@ -17,10 +17,24 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "file",
-      "text_options" : 
+      "field_type" : "dropdown",
+      "dropdown_options": 
       {
-        "valid_ws_types" : [ ]
+        "options": 
+        [
+          {
+              "display": "Value 1",
+              "value": "value1"
+          },
+          {
+              "display": "Value 2",
+              "value": "value2"
+          },
+          {
+              "display": "Value 3",
+              "value": "value3"
+          }
+        ]
       }
     }, 
     {
@@ -29,11 +43,8 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "file",
-      "text_options" : 
-      {
-        "valid_ws_types" : [ ]
-      }
+      "field_type" : "autocomplete",
+      "text_options": {}
     }, 
     {
       "id" : "outputObject",

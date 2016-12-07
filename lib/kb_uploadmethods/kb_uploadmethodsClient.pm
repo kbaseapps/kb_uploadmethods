@@ -128,8 +128,8 @@ inputParamUploadFile is a reference to a hash where the following keys are defin
 	secondary_fastq_file_path has a value which is a kb_uploadmethods.secondary_fastq_file_path
 	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 workspace_name is a string
-fastq_file_path is a string
-secondary_fastq_file_path is a string
+fastq_file_path is a reference to a list where each element is a string
+secondary_fastq_file_path is a reference to a list where each element is a string
 reads_file_name is a string
 outParam is a reference to a hash where the following keys are defined:
 	uploaded has a value which is a kb_uploadmethods.uploaded
@@ -149,8 +149,8 @@ inputParamUploadFile is a reference to a hash where the following keys are defin
 	secondary_fastq_file_path has a value which is a kb_uploadmethods.secondary_fastq_file_path
 	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 workspace_name is a string
-fastq_file_path is a string
-secondary_fastq_file_path is a string
+fastq_file_path is a reference to a list where each element is a string
+secondary_fastq_file_path is a reference to a list where each element is a string
 reads_file_name is a string
 outParam is a reference to a hash where the following keys are defined:
 	uploaded has a value which is a kb_uploadmethods.uploaded
@@ -486,14 +486,14 @@ input and output file path/url
 =begin html
 
 <pre>
-a string
+a reference to a list where each element is a string
 </pre>
 
 =end html
 
 =begin text
 
-a string
+a reference to a list where each element is a string
 
 =end text
 
@@ -512,14 +512,14 @@ a string
 =begin html
 
 <pre>
-a string
+a reference to a list where each element is a string
 </pre>
 
 =end html
 
 =begin text
 
-a string
+a reference to a list where each element is a string
 
 =end text
 

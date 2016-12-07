@@ -11,8 +11,8 @@ module kb_uploadmethods {
 	typedef string workspace_name;
 
 	/* input and output file path/url */
-	typedef string fastq_file_path;
-    typedef string secondary_fastq_file_path;
+	typedef list<string> fastq_file_path;
+    typedef list<string> secondary_fastq_file_path;
     typedef string fastq_file_url;
     typedef string secondary_fastq_file_url;
     typedef string reads_file_name;

@@ -24,7 +24,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "git@github.com:Tianhao-Gu/uk_uploadmethods.git"
-    GIT_COMMIT_HASH = "faf8bbdf0da8eff85b2ee2729b94107ba31898c6"
+    GIT_COMMIT_HASH = "ea62ac195aafaf0b1d78dc6a8ae8309665f8af6b"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -44,9 +44,10 @@ class kb_uploadmethods:
         :param inputParamUploadFile: instance of type "inputParamUploadFile"
            -> structure: parameter "workspace_name" of type "workspace_name"
            (workspace name of the object), parameter "fastq_file_path" of
-           type "fastq_file_path" (input and output file path/url), parameter
-           "secondary_fastq_file_path" of type "secondary_fastq_file_path",
-           parameter "reads_file_name" of type "reads_file_name"
+           type "fastq_file_path" (input and output file path/url) -> list of
+           String, parameter "secondary_fastq_file_path" of type
+           "secondary_fastq_file_path" -> list of String, parameter
+           "reads_file_name" of type "reads_file_name"
         :returns: instance of type "outParam" -> structure: parameter
            "uploaded" of type "uploaded" (indicates true or false values,
            false <= 0, true >=1)
@@ -106,7 +107,6 @@ class kb_uploadmethods:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
-        
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",
