@@ -1,6 +1,6 @@
-name     : PAIRED END READS
-subtitle : none
-tooltip  : Upload a PairedEndLibrary from FASTA/FASTQ file(s) into your Narrative.
+name     : PAIRED END FASTA/FASTQ READS
+subtitle : Upload a PairedEndLibrary from FASTA/FASTQ file(s) into your Narrative
+tooltip  : Upload a PairedEndLibrary from FASTA/FASTQ file(s) into your Narrative
 
 screenshots :
     []
@@ -18,19 +18,31 @@ suggestions :
             []
 
 parameters :
-    fastqFile1 :
-        ui-name : READS FILE
+    fastqFilePATH1 :
+        ui-name : 1st PAIRED FASTA/FASTQ FILE PATH
         short-hint : Short read file containing a paired end library in FASTA/FASTQ format
         long-hint  : |
             Valid file extensions for FASTA: .fasta, .fna, .fa   Valid file extensions for FASTQ: .fastq, .fnq, .fq; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2
 
-    fastqFile2 :
-        ui-name : READS FILE
+    fastqFilePATH2 :
+        ui-name : 2nd PAIRED FASTA/FASTQ FILE PATH
         short-hint : Optional second short read file containing a paired end library in FASTA/FASTQ format.
         long-hint  : Not needed in an interleaved library
 
+    fastqFileURL1 :
+        ui-name : 1st PAIRED FASTA/FASTQ FILE URL
+        short-hint : Download link containing a single end library in FASTA/FASTQ format
+        long-hint  : |
+            Valid file extensions for FASTA: .fasta, .fna, .fa   Valid file extensions for FASTQ: .fastq, .fnq, .fq; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2
+
+    fastqFileURL2 :
+        ui-name : 2nd PAIRED FASTA/FASTQ FILE URL
+        short-hint : Optional second download link containing a single end library in FASTA/FASTQ format
+        long-hint  : |
+            Valid file extensions for FASTA: .fasta, .fna, .fa   Valid file extensions for FASTQ: .fastq, .fnq, .fq; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2
+
     outputObject :
-        ui-name : OBJECT NAME
+        ui-name : OUTPUT OBJECT FILE NAME
         short-hint : Provide a name for the output object that will be created by this upload
         long-hint  : Provide a name for the output object that will be created by this upload
 

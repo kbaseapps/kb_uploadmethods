@@ -12,7 +12,7 @@
   "parameters" : 
   [ 
     {
-      "id" : "fastqFile1",
+      "id" : "fastqFilePATH1",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -38,14 +38,49 @@
       }
     }, 
     {
-      "id" : "fastqFile2",
+      "id" : "fastqFilePATH2",
       "optional" : true,
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "autocomplete",
-      "text_options": {}
+      "field_type" : "dropdown",
+      "dropdown_options": 
+      {
+        "options": 
+        [
+          {
+              "display": "Value 1",
+              "value": "value1"
+          },
+          {
+              "display": "Value 2",
+              "value": "value2"
+          },
+          {
+              "display": "Value 3",
+              "value": "value3"
+          }
+        ]
+      }
     }, 
+    {
+      "id" : "fastqFileURL1",
+      "optional" : true,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "http://" ],
+      "field_type" : "text",
+      "text_options": {}
+    },
+    {
+      "id" : "fastqFileURL2",
+      "optional" : true,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "http://" ],
+      "field_type" : "text",
+      "text_options": {}
+    },
     {
       "id" : "outputObject",
       "optional" : false,
@@ -74,12 +109,20 @@
           "target_property": "workspace_name"
         },
         {
-          "input_parameter": "fastqFile1",
+          "input_parameter": "fastqFilePATH1",
           "target_property": "fastq_file_path"
         },
         {
-          "input_parameter": "fastqFile2",
+          "input_parameter": "fastqFilePATH2",
           "target_property": "secondary_fastq_file_path"
+        },
+        {
+          "input_parameter": "fastqFileURL1",
+          "target_property": "fastq_file_url"
+        },
+        {
+          "input_parameter": "fastqFileURL2",
+          "target_property": "secondary_fastq_file_url"
         },
         {
           "input_parameter": "outputObject",
