@@ -24,7 +24,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "git@github.com:Tianhao-Gu/uk_uploadmethods.git"
-    GIT_COMMIT_HASH = "81bd0bbea74440584936842c416c59233c0127e4"
+    GIT_COMMIT_HASH = "e3bf35b4bb015b7825299956b067a629c10a3b2f"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -43,9 +43,9 @@ class kb_uploadmethods:
         """
         :param inputParamUploadFile: instance of type "inputParamUploadFile"
            -> structure: parameter "workspace_name" of type "workspace_name"
-           (workspace name of the object), parameter "fastq_file_path" of
-           type "fastq_file_path" (input and output file path/url), parameter
-           "secondary_fastq_file_path" of type "secondary_fastq_file_path",
+           (workspace name of the object), parameter "fastq_file_name" of
+           type "fastq_file_name" (input and output file path/url), parameter
+           "secondary_fastq_file_name" of type "secondary_fastq_file_name",
            parameter "fastq_file_url" of type "fastq_file_url", parameter
            "secondary_fastq_file_url" of type "secondary_fastq_file_url",
            parameter "reads_file_name" of type "reads_file_name"
@@ -57,8 +57,8 @@ class kb_uploadmethods:
         # return variables are: returnVal
         #BEGIN upload_fastq_file
 
-        fastq_file_path = inputParamUploadFile.get('fastq_file_path')
-        secondary_file_path = inputParamUploadFile.get('secondary_fastq_file_path')
+        fastq_file_name = inputParamUploadFile.get('fastq_file_name')
+        secondary_file_name = inputParamUploadFile.get('secondary_fastq_file_name')
         reads_file_name = inputParamUploadFile.get('reads_file_name')
 
 

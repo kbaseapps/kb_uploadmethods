@@ -1,0 +1,155 @@
+{
+  "ver" : "1.0.0",
+  "authors" : ["tgu2"],
+  "contact" : "help@kbase.us",
+  "visble" : true,
+  "categories" : [ "active","upload" ],
+  "widgets" : 
+  {
+    "input" : null,
+    "output" : "kbaseReportView"
+  },
+  "parameters" : 
+  [ 
+    {
+      "id" : "fastqFileName1",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "dropdown",
+      "dropdown_options": 
+      {
+        "options": 
+        [
+          {
+              "display": "Value 1",
+              "value": "value1"
+          },
+          {
+              "display": "Value 2",
+              "value": "value2"
+          },
+          {
+              "display": "Value 3",
+              "value": "value3"
+          }
+        ]
+      }
+    }, 
+    {
+      "id" : "fastqFileName2",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "dropdown",
+      "dropdown_options": 
+      {
+        "options": 
+        [
+          {
+              "display": "Value 1",
+              "value": "value1"
+          },
+          {
+              "display": "Value 2",
+              "value": "value2"
+          },
+          {
+              "display": "Value 3",
+              "value": "value3"
+          }
+        ]
+      }
+    },
+    {
+      "id" : "orTag",
+      "optional" : true,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options": 
+      {
+        "min_length": 0,
+        "max_length": 0
+      }
+    }, 
+    {
+      "id" : "fastqFileURL1",
+      "optional" : true,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "http://" ],
+      "field_type" : "text",
+      "text_options": {}
+    },
+    {
+      "id" : "fastqFileURL2",
+      "optional" : true,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "http://" ],
+      "field_type" : "text",
+      "text_options": {}
+    },
+    {
+      "id" : "outputObject",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : 
+      {
+        "valid_ws_types" : [ "KBaseAssembly.PairedEndLibrary" ],
+        "is_output_name" : true
+      }
+    }
+  ],
+  "behavior" : 
+  {
+    "service-mapping" : 
+    {
+      "url" : "",
+      "name" : "kb_uploadmethods",
+      "method" : "upload_fastq_file",
+      "input_mapping" : 
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "fastqFileName1",
+          "target_property": "fastq_file_name"
+        },
+        {
+          "input_parameter": "fastqFileName2",
+          "target_property": "secondary_fastq_file_name"
+        },
+        {
+          "input_parameter": "fastqFileURL1",
+          "target_property": "fastq_file_url"
+        },
+        {
+          "input_parameter": "fastqFileURL2",
+          "target_property": "secondary_fastq_file_url"
+        },
+        {
+          "input_parameter": "outputObject",
+          "target_property": "reads_file_name"
+        }
+      ],
+      "output_mapping" : 
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        }
+      ]
+    }
+  },
+  "job_id_output_field": "docker"
+}

@@ -10,72 +10,7 @@
     "output" : "kbaseReportView"
   },
   "parameters" : 
-  [ 
-    {
-      "id" : "fastqFilePATH1",
-      "optional" : false,
-      "advanced" : false,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "dropdown",
-      "dropdown_options": 
-      {
-        "options": 
-        [
-          {
-              "display": "Value 1",
-              "value": "value1"
-          },
-          {
-              "display": "Value 2",
-              "value": "value2"
-          },
-          {
-              "display": "Value 3",
-              "value": "value3"
-          }
-        ]
-      }
-    }, 
-    {
-      "id" : "fastqFilePATH2",
-      "optional" : true,
-      "advanced" : false,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "dropdown",
-      "dropdown_options": 
-      {
-        "options": 
-        [
-          {
-              "display": "Value 1",
-              "value": "value1"
-          },
-          {
-              "display": "Value 2",
-              "value": "value2"
-          },
-          {
-              "display": "Value 3",
-              "value": "value3"
-          }
-        ]
-      }
-    },
-    {
-      "id" : "orTag",
-      "optional" : true,
-      "advanced" : false,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options": 
-      {
-        "min_length": 0,
-        "max_length": 0
-      }
-    }, 
+  [  
     {
       "id" : "fastqFileURL1",
       "optional" : true,
@@ -120,14 +55,6 @@
         {
           "narrative_system_variable": "workspace",
           "target_property": "workspace_name"
-        },
-        {
-          "input_parameter": "fastqFilePATH1",
-          "target_property": "fastq_file_path"
-        },
-        {
-          "input_parameter": "fastqFilePATH2",
-          "target_property": "secondary_fastq_file_path"
         },
         {
           "input_parameter": "fastqFileURL1",

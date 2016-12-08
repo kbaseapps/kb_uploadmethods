@@ -36,28 +36,6 @@
           }
         ]
       }
-    }, 
-    {
-      "id" : "orTag",
-      "optional" : true,
-      "advanced" : false,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options": 
-      {
-        "min_length": 0,
-        "max_length": 0
-      }
-    },
-    {
-      "id" : "fastqFileURL",
-      "optional" : true,
-      "advanced" : false,
-      "allow_multiple" : false,
-      "default_values" : [ "http://" ],
-      "field_type" : "text",
-      "text_options": {}
     },
     {
       "id" : "outputObject",
@@ -88,11 +66,7 @@
         },
         {
             "input_parameter": "fastqFileName",
-            "target_property": "fastq_file_path"
-        },
-        {
-            "input_parameter": "fastqFileURL",
-            "target_property": "fastq_file_url"
+            "target_property": "fastq_file_name"
         },
         {
             "input_parameter": "outputObject",
