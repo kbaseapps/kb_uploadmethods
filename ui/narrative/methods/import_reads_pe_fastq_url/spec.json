@@ -3,7 +3,7 @@
   "authors" : ["tgu2"],
   "contact" : "help@kbase.us",
   "visble" : true,
-  "categories" : [ "importers" ],
+  "categories" : [ "active","upload" ],
   "widgets" : 
   {
     "input" : null,
