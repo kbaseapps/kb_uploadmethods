@@ -126,10 +126,14 @@ inputParamUploadFile is a reference to a hash where the following keys are defin
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
 	fastq_file_path has a value which is a kb_uploadmethods.fastq_file_path
 	secondary_fastq_file_path has a value which is a kb_uploadmethods.secondary_fastq_file_path
+	fastq_file_url has a value which is a kb_uploadmethods.fastq_file_url
+	secondary_fastq_file_url has a value which is a kb_uploadmethods.secondary_fastq_file_url
 	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 workspace_name is a string
-fastq_file_path is a reference to a list where each element is a string
-secondary_fastq_file_path is a reference to a list where each element is a string
+fastq_file_path is a string
+secondary_fastq_file_path is a string
+fastq_file_url is a string
+secondary_fastq_file_url is a string
 reads_file_name is a string
 outParam is a reference to a hash where the following keys are defined:
 	uploaded has a value which is a kb_uploadmethods.uploaded
@@ -147,10 +151,14 @@ inputParamUploadFile is a reference to a hash where the following keys are defin
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
 	fastq_file_path has a value which is a kb_uploadmethods.fastq_file_path
 	secondary_fastq_file_path has a value which is a kb_uploadmethods.secondary_fastq_file_path
+	fastq_file_url has a value which is a kb_uploadmethods.fastq_file_url
+	secondary_fastq_file_url has a value which is a kb_uploadmethods.secondary_fastq_file_url
 	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 workspace_name is a string
-fastq_file_path is a reference to a list where each element is a string
-secondary_fastq_file_path is a reference to a list where each element is a string
+fastq_file_path is a string
+secondary_fastq_file_path is a string
+fastq_file_url is a string
+secondary_fastq_file_url is a string
 reads_file_name is a string
 outParam is a reference to a hash where the following keys are defined:
 	uploaded has a value which is a kb_uploadmethods.uploaded
@@ -213,112 +221,6 @@ uploaded is an int
     }
 }
  
-
-
-=head2 upload_fastq_url
-
-  $return = $obj->upload_fastq_url($inputParamUploadURL)
-
-=over 4
-
-=item Parameter and return types
-
-=begin html
-
-<pre>
-$inputParamUploadURL is a kb_uploadmethods.inputParamUploadURL
-$return is a kb_uploadmethods.outParam
-inputParamUploadURL is a reference to a hash where the following keys are defined:
-	workspace_name has a value which is a kb_uploadmethods.workspace_name
-	fastq_file_url has a value which is a kb_uploadmethods.fastq_file_url
-	secondary_fastq_file_url has a value which is a kb_uploadmethods.secondary_fastq_file_url
-	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
-workspace_name is a string
-fastq_file_url is a string
-secondary_fastq_file_url is a string
-reads_file_name is a string
-outParam is a reference to a hash where the following keys are defined:
-	uploaded has a value which is a kb_uploadmethods.uploaded
-uploaded is an int
-
-</pre>
-
-=end html
-
-=begin text
-
-$inputParamUploadURL is a kb_uploadmethods.inputParamUploadURL
-$return is a kb_uploadmethods.outParam
-inputParamUploadURL is a reference to a hash where the following keys are defined:
-	workspace_name has a value which is a kb_uploadmethods.workspace_name
-	fastq_file_url has a value which is a kb_uploadmethods.fastq_file_url
-	secondary_fastq_file_url has a value which is a kb_uploadmethods.secondary_fastq_file_url
-	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
-workspace_name is a string
-fastq_file_url is a string
-secondary_fastq_file_url is a string
-reads_file_name is a string
-outParam is a reference to a hash where the following keys are defined:
-	uploaded has a value which is a kb_uploadmethods.uploaded
-uploaded is an int
-
-
-=end text
-
-=item Description
-
-
-
-=back
-
-=cut
-
- sub upload_fastq_url
-{
-    my($self, @args) = @_;
-
-# Authentication: required
-
-    if ((my $n = @args) != 1)
-    {
-	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function upload_fastq_url (received $n, expecting 1)");
-    }
-    {
-	my($inputParamUploadURL) = @args;
-
-	my @_bad_arguments;
-        (ref($inputParamUploadURL) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"inputParamUploadURL\" (value was \"$inputParamUploadURL\")");
-        if (@_bad_arguments) {
-	    my $msg = "Invalid arguments passed to upload_fastq_url:\n" . join("", map { "\t$_\n" } @_bad_arguments);
-	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-								   method_name => 'upload_fastq_url');
-	}
-    }
-
-    my $url = $self->{url};
-    my $result = $self->{client}->call($url, $self->{headers}, {
-	    method => "kb_uploadmethods.upload_fastq_url",
-	    params => \@args,
-    });
-    if ($result) {
-	if ($result->is_error) {
-	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
-					       code => $result->content->{error}->{code},
-					       method_name => 'upload_fastq_url',
-					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
-					      );
-	} else {
-	    return wantarray ? @{$result->result} : $result->result->[0];
-	}
-    } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method upload_fastq_url",
-					    status_line => $self->{client}->status_line,
-					    method_name => 'upload_fastq_url',
-				       );
-    }
-}
- 
   
 sub status
 {
@@ -362,16 +264,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'upload_fastq_url',
+                method_name => 'upload_fastq_file',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method upload_fastq_url",
+            error => "Error invoking method upload_fastq_file",
             status_line => $self->{client}->status_line,
-            method_name => 'upload_fastq_url',
+            method_name => 'upload_fastq_file',
         );
     }
 }
@@ -486,14 +388,14 @@ input and output file path/url
 =begin html
 
 <pre>
-a reference to a list where each element is a string
+a string
 </pre>
 
 =end html
 
 =begin text
 
-a reference to a list where each element is a string
+a string
 
 =end text
 
@@ -512,14 +414,14 @@ a reference to a list where each element is a string
 =begin html
 
 <pre>
-a reference to a list where each element is a string
+a string
 </pre>
 
 =end html
 
 =begin text
 
-a reference to a list where each element is a string
+a string
 
 =end text
 
@@ -620,40 +522,6 @@ a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_uploadmethods.workspace_name
 fastq_file_path has a value which is a kb_uploadmethods.fastq_file_path
 secondary_fastq_file_path has a value which is a kb_uploadmethods.secondary_fastq_file_path
-reads_file_name has a value which is a kb_uploadmethods.reads_file_name
-
-</pre>
-
-=end html
-
-=begin text
-
-a reference to a hash where the following keys are defined:
-workspace_name has a value which is a kb_uploadmethods.workspace_name
-fastq_file_path has a value which is a kb_uploadmethods.fastq_file_path
-secondary_fastq_file_path has a value which is a kb_uploadmethods.secondary_fastq_file_path
-reads_file_name has a value which is a kb_uploadmethods.reads_file_name
-
-
-=end text
-
-=back
-
-
-
-=head2 inputParamUploadURL
-
-=over 4
-
-
-
-=item Definition
-
-=begin html
-
-<pre>
-a reference to a hash where the following keys are defined:
-workspace_name has a value which is a kb_uploadmethods.workspace_name
 fastq_file_url has a value which is a kb_uploadmethods.fastq_file_url
 secondary_fastq_file_url has a value which is a kb_uploadmethods.secondary_fastq_file_url
 reads_file_name has a value which is a kb_uploadmethods.reads_file_name
@@ -666,6 +534,8 @@ reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_uploadmethods.workspace_name
+fastq_file_path has a value which is a kb_uploadmethods.fastq_file_path
+secondary_fastq_file_path has a value which is a kb_uploadmethods.secondary_fastq_file_path
 fastq_file_url has a value which is a kb_uploadmethods.fastq_file_url
 secondary_fastq_file_url has a value which is a kb_uploadmethods.secondary_fastq_file_url
 reads_file_name has a value which is a kb_uploadmethods.reads_file_name

@@ -12,7 +12,7 @@
   "parameters" : 
   [ 
     {
-      "id" : "fastqFilePATH",
+      "id" : "fastqFileName",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -39,7 +39,7 @@
     }, 
     {
       "id" : "orTag",
-      "optional" : false,
+      "optional" : true,
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
@@ -52,7 +52,7 @@
     },
     {
       "id" : "fastqFileURL",
-      "optional" : false,
+      "optional" : true,
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "http://" ],
@@ -87,7 +87,7 @@
           "target_property": "workspace_name"
         },
         {
-            "input_parameter": "fastqFilePATH",
+            "input_parameter": "fastqFileName",
             "target_property": "fastq_file_path"
         },
         {

@@ -2,7 +2,6 @@
 package us.kbase.kbuploadmethods;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -23,93 +22,129 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "workspace_name",
     "fastq_file_path",
     "secondary_fastq_file_path",
+    "fastq_file_url",
+    "secondary_fastq_file_url",
     "reads_file_name"
 })
 public class InputParamUploadFile {
 
     @JsonProperty("workspace_name")
-    private java.lang.String workspaceName;
+    private String workspaceName;
     @JsonProperty("fastq_file_path")
-    private List<String> fastqFilePath;
+    private String fastqFilePath;
     @JsonProperty("secondary_fastq_file_path")
-    private List<String> secondaryFastqFilePath;
+    private String secondaryFastqFilePath;
+    @JsonProperty("fastq_file_url")
+    private String fastqFileUrl;
+    @JsonProperty("secondary_fastq_file_url")
+    private String secondaryFastqFileUrl;
     @JsonProperty("reads_file_name")
-    private java.lang.String readsFileName;
-    private Map<java.lang.String, Object> additionalProperties = new HashMap<java.lang.String, Object>();
+    private String readsFileName;
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("workspace_name")
-    public java.lang.String getWorkspaceName() {
+    public String getWorkspaceName() {
         return workspaceName;
     }
 
     @JsonProperty("workspace_name")
-    public void setWorkspaceName(java.lang.String workspaceName) {
+    public void setWorkspaceName(String workspaceName) {
         this.workspaceName = workspaceName;
     }
 
-    public InputParamUploadFile withWorkspaceName(java.lang.String workspaceName) {
+    public InputParamUploadFile withWorkspaceName(String workspaceName) {
         this.workspaceName = workspaceName;
         return this;
     }
 
     @JsonProperty("fastq_file_path")
-    public List<String> getFastqFilePath() {
+    public String getFastqFilePath() {
         return fastqFilePath;
     }
 
     @JsonProperty("fastq_file_path")
-    public void setFastqFilePath(List<String> fastqFilePath) {
+    public void setFastqFilePath(String fastqFilePath) {
         this.fastqFilePath = fastqFilePath;
     }
 
-    public InputParamUploadFile withFastqFilePath(List<String> fastqFilePath) {
+    public InputParamUploadFile withFastqFilePath(String fastqFilePath) {
         this.fastqFilePath = fastqFilePath;
         return this;
     }
 
     @JsonProperty("secondary_fastq_file_path")
-    public List<String> getSecondaryFastqFilePath() {
+    public String getSecondaryFastqFilePath() {
         return secondaryFastqFilePath;
     }
 
     @JsonProperty("secondary_fastq_file_path")
-    public void setSecondaryFastqFilePath(List<String> secondaryFastqFilePath) {
+    public void setSecondaryFastqFilePath(String secondaryFastqFilePath) {
         this.secondaryFastqFilePath = secondaryFastqFilePath;
     }
 
-    public InputParamUploadFile withSecondaryFastqFilePath(List<String> secondaryFastqFilePath) {
+    public InputParamUploadFile withSecondaryFastqFilePath(String secondaryFastqFilePath) {
         this.secondaryFastqFilePath = secondaryFastqFilePath;
         return this;
     }
 
+    @JsonProperty("fastq_file_url")
+    public String getFastqFileUrl() {
+        return fastqFileUrl;
+    }
+
+    @JsonProperty("fastq_file_url")
+    public void setFastqFileUrl(String fastqFileUrl) {
+        this.fastqFileUrl = fastqFileUrl;
+    }
+
+    public InputParamUploadFile withFastqFileUrl(String fastqFileUrl) {
+        this.fastqFileUrl = fastqFileUrl;
+        return this;
+    }
+
+    @JsonProperty("secondary_fastq_file_url")
+    public String getSecondaryFastqFileUrl() {
+        return secondaryFastqFileUrl;
+    }
+
+    @JsonProperty("secondary_fastq_file_url")
+    public void setSecondaryFastqFileUrl(String secondaryFastqFileUrl) {
+        this.secondaryFastqFileUrl = secondaryFastqFileUrl;
+    }
+
+    public InputParamUploadFile withSecondaryFastqFileUrl(String secondaryFastqFileUrl) {
+        this.secondaryFastqFileUrl = secondaryFastqFileUrl;
+        return this;
+    }
+
     @JsonProperty("reads_file_name")
-    public java.lang.String getReadsFileName() {
+    public String getReadsFileName() {
         return readsFileName;
     }
 
     @JsonProperty("reads_file_name")
-    public void setReadsFileName(java.lang.String readsFileName) {
+    public void setReadsFileName(String readsFileName) {
         this.readsFileName = readsFileName;
     }
 
-    public InputParamUploadFile withReadsFileName(java.lang.String readsFileName) {
+    public InputParamUploadFile withReadsFileName(String readsFileName) {
         this.readsFileName = readsFileName;
         return this;
     }
 
     @JsonAnyGetter
-    public Map<java.lang.String, Object> getAdditionalProperties() {
+    public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
     }
 
     @JsonAnySetter
-    public void setAdditionalProperties(java.lang.String name, Object value) {
+    public void setAdditionalProperties(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
 
     @Override
-    public java.lang.String toString() {
-        return ((((((((((("InputParamUploadFile"+" [workspaceName=")+ workspaceName)+", fastqFilePath=")+ fastqFilePath)+", secondaryFastqFilePath=")+ secondaryFastqFilePath)+", readsFileName=")+ readsFileName)+", additionalProperties=")+ additionalProperties)+"]");
+    public String toString() {
+        return ((((((((((((((("InputParamUploadFile"+" [workspaceName=")+ workspaceName)+", fastqFilePath=")+ fastqFilePath)+", secondaryFastqFilePath=")+ secondaryFastqFilePath)+", fastqFileUrl=")+ fastqFileUrl)+", secondaryFastqFileUrl=")+ secondaryFastqFileUrl)+", readsFileName=")+ readsFileName)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

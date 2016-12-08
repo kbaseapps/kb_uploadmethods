@@ -333,10 +333,6 @@ class Application(object):
                              name='kb_uploadmethods.upload_fastq_file',
                              types=[dict])
         self.method_authentication['kb_uploadmethods.upload_fastq_file'] = 'required' # noqa
-        self.rpc_service.add(impl_kb_uploadmethods.upload_fastq_url,
-                             name='kb_uploadmethods.upload_fastq_url',
-                             types=[dict])
-        self.method_authentication['kb_uploadmethods.upload_fastq_url'] = 'required' # noqa
         self.rpc_service.add(impl_kb_uploadmethods.status,
                              name='kb_uploadmethods.status',
                              types=[dict])
