@@ -62,6 +62,19 @@
           }
         ]
       }
+    },
+    {
+      "id" : "orTag",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options": 
+      {
+        "min_length": 0,
+        "max_length": 0
+      }
     }, 
     {
       "id" : "fastqFileURL1",

@@ -29,6 +29,11 @@ parameters :
         short-hint : Optional second short read file containing a paired end library in FASTA/FASTQ format.
         long-hint  : Not needed in an interleaved library
 
+    orTag :
+        ui-name : OR
+        short-hint : ""
+        long-hint  : ""
+
     fastqFileURL1 :
         ui-name : 1st PAIRED FASTA/FASTQ FILE URL
         short-hint : Download link containing a single end library in FASTA/FASTQ format
