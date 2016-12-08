@@ -13,7 +13,7 @@
   [  
     {
       "id" : "fastqFileURL1",
-      "optional" : true,
+      "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "http://" ],
@@ -22,7 +22,7 @@
     },
     {
       "id" : "fastqFileURL2",
-      "optional" : true,
+      "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "http://" ],
