@@ -42,6 +42,12 @@ class kb_uploadmethods:
 
         uploaded_first_file = False
         returnVal = dict([('uploaded_first_file', uploaded_first_file)])
+        first_fastq_file_name = inputParamUploadFile.get('first_fastq_file_name')
+        reads_file_name = inputParamUploadFile.get('reads_file_name')
+
+        ru = ReadsUtils(self.callback_url, token=ctx['token'])
+        fs = ftp_service(self.callback_url, token=ctx['token'])
+        dfu = DataFileUtil(self.callback_url, token=ctx['token'])
 
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
@@ -56,6 +62,13 @@ class kb_uploadmethods:
         uploaded_second_file = False
         returnVal = dict([('uploaded_first_file', uploaded_first_file), 
                         ('uploaded_second_file', uploaded_second_file)])
+        first_fastq_file_name = inputParamUploadFile.get('first_fastq_file_name')
+        second_file_name = inputParamUploadFile.get('second_fastq_file_name')
+        reads_file_name = inputParamUploadFile.get('reads_file_name')
+
+        ru = ReadsUtils(self.callback_url, token=ctx['token'])
+        fs = ftp_service(self.callback_url, token=ctx['token'])
+        dfu = DataFileUtil(self.callback_url, token=ctx['token'])
 
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
@@ -89,13 +102,6 @@ class kb_uploadmethods:
         elif inputParamUploadFile.get('first_fastq_file_name'):
             returnVal = __upload_single_end_reads_from_file(ctx, inputParamUploadFile)
 
-        fastq_file_name = inputParamUploadFile.get('fastq_file_name')
-        secondary_file_name = inputParamUploadFile.get('second_fastq_file_name')
-        reads_file_name = inputParamUploadFile.get('reads_file_name')
-
-        ru = ReadsUtils(self.callback_url, token=ctx['token'])
-        fs = ftp_service(self.callback_url, token=ctx['token'])
-        dfu = DataFileUtil(self.callback_url, token=ctx['token'])
         #END upload_fastq_file
 
         # At some point might do deeper type checking...
