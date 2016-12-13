@@ -58,11 +58,11 @@
         },
         {
           "input_parameter": "fastqFileURL1",
-          "target_property": "fastq_file_url"
+          "target_property": "first_fastq_file_url"
         },
         {
           "input_parameter": "fastqFileURL2",
-          "target_property": "secondary_fastq_file_url"
+          "target_property": "second_fastq_file_url"
         },
         {
           "input_parameter": "outputObject",

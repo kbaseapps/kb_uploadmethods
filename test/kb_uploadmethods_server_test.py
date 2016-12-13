@@ -70,7 +70,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
     def getContext(self):
         return self.__class__.ctx
-
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
     def test_your_method(self):
         # Prepare test objects in workspace if needed using
@@ -78,7 +77,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         #                                  'objects': []})
         #
         # Run your method by
-        # ret = self.getImpl().your_method(self.getContext(), parameters...)
+        # ret = self.getImpl().your_method(self.getContext(), paramPeters...)
         #
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
@@ -89,6 +88,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         ret = self.getImpl()
         print 'self.scratch: %s' % ret.scratch
         print 'self.callback_url: %s' % ret.callback_url
+        # import pdb; pdb.set_trace()
         self.assertIsNotNone(ret.scratch)
         self.assertIsNotNone(ret.callback_url)
         print '------ Testing Contructor Method OK ------'

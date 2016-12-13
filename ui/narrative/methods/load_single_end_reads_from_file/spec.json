@@ -66,7 +66,7 @@
         },
         {
             "input_parameter": "fastqFileName",
-            "target_property": "fastq_file_name"
+            "target_property": "first_fastq_file_name"
         },
         {
             "input_parameter": "outputObject",

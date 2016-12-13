@@ -124,16 +124,16 @@ $inputParamUploadFile is a kb_uploadmethods.inputParamUploadFile
 $return is a kb_uploadmethods.outParam
 inputParamUploadFile is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
-	fastq_file_name has a value which is a kb_uploadmethods.fastq_file_name
-	secondary_fastq_file_name has a value which is a kb_uploadmethods.secondary_fastq_file_name
-	fastq_file_url has a value which is a kb_uploadmethods.fastq_file_url
-	secondary_fastq_file_url has a value which is a kb_uploadmethods.secondary_fastq_file_url
+	first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
+	second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
+	first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
+	second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
 	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 workspace_name is a string
-fastq_file_name is a string
-secondary_fastq_file_name is a string
-fastq_file_url is a string
-secondary_fastq_file_url is a string
+first_fastq_file_name is a string
+second_fastq_file_name is a string
+first_fastq_file_url is a string
+second_fastq_file_url is a string
 reads_file_name is a string
 outParam is a reference to a hash where the following keys are defined:
 	uploaded has a value which is a kb_uploadmethods.uploaded
@@ -149,16 +149,16 @@ $inputParamUploadFile is a kb_uploadmethods.inputParamUploadFile
 $return is a kb_uploadmethods.outParam
 inputParamUploadFile is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
-	fastq_file_name has a value which is a kb_uploadmethods.fastq_file_name
-	secondary_fastq_file_name has a value which is a kb_uploadmethods.secondary_fastq_file_name
-	fastq_file_url has a value which is a kb_uploadmethods.fastq_file_url
-	secondary_fastq_file_url has a value which is a kb_uploadmethods.secondary_fastq_file_url
+	first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
+	second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
+	first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
+	second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
 	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 workspace_name is a string
-fastq_file_name is a string
-secondary_fastq_file_name is a string
-fastq_file_url is a string
-secondary_fastq_file_url is a string
+first_fastq_file_name is a string
+second_fastq_file_name is a string
+first_fastq_file_url is a string
+second_fastq_file_url is a string
 reads_file_name is a string
 outParam is a reference to a hash where the following keys are defined:
 	uploaded has a value which is a kb_uploadmethods.uploaded
@@ -372,7 +372,7 @@ a string
 
 
 
-=head2 fastq_file_name
+=head2 first_fastq_file_name
 
 =over 4
 
@@ -403,7 +403,7 @@ a string
 
 
 
-=head2 secondary_fastq_file_name
+=head2 second_fastq_file_name
 
 =over 4
 
@@ -429,7 +429,7 @@ a string
 
 
 
-=head2 fastq_file_url
+=head2 first_fastq_file_url
 
 =over 4
 
@@ -455,7 +455,7 @@ a string
 
 
 
-=head2 secondary_fastq_file_url
+=head2 second_fastq_file_url
 
 =over 4
 
@@ -520,10 +520,10 @@ a string
 <pre>
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_uploadmethods.workspace_name
-fastq_file_name has a value which is a kb_uploadmethods.fastq_file_name
-secondary_fastq_file_name has a value which is a kb_uploadmethods.secondary_fastq_file_name
-fastq_file_url has a value which is a kb_uploadmethods.fastq_file_url
-secondary_fastq_file_url has a value which is a kb_uploadmethods.secondary_fastq_file_url
+first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
+second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
+first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
+second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
 reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 
 </pre>
@@ -534,10 +534,10 @@ reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_uploadmethods.workspace_name
-fastq_file_name has a value which is a kb_uploadmethods.fastq_file_name
-secondary_fastq_file_name has a value which is a kb_uploadmethods.secondary_fastq_file_name
-fastq_file_url has a value which is a kb_uploadmethods.fastq_file_url
-secondary_fastq_file_url has a value which is a kb_uploadmethods.secondary_fastq_file_url
+first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
+second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
+first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
+second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
 reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 
 

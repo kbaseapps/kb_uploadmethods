@@ -92,11 +92,11 @@
         },
         {
           "input_parameter": "fastqFileName1",
-          "target_property": "fastq_file_name"
+          "target_property": "first_fastq_file_name"
         },
         {
           "input_parameter": "fastqFileName2",
-          "target_property": "secondary_fastq_file_name"
+          "target_property": "second_fastq_file_name"
         },
         {
           "input_parameter": "outputObject",

@@ -11,18 +11,18 @@ module kb_uploadmethods {
 	typedef string workspace_name;
 
 	/* input and output file path/url */
-	typedef string fastq_file_name;
-    typedef string secondary_fastq_file_name;
-    typedef string fastq_file_url;
-    typedef string secondary_fastq_file_url;
+	typedef string first_fastq_file_name;
+    typedef string second_fastq_file_name;
+    typedef string first_fastq_file_url;
+    typedef string second_fastq_file_url;
     typedef string reads_file_name;
 
 	typedef structure {
 		workspace_name workspace_name;
-		fastq_file_name fastq_file_name;
-		secondary_fastq_file_name secondary_fastq_file_name;
-		fastq_file_url fastq_file_url;
-		secondary_fastq_file_url secondary_fastq_file_url;
+		first_fastq_file_name first_fastq_file_name;
+		second_fastq_file_name second_fastq_file_name;
+		first_fastq_file_url first_fastq_file_url;
+		second_fastq_file_url second_fastq_file_url;
 		reads_file_name reads_file_name;
 	} inputParamUploadFile;
 
