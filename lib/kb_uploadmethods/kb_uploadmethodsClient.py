@@ -33,12 +33,12 @@ class kb_uploadmethods(object):
             trust_all_ssl_certificates=trust_all_ssl_certificates,
             auth_svc=auth_svc)
 
-    def upload_fastq_file(self, inputParamUploadFile, context=None):
+    def upload_fastq_file(self, params, context=None):
         """
-        :param inputParamUploadFile: instance of type "inputParamUploadFile"
-           -> structure: parameter "workspace_name" of type "workspace_name"
-           (workspace name of the object), parameter "first_fastq_file_name"
-           of type "first_fastq_file_name" (input and output file path/url),
+        :param params: instance of type "params" -> structure: parameter
+           "workspace_name" of type "workspace_name" (workspace name of the
+           object), parameter "first_fastq_file_name" of type
+           "first_fastq_file_name" (input and output file path/url),
            parameter "second_fastq_file_name" of type
            "second_fastq_file_name", parameter "first_fastq_file_url" of type
            "first_fastq_file_url", parameter "second_fastq_file_url" of type
@@ -50,7 +50,7 @@ class kb_uploadmethods(object):
         """
         return self._client.call_method(
             'kb_uploadmethods.upload_fastq_file',
-            [inputParamUploadFile], self._service_ver, context)
+            [params], self._service_ver, context)
 
     def status(self, context=None):
         return self._client.call_method('kb_uploadmethods.status',

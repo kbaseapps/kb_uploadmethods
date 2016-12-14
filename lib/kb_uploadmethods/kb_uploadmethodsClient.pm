@@ -111,7 +111,7 @@ sub new
 
 =head2 upload_fastq_file
 
-  $return = $obj->upload_fastq_file($inputParamUploadFile)
+  $return = $obj->upload_fastq_file($params)
 
 =over 4
 
@@ -120,9 +120,9 @@ sub new
 =begin html
 
 <pre>
-$inputParamUploadFile is a kb_uploadmethods.inputParamUploadFile
+$params is a kb_uploadmethods.params
 $return is a kb_uploadmethods.outParam
-inputParamUploadFile is a reference to a hash where the following keys are defined:
+params is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
 	first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
 	second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
@@ -145,9 +145,9 @@ uploaded is an int
 
 =begin text
 
-$inputParamUploadFile is a kb_uploadmethods.inputParamUploadFile
+$params is a kb_uploadmethods.params
 $return is a kb_uploadmethods.outParam
-inputParamUploadFile is a reference to a hash where the following keys are defined:
+params is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
 	first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
 	second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
@@ -187,10 +187,10 @@ uploaded is an int
 							       "Invalid argument count for function upload_fastq_file (received $n, expecting 1)");
     }
     {
-	my($inputParamUploadFile) = @args;
+	my($params) = @args;
 
 	my @_bad_arguments;
-        (ref($inputParamUploadFile) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"inputParamUploadFile\" (value was \"$inputParamUploadFile\")");
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
         if (@_bad_arguments) {
 	    my $msg = "Invalid arguments passed to upload_fastq_file:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
@@ -507,7 +507,7 @@ a string
 
 
 
-=head2 inputParamUploadFile
+=head2 params
 
 =over 4
 

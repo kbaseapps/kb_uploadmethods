@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 #BEGIN_HEADER
 import os
-from ReadsUtils.ReadsUtilsClient import ReadsUtils
-from DataFileUtil.DataFileUtilClient import DataFileUtil
-from ftp_service.ftp_serviceClient import ftp_service
+from pprint import pprint
+from kb_uploadmethods.FastqUploaderUtil import FastqUploaderUtil
 #END_HEADER
 
 
@@ -24,7 +23,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "git@github.com:Tianhao-Gu/uk_uploadmethods.git"
-    GIT_COMMIT_HASH = "e234459ebf252aaac7f44ea0f958bc2160d3ba3c"
+    GIT_COMMIT_HASH = "0b9f2cb10fa3280b78afbd3fdd70a0b9741ab7ff"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -33,57 +32,17 @@ class kb_uploadmethods:
     # be found
     def __init__(self, config):
         #BEGIN_CONSTRUCTOR
-        self.scratch = config['scratch']
-        self.callback_url = os.environ['SDK_CALLBACK_URL']
+        self.config = config
+        self.config['SDK_CALLBACK_URL'] = os.environ['SDK_CALLBACK_URL']
         #END_CONSTRUCTOR
         pass
 
-    def _upload_single_end_reads_from_file(self, ctx, inputParamUploadFile)
-
-        uploaded_first_file = False
-        returnVal = dict([('uploaded_first_file', uploaded_first_file)])
-        first_fastq_file_name = inputParamUploadFile.get('first_fastq_file_name')
-        reads_file_name = inputParamUploadFile.get('reads_file_name')
-
-        ru = ReadsUtils(self.callback_url, token=ctx['token'])
-        fs = ftp_service(self.callback_url, token=ctx['token'])
-        dfu = DataFileUtil(self.callback_url, token=ctx['token'])
-
-        # At some point might do deeper type checking...
-        if not isinstance(returnVal, dict):
-            raise ValueError('Method upload_fastq_file return value ' +
-                             'returnVal is not type dict as required.')
-        # return the results
-        return [returnVal]
-
-    def _upload_paired_end_reads_from_file(self, ctx, inputParamUploadFile)
-
-        uploaded_first_file = False
-        uploaded_second_file = False
-        returnVal = dict([('uploaded_first_file', uploaded_first_file), 
-                        ('uploaded_second_file', uploaded_second_file)])
-        first_fastq_file_name = inputParamUploadFile.get('first_fastq_file_name')
-        second_file_name = inputParamUploadFile.get('second_fastq_file_name')
-        reads_file_name = inputParamUploadFile.get('reads_file_name')
-
-        ru = ReadsUtils(self.callback_url, token=ctx['token'])
-        fs = ftp_service(self.callback_url, token=ctx['token'])
-        dfu = DataFileUtil(self.callback_url, token=ctx['token'])
-
-        # At some point might do deeper type checking...
-        if not isinstance(returnVal, dict):
-            raise ValueError('Method upload_fastq_file return value ' +
-                             'returnVal is not type dict as required.')
-        # return the results
-        return [returnVal]
-
-
-    def upload_fastq_file(self, ctx, inputParamUploadFile):
+    def upload_fastq_file(self, ctx, params):
         """
-        :param inputParamUploadFile: instance of type "inputParamUploadFile"
-           -> structure: parameter "workspace_name" of type "workspace_name"
-           (workspace name of the object), parameter "first_fastq_file_name"
-           of type "first_fastq_file_name" (input and output file path/url),
+        :param params: instance of type "params" -> structure: parameter
+           "workspace_name" of type "workspace_name" (workspace name of the
+           object), parameter "first_fastq_file_name" of type
+           "first_fastq_file_name" (input and output file path/url),
            parameter "second_fastq_file_name" of type
            "second_fastq_file_name", parameter "first_fastq_file_url" of type
            "first_fastq_file_url", parameter "second_fastq_file_url" of type
@@ -97,13 +56,14 @@ class kb_uploadmethods:
         # return variables are: returnVal
         #BEGIN upload_fastq_file
 
-        if inputParamUploadFile.get('second_fastq_file_name'):
-            returnVal = _upload_paired_end_reads_from_file(ctx, inputParamUploadFile)
-        elif inputParamUploadFile.get('first_fastq_file_name'):
-            returnVal = _upload_single_end_reads_from_file(ctx, inputParamUploadFile)
+        print('Running uploadmethods.upload_fastq_file')
+        pprint('input params: \n%s' % params)
+
+        fastqUploader = FastqUploaderUtil(self.config)
+        # returnVal = fastqUploader.upload_fastq_file(params)
+        returnVal = {'first_fastq_file_name': 'test'}
 
         #END upload_fastq_file
-
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method upload_fastq_file return value ' +

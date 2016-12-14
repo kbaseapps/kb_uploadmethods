@@ -86,8 +86,21 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def test_contructor(self):
         print '------ Testing Contructor Method ------'
         ret = self.getImpl()
-        print 'self.scratch: %s' % ret.scratch
-        print 'self.callback_url: %s' % ret.callback_url
-        self.assertIsNotNone(ret.scratch)
-        self.assertIsNotNone(ret.callback_url)
+        print 'self.config: %s' % ret.config
+        print 'self.callback_url: %s' % ret.config['SDK_CALLBACK_URL']
+        self.assertIsNotNone(ret.config)
+        self.assertIsNotNone(ret.config['SDK_CALLBACK_URL'])
         print '------ Testing Contructor Method OK ------'
+
+    def test_upload_fastq_file(self):
+        print '------ Testing upload_fastq_file Method ------'
+
+        params = {
+            'first_fastq_file_name': 'test'
+        }
+
+        ret = self.getImpl().upload_fastq_file(self.getContext(), params)
+
+
+        print '------ Testing upload_fastq_file Method OK ------'
+

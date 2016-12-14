@@ -166,12 +166,12 @@ public class KbUploadmethodsClient {
      * <p>Original spec-file function name: upload_fastq_file</p>
      * <pre>
      * </pre>
-     * @param   arg1   instance of type {@link us.kbase.kbuploadmethods.InputParamUploadFile InputParamUploadFile} (original type "inputParamUploadFile")
+     * @param   arg1   instance of type {@link us.kbase.kbuploadmethods.Params Params} (original type "params")
      * @return   instance of type {@link us.kbase.kbuploadmethods.OutParam OutParam} (original type "outParam")
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public OutParam uploadFastqFile(InputParamUploadFile arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public OutParam uploadFastqFile(Params arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(arg1);
         TypeReference<List<OutParam>> retType = new TypeReference<List<OutParam>>() {};
