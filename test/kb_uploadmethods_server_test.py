@@ -88,7 +88,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
         ret = self.getImpl()
         print 'self.scratch: %s' % ret.scratch
         print 'self.callback_url: %s' % ret.callback_url
-        # import pdb; pdb.set_trace()
         self.assertIsNotNone(ret.scratch)
         self.assertIsNotNone(ret.callback_url)
         print '------ Testing Contructor Method OK ------'

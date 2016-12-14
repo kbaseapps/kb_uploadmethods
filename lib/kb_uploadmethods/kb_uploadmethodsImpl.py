@@ -38,7 +38,7 @@ class kb_uploadmethods:
         #END_CONSTRUCTOR
         pass
 
-    def __upload_single_end_reads_from_file(self, ctx, inputParamUploadFile)
+    def _upload_single_end_reads_from_file(self, ctx, inputParamUploadFile)
 
         uploaded_first_file = False
         returnVal = dict([('uploaded_first_file', uploaded_first_file)])
@@ -56,7 +56,7 @@ class kb_uploadmethods:
         # return the results
         return [returnVal]
 
-    def __upload_paired_end_reads_from_file(self, ctx, inputParamUploadFile)
+    def _upload_paired_end_reads_from_file(self, ctx, inputParamUploadFile)
 
         uploaded_first_file = False
         uploaded_second_file = False
@@ -98,9 +98,9 @@ class kb_uploadmethods:
         #BEGIN upload_fastq_file
 
         if inputParamUploadFile.get('second_fastq_file_name'):
-            returnVal = __upload_paired_end_reads_from_file(ctx, inputParamUploadFile)
+            returnVal = _upload_paired_end_reads_from_file(ctx, inputParamUploadFile)
         elif inputParamUploadFile.get('first_fastq_file_name'):
-            returnVal = __upload_single_end_reads_from_file(ctx, inputParamUploadFile)
+            returnVal = _upload_single_end_reads_from_file(ctx, inputParamUploadFile)
 
         #END upload_fastq_file
 
