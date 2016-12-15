@@ -9,16 +9,21 @@ class FastqUploaderUtil:
     def __init__(self, config):
         # pprint(config)
         self.scratch = config['scratch']
-        self.callbackURL = config['SDK_CALLBACK_URL']
+        self.callback_url = config['SDK_CALLBACK_URL']
 
     def upload_fastq_file(self, params):
+    	fs = ftp_service(self.callback_url)
+    	list = fs.list_files()
+    	print 'xxxxxxxxxxxxxxxxxxx'
+    	print list
+    	print 'xxxxxxxxxxxxxxxxxxx'
 
-    	self.validate_upload_fastq_file_parameters(params)
+    	# self.validate_upload_fastq_file_parameters(params)
 
-    	if params.get('second_fastq_file_name'):
-            returnVal = _upload_paired_end_reads_from_file(params)
-        elif params.get('first_fastq_file_name'):
-            returnVal = _upload_single_end_reads_from_file(params)
+    	# if params.get('second_fastq_file_name'):
+     #        returnVal = _upload_paired_end_reads_from_file(params)
+     #    elif params.get('first_fastq_file_name'):
+     #        returnVal = _upload_single_end_reads_from_file(params)
 
         # ca = CutadaptRunner(self.scratch)
         # input_file_info = self._stage_input_file(ca, params['input_reads'])
@@ -32,8 +37,9 @@ class FastqUploaderUtil:
         #                             params['output_workspace'],
         #                             input_file_info,
         #                             report)
+    	returnVal = {'first_fastq_file_name': 'test'}
         # return the results
-        return [returnVal]
+        return returnVal
 
     def validate_remove_adapters_parameters(self, params):
         # check for required parameters
@@ -70,7 +76,7 @@ class FastqUploaderUtil:
         dfu = DataFileUtil(self.callback_url)
 
         # return the results
-        return [returnVal]
+        return returnVal
 
     def _upload_paired_end_reads_from_file(self, params):
 
@@ -88,4 +94,4 @@ class FastqUploaderUtil:
         dfu = DataFileUtil(self.callback_url)
 
         # return the results
-        return [returnVal]
+        return returnVal

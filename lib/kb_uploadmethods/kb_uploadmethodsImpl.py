@@ -60,8 +60,7 @@ class kb_uploadmethods:
         pprint('input params: \n%s' % params)
 
         fastqUploader = FastqUploaderUtil(self.config)
-        # returnVal = fastqUploader.upload_fastq_file(params)
-        returnVal = {'first_fastq_file_name': 'test'}
+        returnVal = fastqUploader.upload_fastq_file(params)
 
         #END upload_fastq_file
         # At some point might do deeper type checking...
