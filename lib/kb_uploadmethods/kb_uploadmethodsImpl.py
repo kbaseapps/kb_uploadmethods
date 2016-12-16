@@ -2,6 +2,7 @@
 #BEGIN_HEADER
 import os
 from pprint import pprint
+import json
 from kb_uploadmethods.FastqUploaderUtil import FastqUploaderUtil
 #END_HEADER
 
@@ -55,9 +56,9 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN upload_fastq_file
-
-        print('Running uploadmethods.upload_fastq_file')
-        pprint('input params: \n%s' % params)
+        print '--->\nRunning uploadmethods.upload_fastq_file\nparams: \n'
+        print json.dumps(params, indent=1)
+        # pprint('input params: \n%s' % params)
 
         fastqUploader = FastqUploaderUtil(self.config)
         returnVal = fastqUploader.upload_fastq_file(params)

@@ -96,7 +96,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         print '------ Testing upload_fastq_file Method ------'
 
         params = {
-            'first_fastq_file_name': 'test'
+            'first_fastq_file_name': 'test.fq',
+            'reads_file_name': 'test_reads_file_name'
         }
 
         ret = self.getImpl().upload_fastq_file(self.getContext(), params)

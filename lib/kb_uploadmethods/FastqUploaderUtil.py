@@ -7,7 +7,8 @@ from ftp_service.ftp_serviceClient import ftp_service
 class FastqUploaderUtil:
 
     def __init__(self, config):
-        # pprint(config)
+    	print('--->\nInitializing FastqUploaderUtil instance:\n config:')
+        pprint(config)
         self.scratch = config['scratch']
         self.callback_url = config['SDK_CALLBACK_URL']
 
@@ -20,7 +21,13 @@ class FastqUploaderUtil:
 
     	# self.validate_upload_fastq_file_parameters(params)
 
-    	output_file = os.path.join(self.scratch, params['output_object_name'] + '.fq')
+    	output_file = os.path.join(self.scratch, params['reads_file_name'] + '.fq')
+    	print "--->\nOutput Reads File: \n %s" % output_file
+
+
+    	ru = ReadsUtils(self.callback_url)
+
+    	upload_params = {}
 
     	# if params.get('second_fastq_file_name'):
      #        returnVal = _upload_paired_end_reads_from_file(params)
@@ -36,7 +43,7 @@ class FastqUploaderUtil:
 
         # return self._package_result(output_file,
         #                             params['output_object_name'],
-        #                             params['output_workspace'],
+        #                             params['output_worksspace'],
         #                             input_file_info,
         #                             report)
     	returnVal = {'first_fastq_file_name': 'test'}
