@@ -20,6 +20,8 @@ class FastqUploaderUtil:
 
     	# self.validate_upload_fastq_file_parameters(params)
 
+    	output_file = os.path.join(self.scratch, params['output_object_name'] + '.fq')
+
     	# if params.get('second_fastq_file_name'):
      #        returnVal = _upload_paired_end_reads_from_file(params)
      #    elif params.get('first_fastq_file_name'):
