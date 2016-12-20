@@ -22,24 +22,37 @@ class FastqUploaderUtil:
     def upload_fastq_file(self, params):
     	log('--->\nrunning upload_fastq_file:\nparams:\n')
 
-    	fs = ftp_service(self.callback_url)
-    	list = fs.list_files()
-    	print 'xxxxxxxxxxxxxxxxxxx'
-    	print list
-    	print 'xxxxxxxxxxxxxxxxxxx'
-
     	self.validate_upload_fastq_file_parameters(params)
 
     	output_file = os.path.join(self.scratch, params['reads_file_name'] + '.fq')
     	log("--->\nOutput Reads File: \n %s" % output_file)
 
+    	if 'first_fastq_file_name' in params:
+    		file_path = self.get_file_path(params.get('first_fastq_file_name'))
+    		#TODO: test file_path NEED TO DELETE
+    		#/data/bulk/tgu2/interleaved.fastq
+    		file_path = '/kb/module/work/tmp/SP1.fq'
+    		upload_file_params = {
+    			'fwd_file': file_path,
+    			'sequencing_tech': 'tech1',
+    			'name': params['reads_file_name']
+    		}
 
-    	ru = ReadsUtils(self.callback_url)
+    		ws_name_or_id = params['workspace_name']
+    		if str(ws_name_or_id).isdigit():
+    			upload_file_params['wsid'] = int(ws_name_or_id)
+        	else:
+        		upload_file_params['wsname'] = str(ws_name_or_id)
 
-    	upload_params = {
-    		'fwd_file': output_file,
-    		'name': params['reads_file_name']
-    	}
+        	log('--->\nupload_file_params:\n')
+        	pprint (upload_file_params)
+        	print upload_file_params
+
+        	ru = ReadsUtils(self.callback_url)
+        	print 'xxxxxxxxxxxxxxxxxxx'
+    		result = ru.upload_reads(upload_file_params)
+    		print 'xxxxxxxxxxxxxxxxxxx'
+    		print result
 
     	cmd = ''
     	cmd += 'curl -H "Authorization: '
@@ -47,11 +60,7 @@ class FastqUploaderUtil:
     	cmd += '" '
     	cmd += 'https://ci.kbase.us/services/kb-ftp-api/v0/list/tgu2/'
 
-    	
-    	#data/bulk/tgu2/interleaved.fastq
-    	# cmd = 'find -name "interleaved.fastq"'
-    	# self.scratch = '/data/bulk/tgu2'
-    	# cmd = 'ls'
+    	cmd = 'pwd'
         log('    ' + ''.join(cmd))
 
     	p = subprocess.Popen(cmd, cwd=self.scratch, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -71,61 +80,37 @@ class FastqUploaderUtil:
             raise ValueError('Error running upload_fastq_file, return code: ' +
                              str(p.returncode) + '\n')
         print report
-        print 'xxxxxxxxxxxxxxxxxxx'
+        
 
-    	# ru_return = ru.upload_reads(upload_params)
-    	# print ru_return
-
-    	# if params.get('second_fastq_file_name'):
-     #        returnVal = _upload_paired_end_reads_from_file(params)
-     #    elif params.get('first_fastq_file_name'):
-     #        returnVal = _upload_single_end_reads_from_file(params)
-
-        # ca = CutadaptRunner(self.scratch)
-        # input_file_info = self._stage_input_file(ca, params['input_reads'])
-        # output_file = os.path.join(self.scratch, params['output_object_name'] + '.fq')
-        # ca.set_output_file(output_file)
-        # self._build_run(ca, params)
-        # report = ca.run()
-
-        # return self._package_result(output_file,
-        #                             params['output_object_name'],
-        #                             params['output_worksspace'],
-        #                             input_file_info,
-        #                             report)
-    	returnVal = {'first_fastq_file_name': 'test'}
         # return the results
+        returnVal = {'first_fastq_file_name': 'test'}
         return returnVal
 
-    # def _get_file_path(self, token_user, file_name):
-
-
     def validate_upload_fastq_file_parameters(self, params):
-        # check for required parameters
-        # for p in ['input_reads', 'output_workspace', 'output_object_name']:
-        #     if p not in params:
-        #         raise ValueError('"' + p + '" parameter is required, but missing')
 
-        # if 'five_prime' in params:
-        #     if 'adapter_sequence_5P' not in params['five_prime']:
-        #         raise ValueError('"five_prime.adapter_sequence_5P" was not defined')
-        #     if 'anchored_5P' in params['five_prime']:
-        #         if params['five_prime']['anchored_5P'] not in [0, 1]:
-        #             raise ValueError('"five_prime.anchored_5P" must be either 0 or 1')
+    	# check for required parameters
+    	for p in ['reads_file_name', 'workspace_name']:
+            if p not in params:
+                raise ValueError('"' + p + '" parameter is required, but missing')	
+                
+    	# check for file path parameters
+    	if 'first_fastq_file_name' in params:
+    		self._validate_upload_file_path_availability(params["first_fastq_file_name"])
 
-        # if 'three_prime' in params:
-        #     if 'adapter_sequence_3P' not in params['three_prime']:
-        #         raise ValueError('"three_prime.adapter_sequence_3P" was not defined')
-        #     if 'anchored_3P' in params['three_prime']:
-        #         if params['three_prime']['anchored_3P'] not in [0, 1]:
-        #             raise ValueError('"three_prime.anchored_3P" must be either 0 or 1')
-        self._validate_upload_file_availability(params["first_fastq_file_name"])
-        # self._validate_upload_file_availability('as')
+    	# check for file URL parameters
+    	if 'first_fastq_file_url' in params:
+    		self._validate_upload_file_URL_availability(params["first_fastq_file_url"])
 
-    def _validate_upload_file_availability(self, upload_file_name):
+    def _validate_upload_file_path_availability(self, upload_file_name):
     	list = ftp_service(self.callback_url).list_files() #get available file list in user's staging area
     	if upload_file_name not in list:
     		raise ValueError("Target file: %s is NOT available. Available files: %s" % (upload_file_name, ",".join(list)))
+
+    def _validate_upload_file_URL_availability(self, upload_file_URL):
+    	pass
+
+    def get_file_path(self, upload_file_name):
+    	return '/data/bulk/%s/%s' % (self.token_user, upload_file_name)
 
     def _upload_single_end_reads_from_file(self, params):
 

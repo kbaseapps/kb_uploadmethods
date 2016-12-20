@@ -36,7 +36,6 @@ class kb_uploadmethods:
         self.config = config
         self.config['SDK_CALLBACK_URL'] = os.environ['SDK_CALLBACK_URL']
         self.config['KB_AUTH_TOKEN'] = os.environ['KB_AUTH_TOKEN']
-        print os.environ
         #END_CONSTRUCTOR
         pass
 
@@ -58,7 +57,7 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN upload_fastq_file
-        print '--->\nRunning uploadmethods.upload_fastq_file\nparams: \n'
+        print '--->\nRunning uploadmethods.upload_fastq_file\nparams:'
         print json.dumps(params, indent=1)
         # pprint('input params: \n%s' % params)
 
