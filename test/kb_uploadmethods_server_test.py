@@ -49,13 +49,14 @@ class kb_uploadmethodsTest(unittest.TestCase):
         cls.serviceImpl = kb_uploadmethods(cls.cfg)
 
         # copy test file to scratch area
-        fq_filename = "interleaved.fastq"
+        fq_filename = "SP1.fq"
         fq_path = os.path.join(cls.cfg['scratch'], fq_filename)
         shutil.copy(os.path.join("data", fq_filename), fq_path)
 
         cls.default_input_params = {
-            'first_fastq_file_name': 'interleaved.fastq',
-            'reads_file_name': 'test_reads_file_name'
+            'first_fastq_file_name': 'SP1.fq',
+            'reads_file_name': 'test_reads_file_name',
+            'workspace_name': 'test_kb_uploadmethods'
         }
 
     @classmethod
@@ -106,32 +107,32 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def test_validate_upload_fastq_file_parameters(self):
         print '------ Testing validate_upload_fastq_file_parameters Method ------'
 
-
-        print '------------ Testing required params ------'
+        # Testing required params
         invalidate_input_params = self.default_input_params.copy()
         del invalidate_input_params['reads_file_name']
         with self.assertRaisesRegexp(ValueError, '"reads_file_name" parameter is required, but missing'):
-            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)        
-        print '------------ Testing required params OK------'
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
+        invalidate_input_params = self.default_input_params.copy()
+        del invalidate_input_params['workspace_name']
+        with self.assertRaisesRegexp(ValueError, '"workspace_name" parameter is required, but missing'):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)         
 
-        print '------------ Testing _validate_upload_file_availability method ------'
+        # Testing _validate_upload_file_availability
         invalidate_input_params = self.default_input_params.copy()
         nonexistent_file_name = 'fake_file_0123456.fastq'
         invalidate_input_params['first_fastq_file_name'] = nonexistent_file_name
         with self.assertRaisesRegexp(ValueError, 'Target file: %s is NOT available.' % nonexistent_file_name):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)        
-        print '------------ Testing _validate_upload_file_availability method OK------'
-
 
         print '------ Testing validate_upload_fastq_file_parameters Method OK ------'
-
 
     def test_upload_fastq_file(self):
         print '------ Testing upload_fastq_file Method ------'
 
         params = {
-            'first_fastq_file_name': 'interleaved.fastq',
-            'reads_file_name': 'test_reads_file_name'
+            'first_fastq_file_name': 'SP1.fq',
+            'reads_file_name': 'test_reads_file_name',
+            'workspace_name': self.getWsName()
         }
 
         ret = self.getImpl().upload_fastq_file(self.getContext(), params)
