@@ -4,6 +4,7 @@ import os  # noqa: F401
 import json  # noqa: F401
 import time
 import requests
+import shutil
 
 from os import environ
 try:
@@ -16,7 +17,7 @@ from pprint import pprint  # noqa: F401
 from biokbase.workspace.client import Workspace as workspaceService
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
-
+from ReadsUtils.ReadsUtilsClient import ReadsUtils
 
 class kb_uploadmethodsTest(unittest.TestCase):
 
@@ -46,6 +47,16 @@ class kb_uploadmethodsTest(unittest.TestCase):
         cls.wsURL = cls.cfg['workspace-url']
         cls.wsClient = workspaceService(cls.wsURL, token=token)
         cls.serviceImpl = kb_uploadmethods(cls.cfg)
+
+        # copy test file to scratch area
+        fq_filename = "interleaved.fastq"
+        fq_path = os.path.join(cls.cfg['scratch'], fq_filename)
+        shutil.copy(os.path.join("data", fq_filename), fq_path)
+
+        cls.default_input_params = {
+            'first_fastq_file_name': 'interleaved.fastq',
+            'reads_file_name': 'test_reads_file_name'
+        }
 
     @classmethod
     def tearDownClass(cls):
@@ -91,6 +102,21 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertIsNotNone(ret.config)
         self.assertIsNotNone(ret.config['SDK_CALLBACK_URL'])
         print '------ Testing Contructor Method OK ------'
+
+    def test_validate_upload_fastq_file_parameters(self):
+        print '------ Testing validate_upload_fastq_file_parameters Method ------'
+
+        print '------------ Testing _validate_upload_file_availability method ------'
+        invalidate_upload_file_availability_params = self.default_input_params.copy()
+        nonexistent_file_name = 'fake_file_0123456.fastq'
+        invalidate_upload_file_availability_params['first_fastq_file_name'] = nonexistent_file_name
+        with self.assertRaisesRegexp(ValueError, 'Target file: %s is NOT available.' % nonexistent_file_name):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_upload_file_availability_params)        
+        print '------------ Testing _validate_upload_file_availability method OK------'
+
+
+        print '------ Testing validate_upload_fastq_file_parameters Method OK ------'
+
 
     def test_upload_fastq_file(self):
         print '------ Testing upload_fastq_file Method ------'

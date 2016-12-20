@@ -20,13 +20,15 @@ class FastqUploaderUtil:
         self.token_user = self.token.split('client_id=')[1].split('|')[0]
 
     def upload_fastq_file(self, params):
+    	log('--->\nrunning upload_fastq_file:\nparams:\n')
+
     	fs = ftp_service(self.callback_url)
     	list = fs.list_files()
     	print 'xxxxxxxxxxxxxxxxxxx'
     	print list
     	print 'xxxxxxxxxxxxxxxxxxx'
 
-    	# self.validate_upload_fastq_file_parameters(params)
+    	self.validate_upload_fastq_file_parameters(params)
 
     	output_file = os.path.join(self.scratch, params['reads_file_name'] + '.fq')
     	log("--->\nOutput Reads File: \n %s" % output_file)
@@ -42,17 +44,17 @@ class FastqUploaderUtil:
     	cmd = ''
     	cmd += 'curl -H "Authorization: '
     	cmd += self.token
-    	cmd += '"\\n'
+    	cmd += '" '
     	cmd += 'https://ci.kbase.us/services/kb-ftp-api/v0/list/tgu2/'
 
-    	log('--->\nrunning upload_fastq_file:')
+    	
     	#data/bulk/tgu2/interleaved.fastq
     	# cmd = 'find -name "interleaved.fastq"'
-    	self.scratch = '/data/bulk/tgu2'
-    	cmd = 'ls'
+    	# self.scratch = '/data/bulk/tgu2'
+    	# cmd = 'ls'
         log('    ' + ''.join(cmd))
 
-    	p = subprocess.Popen(cmd, cwd=self.scratch, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    	p = subprocess.Popen(cmd, cwd=self.scratch, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     	report = ''
         while True:
             line = p.stdout.readline()
@@ -95,27 +97,35 @@ class FastqUploaderUtil:
         # return the results
         return returnVal
 
-    def validate_remove_adapters_parameters(self, params):
+    # def _get_file_path(self, token_user, file_name):
+
+
+    def validate_upload_fastq_file_parameters(self, params):
         # check for required parameters
-        for p in ['input_reads', 'output_workspace', 'output_object_name']:
-            if p not in params:
-                raise ValueError('"' + p + '" parameter is required, but missing')
+        # for p in ['input_reads', 'output_workspace', 'output_object_name']:
+        #     if p not in params:
+        #         raise ValueError('"' + p + '" parameter is required, but missing')
 
-        if 'five_prime' in params:
-            if 'adapter_sequence_5P' not in params['five_prime']:
-                raise ValueError('"five_prime.adapter_sequence_5P" was not defined')
-            if 'anchored_5P' in params['five_prime']:
-                if params['five_prime']['anchored_5P'] not in [0, 1]:
-                    raise ValueError('"five_prime.anchored_5P" must be either 0 or 1')
+        # if 'five_prime' in params:
+        #     if 'adapter_sequence_5P' not in params['five_prime']:
+        #         raise ValueError('"five_prime.adapter_sequence_5P" was not defined')
+        #     if 'anchored_5P' in params['five_prime']:
+        #         if params['five_prime']['anchored_5P'] not in [0, 1]:
+        #             raise ValueError('"five_prime.anchored_5P" must be either 0 or 1')
 
-        if 'three_prime' in params:
-            if 'adapter_sequence_3P' not in params['three_prime']:
-                raise ValueError('"three_prime.adapter_sequence_3P" was not defined')
-            if 'anchored_3P' in params['three_prime']:
-                if params['three_prime']['anchored_3P'] not in [0, 1]:
-                    raise ValueError('"three_prime.anchored_3P" must be either 0 or 1')
+        # if 'three_prime' in params:
+        #     if 'adapter_sequence_3P' not in params['three_prime']:
+        #         raise ValueError('"three_prime.adapter_sequence_3P" was not defined')
+        #     if 'anchored_3P' in params['three_prime']:
+        #         if params['three_prime']['anchored_3P'] not in [0, 1]:
+        #             raise ValueError('"three_prime.anchored_3P" must be either 0 or 1')
+        self._validate_upload_file_availability(params["first_fastq_file_name"])
+        # self._validate_upload_file_availability('as')
 
-        # TODO: validate values of error_tolerance and min_overlap_length
+    def _validate_upload_file_availability(self, upload_file_name):
+    	list = ftp_service(self.callback_url).list_files() #get available file list in user's staging area
+    	if upload_file_name not in list:
+    		raise ValueError("Target file: %s is NOT available. Available files: %s" % (upload_file_name, ",".join(list)))
 
     def _upload_single_end_reads_from_file(self, params):
 
