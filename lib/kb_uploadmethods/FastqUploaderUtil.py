@@ -101,10 +101,10 @@ class FastqUploaderUtil:
 
 
     def validate_upload_fastq_file_parameters(self, params):
-        # check for required parameters
-        # for p in ['input_reads', 'output_workspace', 'output_object_name']:
-        #     if p not in params:
-        #         raise ValueError('"' + p + '" parameter is required, but missing')
+
+    	# check for required parameters
+    	if 'reads_file_name' not in params:
+    		raise ValueError('"reads_file_name" parameter is required, but missing')
 
         # if 'five_prime' in params:
         #     if 'adapter_sequence_5P' not in params['five_prime']:

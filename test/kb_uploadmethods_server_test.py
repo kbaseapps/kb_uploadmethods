@@ -106,12 +106,20 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def test_validate_upload_fastq_file_parameters(self):
         print '------ Testing validate_upload_fastq_file_parameters Method ------'
 
+
+        print '------------ Testing required params ------'
+        invalidate_input_params = self.default_input_params.copy()
+        del invalidate_input_params['reads_file_name']
+        with self.assertRaisesRegexp(ValueError, '"reads_file_name" parameter is required, but missing'):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)        
+        print '------------ Testing required params OK------'
+
         print '------------ Testing _validate_upload_file_availability method ------'
-        invalidate_upload_file_availability_params = self.default_input_params.copy()
+        invalidate_input_params = self.default_input_params.copy()
         nonexistent_file_name = 'fake_file_0123456.fastq'
-        invalidate_upload_file_availability_params['first_fastq_file_name'] = nonexistent_file_name
+        invalidate_input_params['first_fastq_file_name'] = nonexistent_file_name
         with self.assertRaisesRegexp(ValueError, 'Target file: %s is NOT available.' % nonexistent_file_name):
-            self.getImpl().upload_fastq_file(self.getContext(), invalidate_upload_file_availability_params)        
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)        
         print '------------ Testing _validate_upload_file_availability method OK------'
 
 
