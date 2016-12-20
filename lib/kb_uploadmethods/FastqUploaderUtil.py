@@ -1,16 +1,23 @@
 import os
 from pprint import pprint
+import subprocess
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from ftp_service.ftp_serviceClient import ftp_service
 
+def log(message):
+    """Logging function, provides a hook to suppress or redirect log messages."""
+    print(message)
+
 class FastqUploaderUtil:
 
     def __init__(self, config):
-    	print('--->\nInitializing FastqUploaderUtil instance:\n config:')
-        pprint(config)
+    	log('--->\nInitializing FastqUploaderUtil instance:\n config:')
+        log(config)
         self.scratch = config['scratch']
         self.callback_url = config['SDK_CALLBACK_URL']
+        self.token = config['KB_AUTH_TOKEN']
+        self.token_user = self.token.split('client_id=')[1].split('|')[0]
 
     def upload_fastq_file(self, params):
     	fs = ftp_service(self.callback_url)
@@ -22,12 +29,50 @@ class FastqUploaderUtil:
     	# self.validate_upload_fastq_file_parameters(params)
 
     	output_file = os.path.join(self.scratch, params['reads_file_name'] + '.fq')
-    	print "--->\nOutput Reads File: \n %s" % output_file
+    	log("--->\nOutput Reads File: \n %s" % output_file)
 
 
     	ru = ReadsUtils(self.callback_url)
 
-    	upload_params = {}
+    	upload_params = {
+    		'fwd_file': output_file,
+    		'name': params['reads_file_name']
+    	}
+
+    	cmd = ''
+    	cmd += 'curl -H "Authorization: '
+    	cmd += self.token
+    	cmd += '"\\n'
+    	cmd += 'https://ci.kbase.us/services/kb-ftp-api/v0/list/tgu2/'
+
+    	log('--->\nrunning upload_fastq_file:')
+    	#data/bulk/tgu2/interleaved.fastq
+    	# cmd = 'find -name "interleaved.fastq"'
+    	self.scratch = '/data/bulk/tgu2'
+    	cmd = 'ls'
+        log('    ' + ''.join(cmd))
+
+    	p = subprocess.Popen(cmd, cwd=self.scratch, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    	report = ''
+        while True:
+            line = p.stdout.readline()
+            if not line:
+                break
+            report += line
+            log(line.replace('\n', ''))
+
+        p.stdout.close()
+        p.wait()
+        report += "\n\n"
+       	log('process return code: ' + str(p.returncode))
+        if p.returncode != 0:
+            raise ValueError('Error running upload_fastq_file, return code: ' +
+                             str(p.returncode) + '\n')
+        print report
+        print 'xxxxxxxxxxxxxxxxxxx'
+
+    	# ru_return = ru.upload_reads(upload_params)
+    	# print ru_return
 
     	# if params.get('second_fastq_file_name'):
      #        returnVal = _upload_paired_end_reads_from_file(params)

@@ -96,7 +96,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         print '------ Testing upload_fastq_file Method ------'
 
         params = {
-            'first_fastq_file_name': 'test.fq',
+            'first_fastq_file_name': 'interleaved.fastq',
             'reads_file_name': 'test_reads_file_name'
         }
 
