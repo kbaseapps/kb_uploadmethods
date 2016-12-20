@@ -36,6 +36,7 @@ class kb_uploadmethods:
         self.config = config
         self.config['SDK_CALLBACK_URL'] = os.environ['SDK_CALLBACK_URL']
         self.config['KB_AUTH_TOKEN'] = os.environ['KB_AUTH_TOKEN']
+        print os.environ
         #END_CONSTRUCTOR
         pass
 
