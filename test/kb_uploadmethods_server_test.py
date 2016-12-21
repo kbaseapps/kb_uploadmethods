@@ -130,9 +130,10 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         print '------ Testing validate_upload_fastq_file_parameters Method OK ------'
 
-    def test_upload_fastq_file(self):
+    @patch.object(FastqUploaderUtil, '_get_file_path')
+    def test_upload_fastq_file(self, mock_get_file_path):
         print '------ Testing upload_fastq_file Method ------'
-        # with mock.patch.object(FastqUploaderUtil, 'get_file_path', return_value = 'Mocked This Silly'):
+        mock_get_file_path.return_value = '/kb/module/work/tmp/SP1.fq'
         params = {
             'first_fastq_file_name': 'SP1.fq',
             'reads_file_name': 'test_reads_file_name',
@@ -140,7 +141,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
         }  
 
         ret = self.getImpl().upload_fastq_file(self.getContext(), params)
-
 
         print '------ Testing upload_fastq_file Method OK ------'
 
