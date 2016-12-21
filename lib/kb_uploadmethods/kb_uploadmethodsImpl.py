@@ -24,7 +24,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "git@github.com:Tianhao-Gu/uk_uploadmethods.git"
-    GIT_COMMIT_HASH = "1f41d6046acf7a68acbdaacd3e7de59723a67496"
+    GIT_COMMIT_HASH = "74ce1e3c85cc8bf31a03020c6cd1cbfcb15e8925"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -39,19 +39,20 @@ class kb_uploadmethods:
         #END_CONSTRUCTOR
         pass
 
+
     def upload_fastq_file(self, ctx, params):
         """
-        :param params: instance of type "params" -> structure: parameter
-           "workspace_name" of type "workspace_name" (workspace name of the
-           object), parameter "first_fastq_file_name" of type
+        :param params: instance of type "UploadMethodParams" -> structure:
+           parameter "workspace_name" of type "workspace_name" (workspace
+           name of the object), parameter "first_fastq_file_name" of type
            "first_fastq_file_name" (input and output file path/url),
            parameter "second_fastq_file_name" of type
            "second_fastq_file_name", parameter "first_fastq_file_url" of type
            "first_fastq_file_url", parameter "second_fastq_file_url" of type
            "second_fastq_file_url", parameter "reads_file_name" of type
            "reads_file_name"
-        :returns: instance of type "outParam" -> structure: parameter
-           "obj_ref" of type "obj_ref"
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref"
         """
         # ctx is the context object
         # return variables are: returnVal

@@ -166,16 +166,16 @@ public class KbUploadmethodsClient {
      * <p>Original spec-file function name: upload_fastq_file</p>
      * <pre>
      * </pre>
-     * @param   arg1   instance of type {@link us.kbase.kbuploadmethods.Params Params} (original type "params")
-     * @return   instance of type {@link us.kbase.kbuploadmethods.OutParam OutParam} (original type "outParam")
+     * @param   params   instance of type {@link us.kbase.kbuploadmethods.UploadMethodParams UploadMethodParams}
+     * @return   parameter "returnVal" of type {@link us.kbase.kbuploadmethods.UploadMethodResult UploadMethodResult}
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public OutParam uploadFastqFile(Params arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public UploadMethodResult uploadFastqFile(UploadMethodParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
-        args.add(arg1);
-        TypeReference<List<OutParam>> retType = new TypeReference<List<OutParam>>() {};
-        List<OutParam> res = caller.jsonrpcCall("kb_uploadmethods.upload_fastq_file", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        args.add(params);
+        TypeReference<List<UploadMethodResult>> retType = new TypeReference<List<UploadMethodResult>>() {};
+        List<UploadMethodResult> res = caller.jsonrpcCall("kb_uploadmethods.upload_fastq_file", args, retType, true, true, jsonRpcContext, this.serviceVersion);
         return res.get(0);
     }
 

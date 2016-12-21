@@ -35,17 +35,17 @@ class kb_uploadmethods(object):
 
     def upload_fastq_file(self, params, context=None):
         """
-        :param params: instance of type "params" -> structure: parameter
-           "workspace_name" of type "workspace_name" (workspace name of the
-           object), parameter "first_fastq_file_name" of type
+        :param params: instance of type "UploadMethodParams" -> structure:
+           parameter "workspace_name" of type "workspace_name" (workspace
+           name of the object), parameter "first_fastq_file_name" of type
            "first_fastq_file_name" (input and output file path/url),
            parameter "second_fastq_file_name" of type
            "second_fastq_file_name", parameter "first_fastq_file_url" of type
            "first_fastq_file_url", parameter "second_fastq_file_url" of type
            "second_fastq_file_url", parameter "reads_file_name" of type
            "reads_file_name"
-        :returns: instance of type "outParam" -> structure: parameter
-           "obj_ref" of type "obj_ref"
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref"
         """
         return self._client.call_method(
             'kb_uploadmethods.upload_fastq_file',

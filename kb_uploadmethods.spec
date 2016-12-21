@@ -22,12 +22,12 @@ module kb_uploadmethods {
 		first_fastq_file_url first_fastq_file_url;
 		second_fastq_file_url second_fastq_file_url;
 		reads_file_name reads_file_name;
-	} params;
+	} UploadMethodParams;
 
 	typedef structure {
 		obj_ref obj_ref;
-	} outParam;
+	} UploadMethodResult;
 
-    funcdef upload_fastq_file(params)
-    	returns (outParam) authentication required;
+    funcdef upload_fastq_file(UploadMethodParams params)
+    	returns (UploadMethodResult returnVal) authentication required;
 };

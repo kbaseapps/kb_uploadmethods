@@ -111,7 +111,7 @@ sub new
 
 =head2 upload_fastq_file
 
-  $return = $obj->upload_fastq_file($params)
+  $returnVal = $obj->upload_fastq_file($params)
 
 =over 4
 
@@ -120,9 +120,9 @@ sub new
 =begin html
 
 <pre>
-$params is a kb_uploadmethods.params
-$return is a kb_uploadmethods.outParam
-params is a reference to a hash where the following keys are defined:
+$params is a kb_uploadmethods.UploadMethodParams
+$returnVal is a kb_uploadmethods.UploadMethodResult
+UploadMethodParams is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
 	first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
 	second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
@@ -135,7 +135,7 @@ second_fastq_file_name is a string
 first_fastq_file_url is a string
 second_fastq_file_url is a string
 reads_file_name is a string
-outParam is a reference to a hash where the following keys are defined:
+UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
 obj_ref is a string
 
@@ -145,9 +145,9 @@ obj_ref is a string
 
 =begin text
 
-$params is a kb_uploadmethods.params
-$return is a kb_uploadmethods.outParam
-params is a reference to a hash where the following keys are defined:
+$params is a kb_uploadmethods.UploadMethodParams
+$returnVal is a kb_uploadmethods.UploadMethodResult
+UploadMethodParams is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
 	first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
 	second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
@@ -160,7 +160,7 @@ second_fastq_file_name is a string
 first_fastq_file_url is a string
 second_fastq_file_url is a string
 reads_file_name is a string
-outParam is a reference to a hash where the following keys are defined:
+UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
 obj_ref is a string
 
@@ -502,7 +502,7 @@ a string
 
 
 
-=head2 params
+=head2 UploadMethodParams
 
 =over 4
 
@@ -542,7 +542,7 @@ reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 
 
 
-=head2 outParam
+=head2 UploadMethodResult
 
 =over 4
 
