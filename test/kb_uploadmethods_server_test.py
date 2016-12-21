@@ -5,6 +5,9 @@ import json  # noqa: F401
 import time
 import requests
 import shutil
+from mock import patch
+import mock
+# from unittest.mock import MagicMock
 
 from os import environ
 try:
@@ -17,6 +20,7 @@ from pprint import pprint  # noqa: F401
 from biokbase.workspace.client import Workspace as workspaceService
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
+from kb_uploadmethods.FastqUploaderUtil import FastqUploaderUtil
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -128,12 +132,12 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
     def test_upload_fastq_file(self):
         print '------ Testing upload_fastq_file Method ------'
-
+        # with mock.patch.object(FastqUploaderUtil, 'get_file_path', return_value = 'Mocked This Silly'):
         params = {
             'first_fastq_file_name': 'SP1.fq',
             'reads_file_name': 'test_reads_file_name',
             'workspace_name': self.getWsName()
-        }
+        }  
 
         ret = self.getImpl().upload_fastq_file(self.getContext(), params)
 

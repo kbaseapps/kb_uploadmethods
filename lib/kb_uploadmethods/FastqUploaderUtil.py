@@ -1,6 +1,7 @@
 import os
 from pprint import pprint
 import subprocess
+import shutil
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from ftp_service.ftp_serviceClient import ftp_service
@@ -55,16 +56,23 @@ class FastqUploaderUtil:
 	def _validate_upload_file_URL_availability(self, upload_file_URL):
 		pass
 
-	def _get_file_path(self, upload_file_name):
+	def get_file_path(self, upload_file_name):
 		return '/data/bulk/%s/%s' % (self.token_user, upload_file_name)
 
 	def _upload_file_path(self, file_name, sequencing_tech, output_file_name, workspace_name_or_id):
-		file_path = self._get_file_path(file_name)
+		file_path = self.get_file_path(file_name)
 		#TODO: test file_path NEED TO DELETE
 		#/data/bulk/tgu2/interleaved.fastq
 		# file_path = '/kb/module/work/tmp/SP1.fq'
+		log('--->\nstart copying file to local:\n')
+		dstdir = os.path.join(self.scratch, 'tmp')
+		os.makedirs(dstdir)
+		shutil.copy2(file_path, dstdir)
+		copy_file_path = os.path.join(dstdir, file_name)
+		log('--->\ncopied file from: %s to: %s\n' % (file_path, copy_file_path))
+
 		upload_file_params = {
-			'fwd_file': file_path,
+			'fwd_file': copy_file_path,
 			'sequencing_tech': sequencing_tech,
 			'name': output_file_name
 		}
@@ -75,11 +83,13 @@ class FastqUploaderUtil:
 			upload_file_params['wsname'] = str(workspace_name_or_id)
 
 		log('--->\nupload_file_params:\n')
-		pprint (upload_file_params)
-		print upload_file_params
+		log(upload_file_params)
 
 		ru = ReadsUtils(self.callback_url)
 		result = ru.upload_reads(upload_file_params)
+
+		log('--->\nremoving folder: %s' % dstdir)
+		shutil.rmtree(dstdir)
 
 		return result
 
