@@ -23,16 +23,16 @@
         "options": 
         [
           {
-              "display": "Value 1",
-              "value": "value1"
+              "display": "SP1.fq",
+              "value": "SP1.fq"
           },
           {
-              "display": "Value 2",
-              "value": "value2"
+              "display": "sample.fa",
+              "value": "sample.fa"
           },
           {
-              "display": "Value 3",
-              "value": "value3"
+              "display": "fakefile.fq",
+              "value": "fakefile.fq"
           }
         ]
       }
@@ -78,6 +78,10 @@
         {
           "narrative_system_variable": "workspace",
           "target_property": "workspace_name"
+        },
+        {
+          "service_method_output_path": [0,"obj_ref"],
+          "target_property": "obj_ref"
         }
       ]
     }

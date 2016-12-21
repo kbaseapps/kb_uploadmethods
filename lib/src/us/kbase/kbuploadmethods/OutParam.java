@@ -19,26 +19,26 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "uploaded"
+    "obj_ref"
 })
 public class OutParam {
 
-    @JsonProperty("uploaded")
-    private Long uploaded;
+    @JsonProperty("obj_ref")
+    private String objRef;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("uploaded")
-    public Long getUploaded() {
-        return uploaded;
+    @JsonProperty("obj_ref")
+    public String getObjRef() {
+        return objRef;
     }
 
-    @JsonProperty("uploaded")
-    public void setUploaded(Long uploaded) {
-        this.uploaded = uploaded;
+    @JsonProperty("obj_ref")
+    public void setObjRef(String objRef) {
+        this.objRef = objRef;
     }
 
-    public OutParam withUploaded(Long uploaded) {
-        this.uploaded = uploaded;
+    public OutParam withObjRef(String objRef) {
+        this.objRef = objRef;
         return this;
     }
 
@@ -54,7 +54,7 @@ public class OutParam {
 
     @Override
     public String toString() {
-        return ((((("OutParam"+" [uploaded=")+ uploaded)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((("OutParam"+" [objRef=")+ objRef)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

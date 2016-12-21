@@ -136,8 +136,8 @@ first_fastq_file_url is a string
 second_fastq_file_url is a string
 reads_file_name is a string
 outParam is a reference to a hash where the following keys are defined:
-	uploaded has a value which is a kb_uploadmethods.uploaded
-uploaded is an int
+	obj_ref has a value which is a kb_uploadmethods.obj_ref
+obj_ref is a string
 
 </pre>
 
@@ -161,8 +161,8 @@ first_fastq_file_url is a string
 second_fastq_file_url is a string
 reads_file_name is a string
 outParam is a reference to a hash where the following keys are defined:
-	uploaded has a value which is a kb_uploadmethods.uploaded
-uploaded is an int
+	obj_ref has a value which is a kb_uploadmethods.obj_ref
+obj_ref is a string
 
 
 =end text
@@ -307,37 +307,6 @@ sub _validate_version {
 }
 
 =head1 TYPES
-
-
-
-=head2 uploaded
-
-=over 4
-
-
-
-=item Description
-
-indicates true or false values, false <= 0, true >=1
-
-
-=item Definition
-
-=begin html
-
-<pre>
-an int
-</pre>
-
-=end html
-
-=begin text
-
-an int
-
-=end text
-
-=back
 
 
 
@@ -507,6 +476,32 @@ a string
 
 
 
+=head2 obj_ref
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
 =head2 params
 
 =over 4
@@ -559,7 +554,7 @@ reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 
 <pre>
 a reference to a hash where the following keys are defined:
-uploaded has a value which is a kb_uploadmethods.uploaded
+obj_ref has a value which is a kb_uploadmethods.obj_ref
 
 </pre>
 
@@ -568,7 +563,7 @@ uploaded has a value which is a kb_uploadmethods.uploaded
 =begin text
 
 a reference to a hash where the following keys are defined:
-uploaded has a value which is a kb_uploadmethods.uploaded
+obj_ref has a value which is a kb_uploadmethods.obj_ref
 
 
 =end text
