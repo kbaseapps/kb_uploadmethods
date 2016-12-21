@@ -7,7 +7,7 @@
   "widgets" : 
   {
     "input" : null,
-    "output" : "upload result"
+    "output" : "no-display"
   },
   "parameters" : 
   [ 
