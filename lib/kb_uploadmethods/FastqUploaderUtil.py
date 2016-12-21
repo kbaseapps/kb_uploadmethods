@@ -56,7 +56,7 @@ class FastqUploaderUtil:
 		pass
 
 	def _get_file_path(self, upload_file_name):
-		return '/data/bulk/%s/%s' % (self.token_user, upload_file_name)
+		return '/data/bulktest/%s/%s' % (self.token_user, upload_file_name)
 
 	def _upload_file_path(self, file_name, sequencing_tech, output_file_name, workspace_name_or_id):
 		file_path = self._get_file_path(file_name)
