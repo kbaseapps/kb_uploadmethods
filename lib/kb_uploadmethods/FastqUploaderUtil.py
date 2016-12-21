@@ -22,6 +22,7 @@ class FastqUploaderUtil:
 
 	def upload_fastq_file(self, params):
 		log('--->\nrunning upload_fastq_file:\nparams:\n')
+		log(params)
 
 		self.validate_upload_fastq_file_parameters(params)
 
@@ -56,14 +57,11 @@ class FastqUploaderUtil:
 	def _validate_upload_file_URL_availability(self, upload_file_URL):
 		pass
 
-	def get_file_path(self, upload_file_name):
+	def _get_file_path(self, upload_file_name):
 		return '/data/bulk/%s/%s' % (self.token_user, upload_file_name)
 
 	def _upload_file_path(self, file_name, sequencing_tech, output_file_name, workspace_name_or_id):
-		file_path = self.get_file_path(file_name)
-		#TODO: test file_path NEED TO DELETE
-		#/data/bulk/tgu2/interleaved.fastq
-		# file_path = '/kb/module/work/tmp/SP1.fq'
+		file_path = self._get_file_path(file_name)
 		log('--->\nstart copying file to local:\n')
 		dstdir = os.path.join(self.scratch, 'tmp')
 		os.makedirs(dstdir)
