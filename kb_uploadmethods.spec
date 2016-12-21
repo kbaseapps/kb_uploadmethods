@@ -4,9 +4,6 @@ A KBase module: kb_uploadmethods
 
 module kb_uploadmethods {
 
-	/* indicates true or false values, false <= 0, true >=1 */
-	typedef int uploaded;
-
 	/* workspace name of the object */
 	typedef string workspace_name;
 
@@ -16,6 +13,7 @@ module kb_uploadmethods {
     typedef string first_fastq_file_url;
     typedef string second_fastq_file_url;
     typedef string reads_file_name;
+    typedef string obj_ref;
 
 	typedef structure {
 		workspace_name workspace_name;
@@ -27,7 +25,7 @@ module kb_uploadmethods {
 	} params;
 
 	typedef structure {
-		uploaded uploaded;
+		obj_ref obj_ref;
 	} outParam;
 
     funcdef upload_fastq_file(params)

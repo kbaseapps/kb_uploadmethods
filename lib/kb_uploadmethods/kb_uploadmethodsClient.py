@@ -45,8 +45,7 @@ class kb_uploadmethods(object):
            "second_fastq_file_url", parameter "reads_file_name" of type
            "reads_file_name"
         :returns: instance of type "outParam" -> structure: parameter
-           "uploaded" of type "uploaded" (indicates true or false values,
-           false <= 0, true >=1)
+           "obj_ref" of type "obj_ref"
         """
         return self._client.call_method(
             'kb_uploadmethods.upload_fastq_file',

@@ -24,7 +24,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "git@github.com:Tianhao-Gu/uk_uploadmethods.git"
-    GIT_COMMIT_HASH = "0b9f2cb10fa3280b78afbd3fdd70a0b9741ab7ff"
+    GIT_COMMIT_HASH = "1f41d6046acf7a68acbdaacd3e7de59723a67496"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -51,27 +51,26 @@ class kb_uploadmethods:
            "second_fastq_file_url", parameter "reads_file_name" of type
            "reads_file_name"
         :returns: instance of type "outParam" -> structure: parameter
-           "uploaded" of type "uploaded" (indicates true or false values,
-           false <= 0, true >=1)
+           "obj_ref" of type "obj_ref"
         """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN upload_fastq_file
         print '--->\nRunning uploadmethods.upload_fastq_file\nparams:'
         print json.dumps(params, indent=1)
-        # pprint('input params: \n%s' % params)
 
         fastqUploader = FastqUploaderUtil(self.config)
         returnVal = fastqUploader.upload_fastq_file(params)
 
         #END upload_fastq_file
+
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method upload_fastq_file return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
-
+        
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",
