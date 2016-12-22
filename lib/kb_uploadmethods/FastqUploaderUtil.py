@@ -2,6 +2,8 @@ import os
 from pprint import pprint
 import subprocess
 import shutil
+import requests
+import urllib2
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from ftp_service.ftp_serviceClient import ftp_service
@@ -31,6 +33,12 @@ class FastqUploaderUtil:
 							sequencing_tech='tech1', 
 							output_file_name=params['reads_file_name'],
 							workspace_name_or_id=params['workspace_name'])
+		
+		if 'first_fastq_file_url' in params:
+			returnVal = self._upload_file_url(file_url=params.get('first_fastq_file_url'), 
+							sequencing_tech='tech1', 
+							output_file_name=params['reads_file_name'],
+							workspace_name_or_id=params['workspace_name'])
 
 		return returnVal
 
@@ -41,13 +49,30 @@ class FastqUploaderUtil:
 			if p not in params:
 				raise ValueError('"' + p + '" parameter is required, but missing')	
 
+		# check for invalidate both file path and file URL parameters
+		upload_file_path = False
+		upload_file_URL = False
+
+		if 'first_fastq_file_name' in params or 'second_fastq_file_name' in params:
+			upload_file_path = True
+
+		if 'first_fastq_file_url' in params or 'second_fastq_file_url' in params:
+			upload_file_URL = True
+
+		if upload_file_path and upload_file_URL:
+			raise ValueError('Cannot upload Reads for both file path and file URL')	
+
 		# check for file path parameters
 		if 'first_fastq_file_name' in params:
 			self._validate_upload_file_path_availability(params["first_fastq_file_name"])
+		elif 'second_fastq_file_url' in params:
+			self._validate_upload_file_path_availability(params["second_fastq_file_url"])
 
 		# check for file URL parameters
 		if 'first_fastq_file_url' in params:
 			self._validate_upload_file_URL_availability(params["first_fastq_file_url"])
+		elif 'second_fastq_file_url' in params:
+			self._validate_upload_file_URL_availability(params["second_fastq_file_url"])
 
 	def _validate_upload_file_path_availability(self, upload_file_name):
 		list = ftp_service(self.callback_url).list_files() #get available file list in user's staging area
@@ -91,4 +116,39 @@ class FastqUploaderUtil:
 
 		return result
 
+	def _upload_file_url(self, file_url, sequencing_tech, output_file_name, workspace_name_or_id):
+
+		log('--->\nFile URL:\n')
+		log(file_url)
+		file_name = 'tmp_fastq.fq'
+
+		dstdir = os.path.join(self.scratch, 'tmp')
+		os.makedirs(dstdir)
+		copy_file_path = os.path.join(dstdir, file_name)
+		online_file = urllib2.urlopen(file_url)
+
+		with open(copy_file_path,'wb') as output:
+			output.write(online_file.read())
+
+		upload_file_params = {
+			'fwd_file': copy_file_path,
+			'sequencing_tech': sequencing_tech,
+			'name': output_file_name
+		}
+
+		if str(workspace_name_or_id).isdigit():
+			upload_file_params['wsid'] = int(workspace_name_or_id)
+		else:
+			upload_file_params['wsname'] = str(workspace_name_or_id)
+
+		log('--->\nupload_file_params:\n')
+		log(upload_file_params)
+
+		ru = ReadsUtils(self.callback_url)
+		result = ru.upload_reads(upload_file_params)
+
+		log('--->\nremoving folder: %s' % dstdir)
+		shutil.rmtree(dstdir)
+
+		return result
 

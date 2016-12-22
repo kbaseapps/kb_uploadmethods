@@ -57,12 +57,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
         fq_path = os.path.join(cls.cfg['scratch'], fq_filename)
         shutil.copy(os.path.join("data", fq_filename), fq_path)
 
-        cls.default_input_params = {
-            'first_fastq_file_name': 'SP1.fq',
-            'reads_file_name': 'test_reads_file_name',
-            'workspace_name': 'test_kb_uploadmethods'
-        }
-
     @classmethod
     def tearDownClass(cls):
         if hasattr(cls, 'wsName'):
@@ -86,6 +80,22 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
     def getContext(self):
         return self.__class__.ctx
+
+    def getDefaultParams(self, file_path=True):
+        if file_path:
+            default_input_params = {
+                'first_fastq_file_name': 'SP1.fq',
+                'reads_file_name': 'test_reads_file_name.reads',
+                'workspace_name': self.getWsName()
+            }
+        else:
+            default_input_params = {
+                'first_fastq_file_url': 'http://molb7621.github.io/workshop/_downloads/SP1.fq',
+                'reads_file_name': 'test_reads_file_name.reads',
+                'workspace_name': self.getWsName()
+            }
+        return default_input_params
+
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
     def test_your_method(self):
         # Prepare test objects in workspace if needed using
@@ -112,17 +122,21 @@ class kb_uploadmethodsTest(unittest.TestCase):
         print '------ Testing validate_upload_fastq_file_parameters Method ------'
 
         # Testing required params
-        invalidate_input_params = self.default_input_params.copy()
+        invalidate_input_params = self.getDefaultParams()
         del invalidate_input_params['reads_file_name']
         with self.assertRaisesRegexp(ValueError, '"reads_file_name" parameter is required, but missing'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
-        invalidate_input_params = self.default_input_params.copy()
+        invalidate_input_params = self.getDefaultParams()
         del invalidate_input_params['workspace_name']
         with self.assertRaisesRegexp(ValueError, '"workspace_name" parameter is required, but missing'):
-            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)         
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params) 
+        invalidate_input_params = self.getDefaultParams()
+        invalidate_input_params['first_fastq_file_url'] = 'https://fake_url'
+        with self.assertRaisesRegexp(ValueError, 'Cannot upload Reads for both file path and file URL'):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)          
 
         # Testing _validate_upload_file_availability
-        invalidate_input_params = self.default_input_params.copy()
+        invalidate_input_params = self.getDefaultParams()
         nonexistent_file_name = 'fake_file_0123456.fastq'
         invalidate_input_params['first_fastq_file_name'] = nonexistent_file_name
         with self.assertRaisesRegexp(ValueError, 'Target file: %s is NOT available.' % nonexistent_file_name):
@@ -131,16 +145,18 @@ class kb_uploadmethodsTest(unittest.TestCase):
         print '------ Testing validate_upload_fastq_file_parameters Method OK ------'
 
     @patch.object(FastqUploaderUtil, '_get_file_path')
-    def test_upload_fastq_file(self, mock_get_file_path):
-        print '------ Testing upload_fastq_file Method ------'
+    def test_upload_fastq_file_path(self, mock_get_file_path):
+        print '------ Testing upload_fastq_file for file path Method ------'
         mock_get_file_path.return_value = '/kb/module/work/tmp/SP1.fq'
-        params = {
-            'first_fastq_file_name': 'SP1.fq',
-            'reads_file_name': 'test_reads_file_name',
-            'workspace_name': self.getWsName()
-        }  
-
+        params = self.getDefaultParams()
         ret = self.getImpl().upload_fastq_file(self.getContext(), params)
 
-        print '------ Testing upload_fastq_file Method OK ------'
+        print '------ Testing upload_fastq_file for file path Method OK ------'
+
+    def test_upload_fastq_file_url(self):
+        print '------ Testing upload_fastq_file for file URL Method ------'
+        params = self.getDefaultParams(file_path=False)
+        ret = self.getImpl().upload_fastq_file(self.getContext(), params)
+
+        print '------ Testing upload_fastq_file for file URL Method OK ------'
 
