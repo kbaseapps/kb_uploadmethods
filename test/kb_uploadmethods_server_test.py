@@ -191,7 +191,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         print '------ Testing upload_fastq_file for DropBox URL Method OK ------'
 
-    def test_upload_fastq_file_ftp_dropbox(self):
+    def test_upload_fastq_file_url_ftp(self):
         print '------ Testing upload_fastq_file for FTP URL Method ------'
         params = self.getDefaultParams(file_path=False)
         params['first_fastq_file_url'] = 'ftp://Anonymous:fake_email@hotmail.com@ftp.swfwmd.state.fl.us/pub/incoming/SP1.fq'
