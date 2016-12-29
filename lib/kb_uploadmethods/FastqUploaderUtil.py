@@ -165,9 +165,9 @@ class FastqUploaderUtil:
 				with open(copy_file_path, 'wb') as output:
 					shutil.copyfileobj(online_file, output)
 		elif download_type == 'FTP':
-			with closing(urllib2.urlopen(file_url)) as r:
-				with open(copy_file_path, 'wb') as f:
-					shutil.copyfileobj(r, f)
+			with closing(urllib2.urlopen(file_url)) as online_file:
+				with open(copy_file_path, 'wb') as output:
+					shutil.copyfileobj(online_file, output)
 
 		upload_file_params = {
 			'fwd_file': copy_file_path,
