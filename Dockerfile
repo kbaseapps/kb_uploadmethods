@@ -7,6 +7,7 @@ MAINTAINER KBase Developer
 
 # RUN apt-get update
 RUN pip install coverage
+RUN pip install dropbox
 
 # -----------------------------------------
 
