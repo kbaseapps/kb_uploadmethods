@@ -112,7 +112,8 @@ class FastqUploaderUtil:
 		file_path = self._get_file_path(file_name)
 		log('--->\nstart copying file to local:\n')
 		dstdir = os.path.join(self.scratch, 'tmp')
-		os.makedirs(dstdir)
+		if not os.path.exists(dstdir):
+			os.makedirs(dstdir)
 		shutil.copy2(file_path, dstdir)
 		copy_file_path = os.path.join(dstdir, file_name)
 		log('--->\ncopied file from: %s to: %s\n' % (file_path, copy_file_path))
