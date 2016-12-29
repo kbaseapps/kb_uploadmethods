@@ -1,3 +1,4 @@
 test_local
 sdk.cfg
 *.pyc
+*.bak-*

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "workspace_name",
     "first_fastq_file_name",
     "second_fastq_file_name",
+    "download_type",
     "first_fastq_file_url",
     "second_fastq_file_url",
     "reads_file_name"
@@ -34,6 +35,8 @@ public class UploadMethodParams {
     private String firstFastqFileName;
     @JsonProperty("second_fastq_file_name")
     private String secondFastqFileName;
+    @JsonProperty("download_type")
+    private String downloadType;
     @JsonProperty("first_fastq_file_url")
     private String firstFastqFileUrl;
     @JsonProperty("second_fastq_file_url")
@@ -84,6 +87,21 @@ public class UploadMethodParams {
 
     public UploadMethodParams withSecondFastqFileName(String secondFastqFileName) {
         this.secondFastqFileName = secondFastqFileName;
+        return this;
+    }
+
+    @JsonProperty("download_type")
+    public String getDownloadType() {
+        return downloadType;
+    }
+
+    @JsonProperty("download_type")
+    public void setDownloadType(String downloadType) {
+        this.downloadType = downloadType;
+    }
+
+    public UploadMethodParams withDownloadType(String downloadType) {
+        this.downloadType = downloadType;
         return this;
     }
 
@@ -144,7 +162,7 @@ public class UploadMethodParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((("UploadMethodParams"+" [workspaceName=")+ workspaceName)+", firstFastqFileName=")+ firstFastqFileName)+", secondFastqFileName=")+ secondFastqFileName)+", firstFastqFileUrl=")+ firstFastqFileUrl)+", secondFastqFileUrl=")+ secondFastqFileUrl)+", readsFileName=")+ readsFileName)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((("UploadMethodParams"+" [workspaceName=")+ workspaceName)+", firstFastqFileName=")+ firstFastqFileName)+", secondFastqFileName=")+ secondFastqFileName)+", downloadType=")+ downloadType)+", firstFastqFileUrl=")+ firstFastqFileUrl)+", secondFastqFileUrl=")+ secondFastqFileUrl)+", readsFileName=")+ readsFileName)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

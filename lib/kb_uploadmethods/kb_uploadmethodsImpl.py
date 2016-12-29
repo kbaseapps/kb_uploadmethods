@@ -24,7 +24,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "git@github.com:Tianhao-Gu/uk_uploadmethods.git"
-    GIT_COMMIT_HASH = "74ce1e3c85cc8bf31a03020c6cd1cbfcb15e8925"
+    GIT_COMMIT_HASH = "391022e4203683150e6615c1e584f7e36a03af26"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -47,7 +47,8 @@ class kb_uploadmethods:
            name of the object), parameter "first_fastq_file_name" of type
            "first_fastq_file_name" (input and output file path/url),
            parameter "second_fastq_file_name" of type
-           "second_fastq_file_name", parameter "first_fastq_file_url" of type
+           "second_fastq_file_name", parameter "download_type" of type
+           "download_type", parameter "first_fastq_file_url" of type
            "first_fastq_file_url", parameter "second_fastq_file_url" of type
            "second_fastq_file_url", parameter "reads_file_name" of type
            "reads_file_name"
@@ -71,7 +72,6 @@ class kb_uploadmethods:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
-        
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",
