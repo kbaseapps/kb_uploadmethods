@@ -10,6 +10,7 @@ module kb_uploadmethods {
 	/* input and output file path/url */
 	typedef string first_fastq_file_name;
     typedef string second_fastq_file_name;
+    typedef string download_type;
     typedef string first_fastq_file_url;
     typedef string second_fastq_file_url;
     typedef string reads_file_name;
@@ -19,6 +20,7 @@ module kb_uploadmethods {
 		workspace_name workspace_name;
 		first_fastq_file_name first_fastq_file_name;
 		second_fastq_file_name second_fastq_file_name;
+		download_type download_type;
 		first_fastq_file_url first_fastq_file_url;
 		second_fastq_file_url second_fastq_file_url;
 		reads_file_name reads_file_name;

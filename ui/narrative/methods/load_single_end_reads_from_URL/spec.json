@@ -12,11 +12,37 @@
   "parameters" : 
   [ 
     {
+      "id" : "downloadType",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "dropdown",
+      "dropdown_options": 
+      {
+        "options": 
+        [
+          {
+              "display": "HTTP",
+              "value": "HTTP"
+          },
+          {
+              "display": "FTP",
+              "value": "FTP"
+          },
+          {
+              "display": "DropBox",
+              "value": "DropBox"
+          }
+        ]
+      }
+    },
+    {
       "id" : "fastqFileURL",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
-      "default_values" : [ "http://" ],
+      "default_values" : [ "" ],
       "field_type" : "text",
       "text_options": {}
     },
@@ -46,6 +72,10 @@
         {
           "narrative_system_variable": "workspace",
           "target_property": "workspace_name"
+        },
+        {
+            "input_parameter": "downloadType",
+            "target_property": "download_type"
         },
         {
             "input_parameter": "fastqFileURL",

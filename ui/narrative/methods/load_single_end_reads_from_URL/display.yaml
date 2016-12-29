@@ -18,6 +18,12 @@ suggestions :
             []
 
 parameters :
+
+    downloadType:
+        ui-name: DOWNLOAD TYPE
+        short-hint: Download type ('HTTP', 'DropBox Shared Link', 'FTP')
+        long-hint  : Download type ('HTTP', 'DropBox Shared Link', 'FTP')
+        
     fastqFileURL :
         ui-name : FASTA/FASTQ FILE URL
         short-hint : Download link containing a single end library in FASTA/FASTQ format
