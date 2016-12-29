@@ -3,6 +3,7 @@ from pprint import pprint
 import subprocess
 import shutil
 import urllib2
+from contextlib import closing
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
 from ftp_service.ftp_serviceClient import ftp_service
 
@@ -94,10 +95,14 @@ class FastqUploaderUtil:
 				raise ValueError("Download type and URL prefix do NOT match")
 			elif params['download_type'] == 'DropBox' and (first_url_prefix != 'https' or second_url_prefix != 'https'):
 				raise ValueError("Download type and URL prefix do NOT match")
+			elif params['download_type'] == 'FTP' and (first_url_prefix != 'ftp:/' or second_url_prefix != 'ftp:/'):
+				raise ValueError("Download type and URL prefix do NOT match")
 		elif 'first_fastq_file_url' in params:
 			if params['download_type'] == 'HTTP' and url_prefix != 'http:':
 				raise ValueError("Download type and URL prefix do NOT match")
 			elif params['download_type'] == 'DropBox' and url_prefix != 'https':
+				raise ValueError("Download type and URL prefix do NOT match")
+			elif params['download_type'] == 'FTP' and url_prefix != 'ftp:/':
 				raise ValueError("Download type and URL prefix do NOT match")
 
 	def _get_file_path(self, upload_file_name):
@@ -142,21 +147,26 @@ class FastqUploaderUtil:
 
 		# Prepare copy file path
 		dstdir = os.path.join(self.scratch, 'tmp')
-		os.makedirs(dstdir)
+		if not os.path.exists(dstdir):
+			os.makedirs(dstdir)
 		copy_file_path = os.path.join(dstdir, file_name)
 
 		if download_type == 'HTTP':
-			online_file = urllib2.urlopen(file_url)
-			with open(copy_file_path,'wb') as output:
-				output.write(online_file.read())
+			with closing(urllib2.urlopen(file_url)) as online_file:
+				with open(copy_file_path, 'wb') as output:
+					shutil.copyfileobj(online_file, output)
 		elif download_type == 'DropBox':
 			if "?" not in file_url:
 				force_download_link = file_url + '?raw=1'
 			else:
 				force_download_link = file_url.partition('?')[0] + '?raw=1'
-			online_file = urllib2.urlopen(force_download_link)
-			with open(copy_file_path,'wb') as output:
-				output.write(online_file.read())
+			with closing(urllib2.urlopen(force_download_link)) as online_file:
+				with open(copy_file_path, 'wb') as output:
+					shutil.copyfileobj(online_file, output)
+		elif download_type == 'FTP':
+			with closing(urllib2.urlopen(file_url)) as r:
+				with open(copy_file_path, 'wb') as f:
+					shutil.copyfileobj(r, f)
 
 		upload_file_params = {
 			'fwd_file': copy_file_path,

@@ -152,6 +152,11 @@ class kb_uploadmethodsTest(unittest.TestCase):
         invalidate_input_params = self.getDefaultParams(file_path=False) 
         invalidate_input_params['download_type'] = 'DropBox' 
         with self.assertRaisesRegexp(ValueError, 'Download type and URL prefix do NOT match'):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)  
+
+        invalidate_input_params = self.getDefaultParams(file_path=False) 
+        invalidate_input_params['download_type'] = 'FTP' 
+        with self.assertRaisesRegexp(ValueError, 'Download type and URL prefix do NOT match'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)   
 
         invalidate_input_params = self.getDefaultParams(file_path=False) 
@@ -182,9 +187,16 @@ class kb_uploadmethodsTest(unittest.TestCase):
         params = self.getDefaultParams(file_path=False)
         params['first_fastq_file_url'] = 'https://www.dropbox.com/s/mcl7mual35c5p7s/SP1.fq?raw=1'
         params['download_type'] = 'DropBox'
-        print '========='
-        print params
         ret = self.getImpl().upload_fastq_file(self.getContext(), params)
 
         print '------ Testing upload_fastq_file for DropBox URL Method OK ------'
+
+    def test_upload_fastq_file_ftp_dropbox(self):
+        print '------ Testing upload_fastq_file for FTP URL Method ------'
+        params = self.getDefaultParams(file_path=False)
+        params['first_fastq_file_url'] = 'ftp://ftp.swfwmd.state.fl.us/pub/incoming/SP1.fq'
+        params['download_type'] = 'FTP'
+        ret = self.getImpl().upload_fastq_file(self.getContext(), params)
+
+        print '------ Testing upload_fastq_file for FTP URL Method OK ------'
 
