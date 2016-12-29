@@ -40,7 +40,8 @@ class kb_uploadmethods(object):
            name of the object), parameter "first_fastq_file_name" of type
            "first_fastq_file_name" (input and output file path/url),
            parameter "second_fastq_file_name" of type
-           "second_fastq_file_name", parameter "first_fastq_file_url" of type
+           "second_fastq_file_name", parameter "download_type" of type
+           "download_type", parameter "first_fastq_file_url" of type
            "first_fastq_file_url", parameter "second_fastq_file_url" of type
            "second_fastq_file_url", parameter "reads_file_name" of type
            "reads_file_name"

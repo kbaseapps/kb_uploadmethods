@@ -126,12 +126,14 @@ UploadMethodParams is a reference to a hash where the following keys are defined
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
 	first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
 	second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
+	download_type has a value which is a kb_uploadmethods.download_type
 	first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
 	second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
 	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 workspace_name is a string
 first_fastq_file_name is a string
 second_fastq_file_name is a string
+download_type is a string
 first_fastq_file_url is a string
 second_fastq_file_url is a string
 reads_file_name is a string
@@ -151,12 +153,14 @@ UploadMethodParams is a reference to a hash where the following keys are defined
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
 	first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
 	second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
+	download_type has a value which is a kb_uploadmethods.download_type
 	first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
 	second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
 	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 workspace_name is a string
 first_fastq_file_name is a string
 second_fastq_file_name is a string
+download_type is a string
 first_fastq_file_url is a string
 second_fastq_file_url is a string
 reads_file_name is a string
@@ -398,6 +402,32 @@ a string
 
 
 
+=head2 download_type
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
 =head2 first_fastq_file_url
 
 =over 4
@@ -517,6 +547,7 @@ a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_uploadmethods.workspace_name
 first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
 second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
+download_type has a value which is a kb_uploadmethods.download_type
 first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
 second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
 reads_file_name has a value which is a kb_uploadmethods.reads_file_name
@@ -531,6 +562,7 @@ a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_uploadmethods.workspace_name
 first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
 second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
+download_type has a value which is a kb_uploadmethods.download_type
 first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
 second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
 reads_file_name has a value which is a kb_uploadmethods.reads_file_name
