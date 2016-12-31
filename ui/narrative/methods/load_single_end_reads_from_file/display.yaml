@@ -1,4 +1,4 @@
-name     : Load Single-End Reads From File
+name     : Load Single-End Reads From Staging Area
 subtitle : Upload a Single End Library from a FASTA/FASTQ file into your Narrative
 tooltip  : Upload a Single End Library from a FASTA/FASTQ file into your Narrative
 
