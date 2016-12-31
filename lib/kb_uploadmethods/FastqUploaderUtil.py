@@ -4,6 +4,8 @@ import subprocess
 import shutil
 import urllib2
 from contextlib import closing
+import ftplib
+import re
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
 from ftp_service.ftp_serviceClient import ftp_service
 
@@ -167,6 +169,7 @@ class FastqUploaderUtil:
 				with open(copy_file_path, 'wb') as output:
 					shutil.copyfileobj(online_file, output)
 		elif download_type == 'FTP':
+			self._check_ftp_file_existence(file_url)
 			with closing(urllib2.urlopen(file_url)) as online_file:
 				with open(copy_file_path, 'wb') as output:
 					shutil.copyfileobj(online_file, output)
@@ -193,3 +196,31 @@ class FastqUploaderUtil:
 
 		return result
 
+	def _check_ftp_file_existence(self, file_url):
+
+		ftp_url_format = re.match(r'ftp://.*:.*@.*/.*', file_url)
+		if not ftp_url_format:
+			raise ValueError("FTP URL does NOT match format: 'ftp://user_name:password@domain/file_path")
+
+		user_name = re.search('ftp://(.+?):', file_url).group(1)
+		password = file_url.rpartition('@')[0].rpartition(':')[-1]
+		domain = re.search('ftp://.*:.*@(.+?)/', file_url).group(1)
+		file_path = file_url.partition('ftp://')[-1].partition('/')[-1].rpartition('/')[0]
+		file_name = re.search('ftp://.*:.*@.*/(.+$)', file_url).group(1)
+
+		try: ftp = ftplib.FTP(domain)
+		except ftplib.all_errors, error:
+			raise ValueError("Cannot connect: %s" % error)
+		else:
+			try: ftp.login(user_name, password)
+			except ftplib.all_errors, error:
+				raise ValueError("Cannot login: %s" % error)
+			else:
+				ftp.cwd(file_path)
+				if file_name in ftp.nlst():
+					pass
+				else:
+					raise ValueError("File does NOT exist in FTP path: %s" % domain + '/' + file_path)
+
+
+		
