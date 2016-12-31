@@ -1,6 +1,6 @@
-name     : Load Paired-End Reads From File
-subtitle : Upload a PairedEndLibrary from FASTA/FASTQ file(s) into your Narrative
-tooltip  : Upload a PairedEndLibrary from FASTA/FASTQ file(s) into your Narrative
+name     : Load Paired-End Reads From Staging Area
+subtitle : Upload a Paired End Library from FASTA/FASTQ file(s) into your Narrative
+tooltip  : Upload a Paired End Library from FASTA/FASTQ file(s) into your Narrative
 
 screenshots :
     []

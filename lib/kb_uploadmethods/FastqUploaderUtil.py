@@ -27,13 +27,17 @@ class FastqUploaderUtil:
 
 		self.validate_upload_fastq_file_parameters(params)
 
-		if 'first_fastq_file_name' in params:
+		if 'second_fastq_file_name' in params:
+			pass
+		elif 'first_fastq_file_name' in params:
 			returnVal = self._upload_file_path(file_name=params.get('first_fastq_file_name'), 
 							sequencing_tech='tech1', 
 							output_file_name=params['reads_file_name'],
 							workspace_name_or_id=params['workspace_name'])
 		
-		if 'first_fastq_file_url' in params:
+		if 'second_fastq_file_url' in params:
+			pass
+		elif 'first_fastq_file_url' in params:
 			returnVal = self._upload_file_url(
 							download_type=params.get('download_type'),
 							file_url=params.get('first_fastq_file_url'), 
@@ -64,15 +68,13 @@ class FastqUploaderUtil:
 			raise ValueError('Cannot upload Reads for both file path and file URL')	
 
 		# check for file path parameters
-		if 'first_fastq_file_name' in params:
-			self._validate_upload_file_path_availability(params["first_fastq_file_name"])
-		elif 'second_fastq_file_name' in params:
+		if 'second_fastq_file_name' in params:
 			self._validate_upload_file_path_availability(params["second_fastq_file_name"])
-
+		elif 'first_fastq_file_name' in params:
+			self._validate_upload_file_path_availability(params["first_fastq_file_name"])
+		
 		# check for file URL parameters
 		if 'first_fastq_file_url' in params:
-			self._validate_upload_file_URL_availability(params)
-		elif 'second_fastq_file_url' in params:
 			self._validate_upload_file_URL_availability(params)
 
 	def _validate_upload_file_path_availability(self, upload_file_name):

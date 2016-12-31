@@ -1,6 +1,6 @@
-name     : Load Paired-End Reads From URL
-subtitle : Upload a PairedEndLibrary from FASTA/FASTQ URLs into your Narrative
-tooltip  : Upload a PairedEndLibrary from FASTA/FASTQ URLs into your Narrative
+name     : Load Paired-End Reads From Web
+subtitle : Upload a Paired End Library from FASTA/FASTQ URLs into your Narrative
+tooltip  : Upload a Paired End Library from FASTA/FASTQ URLs into your Narrative
 
 screenshots :
     []
@@ -18,6 +18,12 @@ suggestions :
             []
 
 parameters :
+
+    downloadType:
+        ui-name: DOWNLOAD TYPE
+        short-hint: Download type ('HTTP', 'DropBox Shared Link', 'FTP')
+        long-hint  : Download type ('HTTP', 'DropBox Shared Link', 'FTP')
+
     fastqFileURL1 :
         ui-name : 1st PAIRED FASTA/FASTQ FILE URL
         short-hint : Download link containing a single end library in FASTA/FASTQ format
