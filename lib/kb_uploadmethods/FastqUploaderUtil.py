@@ -220,7 +220,7 @@ class FastqUploaderUtil:
 				if file_name in ftp.nlst():
 					pass
 				else:
-					raise ValueError("File does NOT exist in FTP path: %s" % domain + '/' + file_path)
+					raise ValueError("File %s does NOT exist in FTP path: %s" % (file_name, domain + '/' + file_path))
 
 
 		
