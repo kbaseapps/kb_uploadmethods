@@ -7,7 +7,7 @@ import requests
 import shutil
 from mock import patch
 import mock
-# from unittest.mock import MagicMock
+import ftplib
 
 from os import environ
 try:
@@ -56,6 +56,14 @@ class kb_uploadmethodsTest(unittest.TestCase):
         fq_filename = "SP1.fq"
         fq_path = os.path.join(cls.cfg['scratch'], fq_filename)
         shutil.copy(os.path.join("data", fq_filename), fq_path)
+
+        ftp_connection = ftplib.FTP('ftp.swfwmd.state.fl.us')
+        ftp_connection.login('Anonymous', 'fake_email@hotmail.com')
+        ftp_connection.cwd("/pub/incoming/")
+        if fq_filename not in ftp_connection.nlst():
+            fh = open(os.path.join("data", fq_filename), 'rb')
+            ftp_connection.storbinary('STOR SP1.fq', fh)
+            fh.close()
 
     @classmethod
     def tearDownClass(cls):
@@ -193,6 +201,19 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
     def test_upload_fastq_file_url_ftp(self):
         print '------ Testing upload_fastq_file for FTP URL Method ------'
+       
+        fake_ftp_domain_params = self.getDefaultParams(file_path=False)
+        fake_ftp_domain_params['first_fastq_file_url'] = 'ftp://Anonymous:fake_email@hotmail.com@fake_ftp.fake_ftp/pub/incoming/SP1.fq'
+        fake_ftp_domain_params['download_type'] = 'FTP'
+        with self.assertRaisesRegexp(ValueError, 'Cannot connect:'):
+            self.getImpl().upload_fastq_file(self.getContext(), fake_ftp_domain_params)
+
+        fake_ftp_user_params = self.getDefaultParams(file_path=False)
+        fake_ftp_user_params['first_fastq_file_url'] = 'ftp://fake_user:fake_email@hotmail.com@ftp.swfwmd.state.fl.us/pub/incoming/SP1.fq'
+        fake_ftp_user_params['download_type'] = 'FTP'
+        with self.assertRaisesRegexp(ValueError, 'Cannot login:'):
+            self.getImpl().upload_fastq_file(self.getContext(), fake_ftp_user_params)
+
         params = self.getDefaultParams(file_path=False)
         params['first_fastq_file_url'] = 'ftp://Anonymous:fake_email@hotmail.com@ftp.swfwmd.state.fl.us/pub/incoming/SP1.fq'
         params['download_type'] = 'FTP'
