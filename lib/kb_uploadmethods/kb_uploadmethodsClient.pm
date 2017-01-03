@@ -129,6 +129,7 @@ UploadMethodParams is a reference to a hash where the following keys are defined
 	download_type has a value which is a kb_uploadmethods.download_type
 	first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
 	second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
+	sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 workspace_name is a string
 first_fastq_file_name is a string
@@ -136,6 +137,7 @@ second_fastq_file_name is a string
 download_type is a string
 first_fastq_file_url is a string
 second_fastq_file_url is a string
+sequencing_tech is a string
 reads_file_name is a string
 UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
@@ -156,6 +158,7 @@ UploadMethodParams is a reference to a hash where the following keys are defined
 	download_type has a value which is a kb_uploadmethods.download_type
 	first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
 	second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
+	sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 workspace_name is a string
 first_fastq_file_name is a string
@@ -163,6 +166,7 @@ second_fastq_file_name is a string
 download_type is a string
 first_fastq_file_url is a string
 second_fastq_file_url is a string
+sequencing_tech is a string
 reads_file_name is a string
 UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
@@ -480,6 +484,32 @@ a string
 
 
 
+=head2 sequencing_tech
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
 =head2 reads_file_name
 
 =over 4
@@ -550,6 +580,7 @@ second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file
 download_type has a value which is a kb_uploadmethods.download_type
 first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
 second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
+sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 
 </pre>
@@ -565,6 +596,7 @@ second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file
 download_type has a value which is a kb_uploadmethods.download_type
 first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
 second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
+sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 
 

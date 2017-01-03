@@ -64,6 +64,44 @@
       }
     },
     {
+      "id" : "sequencingTech",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "dropdown",
+      "dropdown_options": 
+      {
+        "options": 
+        [
+          {
+              "display": "Illumina",
+              "value": "Illumina"
+          },
+          {
+              "display": "PacBio CLR",
+              "value": "PacBio CLR"
+          },
+          {
+              "display": "PacBio CCS",
+              "value": "PacBio CCS"
+          },
+          {
+              "display": "IonTorrent",
+              "value": "IonTorrent"
+          },
+          {
+              "display": "NanoPore",
+              "value": "NanoPore"
+          },
+          {
+              "display": "Unknown",
+              "value": "Unknown"
+          }
+        ]
+      }
+    },
+    {
       "id" : "outputObject",
       "optional" : false,
       "advanced" : false,
@@ -97,6 +135,10 @@
         {
           "input_parameter": "fastqFileName2",
           "target_property": "second_fastq_file_name"
+        },
+        {
+            "input_parameter": "sequencingTech",
+            "target_property": "sequencing_tech"
         },
         {
           "input_parameter": "outputObject",
