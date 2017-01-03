@@ -100,15 +100,28 @@ class FastqUploaderUtil:
 				raise ValueError("Download type and URL prefix do NOT match")
 			elif params['download_type'] in ['DropBox', 'Google Drive']  and (first_url_prefix != 'https' or second_url_prefix != 'https'):
 				raise ValueError("Download type and URL prefix do NOT match")
-			elif params['download_type'] == 'FTP' and (first_url_prefix[:3] != 'ftp' or second_url_prefix[:3] != 'ftp'):
-				raise ValueError("Download type and URL prefix do NOT match")
+			elif params['download_type'] == 'FTP':
+				if first_url_prefix[:3] != 'ftp' or second_url_prefix[:3] != 'ftp':
+					raise ValueError("Download type and URL prefix do NOT match")
+				else:
+					first_ftp_url_format = re.match(r'ftp://.*:.*@.*/.*', params['first_fastq_file_url'])
+					second_ftp_url_format = re.match(r'ftp://.*:.*@.*/.*', params['second_fastq_file_url'])
+					if not first_ftp_url_format:
+						raise ValueError("FTP Link: %s does NOT match format: 'ftp://user_name:password@domain/file_path'" % params['first_fastq_file_url'])
+					if not second_ftp_url_format:
+						raise ValueError("FTP Link: %s does NOT match format: 'ftp://user_name:password@domain/file_path'" % params['second_fastq_file_url'])
 		elif 'first_fastq_file_url' in params:
 			if params['download_type'] == 'Direct Download' and url_prefix[:4] != 'http':
 				raise ValueError("Download type and URL prefix do NOT match")
 			elif params['download_type'] in ['DropBox', 'Google Drive'] and url_prefix != 'https':
 				raise ValueError("Download type and URL prefix do NOT match")
-			elif params['download_type'] == 'FTP' and url_prefix[:3] != 'ftp':
-				raise ValueError("Download type and URL prefix do NOT match")
+			elif params['download_type'] == 'FTP': 
+				if url_prefix[:3] != 'ftp':
+					raise ValueError("Download type and URL prefix do NOT match")
+				else:
+					ftp_url_format = re.match(r'ftp://.*:.*@.*/.*', params['first_fastq_file_url'])
+					if not ftp_url_format:
+						raise ValueError("FTP Link: %s does NOT match format: 'ftp://user_name:password@domain/file_path'" % params['first_fastq_file_url'])
 
 	def _get_file_path(self, upload_file_name):
 		return '/data/bulk/%s/%s' % (self.token_user, upload_file_name)
@@ -183,10 +196,21 @@ class FastqUploaderUtil:
 					with open(copy_file_path, 'wb') as output:
 						shutil.copyfileobj(online_file, output)
 		elif download_type == 'FTP':
-			self._check_ftp_file_existence(file_url)
-			with closing(urllib2.urlopen(file_url)) as online_file:
-				with open(copy_file_path, 'wb') as output:
-					shutil.copyfileobj(online_file, output)
+			
+			self.ftp_user_name = re.search('ftp://(.+?):', file_url).group(1)
+			self.ftp_password = file_url.rpartition('@')[0].rpartition(':')[-1]
+			self.ftp_domain = re.search('ftp://.*:.*@(.+?)/', file_url).group(1)
+			self.ftp_file_path = file_url.partition('ftp://')[-1].partition('/')[-1].rpartition('/')[0]
+			self.ftp_file_name = re.search('ftp://.*:.*@.*/(.+$)', file_url).group(1)
+
+			self._check_ftp_connection(self.ftp_user_name, self.ftp_password, self.ftp_domain, self.ftp_file_path, self.ftp_file_name)
+			
+			ftp_connection = ftplib.FTP(self.ftp_domain)
+			ftp_connection.login(self.ftp_user_name, self.ftp_password)
+			ftp_connection.cwd(self.ftp_file_path)
+
+			with open(copy_file_path, 'wb') as output:
+				ftp_connection.retrbinary('RETR %s' % self.ftp_file_name, output.write)
 		elif download_type == 'Google Drive':
 			force_download_link_prefix = 'https://drive.google.com/uc?export=download&id='
 			file_id = file_url.partition('/d/')[-1].partition('/')[0]
@@ -223,17 +247,7 @@ class FastqUploaderUtil:
 
 		return result
 
-	def _check_ftp_file_existence(self, file_url):
-
-		ftp_url_format = re.match(r'ftp://.*:.*@.*/.*', file_url)
-		if not ftp_url_format:
-			raise ValueError("FTP URL does NOT match format: 'ftp://user_name:password@domain/file_path'")
-
-		user_name = re.search('ftp://(.+?):', file_url).group(1)
-		password = file_url.rpartition('@')[0].rpartition(':')[-1]
-		domain = re.search('ftp://.*:.*@(.+?)/', file_url).group(1)
-		file_path = file_url.partition('ftp://')[-1].partition('/')[-1].rpartition('/')[0]
-		file_name = re.search('ftp://.*:.*@.*/(.+$)', file_url).group(1)
+	def _check_ftp_connection(self, user_name, password, domain, file_path, file_name):
 
 		try: ftp = ftplib.FTP(domain)
 		except ftplib.all_errors, error:
