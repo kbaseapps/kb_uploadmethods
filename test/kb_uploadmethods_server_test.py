@@ -93,6 +93,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         if file_path:
             default_input_params = {
                 'first_fastq_file_name': 'SP1.fq',
+                'sequencing_tech': 'Illumina',
                 'reads_file_name': 'test_reads_file_name.reads',
                 'workspace_name': self.getWsName()
             }
@@ -100,6 +101,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
             default_input_params = {
                 'download_type': 'HTTP',
                 'first_fastq_file_url': 'http://molb7621.github.io/workshop/_downloads/SP1.fq',
+                'sequencing_tech': 'PacBio CLR',
                 'reads_file_name': 'test_reads_file_name.reads',
                 'workspace_name': self.getWsName()
             }

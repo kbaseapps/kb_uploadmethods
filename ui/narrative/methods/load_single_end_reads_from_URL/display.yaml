@@ -30,6 +30,11 @@ parameters :
         long-hint  : |
             Valid file extensions for FASTA: .fasta, .fna, .fa   Valid file extensions for FASTQ: .fastq, .fnq, .fq; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2
 
+    sequencingTech :
+        ui-name : SEQUENCING TECHNOLOGY
+        short-hint : The name of the sequencing technology used to create the reads file
+        long-hint  : The name of the sequencing technology used to create the reads file
+
     outputObject :
         ui-name : OUTPUT OBJECT FILE NAME
         short-hint : Provide a name for the output object that will be created by this upload

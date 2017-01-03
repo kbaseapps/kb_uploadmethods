@@ -24,7 +24,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "git@github.com:Tianhao-Gu/uk_uploadmethods.git"
-    GIT_COMMIT_HASH = "391022e4203683150e6615c1e584f7e36a03af26"
+    GIT_COMMIT_HASH = "48aa2fdbdc5e857cb7f02b9685a19d62f11f5b8f"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -50,7 +50,8 @@ class kb_uploadmethods:
            "second_fastq_file_name", parameter "download_type" of type
            "download_type", parameter "first_fastq_file_url" of type
            "first_fastq_file_url", parameter "second_fastq_file_url" of type
-           "second_fastq_file_url", parameter "reads_file_name" of type
+           "second_fastq_file_url", parameter "sequencing_tech" of type
+           "sequencing_tech", parameter "reads_file_name" of type
            "reads_file_name"
         :returns: instance of type "UploadMethodResult" -> structure:
            parameter "obj_ref" of type "obj_ref"

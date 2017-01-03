@@ -13,6 +13,7 @@ module kb_uploadmethods {
     typedef string download_type;
     typedef string first_fastq_file_url;
     typedef string second_fastq_file_url;
+    typedef string sequencing_tech;
     typedef string reads_file_name;
     typedef string obj_ref;
 
@@ -23,6 +24,7 @@ module kb_uploadmethods {
 		download_type download_type;
 		first_fastq_file_url first_fastq_file_url;
 		second_fastq_file_url second_fastq_file_url;
+		sequencing_tech sequencing_tech;
 		reads_file_name reads_file_name;
 	} UploadMethodParams;
 

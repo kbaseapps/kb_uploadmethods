@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "download_type",
     "first_fastq_file_url",
     "second_fastq_file_url",
+    "sequencing_tech",
     "reads_file_name"
 })
 public class UploadMethodParams {
@@ -41,6 +42,8 @@ public class UploadMethodParams {
     private String firstFastqFileUrl;
     @JsonProperty("second_fastq_file_url")
     private String secondFastqFileUrl;
+    @JsonProperty("sequencing_tech")
+    private String sequencingTech;
     @JsonProperty("reads_file_name")
     private String readsFileName;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
@@ -135,6 +138,21 @@ public class UploadMethodParams {
         return this;
     }
 
+    @JsonProperty("sequencing_tech")
+    public String getSequencingTech() {
+        return sequencingTech;
+    }
+
+    @JsonProperty("sequencing_tech")
+    public void setSequencingTech(String sequencingTech) {
+        this.sequencingTech = sequencingTech;
+    }
+
+    public UploadMethodParams withSequencingTech(String sequencingTech) {
+        this.sequencingTech = sequencingTech;
+        return this;
+    }
+
     @JsonProperty("reads_file_name")
     public String getReadsFileName() {
         return readsFileName;
@@ -162,7 +180,7 @@ public class UploadMethodParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((("UploadMethodParams"+" [workspaceName=")+ workspaceName)+", firstFastqFileName=")+ firstFastqFileName)+", secondFastqFileName=")+ secondFastqFileName)+", downloadType=")+ downloadType)+", firstFastqFileUrl=")+ firstFastqFileUrl)+", secondFastqFileUrl=")+ secondFastqFileUrl)+", readsFileName=")+ readsFileName)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((("UploadMethodParams"+" [workspaceName=")+ workspaceName)+", firstFastqFileName=")+ firstFastqFileName)+", secondFastqFileName=")+ secondFastqFileName)+", downloadType=")+ downloadType)+", firstFastqFileUrl=")+ firstFastqFileUrl)+", secondFastqFileUrl=")+ secondFastqFileUrl)+", sequencingTech=")+ sequencingTech)+", readsFileName=")+ readsFileName)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

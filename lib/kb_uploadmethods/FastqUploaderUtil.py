@@ -32,8 +32,9 @@ class FastqUploaderUtil:
 		if 'second_fastq_file_name' in params:
 			pass
 		elif 'first_fastq_file_name' in params:
-			returnVal = self._upload_file_path(file_name=params.get('first_fastq_file_name'), 
-							sequencing_tech='tech1', 
+			returnVal = self._upload_file_path(
+							file_name=params.get('first_fastq_file_name'), 
+							sequencing_tech=params.get('sequencing_tech'),
 							output_file_name=params['reads_file_name'],
 							workspace_name_or_id=params['workspace_name'])
 		
@@ -43,7 +44,7 @@ class FastqUploaderUtil:
 			returnVal = self._upload_file_url(
 							download_type=params.get('download_type'),
 							file_url=params.get('first_fastq_file_url'), 
-							sequencing_tech='tech1', 
+							sequencing_tech=params.get('sequencing_tech'),
 							output_file_name=params['reads_file_name'],
 							workspace_name_or_id=params['workspace_name'])
 
