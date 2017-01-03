@@ -57,9 +57,9 @@ class kb_uploadmethodsTest(unittest.TestCase):
         fq_path = os.path.join(cls.cfg['scratch'], fq_filename)
         shutil.copy(os.path.join("data", fq_filename), fq_path)
 
-        ftp_connection = ftplib.FTP('ftp.swfwmd.state.fl.us')
-        ftp_connection.login('Anonymous', 'fake_email@hotmail.com')
-        ftp_connection.cwd("/pub/incoming/")
+        ftp_connection = ftplib.FTP('ftp.dlptest.com')
+        ftp_connection.login('dlpuser', 'yc#KtFCR5kBp')
+        ftp_connection.cwd("/24_Hour/")
         if fq_filename not in ftp_connection.nlst():
             fh = open(os.path.join("data", fq_filename), 'rb')
             ftp_connection.storbinary('STOR SP1.fq', fh)
@@ -155,7 +155,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         # Testing URL prefix
         invalidate_input_params = self.getDefaultParams(file_path=False) 
-        invalidate_input_params['first_fastq_file_url'] = 'ftp://Anonymous:fake_email@hotmail.com@ftp.swfwmd.state.fl.us/pub/incoming/SP1.fq' 
+        invalidate_input_params['first_fastq_file_url'] = 'ftp://dlpuser:yc#KtFCR5kBp@ftp.dlptest.com/24_Hour/SP1.fq' 
         with self.assertRaisesRegexp(ValueError, 'Download type and URL prefix do NOT match'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)   
 
@@ -205,19 +205,19 @@ class kb_uploadmethodsTest(unittest.TestCase):
         print '------ Testing upload_fastq_file for FTP Link Method ------'
        
         fake_ftp_domain_params = self.getDefaultParams(file_path=False)
-        fake_ftp_domain_params['first_fastq_file_url'] = 'ftp://Anonymous:fake_email@hotmail.com@fake_ftp.fake_ftp/pub/incoming/SP1.fq'
+        fake_ftp_domain_params['first_fastq_file_url'] = 'ftp://dlpuser:yc#KtFCR5kBp@FAKE_SERVER.ftp.dlptest.com/24_Hour/SP1.fq'
         fake_ftp_domain_params['download_type'] = 'FTP'
         with self.assertRaisesRegexp(ValueError, 'Cannot connect:'):
             self.getImpl().upload_fastq_file(self.getContext(), fake_ftp_domain_params)
 
         fake_ftp_user_params = self.getDefaultParams(file_path=False)
-        fake_ftp_user_params['first_fastq_file_url'] = 'ftp://fake_user:fake_email@hotmail.com@ftp.swfwmd.state.fl.us/pub/incoming/SP1.fq'
+        fake_ftp_user_params['first_fastq_file_url'] = 'ftp://FAKE_USER:FAKE_PASSWORD@ftp.dlptest.com/24_Hour/SP1.fq'
         fake_ftp_user_params['download_type'] = 'FTP'
         with self.assertRaisesRegexp(ValueError, 'Cannot login:'):
             self.getImpl().upload_fastq_file(self.getContext(), fake_ftp_user_params)
 
         params = self.getDefaultParams(file_path=False)
-        params['first_fastq_file_url'] = 'ftp://Anonymous:fake_email@hotmail.com@ftp.swfwmd.state.fl.us/pub/incoming/SP1.fq'
+        params['first_fastq_file_url'] = 'ftp://dlpuser:yc#KtFCR5kBp@ftp.dlptest.com/24_Hour/SP1.fq'
         params['download_type'] = 'FTP'
         ret = self.getImpl().upload_fastq_file(self.getContext(), params)
 
