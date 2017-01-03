@@ -99,7 +99,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
             }
         else:
             default_input_params = {
-                'download_type': 'HTTP',
+                'download_type': 'Direct Download',
                 'first_fastq_file_url': 'http://molb7621.github.io/workshop/_downloads/SP1.fq',
                 'sequencing_tech': 'Unknown',
                 'reads_file_name': 'test_reads_file_name.reads',
@@ -155,7 +155,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         # Testing URL prefix
         invalidate_input_params = self.getDefaultParams(file_path=False) 
-        invalidate_input_params['first_fastq_file_url'] = 'https://www.dropbox.com/s/mcl7mual35c5p7s/SP1.fq?raw=1' 
+        invalidate_input_params['first_fastq_file_url'] = 'ftp://Anonymous:fake_email@hotmail.com@ftp.swfwmd.state.fl.us/pub/incoming/SP1.fq' 
         with self.assertRaisesRegexp(ValueError, 'Download type and URL prefix do NOT match'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)   
 
@@ -185,24 +185,24 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         print '------ Testing upload_fastq_file for file path Method OK ------'
 
-    def test_upload_fastq_file_url_http(self):
-        print '------ Testing upload_fastq_file for HTTP URL Method ------'
+    def test_upload_fastq_file_url_direct_download(self):
+        print '------ Testing upload_fastq_file for Direct Download Link Method ------'
         params = self.getDefaultParams(file_path=False)
         ret = self.getImpl().upload_fastq_file(self.getContext(), params)
 
-        print '------ Testing upload_fastq_file for HTTP URL Method OK ------'
+        print '------ Testing upload_fastq_file for Direct Download Link Method OK ------'
 
     def test_upload_fastq_file_url_dropbox(self):
-        print '------ Testing upload_fastq_file for DropBox URL Method ------'
+        print '------ Testing upload_fastq_file for DropBox Download Link Method ------'
         params = self.getDefaultParams(file_path=False)
         params['first_fastq_file_url'] = 'https://www.dropbox.com/s/mcl7mual35c5p7s/SP1.fq?dl=0'
         params['download_type'] = 'DropBox'
         ret = self.getImpl().upload_fastq_file(self.getContext(), params)
 
-        print '------ Testing upload_fastq_file for DropBox URL Method OK ------'
+        print '------ Testing upload_fastq_file for DropBox Download Link Method OK ------'
 
     def test_upload_fastq_file_url_ftp(self):
-        print '------ Testing upload_fastq_file for FTP URL Method ------'
+        print '------ Testing upload_fastq_file for FTP Link Method ------'
        
         fake_ftp_domain_params = self.getDefaultParams(file_path=False)
         fake_ftp_domain_params['first_fastq_file_url'] = 'ftp://Anonymous:fake_email@hotmail.com@fake_ftp.fake_ftp/pub/incoming/SP1.fq'
@@ -221,5 +221,5 @@ class kb_uploadmethodsTest(unittest.TestCase):
         params['download_type'] = 'FTP'
         ret = self.getImpl().upload_fastq_file(self.getContext(), params)
 
-        print '------ Testing upload_fastq_file for FTP URL Method OK ------'
+        print '------ Testing upload_fastq_file for FTP Link Method OK ------'
 

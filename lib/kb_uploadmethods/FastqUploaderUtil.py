@@ -96,18 +96,18 @@ class FastqUploaderUtil:
 			url_prefix = params['first_fastq_file_url'][:5].lower()
 
 		if 'second_fastq_file_url' in params:
-			if params['download_type'] == 'HTTP' and (first_url_prefix != 'http:' or second_url_prefix != 'http:'):
+			if params['download_type'] == 'Direct Download' and (first_url_prefix[:4] != 'http' or second_url_prefix[:4] != 'http'):
 				raise ValueError("Download type and URL prefix do NOT match")
 			elif params['download_type'] == 'DropBox' and (first_url_prefix != 'https' or second_url_prefix != 'https'):
 				raise ValueError("Download type and URL prefix do NOT match")
-			elif params['download_type'] == 'FTP' and (first_url_prefix != 'ftp:/' or second_url_prefix != 'ftp:/'):
+			elif params['download_type'] == 'FTP' and (first_url_prefix[:3] != 'ftp' or second_url_prefix[:3] != 'ftp'):
 				raise ValueError("Download type and URL prefix do NOT match")
 		elif 'first_fastq_file_url' in params:
-			if params['download_type'] == 'HTTP' and url_prefix != 'http:':
+			if params['download_type'] == 'Direct Download' and url_prefix[:4] != 'http':
 				raise ValueError("Download type and URL prefix do NOT match")
 			elif params['download_type'] == 'DropBox' and url_prefix != 'https':
 				raise ValueError("Download type and URL prefix do NOT match")
-			elif params['download_type'] == 'FTP' and url_prefix != 'ftp:/':
+			elif params['download_type'] == 'FTP' and url_prefix[:3] != 'ftp':
 				raise ValueError("Download type and URL prefix do NOT match")
 
 	def _get_file_path(self, upload_file_name):
@@ -157,7 +157,7 @@ class FastqUploaderUtil:
 			os.makedirs(dstdir)
 		copy_file_path = os.path.join(dstdir, file_name)
 
-		if download_type == 'HTTP':
+		if download_type == 'Direct Download':
 			with closing(urllib2.urlopen(file_url)) as online_file:
 				with open(copy_file_path, 'wb') as output:
 					shutil.copyfileobj(online_file, output)
@@ -201,7 +201,7 @@ class FastqUploaderUtil:
 
 		ftp_url_format = re.match(r'ftp://.*:.*@.*/.*', file_url)
 		if not ftp_url_format:
-			raise ValueError("FTP URL does NOT match format: 'ftp://user_name:password@domain/file_path")
+			raise ValueError("FTP URL does NOT match format: 'ftp://user_name:password@domain/file_path'")
 
 		user_name = re.search('ftp://(.+?):', file_url).group(1)
 		password = file_url.rpartition('@')[0].rpartition(':')[-1]

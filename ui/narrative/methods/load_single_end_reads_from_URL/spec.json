@@ -16,22 +16,22 @@
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
-      "default_values" : [ "HTTP" ],
+      "default_values" : [ "Direct Download Link" ],
       "field_type" : "dropdown",
       "dropdown_options": 
       {
         "options": 
         [
           {
-              "display": "HTTP",
-              "value": "HTTP"
+              "display": "Direct Download Link",
+              "value": "Direct Download"
           },
           {
-              "display": "FTP",
+              "display": "FTP Link",
               "value": "FTP"
           },
           {
-              "display": "DropBox",
+              "display": "DropBox Public Shared Link",
               "value": "DropBox"
           }
         ]
