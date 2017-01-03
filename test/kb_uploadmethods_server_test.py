@@ -195,7 +195,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def test_upload_fastq_file_url_dropbox(self):
         print '------ Testing upload_fastq_file for DropBox URL Method ------'
         params = self.getDefaultParams(file_path=False)
-        params['first_fastq_file_url'] = 'https://www.dropbox.com/s/mcl7mual35c5p7s/SP1.fq?raw=1'
+        params['first_fastq_file_url'] = 'https://www.dropbox.com/s/mcl7mual35c5p7s/SP1.fq?dl=0'
         params['download_type'] = 'DropBox'
         ret = self.getImpl().upload_fastq_file(self.getContext(), params)
 
