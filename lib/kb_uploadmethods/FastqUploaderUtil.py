@@ -158,17 +158,30 @@ class FastqUploaderUtil:
 		copy_file_path = os.path.join(dstdir, file_name)
 
 		if download_type == 'Direct Download':
-			with closing(urllib2.urlopen(file_url)) as online_file:
-				with open(copy_file_path, 'wb') as output:
-					shutil.copyfileobj(online_file, output)
+			try: online_file = urllib2.urlopen(file_url)
+			except urllib2.HTTPError as e:
+				raise ValueError("The server couldn\'t fulfill the request.\n(Is link publicaly accessable?)\nError code: %s" % e.code)
+			except urllib2.URLError as e:
+				raise ValueError("Failed to reach a server\nReason: %s" % e.reason)
+			else:
+				with closing(online_file):
+					with open(copy_file_path, 'wb') as output:
+						shutil.copyfileobj(online_file, output)
 		elif download_type == 'DropBox':
 			if "?" not in file_url:
 				force_download_link = file_url + '?raw=1'
 			else:
 				force_download_link = file_url.partition('?')[0] + '?raw=1'
-			with closing(urllib2.urlopen(force_download_link)) as online_file:
-				with open(copy_file_path, 'wb') as output:
-					shutil.copyfileobj(online_file, output)
+
+			try: online_file = urllib2.urlopen(force_download_link)
+			except urllib2.HTTPError as e:
+				raise ValueError("The server couldn\'t fulfill the request.\n(Is link publicaly accessable?)\nError code: %s" % e.code)
+			except urllib2.URLError as e:
+				raise ValueError("Failed to reach a server\nReason: %s" % e.reason)
+			else:
+				with closing(online_file):
+					with open(copy_file_path, 'wb') as output:
+						shutil.copyfileobj(online_file, output)
 		elif download_type == 'FTP':
 			self._check_ftp_file_existence(file_url)
 			with closing(urllib2.urlopen(file_url)) as online_file:
@@ -178,9 +191,15 @@ class FastqUploaderUtil:
 			force_download_link_prefix = 'https://drive.google.com/uc?export=download&id='
 			file_id = file_url.partition('/d/')[-1].partition('/')[0]
 			force_download_link = force_download_link_prefix + file_id
-			with closing(urllib2.urlopen(force_download_link)) as online_file:
-				with open(copy_file_path, 'wb') as output:
-					shutil.copyfileobj(online_file, output)
+			try: online_file = urllib2.urlopen(force_download_link)
+			except urllib2.HTTPError as e:
+				raise ValueError("The server couldn\'t fulfill the request.\n(Is link publicaly accessable?)\nError code: %s" % e.code)
+			except urllib2.URLError as e:
+				raise ValueError("Failed to reach a server\nReason: %s" % e.reason)
+			else:
+				with closing(online_file):
+					with open(copy_file_path, 'wb') as output:
+						shutil.copyfileobj(online_file, output)
 
 		upload_file_params = {
 			'fwd_file': copy_file_path,
