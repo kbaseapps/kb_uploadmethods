@@ -98,14 +98,14 @@ class FastqUploaderUtil:
 		if 'second_fastq_file_url' in params:
 			if params['download_type'] == 'Direct Download' and (first_url_prefix[:4] != 'http' or second_url_prefix[:4] != 'http'):
 				raise ValueError("Download type and URL prefix do NOT match")
-			elif params['download_type'] == 'DropBox' and (first_url_prefix != 'https' or second_url_prefix != 'https'):
+			elif params['download_type'] in ['DropBox', 'Google Drive']  and (first_url_prefix != 'https' or second_url_prefix != 'https'):
 				raise ValueError("Download type and URL prefix do NOT match")
 			elif params['download_type'] == 'FTP' and (first_url_prefix[:3] != 'ftp' or second_url_prefix[:3] != 'ftp'):
 				raise ValueError("Download type and URL prefix do NOT match")
 		elif 'first_fastq_file_url' in params:
 			if params['download_type'] == 'Direct Download' and url_prefix[:4] != 'http':
 				raise ValueError("Download type and URL prefix do NOT match")
-			elif params['download_type'] == 'DropBox' and url_prefix != 'https':
+			elif params['download_type'] in ['DropBox', 'Google Drive'] and url_prefix != 'https':
 				raise ValueError("Download type and URL prefix do NOT match")
 			elif params['download_type'] == 'FTP' and url_prefix[:3] != 'ftp':
 				raise ValueError("Download type and URL prefix do NOT match")
@@ -172,6 +172,13 @@ class FastqUploaderUtil:
 		elif download_type == 'FTP':
 			self._check_ftp_file_existence(file_url)
 			with closing(urllib2.urlopen(file_url)) as online_file:
+				with open(copy_file_path, 'wb') as output:
+					shutil.copyfileobj(online_file, output)
+		elif download_type == 'Google Drive':
+			force_download_link_prefix = 'https://drive.google.com/uc?export=download&id='
+			file_id = file_url.partition('/d/')[-1].partition('/')[0]
+			force_download_link = force_download_link_prefix + file_id
+			with closing(urllib2.urlopen(force_download_link)) as online_file:
 				with open(copy_file_path, 'wb') as output:
 					shutil.copyfileobj(online_file, output)
 

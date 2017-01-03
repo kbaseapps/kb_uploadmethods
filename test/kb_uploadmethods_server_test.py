@@ -223,3 +223,12 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         print '------ Testing upload_fastq_file for FTP Link Method OK ------'
 
+    def test_upload_fastq_file_url_google_drive(self):
+        print '------ Testing upload_fastq_file for Google Drive Download Link Method ------'
+        params = self.getDefaultParams(file_path=False)
+        params['first_fastq_file_url'] = 'https://drive.google.com/file/d/0B0exSa7ebQ0qNDc3ZTY5cDFob3M/view?usp=sharing'
+        params['download_type'] = 'Google Drive'
+        ret = self.getImpl().upload_fastq_file(self.getContext(), params)
+
+        print '------ Testing upload_fastq_file for Google Drive Download Link Method OK ------'
+

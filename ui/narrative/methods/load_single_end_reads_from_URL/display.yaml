@@ -21,11 +21,12 @@ parameters :
 
     downloadType:
         ui-name: DOWNLOAD TYPE
-        short-hint: Download type ('Direct Download Link', 'DropBox Public Shared Link', 'FTP Link')
+        short-hint: Download type ('Direct Download Link', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
         long-hint  : |
                 Direct Download Link should have direct download access and can be both http or https protocol
-                DropBox Public Shared Link should be a publicly shared link 
                 FTP Link should follow format: 'ftp://user_name:password@domain/file_path'
+                DropBox Public Shared Link should be a publicly shared DropBox link 
+                Google Drive Public Shared Link should be a publicly shared Google Drive link 
         
     fastqFileURL :
         ui-name : FASTA/FASTQ FILE URL
