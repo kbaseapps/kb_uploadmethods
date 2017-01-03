@@ -6,7 +6,8 @@
   "categories" : [ "active","upload" ],
   "widgets" : 
   {
-    "input" : "kbaseNarrativeMethodInput"
+    "input" : null,
+    "output" : "no-display"
   },
   "parameters" : 
   [ 
