@@ -30,10 +30,15 @@ class FastqUploaderUtil:
 		self.validate_upload_fastq_file_parameters(params)
 
 		if 'second_fastq_file_name' in params:
-			pass
+			returnVal = self._upload_file_path(
+							fwd_file=params.get('first_fastq_file_name'), 
+							rev_file=params.get('second_fastq_file_name'),
+							sequencing_tech=params.get('sequencing_tech'),
+							output_file_name=params['reads_file_name'],
+							workspace_name_or_id=params['workspace_name'])
 		elif 'first_fastq_file_name' in params:
 			returnVal = self._upload_file_path(
-							file_name=params.get('first_fastq_file_name'), 
+							fwd_file=params.get('first_fastq_file_name'), 
 							sequencing_tech=params.get('sequencing_tech'),
 							output_file_name=params['reads_file_name'],
 							workspace_name_or_id=params['workspace_name'])
@@ -126,21 +131,29 @@ class FastqUploaderUtil:
 	def _get_file_path(self, upload_file_name):
 		return '/data/bulk/%s/%s' % (self.token_user, upload_file_name)
 
-	def _upload_file_path(self, file_name, sequencing_tech, output_file_name, workspace_name_or_id):
-		file_path = self._get_file_path(file_name)
+	def _upload_file_path(self, fwd_file, sequencing_tech, output_file_name, workspace_name_or_id, rev_file=None):
+		fwd_file_path = self._get_file_path(fwd_file)
+
 		log('--->\nstart copying file to local:\n')
 		dstdir = os.path.join(self.scratch, 'tmp')
 		if not os.path.exists(dstdir):
 			os.makedirs(dstdir)
-		shutil.copy2(file_path, dstdir)
-		copy_file_path = os.path.join(dstdir, file_name)
-		log('--->\ncopied file from: %s to: %s\n' % (file_path, copy_file_path))
+		shutil.copy2(fwd_file_path, dstdir)
+		copy_fwd_file_path = os.path.join(dstdir, fwd_file)
+		log('--->\ncopied file from: %s to: %s\n' % (fwd_file_path, copy_fwd_file_path))
 
 		upload_file_params = {
-			'fwd_file': copy_file_path,
+			'fwd_file': copy_fwd_file_path,
 			'sequencing_tech': sequencing_tech,
 			'name': output_file_name
 		}
+
+		if rev_file:
+			rev_file_path = self._get_file_path(rev_file)
+			shutil.copy2(rev_file_path, dstdir)
+			copy_rev_file_path = os.path.join(dstdir, rev_file)
+			log('--->\ncopied file from: %s to: %s\n' % (rev_file_path, copy_rev_file_path))
+			upload_file_params['rev_file'] = copy_rev_file_path
 
 		if str(workspace_name_or_id).isdigit():
 			upload_file_params['wsid'] = int(workspace_name_or_id)
