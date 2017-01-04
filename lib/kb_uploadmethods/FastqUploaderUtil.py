@@ -196,7 +196,7 @@ class FastqUploaderUtil:
 			'name': output_file_name
 		}
 
-		if rev_file:
+		if rev_file_url:
 			# Prepare copy file path for rev_file
 			tmp_rev_file_name = 'tmp_rev_fastq.fq'
 			copy_rev_file_path = os.path.join(dstdir, tmp_rev_file_name)
