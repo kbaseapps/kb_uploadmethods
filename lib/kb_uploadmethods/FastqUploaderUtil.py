@@ -44,14 +44,22 @@ class FastqUploaderUtil:
 							workspace_name_or_id=params['workspace_name'])
 		
 		if 'second_fastq_file_url' in params:
-			pass
+			returnVal = self._upload_file_url(
+							download_type=params.get('download_type'),
+							fwd_file_url=params.get('first_fastq_file_url'), 
+							rev_file_url=params.get('second_fastq_file_url'),
+							sequencing_tech=params.get('sequencing_tech'),
+							output_file_name=params['reads_file_name'],
+							workspace_name_or_id=params['workspace_name']
+						)
 		elif 'first_fastq_file_url' in params:
 			returnVal = self._upload_file_url(
 							download_type=params.get('download_type'),
-							file_url=params.get('first_fastq_file_url'), 
+							fwd_file_url=params.get('first_fastq_file_url'), 
 							sequencing_tech=params.get('sequencing_tech'),
 							output_file_name=params['reads_file_name'],
-							workspace_name_or_id=params['workspace_name'])
+							workspace_name_or_id=params['workspace_name']
+						)
 
 		return returnVal
 
@@ -171,78 +179,29 @@ class FastqUploaderUtil:
 
 		return result
 
-	def _upload_file_url(self, download_type, file_url, sequencing_tech, output_file_name, workspace_name_or_id):
+	def _upload_file_url(self, download_type, fwd_file_url, sequencing_tech, output_file_name, workspace_name_or_id, rev_file_url=None):
 
-		log('--->\nFile URL:\n')
-		log(file_url)
-		file_name = 'tmp_fastq.fq'
-
-		# Prepare copy file path
+		# Prepare copy file path for fwd_file
+		tmp_fwd_file_name = 'tmp_fwd_fastq.fq'
 		dstdir = os.path.join(self.scratch, 'tmp')
 		if not os.path.exists(dstdir):
 			os.makedirs(dstdir)
-		copy_file_path = os.path.join(dstdir, file_name)
+		copy_fwd_file_path = os.path.join(dstdir, tmp_fwd_file_name)
 
-		if download_type == 'Direct Download':
-			try: online_file = urllib2.urlopen(file_url)
-			except urllib2.HTTPError as e:
-				raise ValueError("The server couldn\'t fulfill the request.\n(Is link publicaly accessable?)\nError code: %s" % e.code)
-			except urllib2.URLError as e:
-				raise ValueError("Failed to reach a server\nReason: %s" % e.reason)
-			else:
-				with closing(online_file):
-					with open(copy_file_path, 'wb') as output:
-						shutil.copyfileobj(online_file, output)
-		elif download_type == 'DropBox':
-			if "?" not in file_url:
-				force_download_link = file_url + '?raw=1'
-			else:
-				force_download_link = file_url.partition('?')[0] + '?raw=1'
-
-			try: online_file = urllib2.urlopen(force_download_link)
-			except urllib2.HTTPError as e:
-				raise ValueError("The server couldn\'t fulfill the request.\n(Is link publicaly accessable?)\nError code: %s" % e.code)
-			except urllib2.URLError as e:
-				raise ValueError("Failed to reach a server\nReason: %s" % e.reason)
-			else:
-				with closing(online_file):
-					with open(copy_file_path, 'wb') as output:
-						shutil.copyfileobj(online_file, output)
-		elif download_type == 'FTP':
-			
-			self.ftp_user_name = re.search('ftp://(.+?):', file_url).group(1)
-			self.ftp_password = file_url.rpartition('@')[0].rpartition(':')[-1]
-			self.ftp_domain = re.search('ftp://.*:.*@(.+?)/', file_url).group(1)
-			self.ftp_file_path = file_url.partition('ftp://')[-1].partition('/')[-1].rpartition('/')[0]
-			self.ftp_file_name = re.search('ftp://.*:.*@.*/(.+$)', file_url).group(1)
-
-			self._check_ftp_connection(self.ftp_user_name, self.ftp_password, self.ftp_domain, self.ftp_file_path, self.ftp_file_name)
-			
-			ftp_connection = ftplib.FTP(self.ftp_domain)
-			ftp_connection.login(self.ftp_user_name, self.ftp_password)
-			ftp_connection.cwd(self.ftp_file_path)
-
-			with open(copy_file_path, 'wb') as output:
-				ftp_connection.retrbinary('RETR %s' % self.ftp_file_name, output.write)
-		elif download_type == 'Google Drive':
-			force_download_link_prefix = 'https://drive.google.com/uc?export=download&id='
-			file_id = file_url.partition('/d/')[-1].partition('/')[0]
-			force_download_link = force_download_link_prefix + file_id
-			try: online_file = urllib2.urlopen(force_download_link)
-			except urllib2.HTTPError as e:
-				raise ValueError("The server couldn\'t fulfill the request.\n(Is link publicaly accessable?)\nError code: %s" % e.code)
-			except urllib2.URLError as e:
-				raise ValueError("Failed to reach a server\nReason: %s" % e.reason)
-			else:
-				with closing(online_file):
-					with open(copy_file_path, 'wb') as output:
-						shutil.copyfileobj(online_file, output)
+		self._download_file(download_type, fwd_file_url, copy_fwd_file_path)
 
 		upload_file_params = {
-			'fwd_file': copy_file_path,
+			'fwd_file': copy_fwd_file_path,
 			'sequencing_tech': sequencing_tech,
 			'name': output_file_name
 		}
+
+		if rev_file:
+			# Prepare copy file path for rev_file
+			tmp_rev_file_name = 'tmp_rev_fastq.fq'
+			copy_rev_file_path = os.path.join(dstdir, tmp_rev_file_name)
+			self._download_file(download_type, fwd_file_url, tmp_rev_file_name)
+			upload_file_params['rev_file'] = copy_rev_file_path
 
 		if str(workspace_name_or_id).isdigit():
 			upload_file_params['wsid'] = int(workspace_name_or_id)
@@ -260,6 +219,59 @@ class FastqUploaderUtil:
 
 		return result
 
+	def _download_file(self, download_type, file_url, copy_file_path):
+		if download_type == 'Direct Download':
+			self._download_direct_download_link(file_url, copy_file_path)
+		elif download_type == 'DropBox':
+			self._download_dropbox_link(file_url, copy_file_path)
+		elif download_type == 'FTP':
+			self._download_ftp_link(file_url, copy_file_path)
+		elif download_type == 'Google Drive':
+			self._download_google_drive_link(file_url, copy_file_path)
+
+	def _download_direct_download_link(self, file_url, copy_file_path):
+		try: online_file = urllib2.urlopen(file_url)
+		except urllib2.HTTPError as e:
+			raise ValueError("The server couldn\'t fulfill the request.\n(Is link publicaly accessable?)\nError code: %s" % e.code)
+		except urllib2.URLError as e:
+			raise ValueError("Failed to reach a server\nReason: %s" % e.reason)
+		else:
+			with closing(online_file):
+				with open(copy_file_path, 'wb') as output:
+					shutil.copyfileobj(online_file, output)
+
+	def _download_dropbox_link(self, file_url, copy_file_path):
+		if "?" not in file_url:
+			force_download_link = file_url + '?raw=1'
+		else:
+			force_download_link = file_url.partition('?')[0] + '?raw=1'
+
+		try: online_file = urllib2.urlopen(force_download_link)
+		except urllib2.HTTPError as e:
+			raise ValueError("The server couldn\'t fulfill the request.\n(Is link publicaly accessable?)\nError code: %s" % e.code)
+		except urllib2.URLError as e:
+			raise ValueError("Failed to reach a server\nReason: %s" % e.reason)
+		else:
+			with closing(online_file):
+				with open(copy_file_path, 'wb') as output:
+					shutil.copyfileobj(online_file, output)
+
+	def _download_ftp_link(self, file_url, copy_file_path):
+		self.ftp_user_name = re.search('ftp://(.+?):', file_url).group(1)
+		self.ftp_password = file_url.rpartition('@')[0].rpartition(':')[-1]
+		self.ftp_domain = re.search('ftp://.*:.*@(.+?)/', file_url).group(1)
+		self.ftp_file_path = file_url.partition('ftp://')[-1].partition('/')[-1].rpartition('/')[0]
+		self.ftp_file_name = re.search('ftp://.*:.*@.*/(.+$)', file_url).group(1)
+
+		self._check_ftp_connection(self.ftp_user_name, self.ftp_password, self.ftp_domain, self.ftp_file_path, self.ftp_file_name)
+		
+		ftp_connection = ftplib.FTP(self.ftp_domain)
+		ftp_connection.login(self.ftp_user_name, self.ftp_password)
+		ftp_connection.cwd(self.ftp_file_path)
+
+		with open(copy_file_path, 'wb') as output:
+			ftp_connection.retrbinary('RETR %s' % self.ftp_file_name, output.write)
+
 	def _check_ftp_connection(self, user_name, password, domain, file_path, file_name):
 
 		try: ftp = ftplib.FTP(domain)
@@ -276,5 +288,16 @@ class FastqUploaderUtil:
 				else:
 					raise ValueError("File %s does NOT exist in FTP path: %s" % (file_name, domain + '/' + file_path))
 
-
-		
+	def _download_google_drive_link(self, file_url, copy_file_path):
+		force_download_link_prefix = 'https://drive.google.com/uc?export=download&id='
+		file_id = file_url.partition('/d/')[-1].partition('/')[0]
+		force_download_link = force_download_link_prefix + file_id
+		try: online_file = urllib2.urlopen(force_download_link)
+		except urllib2.HTTPError as e:
+			raise ValueError("The server couldn\'t fulfill the request.\n(Is link publicaly accessable?)\nError code: %s" % e.code)
+		except urllib2.URLError as e:
+			raise ValueError("Failed to reach a server\nReason: %s" % e.reason)
+		else:
+			with closing(online_file):
+				with open(copy_file_path, 'wb') as output:
+					shutil.copyfileobj(online_file, output)	
