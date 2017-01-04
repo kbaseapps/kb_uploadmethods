@@ -33,6 +33,14 @@
           {
               "display": "fakefile.fq",
               "value": "fakefile.fq"
+          },
+          {
+              "display": "small.forward.fq",
+              "value": "small.forward.fq"
+          },
+          {
+              "display": "small.reverse.fq",
+              "value": "small.reverse.fq"
           }
         ]
       }
