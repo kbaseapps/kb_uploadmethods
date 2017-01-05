@@ -192,6 +192,15 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         print '------ Testing upload_fastq_file for Direct Download Link Method OK ------'
 
+    def test_upload_fastq_file_url_direct_download_paired_ends(self):
+        print '------ Testing upload_fastq_file for Direct Download Link (Paired Ends) Method ------'
+        paired_ends_direct_params = self.getDefaultParams(file_path=False)
+        paired_ends_direct_params['first_fastq_file_url'] = 'https://anl.box.com/shared/static/lph9l0ye6yqetnbk04cx33mqgrj4b85j.fq'
+        paired_ends_direct_params['second_fastq_file_url'] = 'https://anl.box.com/shared/static/1u9fi158vquyrh9qt7l04t71eqbpvyrr.fq'
+        ret = self.getImpl().upload_fastq_file(self.getContext(), paired_ends_direct_params)
+
+        print '------ Testing upload_fastq_file for Direct Download Link (Paired Ends) Method OK ------'
+
     def test_upload_fastq_file_url_dropbox(self):
         print '------ Testing upload_fastq_file for DropBox Download Link Method ------'
         params = self.getDefaultParams(file_path=False)
@@ -201,9 +210,18 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         print '------ Testing upload_fastq_file for DropBox Download Link Method OK ------'
 
-    def test_upload_fastq_file_url_ftp(self):
-        print '------ Testing upload_fastq_file for FTP Link Method ------'
-       
+    def test_upload_fastq_file_url_dropbox_paired_ends(self):
+        print '------ Testing upload_fastq_file for DropBox Download Link (Paired Ends) Method ------'
+        paired_ends_dropbox_params = self.getDefaultParams(file_path=False)
+        paired_ends_dropbox_params['first_fastq_file_url'] = 'https://www.dropbox.com/s/pgtja4btj62ctkx/small.forward.fq?dl=0'
+        paired_ends_dropbox_params['second_fastq_file_url'] = 'https://www.dropbox.com/s/hh55x00qluhfhr8/small.reverse.fq?dl=0'
+        paired_ends_dropbox_params['download_type'] = 'DropBox'
+        ret = self.getImpl().upload_fastq_file(self.getContext(), paired_ends_dropbox_params)
+
+        print '------ Testing upload_fastq_file for DropBox Download Link (Paired Ends) Method OK ------'
+
+    def test_ftp_validator(self):
+        print '------ Testing _check_ftp_connection for FTP Link Method ------'
         fake_ftp_domain_params = self.getDefaultParams(file_path=False)
         fake_ftp_domain_params['first_fastq_file_url'] = 'ftp://dlpuser:yc#KtFCR5kBp@FAKE_SERVER.ftp.dlptest.com/24_Hour/SP1.fq'
         fake_ftp_domain_params['download_type'] = 'FTP'
@@ -216,6 +234,10 @@ class kb_uploadmethodsTest(unittest.TestCase):
         with self.assertRaisesRegexp(ValueError, 'Cannot login:'):
             self.getImpl().upload_fastq_file(self.getContext(), fake_ftp_user_params)
 
+        print '------ Testing _check_ftp_connection for FTP Link Method OK ------'
+
+    def test_upload_fastq_file_url_ftp(self):
+        print '------ Testing upload_fastq_file for FTP Link Method ------'
         params = self.getDefaultParams(file_path=False)
         params['first_fastq_file_url'] = 'ftp://dlpuser:yc#KtFCR5kBp@ftp.dlptest.com/24_Hour/SP1.fq'
         params['download_type'] = 'FTP'
