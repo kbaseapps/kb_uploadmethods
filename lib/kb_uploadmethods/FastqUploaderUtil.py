@@ -34,14 +34,16 @@ class FastqUploaderUtil:
 							fwd_file=params.get('first_fastq_file_name'), 
 							rev_file=params.get('second_fastq_file_name'),
 							sequencing_tech=params.get('sequencing_tech'),
-							output_file_name=params['reads_file_name'],
-							workspace_name_or_id=params['workspace_name'])
-		elif 'first_fastq_file_name' in params:
+							output_file_name=params.get('reads_file_name'),
+							workspace_name_or_id=params.get('workspace_name')
+						)
+		elif 'first_fastq_file_name' in params and 'second_fastq_file_name' not in params:
 			returnVal = self._upload_file_path(
 							fwd_file=params.get('first_fastq_file_name'), 
 							sequencing_tech=params.get('sequencing_tech'),
-							output_file_name=params['reads_file_name'],
-							workspace_name_or_id=params['workspace_name'])
+							output_file_name=params.get('reads_file_name'),
+							workspace_name_or_id=params.get('workspace_name')
+						)
 		
 		if 'second_fastq_file_url' in params:
 			returnVal = self._upload_file_url(
@@ -49,16 +51,16 @@ class FastqUploaderUtil:
 							fwd_file_url=params.get('first_fastq_file_url'), 
 							rev_file_url=params.get('second_fastq_file_url'),
 							sequencing_tech=params.get('sequencing_tech'),
-							output_file_name=params['reads_file_name'],
-							workspace_name_or_id=params['workspace_name']
+							output_file_name=params.get('reads_file_name'),
+							workspace_name_or_id=params.get('workspace_name')
 						)
-		elif 'first_fastq_file_url' in params:
+		elif 'first_fastq_file_url' in params and 'second_fastq_file_url' not in params:
 			returnVal = self._upload_file_url(
 							download_type=params.get('download_type'),
 							fwd_file_url=params.get('first_fastq_file_url'), 
 							sequencing_tech=params.get('sequencing_tech'),
-							output_file_name=params['reads_file_name'],
-							workspace_name_or_id=params['workspace_name']
+							output_file_name=params.get('reads_file_name'),
+							workspace_name_or_id=params.get('workspace_name')
 						)
 
 		return returnVal
@@ -200,7 +202,7 @@ class FastqUploaderUtil:
 			# Prepare copy file path for rev_file
 			tmp_rev_file_name = 'tmp_rev_fastq.fq'
 			copy_rev_file_path = os.path.join(dstdir, tmp_rev_file_name)
-			self._download_file(download_type, fwd_file_url, tmp_rev_file_name)
+			self._download_file(download_type, rev_file_url, copy_rev_file_path)
 			upload_file_params['rev_file'] = copy_rev_file_path
 
 		if str(workspace_name_or_id).isdigit():
