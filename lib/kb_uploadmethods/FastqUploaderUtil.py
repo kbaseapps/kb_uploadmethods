@@ -181,6 +181,17 @@ class FastqUploaderUtil:
 
 		return result
 
+	def _un_zip_gzip(self, gzip_file_path):
+		with gzip.open(gzip_file_path, 'rb') as in_file:
+			s = in_file.read()
+
+		path_to_store = gzip_file_path[:-3]
+
+		with open(path_to_store, 'w') as f:
+			f.write(s)
+
+		return path_to_store
+
 	def _upload_file_url(self, download_type, fwd_file_url, sequencing_tech, output_file_name, workspace_name_or_id, rev_file_url=None):
 
 		# Prepare copy file path for fwd_file
@@ -191,6 +202,9 @@ class FastqUploaderUtil:
 		copy_fwd_file_path = os.path.join(dstdir, tmp_fwd_file_name)
 
 		self._download_file(download_type, fwd_file_url, copy_fwd_file_path)
+
+		if copy_fwd_file_path.endswith('.gz'):
+			copy_fwd_file_path = self._un_zip_gzip(copy_fwd_file_path)
 
 		upload_file_params = {
 			'fwd_file': copy_fwd_file_path,
@@ -204,6 +218,8 @@ class FastqUploaderUtil:
 			copy_rev_file_path = os.path.join(dstdir, tmp_rev_file_name)
 			self._download_file(download_type, rev_file_url, copy_rev_file_path)
 			upload_file_params['rev_file'] = copy_rev_file_path
+			if copy_rev_file_path.endswith('.gz'):
+				copy_rev_file_path = self._un_zip_gzip(copy_rev_file_path)
 
 		if str(workspace_name_or_id).isdigit():
 			upload_file_params['wsid'] = int(workspace_name_or_id)

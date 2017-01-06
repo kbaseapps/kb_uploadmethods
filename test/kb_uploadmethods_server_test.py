@@ -120,137 +120,145 @@ class kb_uploadmethodsTest(unittest.TestCase):
         # self.assertEqual(ret[...], ...) or other unittest methods
         pass
 
-    def test_contructor(self):
-        print '------ Testing Contructor Method ------'
-        ret = self.getImpl()
-        print 'self.config: %s' % ret.config
-        print 'self.callback_url: %s' % ret.config['SDK_CALLBACK_URL']
-        self.assertIsNotNone(ret.config)
-        self.assertIsNotNone(ret.config['SDK_CALLBACK_URL'])
-        print '------ Testing Contructor Method OK ------'
+    # def test_contructor(self):
+    #     print '------ Testing Contructor Method ------'
+    #     ret = self.getImpl()
+    #     print 'self.config: %s' % ret.config
+    #     print 'self.callback_url: %s' % ret.config['SDK_CALLBACK_URL']
+    #     self.assertIsNotNone(ret.config)
+    #     self.assertIsNotNone(ret.config['SDK_CALLBACK_URL'])
+    #     print '------ Testing Contructor Method OK ------'
 
-    def test_validate_upload_fastq_file_parameters(self):
-        print '------ Testing validate_upload_fastq_file_parameters Method ------'
+    # def test_validate_upload_fastq_file_parameters(self):
+    #     print '------ Testing validate_upload_fastq_file_parameters Method ------'
 
-        # Testing required params
-        invalidate_input_params = self.getDefaultParams()
-        del invalidate_input_params['reads_file_name']
-        with self.assertRaisesRegexp(ValueError, '"reads_file_name" parameter is required, but missing'):
-            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
-        invalidate_input_params = self.getDefaultParams()
-        del invalidate_input_params['workspace_name']
-        with self.assertRaisesRegexp(ValueError, '"workspace_name" parameter is required, but missing'):
-            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params) 
-        invalidate_input_params = self.getDefaultParams()
-        invalidate_input_params['first_fastq_file_url'] = 'https://fake_url'
-        with self.assertRaisesRegexp(ValueError, 'Cannot upload Reads for both file path and file URL'):
-            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)          
+    #     # Testing required params
+    #     invalidate_input_params = self.getDefaultParams()
+    #     del invalidate_input_params['reads_file_name']
+    #     with self.assertRaisesRegexp(ValueError, '"reads_file_name" parameter is required, but missing'):
+    #         self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
+    #     invalidate_input_params = self.getDefaultParams()
+    #     del invalidate_input_params['workspace_name']
+    #     with self.assertRaisesRegexp(ValueError, '"workspace_name" parameter is required, but missing'):
+    #         self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params) 
+    #     invalidate_input_params = self.getDefaultParams()
+    #     invalidate_input_params['first_fastq_file_url'] = 'https://fake_url'
+    #     with self.assertRaisesRegexp(ValueError, 'Cannot upload Reads for both file path and file URL'):
+    #         self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)          
 
-        # Testing _validate_upload_file_availability
-        invalidate_input_params = self.getDefaultParams()
-        nonexistent_file_name = 'fake_file_0123456.fastq'
-        invalidate_input_params['first_fastq_file_name'] = nonexistent_file_name
-        with self.assertRaisesRegexp(ValueError, 'Target file: %s is NOT available.' % nonexistent_file_name):
-            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)    
+    #     # Testing _validate_upload_file_availability
+    #     invalidate_input_params = self.getDefaultParams()
+    #     nonexistent_file_name = 'fake_file_0123456.fastq'
+    #     invalidate_input_params['first_fastq_file_name'] = nonexistent_file_name
+    #     with self.assertRaisesRegexp(ValueError, 'Target file: %s is NOT available.' % nonexistent_file_name):
+    #         self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)    
 
-        # Testing URL prefix
-        invalidate_input_params = self.getDefaultParams(file_path=False) 
-        invalidate_input_params['first_fastq_file_url'] = 'ftp://dlpuser:yc#KtFCR5kBp@ftp.dlptest.com/24_Hour/SP1.fq' 
-        with self.assertRaisesRegexp(ValueError, 'Download type and URL prefix do NOT match'):
-            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)   
+    #     # Testing URL prefix
+    #     invalidate_input_params = self.getDefaultParams(file_path=False) 
+    #     invalidate_input_params['first_fastq_file_url'] = 'ftp://dlpuser:yc#KtFCR5kBp@ftp.dlptest.com/24_Hour/SP1.fq' 
+    #     with self.assertRaisesRegexp(ValueError, 'Download type and URL prefix do NOT match'):
+    #         self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)   
 
-        invalidate_input_params = self.getDefaultParams(file_path=False) 
-        invalidate_input_params['download_type'] = 'DropBox' 
-        with self.assertRaisesRegexp(ValueError, 'Download type and URL prefix do NOT match'):
-            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)  
+    #     invalidate_input_params = self.getDefaultParams(file_path=False) 
+    #     invalidate_input_params['download_type'] = 'DropBox' 
+    #     with self.assertRaisesRegexp(ValueError, 'Download type and URL prefix do NOT match'):
+    #         self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)  
 
-        invalidate_input_params = self.getDefaultParams(file_path=False) 
-        invalidate_input_params['download_type'] = 'FTP' 
-        with self.assertRaisesRegexp(ValueError, 'Download type and URL prefix do NOT match'):
-            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)   
+    #     invalidate_input_params = self.getDefaultParams(file_path=False) 
+    #     invalidate_input_params['download_type'] = 'FTP' 
+    #     with self.assertRaisesRegexp(ValueError, 'Download type and URL prefix do NOT match'):
+    #         self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)   
 
-        invalidate_input_params = self.getDefaultParams(file_path=False) 
-        del invalidate_input_params['download_type']
-        with self.assertRaisesRegexp(ValueError, 'Download type parameter is required, but missing'):
-            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)  
+    #     invalidate_input_params = self.getDefaultParams(file_path=False) 
+    #     del invalidate_input_params['download_type']
+    #     with self.assertRaisesRegexp(ValueError, 'Download type parameter is required, but missing'):
+    #         self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)  
 
-        print '------ Testing validate_upload_fastq_file_parameters Method OK ------'
+    #     print '------ Testing validate_upload_fastq_file_parameters Method OK ------'
 
-    @patch.object(FastqUploaderUtil, '_get_file_path')
-    def test_upload_fastq_file_path(self, mock_get_file_path):
-        print '------ Testing upload_fastq_file for file path Method ------'
-        mock_get_file_path.return_value = '/kb/module/work/tmp/SP1.fq'
-        params = self.getDefaultParams()
-        ret = self.getImpl().upload_fastq_file(self.getContext(), params)
+    # @patch.object(FastqUploaderUtil, '_get_file_path')
+    # def test_upload_fastq_file_path(self, mock_get_file_path):
+    #     print '------ Testing upload_fastq_file for file path Method ------'
+    #     mock_get_file_path.return_value = '/kb/module/work/tmp/SP1.fq'
+    #     params = self.getDefaultParams()
+    #     ret = self.getImpl().upload_fastq_file(self.getContext(), params)
 
-        print '------ Testing upload_fastq_file for file path Method OK ------'
+    #     print '------ Testing upload_fastq_file for file path Method OK ------'
 
-    def test_upload_fastq_file_url_direct_download(self):
-        print '------ Testing upload_fastq_file for Direct Download Link Method ------'
-        params = self.getDefaultParams(file_path=False)
-        ret = self.getImpl().upload_fastq_file(self.getContext(), params)
+    # def test_upload_fastq_file_url_direct_download(self):
+    #     print '------ Testing upload_fastq_file for Direct Download Link Method ------'
+    #     params = self.getDefaultParams(file_path=False)
+    #     ret = self.getImpl().upload_fastq_file(self.getContext(), params)
 
-        print '------ Testing upload_fastq_file for Direct Download Link Method OK ------'
+    #     print '------ Testing upload_fastq_file for Direct Download Link Method OK ------'
 
-    def test_upload_fastq_file_url_direct_download_paired_ends(self):
-        print '------ Testing upload_fastq_file for Direct Download Link (Paired Ends) Method ------'
-        paired_ends_direct_params = self.getDefaultParams(file_path=False)
-        paired_ends_direct_params['first_fastq_file_url'] = 'https://anl.box.com/shared/static/lph9l0ye6yqetnbk04cx33mqgrj4b85j.fq'
-        paired_ends_direct_params['second_fastq_file_url'] = 'https://anl.box.com/shared/static/1u9fi158vquyrh9qt7l04t71eqbpvyrr.fq'
-        ret = self.getImpl().upload_fastq_file(self.getContext(), paired_ends_direct_params)
+    # def test_upload_fastq_file_url_direct_download_paired_ends(self):
+    #     print '------ Testing upload_fastq_file for Direct Download Link (Paired Ends) Method ------'
+    #     paired_ends_direct_params = self.getDefaultParams(file_path=False)
+    #     paired_ends_direct_params['first_fastq_file_url'] = 'https://anl.box.com/shared/static/lph9l0ye6yqetnbk04cx33mqgrj4b85j.fq'
+    #     paired_ends_direct_params['second_fastq_file_url'] = 'https://anl.box.com/shared/static/1u9fi158vquyrh9qt7l04t71eqbpvyrr.fq'
+    #     ret = self.getImpl().upload_fastq_file(self.getContext(), paired_ends_direct_params)
 
-        print '------ Testing upload_fastq_file for Direct Download Link (Paired Ends) Method OK ------'
+    #     print '------ Testing upload_fastq_file for Direct Download Link (Paired Ends) Method OK ------'
 
-    def test_upload_fastq_file_url_dropbox(self):
+    # def test_upload_fastq_file_url_dropbox(self):
+    #     print '------ Testing upload_fastq_file for DropBox Download Link Method ------'
+    #     params = self.getDefaultParams(file_path=False)
+    #     params['first_fastq_file_url'] = 'https://www.dropbox.com/s/mcl7mual35c5p7s/SP1.fq?dl=0'
+    #     params['download_type'] = 'DropBox'
+    #     ret = self.getImpl().upload_fastq_file(self.getContext(), params)
+
+    #     print '------ Testing upload_fastq_file for DropBox Download Link Method OK ------'
+
+    # def test_upload_fastq_file_url_dropbox_paired_ends(self):
+    #     print '------ Testing upload_fastq_file for DropBox Download Link (Paired Ends) Method ------'
+    #     paired_ends_dropbox_params = self.getDefaultParams(file_path=False)
+    #     paired_ends_dropbox_params['first_fastq_file_url'] = 'https://www.dropbox.com/s/pgtja4btj62ctkx/small.forward.fq?dl=0'
+    #     paired_ends_dropbox_params['second_fastq_file_url'] = 'https://www.dropbox.com/s/hh55x00qluhfhr8/small.reverse.fq?dl=0'
+    #     paired_ends_dropbox_params['download_type'] = 'DropBox'
+    #     ret = self.getImpl().upload_fastq_file(self.getContext(), paired_ends_dropbox_params)
+
+    #     print '------ Testing upload_fastq_file for DropBox Download Link (Paired Ends) Method OK ------'
+
+    # def test_ftp_validator(self):
+    #     print '------ Testing _check_ftp_connection for FTP Link Method ------'
+    #     fake_ftp_domain_params = self.getDefaultParams(file_path=False)
+    #     fake_ftp_domain_params['first_fastq_file_url'] = 'ftp://dlpuser:yc#KtFCR5kBp@FAKE_SERVER.ftp.dlptest.com/24_Hour/SP1.fq'
+    #     fake_ftp_domain_params['download_type'] = 'FTP'
+    #     with self.assertRaisesRegexp(ValueError, 'Cannot connect:'):
+    #         self.getImpl().upload_fastq_file(self.getContext(), fake_ftp_domain_params)
+
+    #     fake_ftp_user_params = self.getDefaultParams(file_path=False)
+    #     fake_ftp_user_params['first_fastq_file_url'] = 'ftp://FAKE_USER:FAKE_PASSWORD@ftp.dlptest.com/24_Hour/SP1.fq'
+    #     fake_ftp_user_params['download_type'] = 'FTP'
+    #     with self.assertRaisesRegexp(ValueError, 'Cannot login:'):
+    #         self.getImpl().upload_fastq_file(self.getContext(), fake_ftp_user_params)
+
+    #     print '------ Testing _check_ftp_connection for FTP Link Method OK ------'
+
+    # def test_upload_fastq_file_url_ftp(self):
+    #     print '------ Testing upload_fastq_file for FTP Link Method ------'
+    #     params = self.getDefaultParams(file_path=False)
+    #     params['first_fastq_file_url'] = 'ftp://dlpuser:yc#KtFCR5kBp@ftp.dlptest.com/24_Hour/SP1.fq'
+    #     params['download_type'] = 'FTP'
+    #     ret = self.getImpl().upload_fastq_file(self.getContext(), params)
+
+    #     print '------ Testing upload_fastq_file for FTP Link Method OK ------'
+
+    # def test_upload_fastq_file_url_google_drive(self):
+    #     print '------ Testing upload_fastq_file for Google Drive Download Link Method ------'
+    #     params = self.getDefaultParams(file_path=False)
+    #     params['first_fastq_file_url'] = 'https://drive.google.com/file/d/0B0exSa7ebQ0qNDc3ZTY5cDFob3M/view?usp=sharing'
+    #     params['download_type'] = 'Google Drive'
+    #     ret = self.getImpl().upload_fastq_file(self.getContext(), params)
+
+    #     print '------ Testing upload_fastq_file for Google Drive Download Link Method OK ------'
+
+    def test_upload_fastq_file_url_dropbox_gz_file(self):
         print '------ Testing upload_fastq_file for DropBox Download Link Method ------'
         params = self.getDefaultParams(file_path=False)
-        params['first_fastq_file_url'] = 'https://www.dropbox.com/s/mcl7mual35c5p7s/SP1.fq?dl=0'
+        params['first_fastq_file_url'] = 'https://www.dropbox.com/s/ipokdr941cg53sj/SP1.fq.gz?dl=0'
         params['download_type'] = 'DropBox'
         ret = self.getImpl().upload_fastq_file(self.getContext(), params)
 
         print '------ Testing upload_fastq_file for DropBox Download Link Method OK ------'
-
-    def test_upload_fastq_file_url_dropbox_paired_ends(self):
-        print '------ Testing upload_fastq_file for DropBox Download Link (Paired Ends) Method ------'
-        paired_ends_dropbox_params = self.getDefaultParams(file_path=False)
-        paired_ends_dropbox_params['first_fastq_file_url'] = 'https://www.dropbox.com/s/pgtja4btj62ctkx/small.forward.fq?dl=0'
-        paired_ends_dropbox_params['second_fastq_file_url'] = 'https://www.dropbox.com/s/hh55x00qluhfhr8/small.reverse.fq?dl=0'
-        paired_ends_dropbox_params['download_type'] = 'DropBox'
-        ret = self.getImpl().upload_fastq_file(self.getContext(), paired_ends_dropbox_params)
-
-        print '------ Testing upload_fastq_file for DropBox Download Link (Paired Ends) Method OK ------'
-
-    def test_ftp_validator(self):
-        print '------ Testing _check_ftp_connection for FTP Link Method ------'
-        fake_ftp_domain_params = self.getDefaultParams(file_path=False)
-        fake_ftp_domain_params['first_fastq_file_url'] = 'ftp://dlpuser:yc#KtFCR5kBp@FAKE_SERVER.ftp.dlptest.com/24_Hour/SP1.fq'
-        fake_ftp_domain_params['download_type'] = 'FTP'
-        with self.assertRaisesRegexp(ValueError, 'Cannot connect:'):
-            self.getImpl().upload_fastq_file(self.getContext(), fake_ftp_domain_params)
-
-        fake_ftp_user_params = self.getDefaultParams(file_path=False)
-        fake_ftp_user_params['first_fastq_file_url'] = 'ftp://FAKE_USER:FAKE_PASSWORD@ftp.dlptest.com/24_Hour/SP1.fq'
-        fake_ftp_user_params['download_type'] = 'FTP'
-        with self.assertRaisesRegexp(ValueError, 'Cannot login:'):
-            self.getImpl().upload_fastq_file(self.getContext(), fake_ftp_user_params)
-
-        print '------ Testing _check_ftp_connection for FTP Link Method OK ------'
-
-    def test_upload_fastq_file_url_ftp(self):
-        print '------ Testing upload_fastq_file for FTP Link Method ------'
-        params = self.getDefaultParams(file_path=False)
-        params['first_fastq_file_url'] = 'ftp://dlpuser:yc#KtFCR5kBp@ftp.dlptest.com/24_Hour/SP1.fq'
-        params['download_type'] = 'FTP'
-        ret = self.getImpl().upload_fastq_file(self.getContext(), params)
-
-        print '------ Testing upload_fastq_file for FTP Link Method OK ------'
-
-    def test_upload_fastq_file_url_google_drive(self):
-        print '------ Testing upload_fastq_file for Google Drive Download Link Method ------'
-        params = self.getDefaultParams(file_path=False)
-        params['first_fastq_file_url'] = 'https://drive.google.com/file/d/0B0exSa7ebQ0qNDc3ZTY5cDFob3M/view?usp=sharing'
-        params['download_type'] = 'Google Drive'
-        ret = self.getImpl().upload_fastq_file(self.getContext(), params)
-
-        print '------ Testing upload_fastq_file for Google Drive Download Link Method OK ------'
-
