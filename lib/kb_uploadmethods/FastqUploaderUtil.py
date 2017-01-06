@@ -6,6 +6,7 @@ import urllib2
 from contextlib import closing
 import ftplib
 import re
+import gzip
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
 from ftp_service.ftp_serviceClient import ftp_service
 
@@ -181,17 +182,6 @@ class FastqUploaderUtil:
 
 		return result
 
-	def _un_zip_gzip(self, gzip_file_path):
-		with gzip.open(gzip_file_path, 'rb') as in_file:
-			s = in_file.read()
-
-		path_to_store = gzip_file_path[:-3]
-
-		with open(path_to_store, 'w') as f:
-			f.write(s)
-
-		return path_to_store
-
 	def _upload_file_url(self, download_type, fwd_file_url, sequencing_tech, output_file_name, workspace_name_or_id, rev_file_url=None):
 
 		# Prepare copy file path for fwd_file
@@ -202,9 +192,6 @@ class FastqUploaderUtil:
 		copy_fwd_file_path = os.path.join(dstdir, tmp_fwd_file_name)
 
 		self._download_file(download_type, fwd_file_url, copy_fwd_file_path)
-
-		if copy_fwd_file_path.endswith('.gz'):
-			copy_fwd_file_path = self._un_zip_gzip(copy_fwd_file_path)
 
 		upload_file_params = {
 			'fwd_file': copy_fwd_file_path,
@@ -218,8 +205,6 @@ class FastqUploaderUtil:
 			copy_rev_file_path = os.path.join(dstdir, tmp_rev_file_name)
 			self._download_file(download_type, rev_file_url, copy_rev_file_path)
 			upload_file_params['rev_file'] = copy_rev_file_path
-			if copy_rev_file_path.endswith('.gz'):
-				copy_rev_file_path = self._un_zip_gzip(copy_rev_file_path)
 
 		if str(workspace_name_or_id).isdigit():
 			upload_file_params['wsid'] = int(workspace_name_or_id)
@@ -287,8 +272,26 @@ class FastqUploaderUtil:
 		ftp_connection.login(self.ftp_user_name, self.ftp_password)
 		ftp_connection.cwd(self.ftp_file_path)
 
-		with open(copy_file_path, 'wb') as output:
-			ftp_connection.retrbinary('RETR %s' % self.ftp_file_name, output.write)
+		if self.ftp_file_name.endswith('.gz'):
+			with open(copy_file_path + '.gz', 'wb') as output:
+				ftp_connection.retrbinary('RETR %s' % self.ftp_file_name, output.write)
+			with gzip.open(copy_file_path + '.gz', 'rb') as in_file:
+				with open(copy_file_path, 'w') as f:
+					f.write(in_file.read())
+		else:
+			with open(copy_file_path, 'wb') as output:
+				ftp_connection.retrbinary('RETR %s' % self.ftp_file_name, output.write)
+
+	# def _un_zip_gzip(self, gzip_file_path):
+	# 	with gzip.open(gzip_file_path, 'rb') as in_file:
+	# 		s = in_file.read()
+
+	# 	path_to_store = gzip_file_path[:-3]
+
+	# 	with open(path_to_store, 'w') as f:
+	# 		f.write(s)
+
+	# 	return path_to_store
 
 	def _check_ftp_connection(self, user_name, password, domain, file_path, file_name):
 
@@ -306,6 +309,7 @@ class FastqUploaderUtil:
 				else:
 					raise ValueError("File %s does NOT exist in FTP path: %s" % (file_name, domain + '/' + file_path))
 
+
 	def _download_google_drive_link(self, file_url, copy_file_path):
 		force_download_link_prefix = 'https://drive.google.com/uc?export=download&id='
 		file_id = file_url.partition('/d/')[-1].partition('/')[0]
@@ -319,3 +323,4 @@ class FastqUploaderUtil:
 			with closing(online_file):
 				with open(copy_file_path, 'wb') as output:
 					shutil.copyfileobj(online_file, output)	
+
