@@ -107,19 +107,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
             }
         return default_input_params
 
-    # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
-    def test_your_method(self):
-        # Prepare test objects in workspace if needed using
-        # self.getWsClient().save_objects({'workspace': self.getWsName(),
-        #                                  'objects': []})
-        #
-        # Run your method by
-        # ret = self.getImpl().your_method(self.getContext(), paramPeters...)
-        #
-        # Check returned data with
-        # self.assertEqual(ret[...], ...) or other unittest methods
-        pass
-
     def test_contructor(self):
         print '------ Testing Contructor Method ------'
         ret = self.getImpl()
