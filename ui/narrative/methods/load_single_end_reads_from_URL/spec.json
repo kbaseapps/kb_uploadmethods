@@ -12,12 +12,12 @@
   "parameter-groups": 
   [
     {
-        "id": "urlsToAdd",
+        "id": "urls_to_add",
         "parameters": [
-            "downloadType",
-            "fastqFileURL",
-            "outputObject",
-            "sequencingTech"
+            "download_type",
+            "first_fastq_file_url",
+            "reads_file_name",
+            "sequencing_tech"
         ],
         "optional": false,
         "advanced": false,
@@ -28,7 +28,7 @@
   "parameters" : 
   [ 
     {
-      "id" : "downloadType",
+      "id" : "download_type",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -58,7 +58,7 @@
       }
     },
     {
-      "id" : "fastqFileURL",
+      "id" : "first_fastq_file_url",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -67,7 +67,7 @@
       "text_options": {}
     },
     {
-      "id" : "sequencingTech",
+      "id" : "sequencing_tech",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -105,7 +105,7 @@
       }
     },
     {
-      "id" : "outputObject",
+      "id" : "reads_file_name",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -128,24 +128,24 @@
           "target_property": "workspace_name"
         },
         {
-            "input_parameter": "downloadType",
+            "input_parameter": "download_type",
             "target_property": "download_type"
         },
         {
-            "input_parameter": "fastqFileURL",
+            "input_parameter": "first_fastq_file_url",
             "target_property": "first_fastq_file_url" 
         },
         {
-            "input_parameter": "sequencingTech",
+            "input_parameter": "sequencing_tech",
             "target_property": "sequencing_tech"
         },
         {
-            "input_parameter": "outputObject",
+            "input_parameter": "reads_file_name",
             "target_property": "reads_file_name"
             
         },
         {
-          "input_parameter": "urlsToAdd",
+          "input_parameter": "urls_to_add",
           "target_property": "urls_to_add"
         }
       ],
