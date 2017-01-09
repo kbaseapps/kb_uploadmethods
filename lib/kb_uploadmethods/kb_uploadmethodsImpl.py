@@ -62,11 +62,15 @@ class kb_uploadmethods:
         print '--->\nRunning uploadmethods.upload_fastq_file\nparams:'
         print json.dumps(params, indent=1)
 
-        for params in params.get('urls_to_add'):
+        if params.get('urls_to_add'):
+            workspace_name = params.get('workspace_name')
+            for params_item in params.get('urls_to_add'):
+                params_item['workspace_name'] = workspace_name
+                fastqUploader = FastqUploaderUtil(self.config)
+                returnVal = fastqUploader.upload_fastq_file(params_item) 
+        else:
             fastqUploader = FastqUploaderUtil(self.config)
-            returnVal = fastqUploader.upload_fastq_file(params) 
-            print 'xxxxxxxx'
-            print returnVal
+            returnVal = fastqUploader.upload_fastq_file(params)
 
         #END upload_fastq_file
 
