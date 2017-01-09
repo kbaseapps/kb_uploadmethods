@@ -19,9 +19,9 @@ suggestions :
 
 parameters :
 
-    downloadType:
-        ui-name: DOWNLOAD TYPE
-        short-hint: Download type ('Direct Download Link', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
+    downloadType :
+        ui-name : DOWNLOAD TYPE
+        short-hint : Download type ('Direct Download Link', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
         long-hint  : |
                 Direct Download Link should have direct download access and can be both http or https protocol
                 FTP Link should follow format: 'ftp://user_name:password@domain/file_path'
@@ -43,6 +43,11 @@ parameters :
         ui-name : OUTPUT OBJECT FILE NAME
         short-hint : Provide a name for the output object that will be created by this upload
         long-hint  : Provide a name for the output object that will be created by this upload
+
+parameter-groups :
+    urls_to_add :
+        ui-name: URLs for FASTQ file
+        short-hint: URLs for FASTQ file
 
 description : none
 

@@ -9,6 +9,20 @@
     "input" : null,
     "output" : "no-display"
   },
+  "parameter-groups": 
+  [
+    {
+        "id": "urls_to_add",
+        "parameters": [
+            "fastqFileURL",
+            "outputObject"
+        ],
+        "optional": false,
+        "advanced": false,
+        "allow_multiple": true,
+        "with_border": true
+    }
+  ],
   "parameters" : 
   [ 
     {
