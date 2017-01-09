@@ -14,8 +14,10 @@
     {
         "id": "urlsToAdd",
         "parameters": [
+            "downloadType",
             "fastqFileURL",
-            "outputObject"
+            "outputObject",
+            "sequencingTech"
         ],
         "optional": false,
         "advanced": false,

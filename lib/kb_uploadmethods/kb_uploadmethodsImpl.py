@@ -62,8 +62,11 @@ class kb_uploadmethods:
         print '--->\nRunning uploadmethods.upload_fastq_file\nparams:'
         print json.dumps(params, indent=1)
 
-        fastqUploader = FastqUploaderUtil(self.config)
-        returnVal = fastqUploader.upload_fastq_file(params) 
+        for params in params.get('urls_to_add'):
+            fastqUploader = FastqUploaderUtil(self.config)
+            returnVal = fastqUploader.upload_fastq_file(params) 
+            print 'xxxxxxxx'
+            print returnVal
 
         #END upload_fastq_file
 

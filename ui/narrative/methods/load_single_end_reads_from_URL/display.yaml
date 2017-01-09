@@ -46,7 +46,7 @@ parameters :
 
 parameter-groups :
     urlsToAdd :
-        ui-name: URL FOR FASTQ FILE
+        ui-name: URL(S) FOR FASTQ FILE
         short-hint: URLs for FASTQ file
 
 description : none
