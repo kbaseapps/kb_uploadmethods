@@ -45,8 +45,8 @@ parameters :
         long-hint  : Provide a name for the output object that will be created by this upload
 
 parameter-groups :
-    urls_to_add :
-        ui-name: URLs for FASTQ file
+    urlsToAdd :
+        ui-name: URL FOR FASTQ FILE
         short-hint: URLs for FASTQ file
 
 description : none

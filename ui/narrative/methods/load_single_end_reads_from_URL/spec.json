@@ -12,7 +12,7 @@
   "parameter-groups": 
   [
     {
-        "id": "urls_to_add",
+        "id": "urlsToAdd",
         "parameters": [
             "fastqFileURL",
             "outputObject"
@@ -130,16 +130,21 @@
             "target_property": "download_type"
         },
         {
-            "target_property": "first_fastq_file_url",
-            "input_parameter": "fastqFileURL"   
+            "input_parameter": "fastqFileURL",
+            "target_property": "first_fastq_file_url" 
         },
         {
             "input_parameter": "sequencingTech",
             "target_property": "sequencing_tech"
         },
         {
-            "target_property": "reads_file_name",
-            "input_parameter": "outputObject"
+            "input_parameter": "outputObject",
+            "target_property": "reads_file_name"
+            
+        },
+        {
+          "input_parameter": "urlsToAdd",
+          "target_property": "urls_to_add"
         }
       ],
       "output_mapping" : 
