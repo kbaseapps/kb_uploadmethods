@@ -64,10 +64,13 @@ class kb_uploadmethods:
 
         if params.get('urls_to_add'):
             workspace_name = params.get('workspace_name')
+            returnVal = {'obj_ref': ''}
             for params_item in params.get('urls_to_add'):
                 params_item['workspace_name'] = workspace_name
                 fastqUploader = FastqUploaderUtil(self.config)
-                returnVal = fastqUploader.upload_fastq_file(params_item) 
+                itemReturnVal = fastqUploader.upload_fastq_file(params_item) 
+                returnVal['obj_ref'] += itemReturnVal['obj_ref'] + ',' 
+            returnVal['obj_ref'] = returnVal['obj_ref'][:-1]
         else:
             fastqUploader = FastqUploaderUtil(self.config)
             returnVal = fastqUploader.upload_fastq_file(params)
