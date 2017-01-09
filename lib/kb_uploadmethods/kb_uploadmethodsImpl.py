@@ -63,7 +63,7 @@ class kb_uploadmethods:
         print json.dumps(params, indent=1)
 
         fastqUploader = FastqUploaderUtil(self.config)
-        returnVal = fastqUploader.upload_fastq_file(params)
+        returnVal = fastqUploader.upload_fastq_file(params) 
 
         #END upload_fastq_file
 
