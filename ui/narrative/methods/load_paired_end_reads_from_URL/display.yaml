@@ -19,14 +19,10 @@ suggestions :
 
 parameters :
 
-    download_type:
-        ui-name: DOWNLOAD TYPE
-        short-hint: Download type ('Direct Download Link', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
-        long-hint  : |
-                Direct Download Link should have direct download access and can be both http or https protocol
-                FTP Link should follow format: 'ftp://user_name:password@domain/file_path'
-                DropBox Public Shared Link should be a publicly shared DropBox link 
-                Google Drive Public Shared Link should be a publicly shared Google Drive link 
+    download_type :
+        ui-name : DOWNLOAD TYPE
+        short-hint : Download type ('Direct Download Link', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
+        long-hint  : Download type ('Direct Download Link', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
 
     first_fastq_file_url :
         ui-name : FORWARD/LEFT PAIRED FASTA/FASTQ FILE URL
@@ -52,9 +48,9 @@ parameters :
 
 parameter-groups :
     urls_to_add :
-        ui-name : URL(S) FOR FASTQ FILE
-        short-hint : URLs for FASTQ file
-        long-hint  : URLs for FASTQ file
+        ui-name : FASTQ FILE URL(S)
+        short-hint : Fastq file URL and output Reads file name
+        long-hint  : Fastq file URL and output Reads file name
 
 description : none
 
