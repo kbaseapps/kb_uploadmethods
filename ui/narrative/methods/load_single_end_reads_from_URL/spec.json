@@ -109,7 +109,11 @@
       "allow_multiple" : false,
       "default_values" : [ "" ],
       "field_type" : "text",
-      "text_options" : {}
+      "text_options" :
+      {
+        "valid_ws_types" : [ "KBaseAssembly.SingleEndLibrary" ],
+        "is_output_name" : true
+      }
     } 
   ],
   "behavior" : 
