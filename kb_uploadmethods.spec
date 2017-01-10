@@ -17,6 +17,12 @@ module kb_uploadmethods {
     typedef string reads_file_name;
     typedef string obj_ref;
 
+    typedef structure {
+        first_fastq_file_url first_fastq_file_url;
+		second_fastq_file_url second_fastq_file_url;
+    	reads_file_name reads_file_name;
+    } urls_to_add;
+
 	typedef structure {
 		workspace_name workspace_name;
 		first_fastq_file_name first_fastq_file_name;
@@ -26,6 +32,7 @@ module kb_uploadmethods {
 		second_fastq_file_url second_fastq_file_url;
 		sequencing_tech sequencing_tech;
 		reads_file_name reads_file_name;
+		urls_to_add urls_to_add;
 	} UploadMethodParams;
 
 	typedef structure {

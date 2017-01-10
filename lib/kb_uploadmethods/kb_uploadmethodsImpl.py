@@ -24,7 +24,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "git@github.com:Tianhao-Gu/uk_uploadmethods.git"
-    GIT_COMMIT_HASH = "48aa2fdbdc5e857cb7f02b9685a19d62f11f5b8f"
+    GIT_COMMIT_HASH = "d2d60b113676883396e72cbde28f424d7e69f4f3"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -52,6 +52,10 @@ class kb_uploadmethods:
            "first_fastq_file_url", parameter "second_fastq_file_url" of type
            "second_fastq_file_url", parameter "sequencing_tech" of type
            "sequencing_tech", parameter "reads_file_name" of type
+           "reads_file_name", parameter "urls_to_add" of type "urls_to_add"
+           -> structure: parameter "first_fastq_file_url" of type
+           "first_fastq_file_url", parameter "second_fastq_file_url" of type
+           "second_fastq_file_url", parameter "reads_file_name" of type
            "reads_file_name"
         :returns: instance of type "UploadMethodResult" -> structure:
            parameter "obj_ref" of type "obj_ref"
@@ -63,10 +67,11 @@ class kb_uploadmethods:
         print json.dumps(params, indent=1)
 
         if params.get('urls_to_add'):
-            workspace_name = params.get('workspace_name')
             returnVal = {'obj_ref': ''}
             for params_item in params.get('urls_to_add'):
-                params_item['workspace_name'] = workspace_name
+                params_item['workspace_name'] = params.get('workspace_name')
+                params_item['download_type'] = params.get('download_type')
+                params_item['sequencing_tech'] = params.get('sequencing_tech')
                 fastqUploader = FastqUploaderUtil(self.config)
                 itemReturnVal = fastqUploader.upload_fastq_file(params_item) 
                 returnVal['obj_ref'] += itemReturnVal['obj_ref'] + ',' 
