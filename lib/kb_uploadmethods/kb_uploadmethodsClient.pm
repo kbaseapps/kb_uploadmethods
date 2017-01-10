@@ -131,6 +131,7 @@ UploadMethodParams is a reference to a hash where the following keys are defined
 	second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
 	sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+	urls_to_add has a value which is a kb_uploadmethods.urls_to_add
 workspace_name is a string
 first_fastq_file_name is a string
 second_fastq_file_name is a string
@@ -139,6 +140,10 @@ first_fastq_file_url is a string
 second_fastq_file_url is a string
 sequencing_tech is a string
 reads_file_name is a string
+urls_to_add is a reference to a hash where the following keys are defined:
+	first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
+	second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
+	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
 obj_ref is a string
@@ -160,6 +165,7 @@ UploadMethodParams is a reference to a hash where the following keys are defined
 	second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
 	sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+	urls_to_add has a value which is a kb_uploadmethods.urls_to_add
 workspace_name is a string
 first_fastq_file_name is a string
 second_fastq_file_name is a string
@@ -168,6 +174,10 @@ first_fastq_file_url is a string
 second_fastq_file_url is a string
 sequencing_tech is a string
 reads_file_name is a string
+urls_to_add is a reference to a hash where the following keys are defined:
+	first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
+	second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
+	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
 obj_ref is a string
@@ -562,6 +572,40 @@ a string
 
 
 
+=head2 urls_to_add
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
+second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
+reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
+second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
+reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+
+
+=end text
+
+=back
+
+
+
 =head2 UploadMethodParams
 
 =over 4
@@ -582,6 +626,7 @@ first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_ur
 second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
 sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+urls_to_add has a value which is a kb_uploadmethods.urls_to_add
 
 </pre>
 
@@ -598,6 +643,7 @@ first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_ur
 second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
 sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+urls_to_add has a value which is a kb_uploadmethods.urls_to_add
 
 
 =end text

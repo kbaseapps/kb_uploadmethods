@@ -26,7 +26,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "first_fastq_file_url",
     "second_fastq_file_url",
     "sequencing_tech",
-    "reads_file_name"
+    "reads_file_name",
+    "urls_to_add"
 })
 public class UploadMethodParams {
 
@@ -46,6 +47,13 @@ public class UploadMethodParams {
     private String sequencingTech;
     @JsonProperty("reads_file_name")
     private String readsFileName;
+    /**
+     * <p>Original spec-file type: urls_to_add</p>
+     * 
+     * 
+     */
+    @JsonProperty("urls_to_add")
+    private UrlsToAdd urlsToAdd;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("workspace_name")
@@ -168,6 +176,31 @@ public class UploadMethodParams {
         return this;
     }
 
+    /**
+     * <p>Original spec-file type: urls_to_add</p>
+     * 
+     * 
+     */
+    @JsonProperty("urls_to_add")
+    public UrlsToAdd getUrlsToAdd() {
+        return urlsToAdd;
+    }
+
+    /**
+     * <p>Original spec-file type: urls_to_add</p>
+     * 
+     * 
+     */
+    @JsonProperty("urls_to_add")
+    public void setUrlsToAdd(UrlsToAdd urlsToAdd) {
+        this.urlsToAdd = urlsToAdd;
+    }
+
+    public UploadMethodParams withUrlsToAdd(UrlsToAdd urlsToAdd) {
+        this.urlsToAdd = urlsToAdd;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -180,7 +213,7 @@ public class UploadMethodParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((("UploadMethodParams"+" [workspaceName=")+ workspaceName)+", firstFastqFileName=")+ firstFastqFileName)+", secondFastqFileName=")+ secondFastqFileName)+", downloadType=")+ downloadType)+", firstFastqFileUrl=")+ firstFastqFileUrl)+", secondFastqFileUrl=")+ secondFastqFileUrl)+", sequencingTech=")+ sequencingTech)+", readsFileName=")+ readsFileName)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((("UploadMethodParams"+" [workspaceName=")+ workspaceName)+", firstFastqFileName=")+ firstFastqFileName)+", secondFastqFileName=")+ secondFastqFileName)+", downloadType=")+ downloadType)+", firstFastqFileUrl=")+ firstFastqFileUrl)+", secondFastqFileUrl=")+ secondFastqFileUrl)+", sequencingTech=")+ sequencingTech)+", readsFileName=")+ readsFileName)+", urlsToAdd=")+ urlsToAdd)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

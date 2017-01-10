@@ -45,6 +45,10 @@ class kb_uploadmethods(object):
            "first_fastq_file_url", parameter "second_fastq_file_url" of type
            "second_fastq_file_url", parameter "sequencing_tech" of type
            "sequencing_tech", parameter "reads_file_name" of type
+           "reads_file_name", parameter "urls_to_add" of type "urls_to_add"
+           -> structure: parameter "first_fastq_file_url" of type
+           "first_fastq_file_url", parameter "second_fastq_file_url" of type
+           "second_fastq_file_url", parameter "reads_file_name" of type
            "reads_file_name"
         :returns: instance of type "UploadMethodResult" -> structure:
            parameter "obj_ref" of type "obj_ref"

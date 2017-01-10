@@ -14,10 +14,8 @@
     {
         "id": "urls_to_add",
         "parameters": [
-            "download_type",
             "first_fastq_file_url",
-            "reads_file_name",
-            "sequencing_tech"
+            "reads_file_name"
         ],
         "optional": false,
         "advanced": false,
@@ -128,25 +126,21 @@
           "target_property": "workspace_name"
         },
         {
-            "input_parameter": "download_type",
-            "target_property": "download_type"
+          "input_parameter": "download_type",
+          "target_property": "download_type"
         },
         {
-            "input_parameter": "first_fastq_file_url",
-            "target_property": "first_fastq_file_url" 
+          "input_parameter": "first_fastq_file_url",
+          "target_property": "first_fastq_file_url" 
         },
         {
-            "input_parameter": "sequencing_tech",
-            "target_property": "sequencing_tech"
+          "input_parameter": "sequencing_tech",
+          "target_property": "sequencing_tech"
         },
         {
-            "input_parameter": "reads_file_name",
-            "target_property": "reads_file_name"
+          "input_parameter": "reads_file_name",
+          "target_property": "reads_file_name"
             
-        },
-        {
-          "input_parameter": "urls_to_add",
-          "target_property": "urls_to_add"
         }
       ],
       "output_mapping" : 
