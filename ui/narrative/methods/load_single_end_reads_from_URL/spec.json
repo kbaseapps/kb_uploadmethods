@@ -141,6 +141,11 @@
           "input_parameter": "reads_file_name",
           "target_property": "reads_file_name"
             
+        },
+        {
+          "input_parameter": "urls_to_add",
+          "target_property": "urls_to_add"
+            
         }
       ],
       "output_mapping" : 
