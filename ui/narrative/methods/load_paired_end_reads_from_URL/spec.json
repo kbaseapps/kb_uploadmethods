@@ -9,10 +9,25 @@
     "input" : null,
     "output" : "no-display"
   },
+  "parameter-groups": 
+  [
+    {
+        "id": "urls_to_add",
+        "parameters": [
+            "first_fastq_file_url",
+            "second_fastq_file_url",
+            "reads_file_name"
+        ],
+        "optional": false,
+        "advanced": false,
+        "allow_multiple": true,
+        "with_border": true
+    }
+  ],
   "parameters" : 
   [  
     {
-      "id" : "downloadType",
+      "id" : "download_type",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -42,7 +57,7 @@
       }
     },
     {
-      "id" : "fastqFileURL1",
+      "id" : "first_fastq_file_url",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -51,7 +66,7 @@
       "text_options": {}
     },
     {
-      "id" : "fastqFileURL2",
+      "id" : "second_fastq_file_url",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -60,7 +75,7 @@
       "text_options": {}
     },
     {
-      "id" : "sequencingTech",
+      "id" : "sequencing_tech",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -98,7 +113,7 @@
       }
     },
     {
-      "id" : "outputObject",
+      "id" : "reads_file_name",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -125,23 +140,23 @@
           "target_property": "workspace_name"
         },
         {
-            "input_parameter": "downloadType",
+            "input_parameter": "download_type",
             "target_property": "download_type"
         },
         {
-          "input_parameter": "fastqFileURL1",
+          "input_parameter": "first_fastq_file_url",
           "target_property": "first_fastq_file_url"
         },
         {
-          "input_parameter": "fastqFileURL2",
+          "input_parameter": "second_fastq_file_url",
           "target_property": "second_fastq_file_url"
         },
         {
-            "input_parameter": "sequencingTech",
+            "input_parameter": "sequencing_tech",
             "target_property": "sequencing_tech"
         },
         {
-          "input_parameter": "outputObject",
+          "input_parameter": "reads_file_name",
           "target_property": "reads_file_name"
         }
       ],
