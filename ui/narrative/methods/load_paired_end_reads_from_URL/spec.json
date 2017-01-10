@@ -119,10 +119,7 @@
       "allow_multiple" : false,
       "default_values" : [ "" ],
       "field_type" : "text",
-      "text_options" : 
-      {
-        "valid_ws_types" : [ "KBaseAssembly.PairedEndLibrary" ]
-      }
+      "text_options" : { }
     }
   ],
   "behavior" : 
