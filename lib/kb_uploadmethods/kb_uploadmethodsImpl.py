@@ -42,23 +42,24 @@ class kb_uploadmethods:
 
     def upload_fastq_file(self, ctx, params):
         """
-        :param params: instance of type "UploadMethodParams" -> structure:
-           parameter "workspace_name" of type "workspace_name" (workspace
-           name of the object), parameter "first_fastq_file_name" of type
-           "first_fastq_file_name" (input and output file path/url),
-           parameter "second_fastq_file_name" of type
-           "second_fastq_file_name", parameter "download_type" of type
-           "download_type", parameter "first_fastq_file_url" of type
-           "first_fastq_file_url", parameter "second_fastq_file_url" of type
-           "second_fastq_file_url", parameter "sequencing_tech" of type
-           "sequencing_tech", parameter "reads_file_name" of type
-           "reads_file_name", parameter "urls_to_add" of type "urls_to_add"
-           -> structure: parameter "first_fastq_file_url" of type
-           "first_fastq_file_url", parameter "second_fastq_file_url" of type
-           "second_fastq_file_url", parameter "reads_file_name" of type
-           "reads_file_name"
-        :returns: instance of type "UploadMethodResult" -> structure:
-           parameter "obj_ref" of type "obj_ref"
+        :param params:
+            sequencing_tech: sequencing technology
+            reads_file_name: output reads file name
+            workspace_name: workspace name/ID of the object
+            
+            For files in user's staging area:
+            first_fastq_file_name: single-end fastq file name or forward/left paired-end fastq file name from user's staging area
+            second_fastq_file_name: reverse/right paired-end fastq file name user's staging area
+            
+            For files from web:
+            download_type: download type for web source fastq file ('Direct Download', 'FTP', 'DropBox', 'Google Drive')
+            first_fastq_file_url: single-end fastq file URL or forward/left paired-end fastq file URL
+            second_fastq_file_url: reverse/right paired-end fastq file URL
+             
+            urls_to_add: used for parameter-groups. dict of {first_fastq_file_url, second_fastq_file_url, reads_file_name}
+
+        :returns: 
+            obj_ref: return object(s) ref
         """
         # ctx is the context object
         # return variables are: returnVal
