@@ -28,7 +28,7 @@ class FastqUploaderUtil:
 	upload_fastq_file: upload single-end fastq file or paired-end fastq files to workspace as read(s)
 	                   source file can be either from user's staging area or web
 
-	params:
+	params: 
 	first_fastq_file_name: single-end fastq file name or forward/left paired-end fastq file name from user's staging area
 	second_fastq_file_name: reverse/right paired-end fastq file name user's staging area
 	sequencing_tech: sequencing technology
