@@ -9,19 +9,19 @@ module kb_uploadmethods {
 
 	/* input and output file path/url */
 	typedef string first_fastq_file_name;
-    typedef string second_fastq_file_name;
-    typedef string download_type;
-    typedef string first_fastq_file_url;
-    typedef string second_fastq_file_url;
-    typedef string sequencing_tech;
-    typedef string reads_file_name;
-    typedef string obj_ref;
+	typedef string second_fastq_file_name;
+	typedef string download_type;
+	typedef string first_fastq_file_url;
+	typedef string second_fastq_file_url;
+	typedef string sequencing_tech;
+	typedef string reads_file_name;
+	typedef string obj_ref;
 
-    typedef structure {
-        first_fastq_file_url first_fastq_file_url;
+	typedef structure {
+		first_fastq_file_url first_fastq_file_url;
 		second_fastq_file_url second_fastq_file_url;
-    	reads_file_name reads_file_name;
-    } urls_to_add;
+		reads_file_name reads_file_name;
+	} urls_to_add;
 
 	typedef structure {
 		workspace_name workspace_name;
@@ -39,6 +39,6 @@ module kb_uploadmethods {
 		obj_ref obj_ref;
 	} UploadMethodResult;
 
-    funcdef upload_fastq_file(UploadMethodParams params)
-    	returns (UploadMethodResult returnVal) authentication required;
+	funcdef upload_fastq_file(UploadMethodParams params)
+		returns (UploadMethodResult returnVal) authentication required;
 };
