@@ -12,7 +12,7 @@
   "parameters" : 
   [ 
     {
-      "id" : "fastqFileName",
+      "id" : "first_fastq_file_name",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -46,7 +46,7 @@
       }
     },
     {
-      "id" : "sequencingTech",
+      "id" : "sequencing_tech",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -84,7 +84,7 @@
       }
     },
     {
-      "id" : "outputObject",
+      "id" : "reads_file_name",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -111,15 +111,15 @@
           "target_property": "workspace_name"
         },
         {
-            "input_parameter": "fastqFileName",
+            "input_parameter": "first_fastq_file_name",
             "target_property": "first_fastq_file_name"
         },
         {
-            "input_parameter": "sequencingTech",
+            "input_parameter": "sequencing_tech",
             "target_property": "sequencing_tech"
         },
         {
-            "input_parameter": "outputObject",
+            "input_parameter": "reads_file_name",
             "target_property": "reads_file_name"
         }
       ],
