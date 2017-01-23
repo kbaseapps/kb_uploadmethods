@@ -18,7 +18,7 @@ suggestions :
             []
 
 parameters :
-    first_fastq_file_name :
+    fwd_staging_file_name :
         ui-name : FASTA/FASTQ FILE NAME
         short-hint : Short read file containing a single end library in FASTA/FASTQ format
         long-hint  : |
@@ -29,7 +29,7 @@ parameters :
         short-hint : The name of the sequencing technology used to create the reads file
         long-hint  : The name of the sequencing technology used to create the reads file
 
-    reads_file_name :
+    name :
         ui-name : OUTPUT OBJECT FILE NAME
         short-hint : Provide a name for the output object that will be created by this upload
         long-hint  : Provide a name for the output object that will be created by this upload

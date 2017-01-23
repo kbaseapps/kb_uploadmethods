@@ -23,8 +23,8 @@ class kb_uploadmethods:
     # the latter method is running.
     ######################################### noqa
     VERSION = "0.0.1"
-    GIT_URL = "git@github.com:Tianhao-Gu/uk_uploadmethods.git"
-    GIT_COMMIT_HASH = "d2d60b113676883396e72cbde28f424d7e69f4f3"
+    GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
+    GIT_COMMIT_HASH = "fd901fdac12fe74d0159b94ba127094aac757dcf"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -42,24 +42,31 @@ class kb_uploadmethods:
 
     def upload_fastq_file(self, ctx, params):
         """
-        :param params:
-            sequencing_tech: sequencing technology
-            reads_file_name: output reads file name
-            workspace_name: workspace name/ID of the object
-            
-            For files in user's staging area:
-            first_fastq_file_name: single-end fastq file name or forward/left paired-end fastq file name from user's staging area
-            second_fastq_file_name: reverse/right paired-end fastq file name user's staging area
-            
-            For files from web:
-            download_type: download type for web source fastq file ('Direct Download', 'FTP', 'DropBox', 'Google Drive')
-            first_fastq_file_url: single-end fastq file URL or forward/left paired-end fastq file URL
-            second_fastq_file_url: reverse/right paired-end fastq file URL
-             
-            urls_to_add: used for parameter-groups. dict of {first_fastq_file_url, second_fastq_file_url, reads_file_name}
-
-        :returns: 
-            obj_ref: return object(s) ref
+        :param params: instance of type "UploadMethodParams"
+           (sequencing_tech: sequencing technology name: output reads file
+           name workspace_name: workspace name/ID of the object For files in
+           user's staging area: fwd_staging_file_name: single-end fastq file
+           name or forward/left paired-end fastq file name from user's
+           staging area rev_staging_file_name: reverse/right paired-end fastq
+           file name user's staging area For files from web: download_type:
+           download type for web source fastq file ('Direct Download', 'FTP',
+           'DropBox', 'Google Drive') fwd_file_url: single-end fastq file URL
+           or forward/left paired-end fastq file URL rev_file_url:
+           reverse/right paired-end fastq file URL urls_to_add: used for
+           parameter-groups. dict of {fwd_file_url, rev_file_url, name}) ->
+           structure: parameter "workspace_name" of type "workspace_name"
+           (workspace name of the object), parameter "fwd_staging_file_name"
+           of type "fwd_staging_file_name" (input and output file path/url),
+           parameter "rev_staging_file_name" of type "rev_staging_file_name",
+           parameter "download_type" of type "download_type", parameter
+           "fwd_file_url" of type "fwd_file_url", parameter "rev_file_url" of
+           type "rev_file_url", parameter "sequencing_tech" of type
+           "sequencing_tech", parameter "name" of type "name", parameter
+           "urls_to_add" of type "urls_to_add" -> structure: parameter
+           "fwd_file_url" of type "fwd_file_url", parameter "rev_file_url" of
+           type "rev_file_url", parameter "name" of type "name"
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref"
         """
         # ctx is the context object
         # return variables are: returnVal

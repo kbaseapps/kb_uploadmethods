@@ -35,21 +35,29 @@ class kb_uploadmethods(object):
 
     def upload_fastq_file(self, params, context=None):
         """
-        :param params: instance of type "UploadMethodParams" -> structure:
-           parameter "workspace_name" of type "workspace_name" (workspace
-           name of the object), parameter "first_fastq_file_name" of type
-           "first_fastq_file_name" (input and output file path/url),
-           parameter "second_fastq_file_name" of type
-           "second_fastq_file_name", parameter "download_type" of type
-           "download_type", parameter "first_fastq_file_url" of type
-           "first_fastq_file_url", parameter "second_fastq_file_url" of type
-           "second_fastq_file_url", parameter "sequencing_tech" of type
-           "sequencing_tech", parameter "reads_file_name" of type
-           "reads_file_name", parameter "urls_to_add" of type "urls_to_add"
-           -> structure: parameter "first_fastq_file_url" of type
-           "first_fastq_file_url", parameter "second_fastq_file_url" of type
-           "second_fastq_file_url", parameter "reads_file_name" of type
-           "reads_file_name"
+        :param params: instance of type "UploadMethodParams"
+           (sequencing_tech: sequencing technology name: output reads file
+           name workspace_name: workspace name/ID of the object For files in
+           user's staging area: fwd_staging_file_name: single-end fastq file
+           name or forward/left paired-end fastq file name from user's
+           staging area rev_staging_file_name: reverse/right paired-end fastq
+           file name user's staging area For files from web: download_type:
+           download type for web source fastq file ('Direct Download', 'FTP',
+           'DropBox', 'Google Drive') fwd_file_url: single-end fastq file URL
+           or forward/left paired-end fastq file URL rev_file_url:
+           reverse/right paired-end fastq file URL urls_to_add: used for
+           parameter-groups. dict of {fwd_file_url, rev_file_url, name}) ->
+           structure: parameter "workspace_name" of type "workspace_name"
+           (workspace name of the object), parameter "fwd_staging_file_name"
+           of type "fwd_staging_file_name" (input and output file path/url),
+           parameter "rev_staging_file_name" of type "rev_staging_file_name",
+           parameter "download_type" of type "download_type", parameter
+           "fwd_file_url" of type "fwd_file_url", parameter "rev_file_url" of
+           type "rev_file_url", parameter "sequencing_tech" of type
+           "sequencing_tech", parameter "name" of type "name", parameter
+           "urls_to_add" of type "urls_to_add" -> structure: parameter
+           "fwd_file_url" of type "fwd_file_url", parameter "rev_file_url" of
+           type "rev_file_url", parameter "name" of type "name"
         :returns: instance of type "UploadMethodResult" -> structure:
            parameter "obj_ref" of type "obj_ref"
         """

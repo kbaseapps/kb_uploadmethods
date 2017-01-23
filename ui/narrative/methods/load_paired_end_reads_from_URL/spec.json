@@ -14,9 +14,9 @@
     {
         "id": "urls_to_add",
         "parameters": [
-            "first_fastq_file_url",
-            "second_fastq_file_url",
-            "reads_file_name"
+            "fwd_file_url",
+            "rev_file_url",
+            "name"
         ],
         "optional": false,
         "advanced": false,
@@ -57,7 +57,7 @@
       }
     },
     {
-      "id" : "first_fastq_file_url",
+      "id" : "fwd_file_url",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -66,7 +66,7 @@
       "text_options": {}
     },
     {
-      "id" : "second_fastq_file_url",
+      "id" : "rev_file_url",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -113,7 +113,7 @@
       }
     },
     {
-      "id" : "reads_file_name",
+      "id" : "name",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -140,20 +140,20 @@
             "target_property": "download_type"
         },
         {
-          "input_parameter": "first_fastq_file_url",
-          "target_property": "first_fastq_file_url"
+          "input_parameter": "fwd_file_url",
+          "target_property": "fwd_file_url"
         },
         {
-          "input_parameter": "second_fastq_file_url",
-          "target_property": "second_fastq_file_url"
+          "input_parameter": "rev_file_url",
+          "target_property": "rev_file_url"
         },
         {
             "input_parameter": "sequencing_tech",
             "target_property": "sequencing_tech"
         },
         {
-          "input_parameter": "reads_file_name",
-          "target_property": "reads_file_name"
+          "input_parameter": "name",
+          "target_property": "name"
         },
         {
           "input_parameter": "urls_to_add",

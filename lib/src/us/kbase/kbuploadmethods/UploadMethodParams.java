@@ -13,40 +13,53 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * <p>Original spec-file type: UploadMethodParams</p>
- * 
+ * <pre>
+ * sequencing_tech: sequencing technology
+ * name: output reads file name
+ * workspace_name: workspace name/ID of the object
+ * For files in user's staging area:
+ * fwd_staging_file_name: single-end fastq file name or forward/left paired-end fastq file name from user's staging area
+ * rev_staging_file_name: reverse/right paired-end fastq file name user's staging area
+ * For files from web:
+ * download_type: download type for web source fastq file ('Direct Download', 'FTP', 'DropBox', 'Google Drive')
+ * fwd_file_url: single-end fastq file URL or forward/left paired-end fastq file URL
+ * rev_file_url: reverse/right paired-end fastq file URL
+ *  
+ * urls_to_add: used for parameter-groups. dict of {fwd_file_url, rev_file_url, name}
+ * </pre>
  * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "workspace_name",
-    "first_fastq_file_name",
-    "second_fastq_file_name",
+    "fwd_staging_file_name",
+    "rev_staging_file_name",
     "download_type",
-    "first_fastq_file_url",
-    "second_fastq_file_url",
+    "fwd_file_url",
+    "rev_file_url",
     "sequencing_tech",
-    "reads_file_name",
+    "name",
     "urls_to_add"
 })
 public class UploadMethodParams {
 
     @JsonProperty("workspace_name")
     private String workspaceName;
-    @JsonProperty("first_fastq_file_name")
-    private String firstFastqFileName;
-    @JsonProperty("second_fastq_file_name")
-    private String secondFastqFileName;
+    @JsonProperty("fwd_staging_file_name")
+    private String fwdStagingFileName;
+    @JsonProperty("rev_staging_file_name")
+    private String revStagingFileName;
     @JsonProperty("download_type")
     private String downloadType;
-    @JsonProperty("first_fastq_file_url")
-    private String firstFastqFileUrl;
-    @JsonProperty("second_fastq_file_url")
-    private String secondFastqFileUrl;
+    @JsonProperty("fwd_file_url")
+    private String fwdFileUrl;
+    @JsonProperty("rev_file_url")
+    private String revFileUrl;
     @JsonProperty("sequencing_tech")
     private String sequencingTech;
-    @JsonProperty("reads_file_name")
-    private String readsFileName;
+    @JsonProperty("name")
+    private String name;
     /**
      * <p>Original spec-file type: urls_to_add</p>
      * 
@@ -71,33 +84,33 @@ public class UploadMethodParams {
         return this;
     }
 
-    @JsonProperty("first_fastq_file_name")
-    public String getFirstFastqFileName() {
-        return firstFastqFileName;
+    @JsonProperty("fwd_staging_file_name")
+    public String getFwdStagingFileName() {
+        return fwdStagingFileName;
     }
 
-    @JsonProperty("first_fastq_file_name")
-    public void setFirstFastqFileName(String firstFastqFileName) {
-        this.firstFastqFileName = firstFastqFileName;
+    @JsonProperty("fwd_staging_file_name")
+    public void setFwdStagingFileName(String fwdStagingFileName) {
+        this.fwdStagingFileName = fwdStagingFileName;
     }
 
-    public UploadMethodParams withFirstFastqFileName(String firstFastqFileName) {
-        this.firstFastqFileName = firstFastqFileName;
+    public UploadMethodParams withFwdStagingFileName(String fwdStagingFileName) {
+        this.fwdStagingFileName = fwdStagingFileName;
         return this;
     }
 
-    @JsonProperty("second_fastq_file_name")
-    public String getSecondFastqFileName() {
-        return secondFastqFileName;
+    @JsonProperty("rev_staging_file_name")
+    public String getRevStagingFileName() {
+        return revStagingFileName;
     }
 
-    @JsonProperty("second_fastq_file_name")
-    public void setSecondFastqFileName(String secondFastqFileName) {
-        this.secondFastqFileName = secondFastqFileName;
+    @JsonProperty("rev_staging_file_name")
+    public void setRevStagingFileName(String revStagingFileName) {
+        this.revStagingFileName = revStagingFileName;
     }
 
-    public UploadMethodParams withSecondFastqFileName(String secondFastqFileName) {
-        this.secondFastqFileName = secondFastqFileName;
+    public UploadMethodParams withRevStagingFileName(String revStagingFileName) {
+        this.revStagingFileName = revStagingFileName;
         return this;
     }
 
@@ -116,33 +129,33 @@ public class UploadMethodParams {
         return this;
     }
 
-    @JsonProperty("first_fastq_file_url")
-    public String getFirstFastqFileUrl() {
-        return firstFastqFileUrl;
+    @JsonProperty("fwd_file_url")
+    public String getFwdFileUrl() {
+        return fwdFileUrl;
     }
 
-    @JsonProperty("first_fastq_file_url")
-    public void setFirstFastqFileUrl(String firstFastqFileUrl) {
-        this.firstFastqFileUrl = firstFastqFileUrl;
+    @JsonProperty("fwd_file_url")
+    public void setFwdFileUrl(String fwdFileUrl) {
+        this.fwdFileUrl = fwdFileUrl;
     }
 
-    public UploadMethodParams withFirstFastqFileUrl(String firstFastqFileUrl) {
-        this.firstFastqFileUrl = firstFastqFileUrl;
+    public UploadMethodParams withFwdFileUrl(String fwdFileUrl) {
+        this.fwdFileUrl = fwdFileUrl;
         return this;
     }
 
-    @JsonProperty("second_fastq_file_url")
-    public String getSecondFastqFileUrl() {
-        return secondFastqFileUrl;
+    @JsonProperty("rev_file_url")
+    public String getRevFileUrl() {
+        return revFileUrl;
     }
 
-    @JsonProperty("second_fastq_file_url")
-    public void setSecondFastqFileUrl(String secondFastqFileUrl) {
-        this.secondFastqFileUrl = secondFastqFileUrl;
+    @JsonProperty("rev_file_url")
+    public void setRevFileUrl(String revFileUrl) {
+        this.revFileUrl = revFileUrl;
     }
 
-    public UploadMethodParams withSecondFastqFileUrl(String secondFastqFileUrl) {
-        this.secondFastqFileUrl = secondFastqFileUrl;
+    public UploadMethodParams withRevFileUrl(String revFileUrl) {
+        this.revFileUrl = revFileUrl;
         return this;
     }
 
@@ -161,18 +174,18 @@ public class UploadMethodParams {
         return this;
     }
 
-    @JsonProperty("reads_file_name")
-    public String getReadsFileName() {
-        return readsFileName;
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
-    @JsonProperty("reads_file_name")
-    public void setReadsFileName(String readsFileName) {
-        this.readsFileName = readsFileName;
+    @JsonProperty("name")
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public UploadMethodParams withReadsFileName(String readsFileName) {
-        this.readsFileName = readsFileName;
+    public UploadMethodParams withName(String name) {
+        this.name = name;
         return this;
     }
 
@@ -213,7 +226,7 @@ public class UploadMethodParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((("UploadMethodParams"+" [workspaceName=")+ workspaceName)+", firstFastqFileName=")+ firstFastqFileName)+", secondFastqFileName=")+ secondFastqFileName)+", downloadType=")+ downloadType)+", firstFastqFileUrl=")+ firstFastqFileUrl)+", secondFastqFileUrl=")+ secondFastqFileUrl)+", sequencingTech=")+ sequencingTech)+", readsFileName=")+ readsFileName)+", urlsToAdd=")+ urlsToAdd)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((("UploadMethodParams"+" [workspaceName=")+ workspaceName)+", fwdStagingFileName=")+ fwdStagingFileName)+", revStagingFileName=")+ revStagingFileName)+", downloadType=")+ downloadType)+", fwdFileUrl=")+ fwdFileUrl)+", revFileUrl=")+ revFileUrl)+", sequencingTech=")+ sequencingTech)+", name=")+ name)+", urlsToAdd=")+ urlsToAdd)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

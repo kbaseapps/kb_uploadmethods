@@ -19,62 +19,62 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "first_fastq_file_url",
-    "second_fastq_file_url",
-    "reads_file_name"
+    "fwd_file_url",
+    "rev_file_url",
+    "name"
 })
 public class UrlsToAdd {
 
-    @JsonProperty("first_fastq_file_url")
-    private String firstFastqFileUrl;
-    @JsonProperty("second_fastq_file_url")
-    private String secondFastqFileUrl;
-    @JsonProperty("reads_file_name")
-    private String readsFileName;
+    @JsonProperty("fwd_file_url")
+    private String fwdFileUrl;
+    @JsonProperty("rev_file_url")
+    private String revFileUrl;
+    @JsonProperty("name")
+    private String name;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("first_fastq_file_url")
-    public String getFirstFastqFileUrl() {
-        return firstFastqFileUrl;
+    @JsonProperty("fwd_file_url")
+    public String getFwdFileUrl() {
+        return fwdFileUrl;
     }
 
-    @JsonProperty("first_fastq_file_url")
-    public void setFirstFastqFileUrl(String firstFastqFileUrl) {
-        this.firstFastqFileUrl = firstFastqFileUrl;
+    @JsonProperty("fwd_file_url")
+    public void setFwdFileUrl(String fwdFileUrl) {
+        this.fwdFileUrl = fwdFileUrl;
     }
 
-    public UrlsToAdd withFirstFastqFileUrl(String firstFastqFileUrl) {
-        this.firstFastqFileUrl = firstFastqFileUrl;
+    public UrlsToAdd withFwdFileUrl(String fwdFileUrl) {
+        this.fwdFileUrl = fwdFileUrl;
         return this;
     }
 
-    @JsonProperty("second_fastq_file_url")
-    public String getSecondFastqFileUrl() {
-        return secondFastqFileUrl;
+    @JsonProperty("rev_file_url")
+    public String getRevFileUrl() {
+        return revFileUrl;
     }
 
-    @JsonProperty("second_fastq_file_url")
-    public void setSecondFastqFileUrl(String secondFastqFileUrl) {
-        this.secondFastqFileUrl = secondFastqFileUrl;
+    @JsonProperty("rev_file_url")
+    public void setRevFileUrl(String revFileUrl) {
+        this.revFileUrl = revFileUrl;
     }
 
-    public UrlsToAdd withSecondFastqFileUrl(String secondFastqFileUrl) {
-        this.secondFastqFileUrl = secondFastqFileUrl;
+    public UrlsToAdd withRevFileUrl(String revFileUrl) {
+        this.revFileUrl = revFileUrl;
         return this;
     }
 
-    @JsonProperty("reads_file_name")
-    public String getReadsFileName() {
-        return readsFileName;
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
-    @JsonProperty("reads_file_name")
-    public void setReadsFileName(String readsFileName) {
-        this.readsFileName = readsFileName;
+    @JsonProperty("name")
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public UrlsToAdd withReadsFileName(String readsFileName) {
-        this.readsFileName = readsFileName;
+    public UrlsToAdd withName(String name) {
+        this.name = name;
         return this;
     }
 
@@ -90,7 +90,7 @@ public class UrlsToAdd {
 
     @Override
     public String toString() {
-        return ((((((((("UrlsToAdd"+" [firstFastqFileUrl=")+ firstFastqFileUrl)+", secondFastqFileUrl=")+ secondFastqFileUrl)+", readsFileName=")+ readsFileName)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((("UrlsToAdd"+" [fwdFileUrl=")+ fwdFileUrl)+", revFileUrl=")+ revFileUrl)+", name=")+ name)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

@@ -12,7 +12,7 @@
   "parameters" : 
   [ 
     {
-      "id" : "first_fastq_file_name",
+      "id" : "fwd_staging_file_name",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -84,7 +84,7 @@
       }
     },
     {
-      "id" : "reads_file_name",
+      "id" : "name",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -111,16 +111,16 @@
           "target_property": "workspace_name"
         },
         {
-            "input_parameter": "first_fastq_file_name",
-            "target_property": "first_fastq_file_name"
+            "input_parameter": "fwd_staging_file_name",
+            "target_property": "fwd_staging_file_name"
         },
         {
             "input_parameter": "sequencing_tech",
             "target_property": "sequencing_tech"
         },
         {
-            "input_parameter": "reads_file_name",
-            "target_property": "reads_file_name"
+            "input_parameter": "name",
+            "target_property": "name"
         }
       ],
       "output_mapping" : 
