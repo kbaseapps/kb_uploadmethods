@@ -2,7 +2,7 @@ module-name:
     kb_uploadmethods
 
 module-description:
-    Uploads Reads from staing area and web source. A wrapper use case of ReadsUtils.
+    Uploads Reads from staing area and web source. A wrapper use case of ReadsUtils. Test
 
 service-language:
     python
