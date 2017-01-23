@@ -1,14 +1,6 @@
 import os
-from pprint import pprint
-import subprocess
-import shutil
-import urllib2
-from contextlib import closing
-import ftplib
-import re
-import gzip
+import json
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
-from ftp_service.ftp_serviceClient import ftp_service
 
 def log(message):
     """Logging function, provides a hook to suppress or redirect log messages."""
@@ -17,13 +9,7 @@ def log(message):
 class FastqUploaderUtil:
 
 	def __init__(self, config):
-		log('--->\nInitializing FastqUploaderUtil instance:\n config:')
-		log(config)
-		self.scratch = config['scratch']
 		self.callback_url = config['SDK_CALLBACK_URL']
-		self.token = config['KB_AUTH_TOKEN']
-		self.token_user = self.token.split('client_id=')[1].split('|')[0]
-
 
 	def upload_fastq_file(self, params):
 		"""
@@ -41,8 +27,7 @@ class FastqUploaderUtil:
 		rev_file_url: reverse/right paired-end fastq file URL
 
 		"""
-		log('--->\nrunning upload_fastq_file:\nparams:\n')
-		log(params)
+		log('--->\nrunning FastqUploaderUtil.upload_fastq_file\nparams:\n%s' % json.dumps(params, indent=1))
 
 		self.validate_upload_fastq_file_parameters(params)
 
@@ -173,6 +158,7 @@ class FastqUploaderUtil:
 		rev_staging_file_name: reverse/right paired-end fastq file name user's staging area
 
 		"""
+		log ('---> running FastqUploaderUtil._upload_file_path')
 
 		upload_file_params = {
 			'fwd_staging_file_name': fwd_staging_file_name,
@@ -189,9 +175,7 @@ class FastqUploaderUtil:
 		else:
 			upload_file_params['wsname'] = str(workspace_name_or_id)
 
-		log('--->\nReadsUtils upload_reads params:\n')
-		log(upload_file_params)
-
+		log('--->\nrunning ReadsUtils.upload_reads\nparams:\n%s' % json.dumps(upload_file_params, indent=1))
 		ru = ReadsUtils(self.callback_url)
 		result = ru.upload_reads(upload_file_params)
 
@@ -210,7 +194,8 @@ class FastqUploaderUtil:
 		rev_file_url: reverse/right paired-end fastq file URL
 
 		"""
-		
+		log ('---> running FastqUploaderUtil._upload_file_url')
+
 		upload_file_params = {
 			'download_type': download_type,
 			'fwd_file_url': fwd_file_url,
@@ -226,8 +211,7 @@ class FastqUploaderUtil:
 		else:
 			upload_file_params['wsname'] = str(workspace_name_or_id)
 
-		log('--->\nReadsUtils upload_reads params::\n')
-		log(upload_file_params)
+		log('--->\nrunning ReadsUtils.upload_reads\nparams:\n%s' % json.dumps(upload_file_params, indent=1))
 
 		ru = ReadsUtils(self.callback_url)
 		result = ru.upload_reads(upload_file_params)
