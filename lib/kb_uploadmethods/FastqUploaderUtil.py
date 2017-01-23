@@ -24,22 +24,23 @@ class FastqUploaderUtil:
 		self.token = config['KB_AUTH_TOKEN']
 		self.token_user = self.token.split('client_id=')[1].split('|')[0]
 
-	"""
-	upload_fastq_file: upload single-end fastq file or paired-end fastq files to workspace as read(s)
-	                   source file can be either from user's staging area or web
 
-	params: 
-	fwd_staging_file_name: single-end fastq file name or forward/left paired-end fastq file name from user's staging area
-	rev_staging_file_name: reverse/right paired-end fastq file name user's staging area
-	sequencing_tech: sequencing technology
-	name: output reads file name
-	workspace_name: workspace name/ID that reads will be stored to
-	download_type: download type for web source fastq file
-	fwd_file_url: single-end fastq file URL or forward/left paired-end fastq file URL
-	rev_file_url: reverse/right paired-end fastq file URL
-
-	"""
 	def upload_fastq_file(self, params):
+		"""
+		upload_fastq_file: upload single-end fastq file or paired-end fastq files to workspace as read(s)
+		                   source file can be either from user's staging area or web
+
+		params: 
+		fwd_staging_file_name: single-end fastq file name or forward/left paired-end fastq file name from user's staging area
+		rev_staging_file_name: reverse/right paired-end fastq file name user's staging area
+		sequencing_tech: sequencing technology
+		name: output reads file name
+		workspace_name: workspace name/ID that reads will be stored to
+		download_type: download type for web source fastq file
+		fwd_file_url: single-end fastq file URL or forward/left paired-end fastq file URL
+		rev_file_url: reverse/right paired-end fastq file URL
+
+		"""
 		log('--->\nrunning upload_fastq_file:\nparams:\n')
 		log(params)
 
@@ -85,12 +86,11 @@ class FastqUploaderUtil:
 
 		return returnVal
 
-
-	"""
-	validate_upload_fastq_file_parameters: validates params passed to upload_fastq_file method
-
-	"""
 	def validate_upload_fastq_file_parameters(self, params):
+		"""
+		validate_upload_fastq_file_parameters: validates params passed to upload_fastq_file method
+
+		"""
 
 		# check for required parameters
 		for p in ['name', 'workspace_name']:
@@ -120,20 +120,21 @@ class FastqUploaderUtil:
 		if 'fwd_file_url' in params:
 			self._validate_upload_file_URL_availability(params)
 
-	"""
-	_validate_upload_file_path_availability: validates file availability in user's staging area
-
-	"""
 	def _validate_upload_file_path_availability(self, upload_file_name):
+		"""
+		_validate_upload_file_path_availability: validates file availability in user's staging area
+
+		"""
 		list = ftp_service(self.callback_url).list_files() #get available file list in user's staging area
 		if upload_file_name not in list:
 			raise ValueError("Target file: %s is NOT available. Available files: %s" % (upload_file_name, ",".join(list)))
 
-	"""
-	_validate_upload_file_URL_availability: validates param URL format/connection 
-
-	"""
 	def _validate_upload_file_URL_availability(self, params):
+		"""
+		_validate_upload_file_URL_availability: validates param URL format/connection 
+
+		"""
+
 		if 'download_type' not in params:
 			raise ValueError("Download type parameter is required, but missing")
 
@@ -160,18 +161,18 @@ class FastqUploaderUtil:
 			elif params['download_type'] == 'FTP' and url_prefix[:3] != 'ftp':
 				raise ValueError("Download type and URL prefix do NOT match")
 
-	"""
-	_upload_file_path: upload fastq file as reads from user's staging area
-
-	params:
-	fwd_staging_file_name: single-end fastq file name or forward/left paired-end fastq file name from user's staging area
-	sequencing_tech: sequencing technology
-	name: output reads file name
-	workspace_name_or_id: workspace name/ID that reads will be stored to
-	rev_staging_file_name: reverse/right paired-end fastq file name user's staging area
-
-	"""
 	def _upload_file_path(self, fwd_staging_file_name, sequencing_tech, name, workspace_name_or_id, rev_staging_file_name=None):
+		"""
+		_upload_file_path: upload fastq file as reads from user's staging area
+
+		params:
+		fwd_staging_file_name: single-end fastq file name or forward/left paired-end fastq file name from user's staging area
+		sequencing_tech: sequencing technology
+		name: output reads file name
+		workspace_name_or_id: workspace name/ID that reads will be stored to
+		rev_staging_file_name: reverse/right paired-end fastq file name user's staging area
+
+		"""
 
 		upload_file_params = {
 			'fwd_staging_file_name': fwd_staging_file_name,
@@ -196,20 +197,20 @@ class FastqUploaderUtil:
 
 		return result
 
-	"""
-	_upload_file_url: upload fastq file as reads from web
-
-	params:
-	download_type: download type for web source fastq file
-	fwd_file_url: single-end fastq file URL or forward/left paired-end fastq file URL
-	sequencing_tech: sequencing technology
-	name: output reads file name
-	workspace_name_or_id: workspace name/ID that reads will be stored to
-	rev_file_url: reverse/right paired-end fastq file URL
-
-	"""
 	def _upload_file_url(self, download_type, fwd_file_url, sequencing_tech, name, workspace_name_or_id, rev_file_url=None):
+		"""
+		_upload_file_url: upload fastq file as reads from web
 
+		params:
+		download_type: download type for web source fastq file
+		fwd_file_url: single-end fastq file URL or forward/left paired-end fastq file URL
+		sequencing_tech: sequencing technology
+		name: output reads file name
+		workspace_name_or_id: workspace name/ID that reads will be stored to
+		rev_file_url: reverse/right paired-end fastq file URL
+
+		"""
+		
 		upload_file_params = {
 			'download_type': download_type,
 			'fwd_file_url': fwd_file_url,
