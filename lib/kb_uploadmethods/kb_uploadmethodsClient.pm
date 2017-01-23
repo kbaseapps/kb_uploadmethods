@@ -124,26 +124,26 @@ $params is a kb_uploadmethods.UploadMethodParams
 $returnVal is a kb_uploadmethods.UploadMethodResult
 UploadMethodParams is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
-	first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
-	second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
+	fwd_staging_file_name has a value which is a kb_uploadmethods.fwd_staging_file_name
+	rev_staging_file_name has a value which is a kb_uploadmethods.rev_staging_file_name
 	download_type has a value which is a kb_uploadmethods.download_type
-	first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
-	second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
+	fwd_file_url has a value which is a kb_uploadmethods.fwd_file_url
+	rev_file_url has a value which is a kb_uploadmethods.rev_file_url
 	sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
-	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+	name has a value which is a kb_uploadmethods.name
 	urls_to_add has a value which is a kb_uploadmethods.urls_to_add
 workspace_name is a string
-first_fastq_file_name is a string
-second_fastq_file_name is a string
+fwd_staging_file_name is a string
+rev_staging_file_name is a string
 download_type is a string
-first_fastq_file_url is a string
-second_fastq_file_url is a string
+fwd_file_url is a string
+rev_file_url is a string
 sequencing_tech is a string
-reads_file_name is a string
+name is a string
 urls_to_add is a reference to a hash where the following keys are defined:
-	first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
-	second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
-	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+	fwd_file_url has a value which is a kb_uploadmethods.fwd_file_url
+	rev_file_url has a value which is a kb_uploadmethods.rev_file_url
+	name has a value which is a kb_uploadmethods.name
 UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
 obj_ref is a string
@@ -158,26 +158,26 @@ $params is a kb_uploadmethods.UploadMethodParams
 $returnVal is a kb_uploadmethods.UploadMethodResult
 UploadMethodParams is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
-	first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
-	second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
+	fwd_staging_file_name has a value which is a kb_uploadmethods.fwd_staging_file_name
+	rev_staging_file_name has a value which is a kb_uploadmethods.rev_staging_file_name
 	download_type has a value which is a kb_uploadmethods.download_type
-	first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
-	second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
+	fwd_file_url has a value which is a kb_uploadmethods.fwd_file_url
+	rev_file_url has a value which is a kb_uploadmethods.rev_file_url
 	sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
-	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+	name has a value which is a kb_uploadmethods.name
 	urls_to_add has a value which is a kb_uploadmethods.urls_to_add
 workspace_name is a string
-first_fastq_file_name is a string
-second_fastq_file_name is a string
+fwd_staging_file_name is a string
+rev_staging_file_name is a string
 download_type is a string
-first_fastq_file_url is a string
-second_fastq_file_url is a string
+fwd_file_url is a string
+rev_file_url is a string
 sequencing_tech is a string
-reads_file_name is a string
+name is a string
 urls_to_add is a reference to a hash where the following keys are defined:
-	first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
-	second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
-	reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+	fwd_file_url has a value which is a kb_uploadmethods.fwd_file_url
+	rev_file_url has a value which is a kb_uploadmethods.rev_file_url
+	name has a value which is a kb_uploadmethods.name
 UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
 obj_ref is a string
@@ -359,7 +359,7 @@ a string
 
 
 
-=head2 first_fastq_file_name
+=head2 fwd_staging_file_name
 
 =over 4
 
@@ -390,7 +390,7 @@ a string
 
 
 
-=head2 second_fastq_file_name
+=head2 rev_staging_file_name
 
 =over 4
 
@@ -442,7 +442,7 @@ a string
 
 
 
-=head2 first_fastq_file_url
+=head2 fwd_file_url
 
 =over 4
 
@@ -468,7 +468,7 @@ a string
 
 
 
-=head2 second_fastq_file_url
+=head2 rev_file_url
 
 =over 4
 
@@ -520,7 +520,7 @@ a string
 
 
 
-=head2 reads_file_name
+=head2 name
 
 =over 4
 
@@ -584,9 +584,9 @@ a string
 
 <pre>
 a reference to a hash where the following keys are defined:
-first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
-second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
-reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+fwd_file_url has a value which is a kb_uploadmethods.fwd_file_url
+rev_file_url has a value which is a kb_uploadmethods.rev_file_url
+name has a value which is a kb_uploadmethods.name
 
 </pre>
 
@@ -595,9 +595,9 @@ reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 =begin text
 
 a reference to a hash where the following keys are defined:
-first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
-second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
-reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+fwd_file_url has a value which is a kb_uploadmethods.fwd_file_url
+rev_file_url has a value which is a kb_uploadmethods.rev_file_url
+name has a value which is a kb_uploadmethods.name
 
 
 =end text
@@ -612,6 +612,24 @@ reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 
 
 
+=item Description
+
+sequencing_tech: sequencing technology
+name: output reads file name
+workspace_name: workspace name/ID of the object
+
+For files in user's staging area:
+fwd_staging_file_name: single-end fastq file name or forward/left paired-end fastq file name from user's staging area
+rev_staging_file_name: reverse/right paired-end fastq file name user's staging area
+
+For files from web:
+download_type: download type for web source fastq file ('Direct Download', 'FTP', 'DropBox', 'Google Drive')
+fwd_file_url: single-end fastq file URL or forward/left paired-end fastq file URL
+rev_file_url: reverse/right paired-end fastq file URL
+ 
+urls_to_add: used for parameter-groups. dict of {fwd_file_url, rev_file_url, name}
+
+
 =item Definition
 
 =begin html
@@ -619,13 +637,13 @@ reads_file_name has a value which is a kb_uploadmethods.reads_file_name
 <pre>
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_uploadmethods.workspace_name
-first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
-second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
+fwd_staging_file_name has a value which is a kb_uploadmethods.fwd_staging_file_name
+rev_staging_file_name has a value which is a kb_uploadmethods.rev_staging_file_name
 download_type has a value which is a kb_uploadmethods.download_type
-first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
-second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
+fwd_file_url has a value which is a kb_uploadmethods.fwd_file_url
+rev_file_url has a value which is a kb_uploadmethods.rev_file_url
 sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
-reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+name has a value which is a kb_uploadmethods.name
 urls_to_add has a value which is a kb_uploadmethods.urls_to_add
 
 </pre>
@@ -636,13 +654,13 @@ urls_to_add has a value which is a kb_uploadmethods.urls_to_add
 
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_uploadmethods.workspace_name
-first_fastq_file_name has a value which is a kb_uploadmethods.first_fastq_file_name
-second_fastq_file_name has a value which is a kb_uploadmethods.second_fastq_file_name
+fwd_staging_file_name has a value which is a kb_uploadmethods.fwd_staging_file_name
+rev_staging_file_name has a value which is a kb_uploadmethods.rev_staging_file_name
 download_type has a value which is a kb_uploadmethods.download_type
-first_fastq_file_url has a value which is a kb_uploadmethods.first_fastq_file_url
-second_fastq_file_url has a value which is a kb_uploadmethods.second_fastq_file_url
+fwd_file_url has a value which is a kb_uploadmethods.fwd_file_url
+rev_file_url has a value which is a kb_uploadmethods.rev_file_url
 sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
-reads_file_name has a value which is a kb_uploadmethods.reads_file_name
+name has a value which is a kb_uploadmethods.name
 urls_to_add has a value which is a kb_uploadmethods.urls_to_add
 
 

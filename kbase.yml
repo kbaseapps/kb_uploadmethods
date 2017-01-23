@@ -2,13 +2,13 @@ module-name:
     kb_uploadmethods
 
 module-description:
-    A KBase module
+    Uploads Reads from staing area and web source. A wrapper use case of ReadsUtils.
 
 service-language:
     python
 
 module-version:
-    0.0.1
+    0.1.0
 
 owners:
     [tgu2]

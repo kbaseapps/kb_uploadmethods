@@ -4,9 +4,7 @@ import os  # noqa: F401
 import json  # noqa: F401
 import time
 import requests
-import shutil
-from mock import patch
-import mock
+import hashlib
 import ftplib
 
 from os import environ
@@ -22,20 +20,21 @@ from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
 from kb_uploadmethods.FastqUploaderUtil import FastqUploaderUtil
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
+from DataFileUtil.DataFileUtilClient import DataFileUtil
 
 class kb_uploadmethodsTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        token = environ.get('KB_AUTH_TOKEN', None)
-        user_id = requests.post(
+        cls.token = environ.get('KB_AUTH_TOKEN', None)
+        cls.user_id = requests.post(
             'https://kbase.us/services/authorization/Sessions/Login',
-            data='token={}&fields=user_id'.format(token)).json()['user_id']
+            data='token={}&fields=user_id'.format(cls.token)).json()['user_id']
         # WARNING: don't call any logging methods on the context object,
         # it'll result in a NoneType error
         cls.ctx = MethodContext(None)
-        cls.ctx.update({'token': token,
-                        'user_id': user_id,
+        cls.ctx.update({'token': cls.token,
+                        'user_id': cls.user_id,
                         'provenance': [
                             {'service': 'kb_uploadmethods',
                              'method': 'please_never_use_it_in_production',
@@ -49,27 +48,28 @@ class kb_uploadmethodsTest(unittest.TestCase):
         for nameval in config.items('kb_uploadmethods'):
             cls.cfg[nameval[0]] = nameval[1]
         cls.wsURL = cls.cfg['workspace-url']
-        cls.wsClient = workspaceService(cls.wsURL, token=token)
+        cls.wsClient = workspaceService(cls.wsURL, token=cls.token)
         cls.serviceImpl = kb_uploadmethods(cls.cfg)
-
-        # copy test file to scratch area
-        fq_filename = "SP1.fq"
-        fq_path = os.path.join(cls.cfg['scratch'], fq_filename)
-        shutil.copy(os.path.join("data", fq_filename), fq_path)
-
-        ftp_connection = ftplib.FTP('ftp.dlptest.com')
-        ftp_connection.login('dlpuser', 'yc#KtFCR5kBp')
-        ftp_connection.cwd("/24_Hour/")
-        if fq_filename not in ftp_connection.nlst():
-            fh = open(os.path.join("data", fq_filename), 'rb')
-            ftp_connection.storbinary('STOR SP1.fq', fh)
-            fh.close()
+        cls.dfu = DataFileUtil(os.environ['SDK_CALLBACK_URL'], token=cls.token)
+        cls.scratch = cls.cfg['scratch']
+        cls.shockURL = cls.cfg['shock-url']
 
     @classmethod
     def tearDownClass(cls):
         if hasattr(cls, 'wsName'):
             cls.wsClient.delete_workspace({'workspace': cls.wsName})
             print('Test workspace was deleted')
+
+    @classmethod
+    def make_ref(self, objinfo):
+        return str(objinfo[6]) + '/' + str(objinfo[0]) + '/' + str(objinfo[4])
+
+    @classmethod
+    def delete_shock_node(cls, node_id):
+        header = {'Authorization': 'Oauth {0}'.format(cls.token)}
+        requests.delete(cls.shockURL + '/node/' + node_id, headers=header,
+                        allow_redirects=True)
+        print('Deleted shock node ' + node_id)
 
     def getWsClient(self):
         return self.__class__.wsClient
@@ -92,57 +92,77 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def getDefaultParams(self, file_path=True):
         if file_path:
             default_input_params = {
-                'first_fastq_file_name': 'SP1.fq',
+                'fwd_staging_file_name': 'SP1.fq',
                 'sequencing_tech': 'Unknown',
-                'reads_file_name': 'test_reads_file_name.reads',
+                'name': 'test_reads_file_name.reads',
                 'workspace_name': self.getWsName()
             }
         else:
             default_input_params = {
                 'download_type': 'Direct Download',
-                'first_fastq_file_url': 'http://molb7621.github.io/workshop/_downloads/SP1.fq',
+                'fwd_file_url': 'http://molb7621.github.io/workshop/_downloads/SP1.fq',
                 'sequencing_tech': 'Unknown',
-                'reads_file_name': 'test_reads_file_name.reads',
+                'name': 'test_reads_file_name.reads',
                 'workspace_name': self.getWsName()
             }
         return default_input_params
 
+    def check_lib(self, lib, size, filename, md5):
+        shock_id = lib["file"]["id"]
+        print "LIB: {}".format(str(lib))
+        print "Shock ID: {}".format(str(shock_id))
+        fileinput = [{'shock_id': shock_id,
+                      'file_path': self.scratch + '/temp',
+                      'unpack': 'uncompress'}]
+        print "File Input: {}".format(str(fileinput))
+        files = self.dfu.shock_to_file_mass(fileinput)
+        path = files[0]["file_path"]
+        file_md5 = hashlib.md5(open(path, 'rb').read()).hexdigest()
+        libfile = lib['file']
+        self.assertEqual(file_md5, md5)
+        self.assertEqual(lib['size'], size)
+        self.assertEqual(lib['type'], 'fq')
+        self.assertEqual(lib['encoding'], 'ascii')
+
+        self.assertEqual(libfile['file_name'], filename)
+        self.assertEqual(libfile['hid'].startswith('KBH_'), True)
+
+        self.assertEqual(libfile['type'], 'shock')
+        self.assertEqual(libfile['url'], self.shockURL)
+
     def test_contructor(self):
-        print '------ Testing Contructor Method ------'
         ret = self.getImpl()
         print 'self.config: %s' % ret.config
         print 'self.callback_url: %s' % ret.config['SDK_CALLBACK_URL']
         self.assertIsNotNone(ret.config)
         self.assertIsNotNone(ret.config['SDK_CALLBACK_URL'])
-        print '------ Testing Contructor Method OK ------'
 
     def test_validate_upload_fastq_file_parameters(self):
-        print '------ Testing validate_upload_fastq_file_parameters Method ------'
 
         # Testing required params
         invalidate_input_params = self.getDefaultParams()
-        del invalidate_input_params['reads_file_name']
-        with self.assertRaisesRegexp(ValueError, '"reads_file_name" parameter is required, but missing'):
+        del invalidate_input_params['name']
+        with self.assertRaisesRegexp(ValueError, '"name" parameter is required, but missing'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
         invalidate_input_params = self.getDefaultParams()
         del invalidate_input_params['workspace_name']
         with self.assertRaisesRegexp(ValueError, '"workspace_name" parameter is required, but missing'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params) 
         invalidate_input_params = self.getDefaultParams()
-        invalidate_input_params['first_fastq_file_url'] = 'https://fake_url'
+        invalidate_input_params['fwd_file_url'] = 'https://fake_url'
         with self.assertRaisesRegexp(ValueError, 'Cannot upload Reads for both file path and file URL'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)          
 
         # Testing _validate_upload_file_availability
         invalidate_input_params = self.getDefaultParams()
         nonexistent_file_name = 'fake_file_0123456.fastq'
-        invalidate_input_params['first_fastq_file_name'] = nonexistent_file_name
+        invalidate_input_params['fwd_staging_file_name'] = nonexistent_file_name
         with self.assertRaisesRegexp(ValueError, 'Target file: %s is NOT available.' % nonexistent_file_name):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)    
 
         # Testing URL prefix
         invalidate_input_params = self.getDefaultParams(file_path=False) 
-        invalidate_input_params['first_fastq_file_url'] = 'ftp://dlpuser:yc#KtFCR5kBp@ftp.dlptest.com/24_Hour/SP1.fq' 
+        invalidate_input_params['fwd_file_url'] = 'ftp://dlpuser:yc#KtFCR5kBp@ftp.dlptest.com/24_Hour/SP1.fq' 
         with self.assertRaisesRegexp(ValueError, 'Download type and URL prefix do NOT match'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)   
 
@@ -161,82 +181,219 @@ class kb_uploadmethodsTest(unittest.TestCase):
         with self.assertRaisesRegexp(ValueError, 'Download type parameter is required, but missing'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)  
 
-        print '------ Testing validate_upload_fastq_file_parameters Method OK ------'
-
-    @patch.object(FastqUploaderUtil, '_get_file_path')
-    def test_upload_fastq_file_path(self, mock_get_file_path):
-        print '------ Testing upload_fastq_file for file path Method ------'
-        mock_get_file_path.return_value = '/kb/module/work/tmp/SP1.fq'
-        params = self.getDefaultParams()
-        ret = self.getImpl().upload_fastq_file(self.getContext(), params)
-
-        print '------ Testing upload_fastq_file for file path Method OK ------'
-
     def test_upload_fastq_file_url_direct_download(self):
-        print '------ Testing upload_fastq_file for Direct Download Link Method ------'
-        params = self.getDefaultParams(file_path=False)
-        ret = self.getImpl().upload_fastq_file(self.getContext(), params)
+        params = {
+            'download_type': 'Direct Download',
+            'fwd_file_url': 'https://anl.box.com/shared/static/qwadp20dxtwnhc8r3sjphen6h0k1hdyo.fastq',
+            'sequencing_tech': 'Unknown',
+            'name': 'test_reads_file_name.reads',
+            'workspace_name': self.getWsName()   
+        }
+        ref = self.getImpl().upload_fastq_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('obj_ref'))
 
-        print '------ Testing upload_fastq_file for Direct Download Link Method OK ------'
+        obj = self.dfu.get_objects(
+            {'object_refs': [self.getWsName() + '/test_reads_file_name.reads']})['data'][0]
+        self.assertEqual(ref[0]['obj_ref'], self.make_ref(obj['info']))
+        self.assertEqual(obj['info'][2].startswith(
+            'KBaseFile.SingleEndLibrary'), True)
+        d = obj['data']
+        self.assertEqual(d['sequencing_tech'], 'Unknown')
+        self.assertEqual(d['single_genome'], 1)
+        self.assertEqual('source' not in d, True)
+        self.assertEqual('strain' not in d, True)
+        self.check_lib(d['lib'], 2841, 'tmp_fwd_fastq.fastq.gz',
+                       'f118ee769a5e1b40ec44629994dfc3cd')
+        node = d['lib']['file']['id']
+        self.delete_shock_node(node)
 
-    def test_upload_fastq_file_url_direct_download_paired_ends(self):
-        print '------ Testing upload_fastq_file for Direct Download Link (Paired Ends) Method ------'
-        paired_ends_direct_params = self.getDefaultParams(file_path=False)
-        paired_ends_direct_params['first_fastq_file_url'] = 'https://anl.box.com/shared/static/lph9l0ye6yqetnbk04cx33mqgrj4b85j.fq'
-        paired_ends_direct_params['second_fastq_file_url'] = 'https://anl.box.com/shared/static/1u9fi158vquyrh9qt7l04t71eqbpvyrr.fq'
-        ret = self.getImpl().upload_fastq_file(self.getContext(), paired_ends_direct_params)
+    def test_upload_fastq_file_url_direct_download_paired_end(self):
+        params = {
+            'download_type': 'Direct Download',
+            'fwd_file_url': 'https://anl.box.com/shared/static/lph9l0ye6yqetnbk04cx33mqgrj4b85j.fq',
+            'rev_file_url': 'https://anl.box.com/shared/static/1u9fi158vquyrh9qt7l04t71eqbpvyrr.fq',
+            'sequencing_tech': 'Unknown',
+            'name': 'test_reads_file_name.reads',
+            'workspace_name': self.getWsName()   
+        }
+        ref = self.getImpl().upload_fastq_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('obj_ref'))
 
-        print '------ Testing upload_fastq_file for Direct Download Link (Paired Ends) Method OK ------'
+        obj = self.dfu.get_objects(
+            {'object_refs': [self.getWsName() + '/test_reads_file_name.reads']})['data'][0]
+        self.assertEqual(ref[0]['obj_ref'], self.make_ref(obj['info']))
+        self.assertEqual(obj['info'][2].startswith(
+            'KBaseFile.PairedEndLibrary'), True)
+
+        d = obj['data']
+        file_name = d["lib1"]["file"]["file_name"]
+        self.assertTrue(file_name.endswith(".inter.fastq.gz"))
+        self.assertEqual(d['sequencing_tech'], 'Unknown')
+        self.assertEqual(d['single_genome'], 1)
+        self.assertEqual('source' not in d, True)
+        self.assertEqual('strain' not in d, True)
+        self.assertEqual(d['interleaved'], 1)
+        self.assertEqual(d['read_orientation_outward'], 0)
+        self.assertEqual(d['insert_size_mean'], None)
+        self.assertEqual(d['insert_size_std_dev'], None)
+        self.check_lib(d['lib1'], 2491520, file_name,
+                       '1c58d7d59c656db39cedcb431376514b')
+        node = d['lib1']['file']['id']
+        self.delete_shock_node(node)
 
     def test_upload_fastq_file_url_dropbox(self):
-        print '------ Testing upload_fastq_file for DropBox Download Link Method ------'
-        params = self.getDefaultParams(file_path=False)
-        params['first_fastq_file_url'] = 'https://www.dropbox.com/s/mcl7mual35c5p7s/SP1.fq?dl=0'
-        params['download_type'] = 'DropBox'
-        ret = self.getImpl().upload_fastq_file(self.getContext(), params)
+        params = {
+            'download_type': 'DropBox',
+            'fwd_file_url': 'https://www.dropbox.com/s/lv7jx1vh6yky3o0/Sample1.fastq?dl=0',
+            'sequencing_tech': 'Unknown',
+            'name': 'test_reads_file_name.reads',
+            'workspace_name': self.getWsName()   
+        }
+        ref = self.getImpl().upload_fastq_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('obj_ref'))
 
-        print '------ Testing upload_fastq_file for DropBox Download Link Method OK ------'
+        obj = self.dfu.get_objects(
+            {'object_refs': [self.getWsName() + '/test_reads_file_name.reads']})['data'][0]
+        self.assertEqual(ref[0]['obj_ref'], self.make_ref(obj['info']))
+        self.assertEqual(obj['info'][2].startswith(
+            'KBaseFile.SingleEndLibrary'), True)
+        d = obj['data']
+        self.assertEqual(d['sequencing_tech'], 'Unknown')
+        self.assertEqual(d['single_genome'], 1)
+        self.assertEqual('source' not in d, True)
+        self.assertEqual('strain' not in d, True)
+        self.check_lib(d['lib'], 2841, 'tmp_fwd_fastq.fastq.gz',
+                       'f118ee769a5e1b40ec44629994dfc3cd')
+        node = d['lib']['file']['id']
+        self.delete_shock_node(node)
 
-    def test_upload_fastq_file_url_dropbox_paired_ends(self):
-        print '------ Testing upload_fastq_file for DropBox Download Link (Paired Ends) Method ------'
-        paired_ends_dropbox_params = self.getDefaultParams(file_path=False)
-        paired_ends_dropbox_params['first_fastq_file_url'] = 'https://www.dropbox.com/s/pgtja4btj62ctkx/small.forward.fq?dl=0'
-        paired_ends_dropbox_params['second_fastq_file_url'] = 'https://www.dropbox.com/s/hh55x00qluhfhr8/small.reverse.fq?dl=0'
-        paired_ends_dropbox_params['download_type'] = 'DropBox'
-        ret = self.getImpl().upload_fastq_file(self.getContext(), paired_ends_dropbox_params)
+    def test_upload_fastq_file_url_dropbox_paired_end(self):
+        params = {
+            'download_type': 'DropBox',
+            'fwd_file_url': 'https://www.dropbox.com/s/pgtja4btj62ctkx/small.forward.fq?dl=0',
+            'rev_file_url': 'https://www.dropbox.com/s/hh55x00qluhfhr8/small.reverse.fq?dl=0',
+            'sequencing_tech': 'Unknown',
+            'name': 'test_reads_file_name.reads',
+            'workspace_name': self.getWsName()   
+        }
+        ref = self.getImpl().upload_fastq_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('obj_ref'))
 
-        print '------ Testing upload_fastq_file for DropBox Download Link (Paired Ends) Method OK ------'
+        obj = self.dfu.get_objects(
+            {'object_refs': [self.getWsName() + '/test_reads_file_name.reads']})['data'][0]
+        self.assertEqual(ref[0]['obj_ref'], self.make_ref(obj['info']))
+        self.assertEqual(obj['info'][2].startswith(
+            'KBaseFile.PairedEndLibrary'), True)
 
-    def test_ftp_validator(self):
-        print '------ Testing _check_ftp_connection for FTP Link Method ------'
-        fake_ftp_domain_params = self.getDefaultParams(file_path=False)
-        fake_ftp_domain_params['first_fastq_file_url'] = 'ftp://dlpuser:yc#KtFCR5kBp@FAKE_SERVER.ftp.dlptest.com/24_Hour/SP1.fq'
-        fake_ftp_domain_params['download_type'] = 'FTP'
-        with self.assertRaisesRegexp(ValueError, 'Cannot connect:'):
-            self.getImpl().upload_fastq_file(self.getContext(), fake_ftp_domain_params)
-
-        fake_ftp_user_params = self.getDefaultParams(file_path=False)
-        fake_ftp_user_params['first_fastq_file_url'] = 'ftp://FAKE_USER:FAKE_PASSWORD@ftp.dlptest.com/24_Hour/SP1.fq'
-        fake_ftp_user_params['download_type'] = 'FTP'
-        with self.assertRaisesRegexp(ValueError, 'Cannot login:'):
-            self.getImpl().upload_fastq_file(self.getContext(), fake_ftp_user_params)
-
-        print '------ Testing _check_ftp_connection for FTP Link Method OK ------'
-
-    def test_upload_fastq_file_url_ftp(self):
-        print '------ Testing upload_fastq_file for FTP Link Method ------'
-        params = self.getDefaultParams(file_path=False)
-        params['first_fastq_file_url'] = 'ftp://dlpuser:yc#KtFCR5kBp@ftp.dlptest.com/24_Hour/SP1.fq'
-        params['download_type'] = 'FTP'
-        ret = self.getImpl().upload_fastq_file(self.getContext(), params)
-
-        print '------ Testing upload_fastq_file for FTP Link Method OK ------'
+        d = obj['data']
+        file_name = d["lib1"]["file"]["file_name"]
+        self.assertTrue(file_name.endswith(".inter.fastq.gz"))
+        self.assertEqual(d['sequencing_tech'], 'Unknown')
+        self.assertEqual(d['single_genome'], 1)
+        self.assertEqual('source' not in d, True)
+        self.assertEqual('strain' not in d, True)
+        self.assertEqual(d['interleaved'], 1)
+        self.assertEqual(d['read_orientation_outward'], 0)
+        self.assertEqual(d['insert_size_mean'], None)
+        self.assertEqual(d['insert_size_std_dev'], None)
+        self.check_lib(d['lib1'], 2491520, file_name,
+                       '1c58d7d59c656db39cedcb431376514b')
+        node = d['lib1']['file']['id']
+        self.delete_shock_node(node)
 
     def test_upload_fastq_file_url_google_drive(self):
-        print '------ Testing upload_fastq_file for Google Drive Download Link Method ------'
-        params = self.getDefaultParams(file_path=False)
-        params['first_fastq_file_url'] = 'https://drive.google.com/file/d/0B0exSa7ebQ0qNDc3ZTY5cDFob3M/view?usp=sharing'
-        params['download_type'] = 'Google Drive'
-        ret = self.getImpl().upload_fastq_file(self.getContext(), params)
+        params = {
+            'download_type': 'Google Drive',
+            'fwd_file_url': 'https://drive.google.com/file/d/0B0exSa7ebQ0qcHdNS2NEYjJOTTg/view?usp=sharing',
+            'sequencing_tech': 'Unknown',
+            'name': 'test_reads_file_name.reads',
+            'workspace_name': self.getWsName()   
+        }
+        ref = self.getImpl().upload_fastq_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('obj_ref'))
 
-        print '------ Testing upload_fastq_file for Google Drive Download Link Method OK ------'
+        obj = self.dfu.get_objects(
+            {'object_refs': [self.getWsName() + '/test_reads_file_name.reads']})['data'][0]
+        self.assertEqual(ref[0]['obj_ref'], self.make_ref(obj['info']))
+        self.assertEqual(obj['info'][2].startswith(
+            'KBaseFile.SingleEndLibrary'), True)
+        d = obj['data']
+        self.assertEqual(d['sequencing_tech'], 'Unknown')
+        self.assertEqual(d['single_genome'], 1)
+        self.assertEqual('source' not in d, True)
+        self.assertEqual('strain' not in d, True)
+        self.check_lib(d['lib'], 2841, 'tmp_fwd_fastq.fastq.gz',
+                       'f118ee769a5e1b40ec44629994dfc3cd')
+        node = d['lib']['file']['id']
+        self.delete_shock_node(node)
+
+    def test_upload_fastq_file_url_google_drive_paired_end(self):
+        params = {
+            'download_type': 'Google Drive',
+            'fwd_file_url': 'https://drive.google.com/file/d/0B0exSa7ebQ0qMDFRMXdYNE5neHM/view?usp=sharing',
+            'rev_file_url': 'https://drive.google.com/file/d/0B0exSa7ebQ0qekw4bm9RXzlBczA/view?usp=sharing',
+            'sequencing_tech': 'Unknown',
+            'name': 'test_reads_file_name.reads',
+            'workspace_name': self.getWsName()   
+        }
+        ref = self.getImpl().upload_fastq_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('obj_ref'))
+
+        obj = self.dfu.get_objects(
+            {'object_refs': [self.getWsName() + '/test_reads_file_name.reads']})['data'][0]
+        self.assertEqual(ref[0]['obj_ref'], self.make_ref(obj['info']))
+        self.assertEqual(obj['info'][2].startswith(
+            'KBaseFile.PairedEndLibrary'), True)
+
+        d = obj['data']
+        file_name = d["lib1"]["file"]["file_name"]
+        self.assertTrue(file_name.endswith(".inter.fastq.gz"))
+        self.assertEqual(d['sequencing_tech'], 'Unknown')
+        self.assertEqual(d['single_genome'], 1)
+        self.assertEqual('source' not in d, True)
+        self.assertEqual('strain' not in d, True)
+        self.assertEqual(d['interleaved'], 1)
+        self.assertEqual(d['read_orientation_outward'], 0)
+        self.assertEqual(d['insert_size_mean'], None)
+        self.assertEqual(d['insert_size_std_dev'], None)
+        self.check_lib(d['lib1'], 2491520, file_name,
+                       '1c58d7d59c656db39cedcb431376514b')
+        node = d['lib1']['file']['id']
+        self.delete_shock_node(node)
+
+    def test_upload_fastq_file_url_ftp(self):
+        # copy test file to FTP
+        fq_filename = "Sample1.fastq"
+        ftp_connection = ftplib.FTP('ftp.uconn.edu')
+        ftp_connection.login('anonymous', 'anonymous@domain.com')
+        ftp_connection.cwd("/48_hour/")
+
+        if fq_filename not in ftp_connection.nlst():
+            fh = open(os.path.join("data", fq_filename), 'rb')
+            ftp_connection.storbinary('STOR Sample1.fastq', fh)
+            fh.close()
+
+        params = {
+            'download_type': 'FTP',
+            'fwd_file_url': 'ftp://ftp.uconn.edu/48_hour/Sample1.fastq',
+            'sequencing_tech': 'Unknown',
+            'name': 'test_reads_file_name.reads',
+            'workspace_name': self.getWsName()   
+        }
+        ref = self.getImpl().upload_fastq_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('obj_ref'))
+
+        obj = self.dfu.get_objects(
+            {'object_refs': [self.getWsName() + '/test_reads_file_name.reads']})['data'][0]
+        self.assertEqual(ref[0]['obj_ref'], self.make_ref(obj['info']))
+        self.assertEqual(obj['info'][2].startswith(
+            'KBaseFile.SingleEndLibrary'), True)
+        d = obj['data']
+        self.assertEqual(d['sequencing_tech'], 'Unknown')
+        self.assertEqual(d['single_genome'], 1)
+        self.assertEqual('source' not in d, True)
+        self.assertEqual('strain' not in d, True)
+        self.check_lib(d['lib'], 2841, 'tmp_fwd_fastq.fastq.gz',
+                       'f118ee769a5e1b40ec44629994dfc3cd')
+        node = d['lib']['file']['id']
+        self.delete_shock_node(node)
