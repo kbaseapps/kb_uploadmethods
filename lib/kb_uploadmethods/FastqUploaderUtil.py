@@ -1,6 +1,7 @@
 import os
 import json
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
+from ftp_service.ftp_serviceClient import ftp_service
 
 def log(message):
     """Logging function, provides a hook to suppress or redirect log messages."""
@@ -212,7 +213,6 @@ class FastqUploaderUtil:
 			upload_file_params['wsname'] = str(workspace_name_or_id)
 
 		log('--->\nrunning ReadsUtils.upload_reads\nparams:\n%s' % json.dumps(upload_file_params, indent=1))
-
 		ru = ReadsUtils(self.callback_url)
 		result = ru.upload_reads(upload_file_params)
 
