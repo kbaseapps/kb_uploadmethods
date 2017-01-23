@@ -17,33 +17,8 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "dropdown",
-      "dropdown_options": 
-      {
-        "options": 
-        [
-          {
-              "display": "SP1.fq",
-              "value": "SP1.fq"
-          },
-          {
-              "display": "sample.fa",
-              "value": "sample.fa"
-          },
-          {
-              "display": "fakefile.fq",
-              "value": "fakefile.fq"
-          },
-          {
-              "display": "small.forward.fq",
-              "value": "small.forward.fq"
-          },
-          {
-              "display": "small.reverse.fq",
-              "value": "small.reverse.fq"
-          }
-        ]
-      }
+      "field_type" : "text",
+      "text_options" : {}
     },
     {
       "id" : "sequencing_tech",
