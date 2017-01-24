@@ -67,7 +67,7 @@
       "field_type" : "text",
       "text_options" : 
       {
-        "valid_ws_types" : [ "KBaseAssembly.SingleEndLibrary" ],
+        "valid_ws_types" : [ "KBaseFile.SingleEndLibrary" ],
         "is_output_name" : true
       }
     } 
