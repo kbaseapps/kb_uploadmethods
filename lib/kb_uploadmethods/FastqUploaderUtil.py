@@ -112,8 +112,8 @@ class FastqUploaderUtil:
 
 		"""
 		list = ftp_service(self.callback_url).list_files() #get available file list in user's staging area
-		if upload_file_name not in list:
-			raise ValueError("Target file: %s is NOT available. Available files: %s" % (upload_file_name, ",".join(list)))
+		if upload_file_name.rpartition('/')[-1] not in list:
+			raise ValueError("Target file: %s is NOT available. Available files: %s" % (upload_file_name.rpartition('/')[-1], ",".join(list)))
 
 	def _validate_upload_file_URL_availability(self, params):
 		"""
