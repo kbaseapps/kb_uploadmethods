@@ -21,6 +21,8 @@ module kb_uploadmethods {
 	typedef string insert_size_std_dev;
 	typedef string read_orientation_outward;
 	typedef string obj_ref;
+	typedef string report_name;
+	typedef string report_ref;
 
 	typedef structure {
 		fwd_file_url fwd_file_url;
@@ -75,6 +77,8 @@ module kb_uploadmethods {
 
 	typedef structure {
 		obj_ref obj_ref;
+		report_name report_name;
+		report_ref report_ref;
 	} UploadMethodResult;
 
 	funcdef upload_fastq_file(UploadMethodParams params)
