@@ -15,12 +15,22 @@ module kb_uploadmethods {
 	typedef string rev_file_url;
 	typedef string sequencing_tech;
 	typedef string name;
+	typedef string single_genome;
+	typedef string interleaved;
+	typedef string insert_size_mean;
+	typedef string insert_size_std_dev;
+	typedef string read_orientation_outward;
 	typedef string obj_ref;
 
 	typedef structure {
 		fwd_file_url fwd_file_url;
 		rev_file_url rev_file_url;
 		name name;
+		single_genome single_genome;
+		interleaved interleaved;
+		insert_size_mean insert_size_mean;
+		insert_size_std_dev insert_size_std_dev;
+		read_orientation_outward read_orientation_outward;
 	} urls_to_add;
 
 	/*
@@ -38,6 +48,13 @@ module kb_uploadmethods {
 	    rev_file_url: reverse/right paired-end fastq file URL
 	     
 	    urls_to_add: used for parameter-groups. dict of {fwd_file_url, rev_file_url, name}
+
+	    Optional Params:
+	    single_genome: whether the reads are from a single genome or a metagenome.
+		interleaved: whether reads is interleaved
+		insert_size_mean: mean (average) insert length
+		insert_size_std_dev: standard deviation of insert lengths
+		read_orientation_outward: whether reads in a pair point outward
     */
 	typedef structure {
 		workspace_name workspace_name;
@@ -49,6 +66,11 @@ module kb_uploadmethods {
 		sequencing_tech sequencing_tech;
 		name name;
 		urls_to_add urls_to_add;
+		single_genome single_genome;
+		interleaved interleaved;
+		insert_size_mean insert_size_mean;
+		insert_size_std_dev insert_size_std_dev;
+		read_orientation_outward read_orientation_outward;
 	} UploadMethodParams;
 
 	typedef structure {

@@ -59,6 +59,18 @@
       }
     },
     {
+    "id": "single_genome",
+    "optional":false,
+    "advanced":false,
+    "allow_multiple":false,
+    "default_values":[1],
+    "field_type" : "checkbox",
+    "checkbox_options":{
+      "checked_value": 1,
+      "unchecked_value": 0
+      }
+    }, 
+    {
       "id" : "name",
       "optional" : false,
       "advanced" : false,
@@ -86,16 +98,20 @@
           "target_property": "workspace_name"
         },
         {
-            "input_parameter": "fwd_staging_file_name",
-            "target_property": "fwd_staging_file_name"
+          "input_parameter": "fwd_staging_file_name",
+          "target_property": "fwd_staging_file_name"
         },
         {
-            "input_parameter": "sequencing_tech",
-            "target_property": "sequencing_tech"
+          "input_parameter": "sequencing_tech",
+          "target_property": "sequencing_tech"
         },
         {
-            "input_parameter": "name",
-            "target_property": "name"
+          "input_parameter": "single_genome",
+          "target_property": "single_genome"
+        },
+        {
+          "input_parameter": "name",
+          "target_property": "name"
         }
       ],
       "output_mapping" : 

@@ -32,43 +32,14 @@ class FastqUploaderUtil:
 
 		self.validate_upload_fastq_file_parameters(params)
 
-		if 'rev_staging_file_name' in params:
-			# process paried-end fastq files from user's staging area
-			returnVal = self._upload_file_path(
-							fwd_staging_file_name=params.get('fwd_staging_file_name'), 
-							rev_staging_file_name=params.get('rev_staging_file_name'),
-							sequencing_tech=params.get('sequencing_tech'),
-							name=params.get('name'),
-							workspace_name_or_id=params.get('workspace_name')
-						)
-		elif 'fwd_staging_file_name' in params and 'rev_staging_file_name' not in params:
+		if 'fwd_staging_file_name' in params:
 			# process single-end fastq file from user's staging area
-			returnVal = self._upload_file_path(
-							fwd_staging_file_name=params.get('fwd_staging_file_name'), 
-							sequencing_tech=params.get('sequencing_tech'),
-							name=params.get('name'),
-							workspace_name_or_id=params.get('workspace_name')
-						)
-		
-		if 'rev_file_url' in params:
-			# process paried-end fastq file URLs
-			returnVal = self._upload_file_url(
-							download_type=params.get('download_type'),
-							fwd_file_url=params.get('fwd_file_url'), 
-							rev_file_url=params.get('rev_file_url'),
-							sequencing_tech=params.get('sequencing_tech'),
-							name=params.get('name'),
-							workspace_name_or_id=params.get('workspace_name')
-						)
-		elif 'fwd_file_url' in params and 'rev_file_url' not in params:
+			returnVal = self._upload_file_path(params)
+		elif 'fwd_file_url' in params:
 			# process single-end fastq file URL
-			returnVal = self._upload_file_url(
-							download_type=params.get('download_type'),
-							fwd_file_url=params.get('fwd_file_url'), 
-							sequencing_tech=params.get('sequencing_tech'),
-							name=params.get('name'),
-							workspace_name_or_id=params.get('workspace_name')
-						)
+			returnVal = self._upload_file_url(params)
+		else:
+			raise ValueError("Unexpected params: \n%s" % json.dumps(params, indent=1))
 
 		return returnVal
 
@@ -147,7 +118,7 @@ class FastqUploaderUtil:
 			elif params['download_type'] == 'FTP' and url_prefix[:3] != 'ftp':
 				raise ValueError("Download type and URL prefix do NOT match")
 
-	def _upload_file_path(self, fwd_staging_file_name, sequencing_tech, name, workspace_name_or_id, rev_staging_file_name=None):
+	def _upload_file_path(self, params):
 		"""
 		_upload_file_path: upload fastq file as reads from user's staging area
 
@@ -155,21 +126,22 @@ class FastqUploaderUtil:
 		fwd_staging_file_name: single-end fastq file name or forward/left paired-end fastq file name from user's staging area
 		sequencing_tech: sequencing technology
 		name: output reads file name
-		workspace_name_or_id: workspace name/ID that reads will be stored to
+		workspace_name: workspace name/ID that reads will be stored to
+
+		optional params:
 		rev_staging_file_name: reverse/right paired-end fastq file name user's staging area
+		single_genome: whether the reads are from a single genome or a metagenome
+		insert_size_mean: mean (average) insert length
+		insert_size_std_dev: standard deviation of insert lengths
+		read_orientation_outward: whether reads in a pair point outward
+		interleaved: whether reads is interleaved
 
 		"""
 		log ('---> running FastqUploaderUtil._upload_file_path')
 
-		upload_file_params = {
-			'fwd_staging_file_name': fwd_staging_file_name,
-			'sequencing_tech': sequencing_tech,
-			'name': name
-		}
+		upload_file_params = params
 
-		# copy reverse/right paired-end fastq file from starging area to local tmp folder
-		if rev_staging_file_name:
-			upload_file_params['rev_staging_file_name'] = rev_staging_file_name
+		workspace_name_or_id = params.get('workspace_name')
 
 		if str(workspace_name_or_id).isdigit():
 			upload_file_params['wsid'] = int(workspace_name_or_id)
@@ -182,7 +154,7 @@ class FastqUploaderUtil:
 
 		return result
 
-	def _upload_file_url(self, download_type, fwd_file_url, sequencing_tech, name, workspace_name_or_id, rev_file_url=None):
+	def _upload_file_url(self, params):
 		"""
 		_upload_file_url: upload fastq file as reads from web
 
@@ -191,21 +163,22 @@ class FastqUploaderUtil:
 		fwd_file_url: single-end fastq file URL or forward/left paired-end fastq file URL
 		sequencing_tech: sequencing technology
 		name: output reads file name
-		workspace_name_or_id: workspace name/ID that reads will be stored to
-		rev_file_url: reverse/right paired-end fastq file URL
+		workspace_name: workspace name/ID that reads will be stored to
 
+		optional params:
+		rev_file_url: reverse/right paired-end fastq file URL
+		single_genome: whether the reads are from a single genome or a metagenome
+		insert_size_mean: mean (average) insert length
+		insert_size_std_dev: standard deviation of insert lengths
+		read_orientation_outward: whether reads in a pair point outward
+		interleaved: whether reads is interleaved
+		
 		"""
 		log ('---> running FastqUploaderUtil._upload_file_url')
 
-		upload_file_params = {
-			'download_type': download_type,
-			'fwd_file_url': fwd_file_url,
-			'sequencing_tech': sequencing_tech,
-			'name': name
-		}
+		upload_file_params = params
 
-		if rev_file_url:
-			upload_file_params['rev_file_url'] = rev_file_url
+		workspace_name_or_id = params.get('workspace_name')
 
 		if str(workspace_name_or_id).isdigit():
 			upload_file_params['wsid'] = int(workspace_name_or_id)
