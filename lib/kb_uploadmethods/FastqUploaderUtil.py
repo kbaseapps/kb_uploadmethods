@@ -65,6 +65,7 @@ class FastqUploaderUtil:
 					html_string += html_file.read()
 
 		report_params = { 'objects_created' : [],
+						'message': 'upload finished'
 						'direct_html_index' : 0,
 						'file_links' : output_zip_files, 
 						'html_links' : output_html_files,
