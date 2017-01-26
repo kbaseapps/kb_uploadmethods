@@ -7,7 +7,7 @@
   "widgets" : 
   {
     "input" : null,
-    "output" : "no-display"
+    "output" : "kbaseReadsViewer"
   },
   "parameters" : 
   [ 
@@ -118,11 +118,12 @@
       [
         {
           "narrative_system_variable": "workspace",
-          "target_property": "workspace_name"
+          "target_property": "wsName"
         },
         {
           "service_method_output_path": [0,"obj_ref"],
-          "target_property": "obj_ref"
+          "target_property": "obj_ref",
+          "target_type_transform": "resolved-ref"
         }
       ]
     }
