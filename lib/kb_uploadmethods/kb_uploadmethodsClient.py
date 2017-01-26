@@ -46,8 +46,13 @@ class kb_uploadmethods(object):
            'DropBox', 'Google Drive') fwd_file_url: single-end fastq file URL
            or forward/left paired-end fastq file URL rev_file_url:
            reverse/right paired-end fastq file URL urls_to_add: used for
-           parameter-groups. dict of {fwd_file_url, rev_file_url, name}) ->
-           structure: parameter "workspace_name" of type "workspace_name"
+           parameter-groups. dict of {fwd_file_url, rev_file_url, name}
+           Optional Params: single_genome: whether the reads are from a
+           single genome or a metagenome. interleaved: whether reads is
+           interleaved insert_size_mean: mean (average) insert length
+           insert_size_std_dev: standard deviation of insert lengths
+           read_orientation_outward: whether reads in a pair point outward)
+           -> structure: parameter "workspace_name" of type "workspace_name"
            (workspace name of the object), parameter "fwd_staging_file_name"
            of type "fwd_staging_file_name" (input and output file path/url),
            parameter "rev_staging_file_name" of type "rev_staging_file_name",
@@ -57,7 +62,16 @@ class kb_uploadmethods(object):
            "sequencing_tech", parameter "name" of type "name", parameter
            "urls_to_add" of type "urls_to_add" -> structure: parameter
            "fwd_file_url" of type "fwd_file_url", parameter "rev_file_url" of
-           type "rev_file_url", parameter "name" of type "name"
+           type "rev_file_url", parameter "name" of type "name", parameter
+           "single_genome" of type "single_genome", parameter "interleaved"
+           of type "interleaved", parameter "insert_size_mean" of type
+           "insert_size_mean", parameter "insert_size_std_dev" of type
+           "insert_size_std_dev", parameter "read_orientation_outward" of
+           type "read_orientation_outward", parameter "single_genome" of type
+           "single_genome", parameter "interleaved" of type "interleaved",
+           parameter "insert_size_mean" of type "insert_size_mean", parameter
+           "insert_size_std_dev" of type "insert_size_std_dev", parameter
+           "read_orientation_outward" of type "read_orientation_outward"
         :returns: instance of type "UploadMethodResult" -> structure:
            parameter "obj_ref" of type "obj_ref"
         """

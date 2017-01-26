@@ -15,7 +15,8 @@
         "id": "urls_to_add",
         "parameters": [
             "fwd_file_url",
-            "name"
+            "name",
+            "single_genome"
         ],
         "optional": false,
         "advanced": false,
@@ -63,6 +64,18 @@
       "default_values" : [ "" ],
       "field_type" : "text",
       "text_options": {}
+    },
+    {
+      "id": "single_genome",
+      "optional":false,
+      "advanced":false,
+      "allow_multiple":false,
+      "default_values":[1],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
+        }
     },
     {
       "id" : "sequencing_tech",
@@ -136,6 +149,10 @@
         {
           "input_parameter": "sequencing_tech",
           "target_property": "sequencing_tech"
+        },
+        {
+          "input_parameter": "single_genome",
+          "target_property": "single_genome"
         },
         {
           "input_parameter": "name",

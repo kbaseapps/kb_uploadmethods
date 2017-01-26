@@ -79,6 +79,52 @@
         "valid_ws_types" : [ "KBaseFile.PairedEndLibrary" ],
         "is_output_name" : true
       }
+    }, 
+    {
+      "id" : "insert_size_mean",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "validate_as": "float"
+      }
+    }, 
+    {
+      "id" : "insert_size_std_dev",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "validate_as": "float"
+        }
+    },
+    {
+      "id": "read_orientation_outward",
+      "optional":true,
+      "advanced":true,
+      "allow_multiple":false,
+      "default_values":[0],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
+        }
+    },
+    {
+      "id": "single_genome",
+      "optional":false,
+      "advanced":false,
+      "allow_multiple":false,
+      "default_values":[1],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
+        }
     }
   ],
   "behavior" : 
@@ -109,6 +155,26 @@
         {
           "input_parameter": "name",
           "target_property": "name"
+        },
+        {
+          "input_parameter": "single_genome",
+          "target_property": "single_genome"
+        },
+        {
+          "constant_value": 1,
+          "target_property": "interleaved"
+        },
+        {
+          "input_parameter": "insert_size_mean",
+          "target_property": "insert_size_mean"
+        },
+        {
+          "input_parameter": "insert_size_std_dev",
+          "target_property": "insert_size_std_dev"
+        },
+        {
+          "input_parameter": "read_orientation_outward",
+          "target_property": "read_orientation_outward"
         }
       ],
       "output_mapping" : 

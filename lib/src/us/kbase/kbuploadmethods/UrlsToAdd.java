@@ -21,7 +21,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "fwd_file_url",
     "rev_file_url",
-    "name"
+    "name",
+    "single_genome",
+    "interleaved",
+    "insert_size_mean",
+    "insert_size_std_dev",
+    "read_orientation_outward"
 })
 public class UrlsToAdd {
 
@@ -31,6 +36,16 @@ public class UrlsToAdd {
     private String revFileUrl;
     @JsonProperty("name")
     private String name;
+    @JsonProperty("single_genome")
+    private String singleGenome;
+    @JsonProperty("interleaved")
+    private String interleaved;
+    @JsonProperty("insert_size_mean")
+    private String insertSizeMean;
+    @JsonProperty("insert_size_std_dev")
+    private String insertSizeStdDev;
+    @JsonProperty("read_orientation_outward")
+    private String readOrientationOutward;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("fwd_file_url")
@@ -78,6 +93,81 @@ public class UrlsToAdd {
         return this;
     }
 
+    @JsonProperty("single_genome")
+    public String getSingleGenome() {
+        return singleGenome;
+    }
+
+    @JsonProperty("single_genome")
+    public void setSingleGenome(String singleGenome) {
+        this.singleGenome = singleGenome;
+    }
+
+    public UrlsToAdd withSingleGenome(String singleGenome) {
+        this.singleGenome = singleGenome;
+        return this;
+    }
+
+    @JsonProperty("interleaved")
+    public String getInterleaved() {
+        return interleaved;
+    }
+
+    @JsonProperty("interleaved")
+    public void setInterleaved(String interleaved) {
+        this.interleaved = interleaved;
+    }
+
+    public UrlsToAdd withInterleaved(String interleaved) {
+        this.interleaved = interleaved;
+        return this;
+    }
+
+    @JsonProperty("insert_size_mean")
+    public String getInsertSizeMean() {
+        return insertSizeMean;
+    }
+
+    @JsonProperty("insert_size_mean")
+    public void setInsertSizeMean(String insertSizeMean) {
+        this.insertSizeMean = insertSizeMean;
+    }
+
+    public UrlsToAdd withInsertSizeMean(String insertSizeMean) {
+        this.insertSizeMean = insertSizeMean;
+        return this;
+    }
+
+    @JsonProperty("insert_size_std_dev")
+    public String getInsertSizeStdDev() {
+        return insertSizeStdDev;
+    }
+
+    @JsonProperty("insert_size_std_dev")
+    public void setInsertSizeStdDev(String insertSizeStdDev) {
+        this.insertSizeStdDev = insertSizeStdDev;
+    }
+
+    public UrlsToAdd withInsertSizeStdDev(String insertSizeStdDev) {
+        this.insertSizeStdDev = insertSizeStdDev;
+        return this;
+    }
+
+    @JsonProperty("read_orientation_outward")
+    public String getReadOrientationOutward() {
+        return readOrientationOutward;
+    }
+
+    @JsonProperty("read_orientation_outward")
+    public void setReadOrientationOutward(String readOrientationOutward) {
+        this.readOrientationOutward = readOrientationOutward;
+    }
+
+    public UrlsToAdd withReadOrientationOutward(String readOrientationOutward) {
+        this.readOrientationOutward = readOrientationOutward;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -90,7 +180,7 @@ public class UrlsToAdd {
 
     @Override
     public String toString() {
-        return ((((((((("UrlsToAdd"+" [fwdFileUrl=")+ fwdFileUrl)+", revFileUrl=")+ revFileUrl)+", name=")+ name)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((("UrlsToAdd"+" [fwdFileUrl=")+ fwdFileUrl)+", revFileUrl=")+ revFileUrl)+", name=")+ name)+", singleGenome=")+ singleGenome)+", interleaved=")+ interleaved)+", insertSizeMean=")+ insertSizeMean)+", insertSizeStdDev=")+ insertSizeStdDev)+", readOrientationOutward=")+ readOrientationOutward)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

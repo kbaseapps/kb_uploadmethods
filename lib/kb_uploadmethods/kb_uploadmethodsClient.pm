@@ -132,6 +132,11 @@ UploadMethodParams is a reference to a hash where the following keys are defined
 	sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 	name has a value which is a kb_uploadmethods.name
 	urls_to_add has a value which is a kb_uploadmethods.urls_to_add
+	single_genome has a value which is a kb_uploadmethods.single_genome
+	interleaved has a value which is a kb_uploadmethods.interleaved
+	insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+	insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+	read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
 workspace_name is a string
 fwd_staging_file_name is a string
 rev_staging_file_name is a string
@@ -144,6 +149,16 @@ urls_to_add is a reference to a hash where the following keys are defined:
 	fwd_file_url has a value which is a kb_uploadmethods.fwd_file_url
 	rev_file_url has a value which is a kb_uploadmethods.rev_file_url
 	name has a value which is a kb_uploadmethods.name
+	single_genome has a value which is a kb_uploadmethods.single_genome
+	interleaved has a value which is a kb_uploadmethods.interleaved
+	insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+	insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+	read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
+single_genome is a string
+interleaved is a string
+insert_size_mean is a string
+insert_size_std_dev is a string
+read_orientation_outward is a string
 UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
 obj_ref is a string
@@ -166,6 +181,11 @@ UploadMethodParams is a reference to a hash where the following keys are defined
 	sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 	name has a value which is a kb_uploadmethods.name
 	urls_to_add has a value which is a kb_uploadmethods.urls_to_add
+	single_genome has a value which is a kb_uploadmethods.single_genome
+	interleaved has a value which is a kb_uploadmethods.interleaved
+	insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+	insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+	read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
 workspace_name is a string
 fwd_staging_file_name is a string
 rev_staging_file_name is a string
@@ -178,6 +198,16 @@ urls_to_add is a reference to a hash where the following keys are defined:
 	fwd_file_url has a value which is a kb_uploadmethods.fwd_file_url
 	rev_file_url has a value which is a kb_uploadmethods.rev_file_url
 	name has a value which is a kb_uploadmethods.name
+	single_genome has a value which is a kb_uploadmethods.single_genome
+	interleaved has a value which is a kb_uploadmethods.interleaved
+	insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+	insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+	read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
+single_genome is a string
+interleaved is a string
+insert_size_mean is a string
+insert_size_std_dev is a string
+read_orientation_outward is a string
 UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
 obj_ref is a string
@@ -546,6 +576,136 @@ a string
 
 
 
+=head2 single_genome
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 interleaved
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 insert_size_mean
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 insert_size_std_dev
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 read_orientation_outward
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
 =head2 obj_ref
 
 =over 4
@@ -587,6 +747,11 @@ a reference to a hash where the following keys are defined:
 fwd_file_url has a value which is a kb_uploadmethods.fwd_file_url
 rev_file_url has a value which is a kb_uploadmethods.rev_file_url
 name has a value which is a kb_uploadmethods.name
+single_genome has a value which is a kb_uploadmethods.single_genome
+interleaved has a value which is a kb_uploadmethods.interleaved
+insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
 
 </pre>
 
@@ -598,6 +763,11 @@ a reference to a hash where the following keys are defined:
 fwd_file_url has a value which is a kb_uploadmethods.fwd_file_url
 rev_file_url has a value which is a kb_uploadmethods.rev_file_url
 name has a value which is a kb_uploadmethods.name
+single_genome has a value which is a kb_uploadmethods.single_genome
+interleaved has a value which is a kb_uploadmethods.interleaved
+insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
 
 
 =end text
@@ -629,6 +799,13 @@ rev_file_url: reverse/right paired-end fastq file URL
  
 urls_to_add: used for parameter-groups. dict of {fwd_file_url, rev_file_url, name}
 
+Optional Params:
+single_genome: whether the reads are from a single genome or a metagenome.
+    interleaved: whether reads is interleaved
+    insert_size_mean: mean (average) insert length
+    insert_size_std_dev: standard deviation of insert lengths
+    read_orientation_outward: whether reads in a pair point outward
+
 
 =item Definition
 
@@ -645,6 +822,11 @@ rev_file_url has a value which is a kb_uploadmethods.rev_file_url
 sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 name has a value which is a kb_uploadmethods.name
 urls_to_add has a value which is a kb_uploadmethods.urls_to_add
+single_genome has a value which is a kb_uploadmethods.single_genome
+interleaved has a value which is a kb_uploadmethods.interleaved
+insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
 
 </pre>
 
@@ -662,6 +844,11 @@ rev_file_url has a value which is a kb_uploadmethods.rev_file_url
 sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 name has a value which is a kb_uploadmethods.name
 urls_to_add has a value which is a kb_uploadmethods.urls_to_add
+single_genome has a value which is a kb_uploadmethods.single_genome
+interleaved has a value which is a kb_uploadmethods.interleaved
+insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
 
 
 =end text
