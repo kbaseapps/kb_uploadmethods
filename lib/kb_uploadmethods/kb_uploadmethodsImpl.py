@@ -35,6 +35,7 @@ class kb_uploadmethods:
         #BEGIN_CONSTRUCTOR
         self.config = config
         self.config['SDK_CALLBACK_URL'] = os.environ['SDK_CALLBACK_URL']
+        self.config['KB_AUTH_TOKEN'] = os.environ['KB_AUTH_TOKEN']
         #END_CONSTRUCTOR
         pass
 
@@ -101,6 +102,8 @@ class kb_uploadmethods:
             fastqUploader = FastqUploaderUtil(self.config)
             returnVal = fastqUploader.upload_fastq_file(params)
 
+        reportVal = fastqUploader.generate_report(returnVal['obj_ref'],params.get('workspace_name'))
+        returnVal.update(reportVal)
         #END upload_fastq_file
 
         # At some point might do deeper type checking...
