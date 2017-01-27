@@ -76,7 +76,7 @@ class FastqUploaderUtil:
 			upload_message += "Reads Type: " + str(object_data.get('data')[0].get('info')[2]) + '\n'
 			reads_info = object_data.get('data')[0].get('info')[-1]
 			if isinstance(reads_info, dict):
-				upload_message += "Reads Info: " + json.dumps(reads_info, indent=1) + '\n'
+				upload_message += "Reads Info: " + json.dumps(reads_info, indent=1)[1:-1] + '\n'
 
 		report_params = { 
 						'message': upload_message,
