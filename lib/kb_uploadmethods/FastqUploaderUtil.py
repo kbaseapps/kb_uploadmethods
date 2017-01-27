@@ -67,7 +67,7 @@ class FastqUploaderUtil:
 		report_params = { 'objects_created' : [],
 						'message': 'upload finished',
 						'direct_html_index' : 0,
-						'file_links' : output_zip_files, 
+						'file_links' : obj_refs_list, 
 						'html_links' : output_html_files,
 						'workspace_name' : workspace_name,
 						'report_object_name' : 'kb_upload_mothods_report_' + uuid_string }
