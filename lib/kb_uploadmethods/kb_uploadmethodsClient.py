@@ -73,7 +73,8 @@ class kb_uploadmethods(object):
            "insert_size_std_dev" of type "insert_size_std_dev", parameter
            "read_orientation_outward" of type "read_orientation_outward"
         :returns: instance of type "UploadMethodResult" -> structure:
-           parameter "obj_ref" of type "obj_ref"
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
         """
         return self._client.call_method(
             'kb_uploadmethods.upload_fastq_file',
