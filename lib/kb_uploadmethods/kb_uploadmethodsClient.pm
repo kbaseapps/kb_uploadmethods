@@ -161,7 +161,11 @@ insert_size_std_dev is a string
 read_orientation_outward is a string
 UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
+	report_name has a value which is a kb_uploadmethods.report_name
+	report_ref has a value which is a kb_uploadmethods.report_ref
 obj_ref is a string
+report_name is a string
+report_ref is a string
 
 </pre>
 
@@ -210,7 +214,11 @@ insert_size_std_dev is a string
 read_orientation_outward is a string
 UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
+	report_name has a value which is a kb_uploadmethods.report_name
+	report_ref has a value which is a kb_uploadmethods.report_ref
 obj_ref is a string
+report_name is a string
+report_ref is a string
 
 
 =end text
@@ -732,6 +740,58 @@ a string
 
 
 
+=head2 report_name
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 report_ref
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
 =head2 urls_to_add
 
 =over 4
@@ -870,6 +930,8 @@ read_orientation_outward has a value which is a kb_uploadmethods.read_orientatio
 <pre>
 a reference to a hash where the following keys are defined:
 obj_ref has a value which is a kb_uploadmethods.obj_ref
+report_name has a value which is a kb_uploadmethods.report_name
+report_ref has a value which is a kb_uploadmethods.report_ref
 
 </pre>
 
@@ -879,6 +941,8 @@ obj_ref has a value which is a kb_uploadmethods.obj_ref
 
 a reference to a hash where the following keys are defined:
 obj_ref has a value which is a kb_uploadmethods.obj_ref
+report_name has a value which is a kb_uploadmethods.report_name
+report_ref has a value which is a kb_uploadmethods.report_ref
 
 
 =end text

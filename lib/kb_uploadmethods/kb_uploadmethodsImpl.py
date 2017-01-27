@@ -22,9 +22,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.1.1"
+    VERSION = "0.1.2"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "8e1898dd971fb8c408e44ab44d58ba0ee8be68da"
+    GIT_COMMIT_HASH = "e7476262c44a2ca14e89602787d3ab1f6491251f"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -80,7 +80,8 @@ class kb_uploadmethods:
            "insert_size_std_dev" of type "insert_size_std_dev", parameter
            "read_orientation_outward" of type "read_orientation_outward"
         :returns: instance of type "UploadMethodResult" -> structure:
-           parameter "obj_ref" of type "obj_ref"
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
         """
         # ctx is the context object
         # return variables are: returnVal
