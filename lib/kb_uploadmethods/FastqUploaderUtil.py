@@ -81,7 +81,7 @@ class FastqUploaderUtil:
 			if params.get('fwd_staging_file_name'):
 				upload_message += "Imported Reads File: %s" % params.get('fwd_staging_file_name')
 				if params.get('rev_staging_file_name'):
-					upload_message += 'and %s\n' % params.get('rev_staging_file_name')
+					upload_message += ' and %s\n' % params.get('rev_staging_file_name')
 				else:
 					upload_message += '\n'
 			else:
