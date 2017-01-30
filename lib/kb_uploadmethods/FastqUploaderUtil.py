@@ -48,12 +48,15 @@ class FastqUploaderUtil:
 
 		return returnVal
 
-	def generate_report(self, obj_refs, workspace_name):
+	def generate_report(self, obj_refs, params):
 		"""
 		generate_report: generate summary report
 
-		params: 
+		 
 		obj_refs: generated workspace object references. (return of upload_fastq_file)
+		params:
+		fwd_staging_file_name: single-end fastq file name or forward/left paired-end fastq file name from user's staging area
+		rev_staging_file_name: reverse/right paired-end fastq file name user's staging area
 		workspace_name: workspace name/ID that reads will be stored to
 
 		"""
@@ -63,7 +66,7 @@ class FastqUploaderUtil:
 
 		dfu = DataFileUtil(self.callback_url)
 
-		upload_message = 'Upload Finished\nUploaded Reads:\n'
+		upload_message = 'Import Finished\nImported Reads:\n'
 
 		for obj_ref in obj_refs_list:
 			get_objects_params = {
@@ -72,15 +75,23 @@ class FastqUploaderUtil:
 			}
 
 			object_data = dfu.get_objects(get_objects_params)
+			
 			upload_message += "Reads Name: " + str(object_data.get('data')[0].get('info')[1]) + '\n'
 			upload_message += "Reads Type: " + str(object_data.get('data')[0].get('info')[2]) + '\n'
-			reads_info = object_data.get('data')[0].get('info')[-1]
-			if isinstance(reads_info, dict):
-				upload_message += "Reads Info: " + json.dumps(reads_info, indent=1)[1:-1] + '\n'
+			if params.get('fwd_staging_file_name'):
+				upload_message += "Imported Reads File: %s" % params.get('fwd_staging_file_name')
+				if params.get('rev_staging_file_name'):
+					upload_message += 'and %s\n' % params.get('rev_staging_file_name')
+				else:
+					upload_message += '\n'
+			else:
+				reads_info = object_data.get('data')[0].get('info')[-1]
+				if isinstance(reads_info, dict):
+					upload_message += "Reads Info: " + json.dumps(reads_info, indent=1)[1:-1] + '\n'
 
 		report_params = { 
 						'message': upload_message,
-						'workspace_name' : workspace_name,
+						'workspace_name' : params.get('workspace_name'),
 						'report_object_name' : 'kb_upload_mothods_report_' + uuid_string }
 
 		kbase_report_client = KBaseReport(self.callback_url, token=self.token)
