@@ -19,16 +19,14 @@ suggestions :
 
 parameters :
     fwd_staging_file_name :
-        ui-name : Forward/Left Fasta/Fastq File Name
+        ui-name : Forward/Left FASTA/FASTQ File Name
         short-hint : Short read file containing a paired end library in FASTA/FASTQ format
-        long-hint  : |
-            Valid file extensions for FASTA: .fasta, .fna, .fa   Valid file extensions for FASTQ: .fastq, .fnq, .fq; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2
+        long-hint  : Valid file extensions for FASTA: .fasta, .fna, .fa   Valid file extensions for FASTQ: .fastq, .fnq, .fq; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2
 
     rev_staging_file_name :
-        ui-name : Reverse/Right Fasta/Fastq File Name
+        ui-name : Reverse/Right FASTA/FASTQ File Name
         short-hint : Second short read file containing a paired end library in FASTA/FASTQ format.
-        long-hint  : |
-            Valid file extensions for FASTA: .fasta, .fna, .fa   Valid file extensions for FASTQ: .fastq, .fnq, .fq; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2
+        long-hint  : Valid file extensions for FASTA: .fasta, .fna, .fa   Valid file extensions for FASTQ: .fastq, .fnq, .fq; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2
 
     sequencing_tech :
         ui-name : Sequencing Technology
@@ -42,8 +40,8 @@ parameters :
 
     single_genome:
         ui-name: Single Genome
-        short-hint: Whether the reads are from a single genome or a metagenome.
-        long-hint: Whether the reads are from a single genome or a metagenome.
+        short-hint: Select if the reads are from a single genome, leave blank if from a metagenome
+        long-hint: Select if the reads are from a single genome, leave blank if from a metagenome
 
     insert_size_mean :
         ui-name : Mean Insert Size
@@ -51,16 +49,16 @@ parameters :
         long-hint  : The mean (average) insert length
 
     insert_size_std_dev :
-        ui-name : Stdev Of Insert Size
+        ui-name : St. Dev. of Insert Size
         short-hint : The standard deviation of insert lengths
         long-hint  : The standard deviation of insert lengths
 
     read_orientation_outward :
         ui-name : Reads Orientation Outward
-        short-hint : Whether reads in a pair point outward
-        long-hint  : Whether reads in a pair point outward
+        short-hint : Select if reads in a pair point outward
+        long-hint  : Select if reads in a pair point outward
 
 description : |
-    <p> Upload a Paired End Library into your Narrative </p>
+    <p> Upload a Paired End Library into your Narrative. </p>
 
 technical-description : none
