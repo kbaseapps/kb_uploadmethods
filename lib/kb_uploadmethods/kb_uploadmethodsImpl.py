@@ -103,7 +103,7 @@ class kb_uploadmethods:
             fastqUploader = FastqUploaderUtil(self.config)
             returnVal = fastqUploader.upload_fastq_file(params)
 
-        reportVal = fastqUploader.generate_report(returnVal['obj_ref'],params.get('workspace_name'))
+        reportVal = fastqUploader.generate_report(returnVal['obj_ref'], params)
         returnVal.update(reportVal)
         #END upload_fastq_file
 
