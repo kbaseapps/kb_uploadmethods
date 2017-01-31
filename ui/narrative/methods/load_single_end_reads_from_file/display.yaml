@@ -35,7 +35,7 @@ parameters :
         long-hint: Select if the reads are from a single genome, leave blank if from a metagenome
 
     name :
-        ui-name : Output Object File Name
+        ui-name : Reads Object Name
         short-hint : Provide a name for the output object that will be created by this upload
         long-hint  : Provide a name for the output object that will be created by this upload
 
