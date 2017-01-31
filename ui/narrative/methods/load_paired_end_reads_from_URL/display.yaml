@@ -42,7 +42,7 @@ parameters :
         long-hint  : The name of the sequencing technology used to create the reads file
 
     name :
-        ui-name : Output Object File Name
+        ui-name : Reads Object Name
         short-hint : Provide a name for the output object that will be created by this upload
         long-hint  : Provide a name for the output object that will be created by this upload
 

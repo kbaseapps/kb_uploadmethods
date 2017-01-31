@@ -414,6 +414,62 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
+    def test_upload_fastq_file_url_ftp_paired(self):
+        # copy test file to FTP
+        fq_filename = "small.forward.fq"
+        ftp_connection = ftplib.FTP('ftp.uconn.edu')
+        ftp_connection.login('anonymous', 'anonymous@domain.com')
+        ftp_connection.cwd("/48_hour/")
+
+        if fq_filename not in ftp_connection.nlst():
+            fh = open(os.path.join("data", fq_filename), 'rb')
+            ftp_connection.storbinary('STOR small.forward.fq', fh)
+            fh.close()
+            
+        fq_filename = "small.reverse.fq"
+
+        if fq_filename not in ftp_connection.nlst():
+            fh = open(os.path.join("data", fq_filename), 'rb')
+            ftp_connection.storbinary('STOR small.reverse.fq', fh)
+            fh.close()
+
+        params = {
+            'download_type': 'FTP',
+            'fwd_file_url': 'ftp://ftp.uconn.edu/48_hour/small.forward.fq',
+            'rev_file_url': 'ftp://ftp.uconn.edu/48_hour/small.reverse.fq',
+            'sequencing_tech': 'Unknown',
+            'name': 'test_reads_file_name.reads',
+            'workspace_name': self.getWsName(), 
+            'single_genome': 0,
+            'insert_size_mean': 99.9,
+            'insert_size_std_dev': 10.1,
+            'interleaved': 0  
+        }
+        ref = self.getImpl().upload_fastq_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('obj_ref'))
+
+        obj = self.dfu.get_objects(
+            {'object_refs': [self.getWsName() + '/test_reads_file_name.reads']})['data'][0]
+        self.assertEqual(ref[0]['obj_ref'], self.make_ref(obj['info']))
+        self.assertEqual(obj['info'][2].startswith(
+            'KBaseFile.PairedEndLibrary'), True)
+
+        d = obj['data']
+        file_name = d["lib1"]["file"]["file_name"]
+        self.assertTrue(file_name.endswith(".inter.fastq.gz"))
+        self.assertEqual(d['sequencing_tech'], 'Unknown')
+        self.assertEqual(d['single_genome'], 0)
+        self.assertEqual('source' not in d, True)
+        self.assertEqual('strain' not in d, True)
+        self.assertEqual(d['interleaved'], 1)
+        self.assertEqual(d['read_orientation_outward'], 0)
+        self.assertEqual(d['insert_size_mean'], 99.9)
+        self.assertEqual(d['insert_size_std_dev'], 10.1)
+        self.check_lib(d['lib1'], 2491520, file_name,
+                       '1c58d7d59c656db39cedcb431376514b')
+        node = d['lib1']['file']['id']
+        self.delete_shock_node(node)
+
     def test_urls_to_add_direct_download(self):
         params = {
             'download_type': 'Direct Download',
