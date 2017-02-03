@@ -207,6 +207,45 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
+    def test_upload_fastq_file_url_direct_download_paired_end_interleaved(self):
+        params = {
+            'download_type': 'Direct Download',
+            'fwd_file_url': 'https://anl.box.com/shared/static/lph9l0ye6yqetnbk04cx33mqgrj4b85j.fq',
+            'sequencing_tech': 'Unknown',
+            'name': 'test_reads_file_name.reads',
+            'workspace_name': self.getWsName(),
+            'single_genome': 0,
+            'insert_size_mean': 99.9,
+            'insert_size_std_dev': 10.1,
+            'read_orientation_outward': 1,
+            'interleaved': 1
+
+        }
+        ref = self.getImpl().upload_fastq_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('obj_ref'))
+
+        obj = self.dfu.get_objects(
+            {'object_refs': [self.getWsName() + '/test_reads_file_name.reads']})['data'][0]
+        self.assertEqual(ref[0]['obj_ref'], self.make_ref(obj['info']))
+        self.assertEqual(obj['info'][2].startswith(
+            'KBaseFile.PairedEndLibrary'), True)
+
+        d = obj['data']
+        file_name = d["lib1"]["file"]["file_name"]
+        self.assertTrue(file_name.endswith(".inter.fastq.gz"))
+        self.assertEqual(d['sequencing_tech'], 'Unknown')
+        self.assertEqual(d['single_genome'], 0)
+        self.assertEqual('source' not in d, True)
+        self.assertEqual('strain' not in d, True)
+        self.assertEqual(d['interleaved'], 1)
+        self.assertEqual(d['read_orientation_outward'], 1)
+        self.assertEqual(d['insert_size_mean'], 99.9)
+        self.assertEqual(d['insert_size_std_dev'], 10.1)
+        self.check_lib(d['lib1'], 2491520, file_name,
+                       '1c58d7d59c656db39cedcb431376514b')
+        node = d['lib1']['file']['id']
+        self.delete_shock_node(node)
+
     def test_upload_fastq_file_url_direct_download_paired_end(self):
         params = {
             'download_type': 'Direct Download',
