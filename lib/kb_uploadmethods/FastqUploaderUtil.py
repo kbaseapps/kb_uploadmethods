@@ -126,9 +126,9 @@ class FastqUploaderUtil:
 			raise ValueError('Cannot upload Reads for both file path and file URL')	
 
 		# check for file path parameters
-		if 'rev_staging_file_name' in params:
+		if params.get('rev_staging_file_name'):
 			self._validate_upload_file_path_availability(params["rev_staging_file_name"])
-		elif 'fwd_staging_file_name' in params:
+		elif params.get('fwd_staging_file_name'):
 			self._validate_upload_file_path_availability(params["fwd_staging_file_name"])
 		
 		# check for file URL parameters
@@ -154,21 +154,21 @@ class FastqUploaderUtil:
 			raise ValueError("Download type parameter is required, but missing")
 
 		# parse URL prefix
-		if 'rev_file_url' in params:
+		if params.get('rev_file_url'):
 			first_url_prefix = params['fwd_file_url'][:5].lower()
 			second_url_prefix = params['rev_file_url'][:5].lower()
-		elif 'fwd_file_url' in params and 'rev_file_url' not in params:
+		elif params.get('fwd_file_url') and not params.get('rev_file_url'):
 			url_prefix = params['fwd_file_url'][:5].lower()
 
 		# check URL prefix
-		if 'rev_file_url' in params:
+		if params.get('rev_file_url'):
 			if params['download_type'] == 'Direct Download' and (first_url_prefix[:4] != 'http' or second_url_prefix[:4] != 'http'):
 				raise ValueError("Download type and URL prefix do NOT match")
 			elif params['download_type'] in ['DropBox', 'Google Drive']  and (first_url_prefix != 'https' or second_url_prefix != 'https'):
 				raise ValueError("Download type and URL prefix do NOT match")
 			elif params['download_type'] == 'FTP' and (first_url_prefix[:3] != 'ftp' or second_url_prefix[:3] != 'ftp'):
 				raise ValueError("Download type and URL prefix do NOT match")
-		elif 'fwd_file_url' in params and 'rev_file_url' not in params:
+		elif params.get('fwd_file_url') and not params.get('rev_file_url'):
 			if params['download_type'] == 'Direct Download' and url_prefix[:4] != 'http':
 				raise ValueError("Download type and URL prefix do NOT match")
 			elif params['download_type'] in ['DropBox', 'Google Drive'] and url_prefix != 'https':
