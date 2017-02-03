@@ -95,6 +95,7 @@ class kb_uploadmethods:
                 params_item['workspace_name'] = params.get('workspace_name')
                 params_item['download_type'] = params.get('download_type')
                 params_item['sequencing_tech'] = params.get('sequencing_tech')
+                params_item['sequencing_tech'] = params.get('interleaved')
                 fastqUploader = FastqUploaderUtil(self.config)
                 itemReturnVal = fastqUploader.upload_fastq_file(params_item) 
                 returnVal['obj_ref'] += itemReturnVal['obj_ref'] + ',' 

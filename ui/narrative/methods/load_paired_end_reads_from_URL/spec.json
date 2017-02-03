@@ -18,7 +18,6 @@
             "rev_file_url",
             "name",
             "single_genome",
-            "interleaved",
             "insert_size_mean",
             "insert_size_std_dev",
             "read_orientation_outward"
