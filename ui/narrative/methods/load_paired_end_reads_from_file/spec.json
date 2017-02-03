@@ -22,7 +22,7 @@
     },    
     {
       "id" : "rev_staging_file_name",
-      "optional" : false,
+      "optional" : true,
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],

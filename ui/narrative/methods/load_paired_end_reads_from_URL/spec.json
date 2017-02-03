@@ -71,7 +71,7 @@
     },
     {
       "id" : "rev_file_url",
-      "optional" : false,
+      "optional" : true,
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
