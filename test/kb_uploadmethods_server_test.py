@@ -219,15 +219,13 @@ class kb_uploadmethodsTest(unittest.TestCase):
             'insert_size_std_dev': 84.0,
             'read_orientation_outward': 1,
             'interleaved': 1
-
         }
         ref = self.getImpl().upload_fastq_file(self.getContext(), params)
         self.assertTrue(ref[0].has_key('obj_ref'))
 
-        obj = self.ws.get_objects2(
-            {'objects': [{'ref': self.ws_info[1] + '/pairedreads2'}]}
-        )['data'][0]
-        self.delete_shock_node(ret['id'])
+        obj = self.dfu.get_objects(
+            {'object_refs': [self.getWsName() + '/pairedreads2']})['data'][0]
+
         self.assertEqual(ref[0]['obj_ref'], self.make_ref(obj['info']))
         self.assertEqual(obj['info'][2].startswith(
             'KBaseFile.PairedEndLibrary'), True)
@@ -257,7 +255,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(d["gc_content"], 0.6)
         self.assertEqual(d["read_length_mean"], 251)
         self.assertEqual(d["read_length_stdev"], 0)
-        self.check_lib(d['lib1'], 1050, 'Sample5_interleaved.fastq.gz',
+        self.check_lib(d['lib1'], 1044, 'tmp_fwd_fastq.fastq.gz',
                        '971a5f445055c85fd45b17459e15e3ed')
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
