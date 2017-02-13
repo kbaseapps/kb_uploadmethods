@@ -57,27 +57,6 @@
       }
     },
     {
-      "id" : "fwd_file_url",
-      "optional" : false,
-      "advanced" : false,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options": {}
-    },
-    {
-      "id": "single_genome",
-      "optional":false,
-      "advanced":false,
-      "allow_multiple":false,
-      "default_values":[1],
-      "field_type" : "checkbox",
-      "checkbox_options":{
-        "checked_value": 1,
-        "unchecked_value": 0
-        }
-    },
-    {
       "id" : "sequencing_tech",
       "optional" : false,
       "advanced" : false,
@@ -114,6 +93,27 @@
           }
         ]
       }
+    },
+    {
+      "id" : "fwd_file_url",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options": {}
+    },
+    {
+      "id": "single_genome",
+      "optional":false,
+      "advanced":false,
+      "allow_multiple":false,
+      "default_values":[1],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
+        }
     },
     {
       "id" : "name",
