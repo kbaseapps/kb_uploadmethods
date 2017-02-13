@@ -163,12 +163,12 @@ class kb_uploadmethodsTest(unittest.TestCase):
         # Testing duplicate forward/reverse  
         invalidate_input_params = self.getDefaultParams()
         invalidate_input_params['rev_staging_file_name'] = invalidate_input_params['fwd_staging_file_name']
-        with self.assertRaisesRegexp(ValueError, 'Cannot upload same Reads for both forward and reverse'):
+        with self.assertRaisesRegexp(ValueError, 'Same file [%s] is used for forward and reverse. Please select different files and try again' % invalidate_input_params['rev_staging_file_name']):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params) 
 
         invalidate_input_params = self.getDefaultParams(file_path=False)
         invalidate_input_params['rev_file_url'] = invalidate_input_params['fwd_file_url']
-        with self.assertRaisesRegexp(ValueError, 'Cannot upload same URL for both forward and reverse'):
+        with self.assertRaisesRegexp(ValueError, 'Same URL\n %s\nis used for forward and reverse. Please select different files and try again.' % invalidate_input_params['rev_file_url']):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params) 
 
         # Testing URL prefix

@@ -79,13 +79,13 @@ class FastqUploaderUtil:
 			object_data = dfu.get_objects(get_objects_params)
 			
 			upload_message += "Reads Name: " + str(object_data.get('data')[0].get('info')[1]) + '\n'
-			upload_message += "Reads Type: " + str(object_data.get('data')[0].get('info')[2]) + '\n'
 			if params.get('fwd_staging_file_name'):
-				upload_message += "Imported Reads File: %s" % params.get('fwd_staging_file_name')
 				if params.get('rev_staging_file_name'):
-					upload_message += ' and %s\n' % params.get('rev_staging_file_name')
+					upload_message += 'Imported Reads Files:\n'
+					upload_message += 'Forward: %s\n' % params.get('fwd_staging_file_name')
+					upload_message += 'Reverse: %s\n' % params.get('rev_staging_file_name')
 				else:
-					upload_message += '\n'
+					upload_message += 'Imported Reads File: %s\n' % params.get('fwd_staging_file_name')
 			else:
 				reads_info = object_data.get('data')[0].get('info')[-1]
 				if isinstance(reads_info, dict):
@@ -128,10 +128,10 @@ class FastqUploaderUtil:
 			raise ValueError('Cannot upload Reads for both file path and file URL')	
 
 		if upload_file_path and (params.get('fwd_staging_file_name') == params.get('rev_staging_file_name')):
-			raise ValueError('Cannot upload same Reads for both forward and reverse')
+			raise ValueError('Same file [%s] is used for forward and reverse. Please select different files and try again.') % params.get('fwd_staging_file_name')
 
 		if upload_file_URL and (params.get('fwd_file_url') == params.get('rev_file_url')):
-			raise ValueError('Cannot upload same URL for both forward and reverse')		
+			raise ValueError('Same URL\n %s\nis used for forward and reverse. Please select different files and try again.') % params.get('fwd_file_url')
 
 		# check for file path parameters
 		if params.get('rev_staging_file_name'):
