@@ -77,6 +77,7 @@ class FastqUploaderUtil:
 			}
 
 			object_data = dfu.get_objects(get_objects_params)
+			number_of_reads = object_data.get('data')[0].get('data').get('read_count')
 			
 			upload_message += "Reads Name: " + str(object_data.get('data')[0].get('info')[1]) + '\n'
 			if params.get('fwd_staging_file_name'):
@@ -86,6 +87,8 @@ class FastqUploaderUtil:
 					upload_message += 'Reverse: %s\n' % params.get('rev_staging_file_name')
 				else:
 					upload_message += 'Imported Reads File: %s\n' % params.get('fwd_staging_file_name')
+				if isinstance(number_of_reads, (int, long)):
+					upload_message += 'Number of Reads: {:,}'.format(number_of_reads)
 			else:
 				reads_info = object_data.get('data')[0].get('info')[-1]
 				if isinstance(reads_info, dict):
