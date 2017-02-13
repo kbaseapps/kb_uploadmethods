@@ -128,10 +128,10 @@ class FastqUploaderUtil:
 			raise ValueError('Cannot upload Reads for both file path and file URL')	
 
 		if upload_file_path and (params.get('fwd_staging_file_name') == params.get('rev_staging_file_name')):
-			raise ValueError('Same file [%s] is used for forward and reverse. Please select different files and try again.') % params.get('fwd_staging_file_name')
+			raise ValueError('Same file [%s] is used for forward and reverse. Please select different files and try again.' % params.get('fwd_staging_file_name'))
 
 		if upload_file_URL and (params.get('fwd_file_url') == params.get('rev_file_url')):
-			raise ValueError('Same URL\n %s\nis used for forward and reverse. Please select different files and try again.') % params.get('fwd_file_url')
+			raise ValueError('Same URL\n %s\nis used for forward and reverse. Please select different files and try again.' % params.get('fwd_file_url'))
 
 		# check for file path parameters
 		if params.get('rev_staging_file_name'):
