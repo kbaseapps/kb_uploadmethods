@@ -61,24 +61,6 @@
       }
     },
     {
-      "id" : "fwd_file_url",
-      "optional" : false,
-      "advanced" : false,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options": {}
-    },
-    {
-      "id" : "rev_file_url",
-      "optional" : true,
-      "advanced" : false,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options": {}
-    },
-    {
       "id" : "sequencing_tech",
       "optional" : false,
       "advanced" : false,
@@ -115,6 +97,24 @@
           }
         ]
       }
+    },
+    {
+      "id" : "fwd_file_url",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options": {}
+    },
+    {
+      "id" : "rev_file_url",
+      "optional" : true,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options": {}
     },
     {
       "id" : "name",
