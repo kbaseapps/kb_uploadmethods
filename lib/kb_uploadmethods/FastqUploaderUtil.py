@@ -88,7 +88,7 @@ class FastqUploaderUtil:
 				else:
 					upload_message += 'Imported Reads File: %s\n' % params.get('fwd_staging_file_name')
 				if isinstance(number_of_reads, (int, long)):
-					upload_message += 'Number of Reads: {:,}'.format(number_of_reads)
+					upload_message += 'Number of Reads: {:,}\n'.format(number_of_reads)
 			else:
 				reads_info = object_data.get('data')[0].get('info')[-1]
 				if isinstance(reads_info, dict):
