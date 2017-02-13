@@ -22,9 +22,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.1.3"
+    VERSION = "0.1.5"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "1c5e18ec1d05bc9dc15c8c1eb6d09ddd4310a189"
+    GIT_COMMIT_HASH = "8f801894b52dad3ccfbb9c2c091d90a899c55910"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -96,11 +96,17 @@ class kb_uploadmethods:
                 params_item['download_type'] = params.get('download_type')
                 params_item['sequencing_tech'] = params.get('sequencing_tech')
                 params_item['interleaved'] = params.get('interleaved')
+                for key, value in params_item.iteritems():
+                  if isinstance(value, basestring):
+                    params_item[key] = value.strip()
                 fastqUploader = FastqUploaderUtil(self.config)
                 itemReturnVal = fastqUploader.upload_fastq_file(params_item) 
                 returnVal['obj_ref'] += itemReturnVal['obj_ref'] + ',' 
             returnVal['obj_ref'] = returnVal['obj_ref'][:-1]
         else:
+            for key, value in params.iteritems():
+              if isinstance(value, basestring):
+                params[key] = value.strip()
             fastqUploader = FastqUploaderUtil(self.config)
             returnVal = fastqUploader.upload_fastq_file(params)
 

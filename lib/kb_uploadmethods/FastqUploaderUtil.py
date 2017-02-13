@@ -66,7 +66,9 @@ class FastqUploaderUtil:
 
 		dfu = DataFileUtil(self.callback_url)
 
-		upload_message = 'Import Finished\nImported Reads:\n'
+		reads_number = 1 if 'urls_to_add' not in params else len(params['urls_to_add'])
+
+		upload_message = 'Import Finished\nImported Reads: %s\n' % reads_number
 
 		for obj_ref in obj_refs_list:
 			get_objects_params = {
@@ -116,14 +118,20 @@ class FastqUploaderUtil:
 		upload_file_path = False
 		upload_file_URL = False
 
-		if 'fwd_staging_file_name' in params or 'rev_staging_file_name' in params:
+		if params.get('fwd_staging_file_name') or params.get('rev_staging_file_name'):
 			upload_file_path = True
 
-		if 'fwd_file_url' in params or 'rev_file_url' in params:
+		if params.get('fwd_file_url') or params.get('rev_file_url'):
 			upload_file_URL = True
 
 		if upload_file_path and upload_file_URL:
 			raise ValueError('Cannot upload Reads for both file path and file URL')	
+
+		if upload_file_path and (params.get('fwd_staging_file_name') == params.get('rev_staging_file_name')):
+			raise ValueError('Cannot upload same Reads for both forward and reverse')
+
+		if upload_file_URL and (params.get('fwd_file_url') == params.get('rev_file_url')):
+			raise ValueError('Cannot upload same URL for both forward and reverse')		
 
 		# check for file path parameters
 		if params.get('rev_staging_file_name'):
@@ -132,7 +140,7 @@ class FastqUploaderUtil:
 			self._validate_upload_file_path_availability(params["fwd_staging_file_name"])
 		
 		# check for file URL parameters
-		if 'fwd_file_url' in params:
+		if upload_file_URL:
 			self._validate_upload_file_URL_availability(params)
 
 	def _validate_upload_file_path_availability(self, upload_file_name):
