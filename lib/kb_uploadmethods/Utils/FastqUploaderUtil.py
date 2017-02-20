@@ -5,10 +5,12 @@ from ftp_service.ftp_serviceClient import ftp_service
 from KBaseReport.KBaseReportClient import KBaseReport
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 import uuid
+import time
 
-def log(message):
-    """Logging function, provides a hook to suppress or redirect log messages."""
-    print(message)
+def log(message, prefix_newline=False):
+	"""Logging function, provides a hook to suppress or redirect log messages."""
+	print(('\n' if prefix_newline else '') + 
+		str(time.time()) + ': ' + str(message))
 
 class FastqUploaderUtil:
 

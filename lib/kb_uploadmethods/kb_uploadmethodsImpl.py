@@ -3,7 +3,8 @@
 import os
 from pprint import pprint
 import json
-from kb_uploadmethods.FastqUploaderUtil import FastqUploaderUtil
+from kb_uploadmethods.Utils.FastqUploaderUtil import FastqUploaderUtil
+from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
 #END_HEADER
 
 
@@ -22,9 +23,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.1.5"
+    VERSION = "0.1.6"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "8f801894b52dad3ccfbb9c2c091d90a899c55910"
+    GIT_COMMIT_HASH = "f4d64b231f648722962e5497f01070abd2b9051e"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -53,32 +54,34 @@ class kb_uploadmethods:
            'DropBox', 'Google Drive') fwd_file_url: single-end fastq file URL
            or forward/left paired-end fastq file URL rev_file_url:
            reverse/right paired-end fastq file URL urls_to_add: used for
-           parameter-groups. dict of {fwd_file_url, rev_file_url, name}
-           Optional Params: single_genome: whether the reads are from a
-           single genome or a metagenome. interleaved: whether reads is
-           interleaved insert_size_mean: mean (average) insert length
-           insert_size_std_dev: standard deviation of insert lengths
-           read_orientation_outward: whether reads in a pair point outward)
-           -> structure: parameter "workspace_name" of type "workspace_name"
-           (workspace name of the object), parameter "fwd_staging_file_name"
-           of type "fwd_staging_file_name" (input and output file path/url),
-           parameter "rev_staging_file_name" of type "rev_staging_file_name",
-           parameter "download_type" of type "download_type", parameter
-           "fwd_file_url" of type "fwd_file_url", parameter "rev_file_url" of
-           type "rev_file_url", parameter "sequencing_tech" of type
-           "sequencing_tech", parameter "name" of type "name", parameter
-           "urls_to_add" of type "urls_to_add" -> structure: parameter
-           "fwd_file_url" of type "fwd_file_url", parameter "rev_file_url" of
-           type "rev_file_url", parameter "name" of type "name", parameter
-           "single_genome" of type "single_genome", parameter "interleaved"
-           of type "interleaved", parameter "insert_size_mean" of type
-           "insert_size_mean", parameter "insert_size_std_dev" of type
-           "insert_size_std_dev", parameter "read_orientation_outward" of
-           type "read_orientation_outward", parameter "single_genome" of type
-           "single_genome", parameter "interleaved" of type "interleaved",
-           parameter "insert_size_mean" of type "insert_size_mean", parameter
+           parameter-groups. dict of {fwd_file_url, rev_file_url, name,
+           single_genome, interleaved, insert_size_mean and
+           read_orientation_outward} Optional Params: single_genome: whether
+           the reads are from a single genome or a metagenome. interleaved:
+           whether reads is interleaved insert_size_mean: mean (average)
+           insert length insert_size_std_dev: standard deviation of insert
+           lengths read_orientation_outward: whether reads in a pair point
+           outward) -> structure: parameter "workspace_name" of type
+           "workspace_name" (workspace name of the object), parameter
+           "fwd_staging_file_name" of type "fwd_staging_file_name" (input and
+           output file path/url), parameter "rev_staging_file_name" of type
+           "rev_staging_file_name", parameter "download_type" of type
+           "download_type", parameter "fwd_file_url" of type "fwd_file_url",
+           parameter "rev_file_url" of type "rev_file_url", parameter
+           "sequencing_tech" of type "sequencing_tech", parameter "name" of
+           type "name", parameter "urls_to_add" of type "urls_to_add" ->
+           structure: parameter "fwd_file_url" of type "fwd_file_url",
+           parameter "rev_file_url" of type "rev_file_url", parameter "name"
+           of type "name", parameter "single_genome" of type "single_genome",
+           parameter "interleaved" of type "interleaved", parameter
+           "insert_size_mean" of type "insert_size_mean", parameter
            "insert_size_std_dev" of type "insert_size_std_dev", parameter
-           "read_orientation_outward" of type "read_orientation_outward"
+           "read_orientation_outward" of type "read_orientation_outward",
+           parameter "single_genome" of type "single_genome", parameter
+           "interleaved" of type "interleaved", parameter "insert_size_mean"
+           of type "insert_size_mean", parameter "insert_size_std_dev" of
+           type "insert_size_std_dev", parameter "read_orientation_outward"
+           of type "read_orientation_outward"
         :returns: instance of type "UploadMethodResult" -> structure:
            parameter "obj_ref" of type "obj_ref", parameter "report_name" of
            type "report_name", parameter "report_ref" of type "report_ref"
@@ -117,6 +120,111 @@ class kb_uploadmethods:
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method upload_fastq_file return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def unpack_staging_file(self, ctx, params):
+        """
+        Unpack a staging area file
+        :param params: instance of type "UnpackStagingFileParams" (Input
+           parameters for the "unpack_staging_file" function. Required
+           parameters: staging_file_subdir_path: subdirectory file path e.g.
+           for file: /data/bulk/user_name/file_name staging_file_subdir_path
+           is file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name
+           workspace_name: workspace name/ID of the object) -> structure:
+           parameter "workspace_name" of type "workspace_name" (workspace
+           name of the object), parameter "staging_file_subdir_path" of String
+        :returns: instance of type "UnpackStagingFileOutput" (Results from
+           the unpack_staging_file function. unpacked_file_path: unpacked
+           file path(s) in staging area) -> structure: parameter
+           "unpacked_file_path" of String
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN unpack_staging_file
+        print '--->\nRunning uploadmethods.unpack_staging_file\nparams:'
+        print json.dumps(params, indent=1)
+
+        for key, value in params.iteritems():
+          if isinstance(value, basestring):
+            params[key] = value.strip()
+
+        self.config['USER_ID'] = ctx['user_id']
+        unpacker = UnpackFileUtil(self.config)
+        returnVal = unpacker.unpack_staging_file(params) 
+
+        reportVal = unpacker.generate_report(returnVal['unpacked_file_path'], params)
+        returnVal.update(reportVal)
+
+        #END unpack_staging_file
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method unpack_staging_file return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def unpack_web_file(self, ctx, params):
+        """
+        Download and unpack a web file to staging area
+        :param params: instance of type "UnpackWebFileParams" (Input
+           parameters for the "unpack_web_file" function. Required
+           parameters: workspace_name: workspace name/ID of the object
+           file_url: file URL download_type: one of ['Direct Download',
+           'FTP', 'DropBox', 'Google Drive'] Optional:
+           urls_to_add_web_unpack: used for parameter-groups. dict of
+           {file_url}) -> structure: parameter "workspace_name" of type
+           "workspace_name" (workspace name of the object), parameter
+           "file_url" of String, parameter "download_type" of String,
+           parameter "urls_to_add_web_unpack" of type
+           "urls_to_add_web_unpack" -> structure: parameter "file_url" of
+           String
+        :returns: instance of type "UnpackWebFileOutput" (Results from the
+           unpack_web_file function. unpacked_file_path: unpacked file
+           path(s) in staging area) -> structure: parameter
+           "unpacked_file_path" of String
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN unpack_web_file
+        print '--->\nRunning uploadmethods.unpack_web_file\nparams:'
+        print json.dumps(params, indent=1)
+
+        self.config['USER_ID'] = ctx['user_id']
+
+        if params.get('urls_to_add_web_unpack'):
+            returnVal = {'unpacked_file_path': ''}
+            download_type = params.get('download_type')
+            workspace_name = params.get('workspace_name')
+            for params_item in params.get('urls_to_add_web_unpack'):
+                params_item['download_type'] = download_type
+                params_item['workspace_name'] = workspace_name
+                for key, value in params_item.iteritems():
+                  if isinstance(value, basestring):
+                    params_item[key] = value.strip()
+                unpacker = UnpackFileUtil(self.config)
+                itemReturnVal = unpacker.unpack_web_file(params_item) 
+                returnVal['unpacked_file_path'] += itemReturnVal['unpacked_file_path'] + ',' 
+            returnVal['unpacked_file_path'] = returnVal['unpacked_file_path'][:-1]
+        else:
+            for key, value in params.iteritems():
+              if isinstance(value, basestring):
+                params[key] = value.strip()
+            unpacker = UnpackFileUtil(self.config)
+            returnVal = unpacker.unpack_web_file(params) 
+
+        reportVal = unpacker.generate_report(returnVal['unpacked_file_path'], params)
+        returnVal.update(reportVal)
+
+        #END unpack_web_file
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method unpack_web_file return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]

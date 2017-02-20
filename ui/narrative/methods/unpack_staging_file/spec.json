@@ -1,0 +1,65 @@
+{
+  "ver" : "1.0.0",
+  "authors" : ["tgu2"],
+  "contact" : "help@kbase.us",
+  "visble" : true,
+  "categories" : [ "active","upload" ],
+  "widgets" : 
+  {
+    "input" : null,
+    "output" : "no-display"
+  },
+  "parameters" : 
+  [ 
+    {
+      "id" : "staging_file_subdir_path",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    }
+  ],
+  "behavior" : 
+  {
+    "service-mapping" : 
+    {
+      "url" : "",
+      "name" : "kb_uploadmethods",
+      "method" : "unpack_staging_file",
+      "input_mapping" : 
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "staging_file_subdir_path",
+          "target_property": "staging_file_subdir_path"
+        }
+      ],
+      "output_mapping" : 
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "service_method_output_path": [0,"unpacked_file_path"],
+          "target_property": "unpacked_file_path",
+          "target_type_transform": "resolved-ref"
+        },
+        {
+            "service_method_output_path": [0, "report_name"],
+            "target_property": "report_name"
+        },
+        {
+            "service_method_output_path": [0, "report_ref"],
+            "target_property": "report_ref"
+        }
+      ]
+    }
+  },
+  "job_id_output_field": "docker"
+}

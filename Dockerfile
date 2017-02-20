@@ -8,6 +8,9 @@ MAINTAINER KBase Developer
 # RUN apt-get update
 RUN pip install coverage
 RUN pip install dropbox
+RUN pip install requests --upgrade \
+	&& ( [ $(pip show filemagic|grep -c filemagic) -eq 0 ] || pip uninstall -y filemagic ) \
+    && pip install python-magic
 
 # -----------------------------------------
 

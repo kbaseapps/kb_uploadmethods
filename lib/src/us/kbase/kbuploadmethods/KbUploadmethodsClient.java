@@ -179,6 +179,42 @@ public class KbUploadmethodsClient {
         return res.get(0);
     }
 
+    /**
+     * <p>Original spec-file function name: unpack_staging_file</p>
+     * <pre>
+     * Unpack a staging area file
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.kbuploadmethods.UnpackStagingFileParams UnpackStagingFileParams}
+     * @return   parameter "returnVal" of type {@link us.kbase.kbuploadmethods.UnpackStagingFileOutput UnpackStagingFileOutput}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public UnpackStagingFileOutput unpackStagingFile(UnpackStagingFileParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<UnpackStagingFileOutput>> retType = new TypeReference<List<UnpackStagingFileOutput>>() {};
+        List<UnpackStagingFileOutput> res = caller.jsonrpcCall("kb_uploadmethods.unpack_staging_file", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: unpack_web_file</p>
+     * <pre>
+     * Download and unpack a web file to staging area
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.kbuploadmethods.UnpackWebFileParams UnpackWebFileParams}
+     * @return   parameter "returnVal" of type {@link us.kbase.kbuploadmethods.UnpackWebFileOutput UnpackWebFileOutput}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public UnpackWebFileOutput unpackWebFile(UnpackWebFileParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<UnpackWebFileOutput>> retType = new TypeReference<List<UnpackWebFileOutput>>() {};
+        List<UnpackWebFileOutput> res = caller.jsonrpcCall("kb_uploadmethods.unpack_web_file", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
     public Map<String, Object> status(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         TypeReference<List<Map<String, Object>>> retType = new TypeReference<List<Map<String, Object>>>() {};
