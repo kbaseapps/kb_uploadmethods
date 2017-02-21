@@ -83,4 +83,24 @@ module kb_uploadmethods {
 
 	funcdef upload_fastq_file(UploadMethodParams params)
 		returns (UploadMethodResult returnVal) authentication required;
+
+
+	/*
+	    genome_name: output genome object name
+	    workspace_name: workspace name/ID of the object
+	    
+	    For staging area:
+	    fasta_file: fasta file containing assembled contigs/chromosomes
+	    gff_file: gff file containing predicted gene models and corresponding features
+    */
+	typedef structure {
+		string fasta_file;
+		string gff_file;
+		string genome_name;
+		workspace_name workspace_name;
+	} UploadFastaGFFMethodParams;
+
+	funcdef upload_fasta_gff_file(UploadFastaGFFMethodParams params)
+		returns (UploadMethodResult returnVal) authentication required;
+
 };

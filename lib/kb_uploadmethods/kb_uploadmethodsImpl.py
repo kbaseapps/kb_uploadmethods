@@ -3,7 +3,7 @@
 import os
 from pprint import pprint
 import json
-from kb_uploadmethods.FastqUploaderUtil import FastqUploaderUtil
+from kb_uploadmethods.UploaderUtil import UploaderUtil
 #END_HEADER
 
 
@@ -23,8 +23,8 @@ class kb_uploadmethods:
     # the latter method is running.
     ######################################### noqa
     VERSION = "0.1.5"
-    GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "8f801894b52dad3ccfbb9c2c091d90a899c55910"
+    GIT_URL = "https://github.com/samseaver/kb_uploadmethods"
+    GIT_COMMIT_HASH = "f4d64b231f648722962e5497f01070abd2b9051e"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -99,24 +99,58 @@ class kb_uploadmethods:
                 for key, value in params_item.iteritems():
                   if isinstance(value, basestring):
                     params_item[key] = value.strip()
-                fastqUploader = FastqUploaderUtil(self.config)
-                itemReturnVal = fastqUploader.upload_fastq_file(params_item) 
+                Uploader = UploaderUtil(self.config)
+                itemReturnVal = Uploader.upload_fastq_file(params_item) 
                 returnVal['obj_ref'] += itemReturnVal['obj_ref'] + ',' 
             returnVal['obj_ref'] = returnVal['obj_ref'][:-1]
         else:
             for key, value in params.iteritems():
               if isinstance(value, basestring):
                 params[key] = value.strip()
-            fastqUploader = FastqUploaderUtil(self.config)
-            returnVal = fastqUploader.upload_fastq_file(params)
+            Uploader = UploaderUtil(self.config)
+            returnVal = Uploader.upload_fastq_file(params)
 
-        reportVal = fastqUploader.generate_report(returnVal['obj_ref'], params)
+        reportVal = Uploader.generate_report(returnVal['obj_ref'], params)
         returnVal.update(reportVal)
         #END upload_fastq_file
 
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method upload_fastq_file return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def upload_fasta_gff_file(self, ctx, params):
+        """
+        :param params: instance of type "UploadFastaGFFMethodParams"
+           (genome_name: output genome object name workspace_name: workspace
+           name/ID of the object For staging area: fasta_file: fasta file
+           containing assembled contigs/chromosomes gff_file: gff file
+           containing predicted gene models and corresponding features) ->
+           structure: parameter "fasta_file" of String, parameter "gff_file"
+           of String, parameter "genome_name" of String, parameter
+           "workspace_name" of type "workspace_name" (workspace name of the
+           object)
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN upload_fasta_gff_file
+        print '--->\nRunning uploadmethods.upload_fastq_file\nparams:'
+        print json.dumps(params, indent=1)
+
+        #Text entry used, stripping whitespace
+        for key, value in params.iteritems():
+            params[key] = value.strip()
+        
+        #END upload_fasta_gff_file
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method upload_fasta_gff_file return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]

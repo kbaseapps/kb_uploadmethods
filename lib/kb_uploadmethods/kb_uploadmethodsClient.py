@@ -80,6 +80,25 @@ class kb_uploadmethods(object):
             'kb_uploadmethods.upload_fastq_file',
             [params], self._service_ver, context)
 
+    def upload_fasta_gff_file(self, params, context=None):
+        """
+        :param params: instance of type "UploadFastaGFFMethodParams"
+           (genome_name: output genome object name workspace_name: workspace
+           name/ID of the object For staging area: fasta_file: fasta file
+           containing assembled contigs/chromosomes gff_file: gff file
+           containing predicted gene models and corresponding features) ->
+           structure: parameter "fasta_file" of String, parameter "gff_file"
+           of String, parameter "genome_name" of String, parameter
+           "workspace_name" of type "workspace_name" (workspace name of the
+           object)
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        return self._client.call_method(
+            'kb_uploadmethods.upload_fasta_gff_file',
+            [params], self._service_ver, context)
+
     def status(self, context=None):
         return self._client.call_method('kb_uploadmethods.status',
                                         [], self._service_ver, context)
