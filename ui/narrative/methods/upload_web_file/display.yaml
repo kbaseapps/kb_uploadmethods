@@ -1,0 +1,40 @@
+name     : Upload Web File
+subtitle : Unpack a Web compressed file and upload uncompressed file(s) to staging area
+tooltip  : Unpack a Web compressed file and upload uncompressed file(s) to staging area
+
+screenshots :
+    []
+
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+parameters :
+    download_type :
+        ui-name : Download Type
+        short-hint : Download type ('Direct Download Link', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
+        long-hint  : Download type ('Direct Download Link', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
+ 
+    file_url :
+        ui-name : File URL
+        short-hint : Compressed File URL
+        long-hint  : Compressed File URL
+
+parameter-groups :
+    urls_to_add_web_unpack :
+        ui-name : URL(s)
+        short-hint : Compressed File URL(s)
+        long-hint  : Compressed File URL(s)
+
+description : |
+    <p> Unpack a Web compressed file and upload uncompressed file(s) to staging area. </p>
+
+technical-description : none

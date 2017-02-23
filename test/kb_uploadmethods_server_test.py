@@ -6,6 +6,8 @@ import time
 import requests
 import hashlib
 import ftplib
+import shutil
+from mock import patch 
 
 from os import environ
 try:
@@ -18,8 +20,8 @@ from pprint import pprint  # noqa: F401
 from biokbase.workspace.client import Workspace as workspaceService
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
-from kb_uploadmethods.FastqUploaderUtil import FastqUploaderUtil
-from ReadsUtils.ReadsUtilsClient import ReadsUtils
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
+from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -735,7 +737,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
-
     def test_upload_fastq_file_url_ftp_trailing_space(self):
         # copy test file to FTP
         fq_filename = "Sample1.fastq"
@@ -772,3 +773,77 @@ class kb_uploadmethodsTest(unittest.TestCase):
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
+
+    def mock_file_to_staging(file_path_list):
+        print 'Mocking _file_to_staging'
+        print "Mocking uploaded files to staging area:\n{}".format('\n'.join(file_path_list))
+
+    @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
+    def test_unpack_web_file_dropbox(self, _file_to_staging):
+        params = {
+            'download_type': 'DropBox',
+            'file_url': 'https://www.dropbox.com/s/cbiywh2aihjxdf5/Archive.zip?dl=0',
+            'workspace_name': self.getWsName()
+        }
+
+        ref = self.getImpl().unpack_web_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('unpacked_file_path'))
+        self.assertTrue(ref[0].has_key('report_ref'))
+        self.assertTrue(ref[0].has_key('report_name'))
+        self.assertEqual(6, len(ref[0].get('unpacked_file_path').split(',')))
+        for file_path in ref[0].get('unpacked_file_path').split(','):
+            self.assertRegexpMatches(os.path.basename(file_path), 
+                                                'file[1-6]\.txt')
+
+    @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
+    def test_unpack_web_file_direct_download(self):
+
+        params = {
+            'download_type': 'Direct Download',
+            'workspace_name': self.getWsName(),
+            'urls_to_add_web_unpack' :[
+                {
+                    'file_url': 'https://anl.box.com/shared/static/g0064wasgaoi3sax4os06paoyxay4l3r.zip'
+                },
+                {
+                    'file_url': 'https://anl.box.com/shared/static/g0064wasgaoi3sax4os06paoyxay4l3r.zip'
+                }
+            ]
+        }
+
+        ref = self.getImpl().unpack_web_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('unpacked_file_path'))
+        self.assertTrue(ref[0].has_key('report_ref'))
+        self.assertTrue(ref[0].has_key('report_name'))
+        self.assertEqual(12, len(ref[0].get('unpacked_file_path').split(',')))
+        for file_path in ref[0].get('unpacked_file_path').split(','):
+            self.assertRegexpMatches(os.path.basename(file_path), 
+                                                'file[1-6]\.txt')
+
+    @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
+    def test_upload_fastq_file_url_ftp_trailing_space(self):
+        # copy test file to FTP
+        fq_filename = "Archive.zip"
+        ftp_connection = ftplib.FTP('ftp.uconn.edu')
+        ftp_connection.login('anonymous', 'anonymous@domain.com')
+        ftp_connection.cwd("/48_hour/")
+
+        if fq_filename not in ftp_connection.nlst():
+            fh = open(os.path.join("data", fq_filename), 'rb')
+            ftp_connection.storbinary('STOR Archive.zip', fh)
+            fh.close()
+
+        params = {
+            'download_type': 'FTP',
+            'file_url': 'ftp://ftp.uconn.edu/48_hour/Archive.zip   ',
+            'workspace_name': self.getWsName()   
+        }
+
+        ref = self.getImpl().unpack_web_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('unpacked_file_path'))
+        self.assertTrue(ref[0].has_key('report_ref'))
+        self.assertTrue(ref[0].has_key('report_name'))
+        self.assertEqual(6, len(ref[0].get('unpacked_file_path').split(',')))
+        for file_path in ref[0].get('unpacked_file_path').split(','):
+            self.assertRegexpMatches(os.path.basename(file_path), 
+                                                'file[1-6]\.txt')
