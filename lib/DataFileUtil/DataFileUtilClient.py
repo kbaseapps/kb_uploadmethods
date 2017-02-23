@@ -631,6 +631,68 @@ class DataFileUtil(object):
             if job_state['finished']:
                 return job_state['result']
 
+    def _download_staging_file_submit(self, params, context=None):
+        return self._client._submit_job(
+             'DataFileUtil.download_staging_file', [params],
+             self._service_ver, context)
+
+    def download_staging_file(self, params, context=None):
+        """
+        Download a staging area file to scratch area
+        :param params: instance of type "DownloadStagingFileParams" (Input
+           parameters for the "download_staging_file" function. Required
+           parameters: staging_file_subdir_path: subdirectory file path e.g.
+           for file: /data/bulk/user_name/file_name staging_file_subdir_path
+           is file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name) ->
+           structure: parameter "staging_file_subdir_path" of String
+        :returns: instance of type "DownloadStagingFileOutput" (Results from
+           the download_staging_file function. copy_file_path: copied file
+           scratch area path) -> structure: parameter "copy_file_path" of
+           String
+        """
+        job_id = self._download_staging_file_submit(params, context)
+        async_job_check_time = self._client.async_job_check_time
+        while True:
+            time.sleep(async_job_check_time)
+            async_job_check_time = (async_job_check_time *
+                self._client.async_job_check_time_scale_percent / 100.0)
+            if async_job_check_time > self._client.async_job_check_max_time:
+                async_job_check_time = self._client.async_job_check_max_time
+            job_state = self._check_job(job_id)
+            if job_state['finished']:
+                return job_state['result'][0]
+
+    def _download_web_file_submit(self, params, context=None):
+        return self._client._submit_job(
+             'DataFileUtil.download_web_file', [params],
+             self._service_ver, context)
+
+    def download_web_file(self, params, context=None):
+        """
+        Download a web file to scratch area
+        :param params: instance of type "DownloadWebFileParams" (Input
+           parameters for the "download_web_file" function. Required
+           parameters: file_url: file URL download_type: one of ['Direct
+           Download', 'FTP', 'DropBox', 'Google Drive']) -> structure:
+           parameter "file_url" of String, parameter "download_type" of String
+        :returns: instance of type "DownloadWebFileOutput" (Results from the
+           download_web_file function. copy_file_path: copied file scratch
+           area path) -> structure: parameter "copy_file_path" of String
+        """
+        job_id = self._download_web_file_submit(params, context)
+        async_job_check_time = self._client.async_job_check_time
+        while True:
+            time.sleep(async_job_check_time)
+            async_job_check_time = (async_job_check_time *
+                self._client.async_job_check_time_scale_percent / 100.0)
+            if async_job_check_time > self._client.async_job_check_max_time:
+                async_job_check_time = self._client.async_job_check_max_time
+            job_state = self._check_job(job_id)
+            if job_state['finished']:
+                return job_state['result'][0]
+
     def status(self, context=None):
         job_id = self._client._submit_job('DataFileUtil.status', 
             [], self._service_ver, context)

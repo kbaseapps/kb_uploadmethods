@@ -10,9 +10,9 @@ import time
 def log(message, prefix_newline=False):
 	"""Logging function, provides a hook to suppress or redirect log messages."""
 	print(('\n' if prefix_newline else '') + 
-		str(time.time()) + ': ' + str(message))
+		'{0:.2f}'.format(time.time()) + ': ' + str(message))
 
-class FastqUploaderUtil:
+class UploaderUtil:
 
 	def __init__(self, config):
 		self.callback_url = config['SDK_CALLBACK_URL']
@@ -35,7 +35,8 @@ class FastqUploaderUtil:
 		rev_file_url: reverse/right paired-end fastq file URL
 
 		"""
-		log('--->\nrunning FastqUploaderUtil.upload_fastq_file\nparams:\n%s' % json.dumps(params, indent=1))
+		log('--->\nrunning UploaderUtil.upload_fastq_file\n' + 
+					'params:\n{}'.format(json.dumps(params, indent=1)))
 
 		self.validate_upload_fastq_file_parameters(params)
 
@@ -46,7 +47,8 @@ class FastqUploaderUtil:
 			# process single-end fastq file URL
 			returnVal = self._upload_file_url(params)
 		else:
-			raise ValueError("Unexpected params: \n%s" % json.dumps(params, indent=1))
+			raise ValueError("Unexpected params: \n{}".format(
+										json.dumps(params, indent=1)))
 
 		return returnVal
 
@@ -70,7 +72,7 @@ class FastqUploaderUtil:
 
 		reads_number = 1 if 'urls_to_add' not in params else len(params['urls_to_add'])
 
-		upload_message = 'Import Finished\nImported Reads: %s\n' % reads_number
+		upload_message = 'Import Finished\nImported Reads: {}\n'.format(reads_number)
 
 		for obj_ref in obj_refs_list:
 			get_objects_params = {
@@ -81,25 +83,30 @@ class FastqUploaderUtil:
 			object_data = dfu.get_objects(get_objects_params)
 			number_of_reads = object_data.get('data')[0].get('data').get('read_count')
 			
-			upload_message += "Reads Name: " + str(object_data.get('data')[0].get('info')[1]) + '\n'
+			upload_message += "Reads Name: "
+			upload_message += str(object_data.get('data')[0].get('info')[1]) + '\n'
 			if params.get('fwd_staging_file_name'):
 				if params.get('rev_staging_file_name'):
 					upload_message += 'Imported Reads Files:\n'
-					upload_message += 'Forward: %s\n' % params.get('fwd_staging_file_name')
-					upload_message += 'Reverse: %s\n' % params.get('rev_staging_file_name')
+					upload_message += 'Forward: {}\n'.format(
+										params.get('fwd_staging_file_name'))
+					upload_message += 'Reverse: {}\n'.format(
+										params.get('rev_staging_file_name'))
 				else:
-					upload_message += 'Imported Reads File: %s\n' % params.get('fwd_staging_file_name')
+					upload_message += 'Imported Reads File: {}\n'.format(
+										params.get('fwd_staging_file_name'))
 				if isinstance(number_of_reads, (int, long)):
 					upload_message += 'Number of Reads: {:,}\n'.format(number_of_reads)
 			else:
 				reads_info = object_data.get('data')[0].get('info')[-1]
 				if isinstance(reads_info, dict):
-					upload_message += "Reads Info: " + json.dumps(reads_info, indent=1)[1:-1] + '\n'
+					upload_message += "Reads Info: "
+					upload_message += json.dumps(reads_info, indent=1)[1:-1] + '\n'
 
 		report_params = { 
-						'message': upload_message,
-						'workspace_name' : params.get('workspace_name'),
-						'report_object_name' : 'kb_upload_mothods_report_' + uuid_string }
+					'message': upload_message,
+					'workspace_name' : params.get('workspace_name'),
+					'report_object_name' : 'kb_upload_mothods_report_' + uuid_string }
 
 		kbase_report_client = KBaseReport(self.callback_url, token=self.token)
 		output = kbase_report_client.create_extended_report(report_params)
@@ -132,11 +139,19 @@ class FastqUploaderUtil:
 		if upload_file_path and upload_file_URL:
 			raise ValueError('Cannot upload Reads for both file path and file URL')	
 
-		if upload_file_path and (params.get('fwd_staging_file_name') == params.get('rev_staging_file_name')):
-			raise ValueError('Same file [%s] is used for forward and reverse. Please select different files and try again.' % params.get('fwd_staging_file_name'))
+		if (upload_file_path and 
+				(params.get('fwd_staging_file_name') == params.get('rev_staging_file_name'))):
+			error_msg = 'Same file [{}] is used for forward and reverse. '.format(
+														params.get('fwd_staging_file_name'))
+			error_msg += 'Please select different files and try again.'
+			raise ValueError(error_msg)
 
-		if upload_file_URL and (params.get('fwd_file_url') == params.get('rev_file_url')):
-			raise ValueError('Same URL\n %s\nis used for forward and reverse. Please select different files and try again.' % params.get('fwd_file_url'))
+		if (upload_file_URL and 
+				(params.get('fwd_file_url') == params.get('rev_file_url'))):
+			error_msg = 'Same URL\n {}\nis used for forward and reverse. '.format(
+														params.get('fwd_file_url'))
+			error_msg += 'Please select different files and try again.'
+			raise ValueError(error_msg)
 
 		# check for file path parameters
 		if params.get('rev_staging_file_name'):
@@ -155,7 +170,10 @@ class FastqUploaderUtil:
 		"""
 		list = ftp_service(self.callback_url).list_files() #get available file list in user's staging area
 		if upload_file_name.rpartition('/')[-1] not in list:
-			raise ValueError("Target file: %s is NOT available. Available files: %s" % (upload_file_name.rpartition('/')[-1], ",".join(list)))
+			error_msg = 'Target file: {} is NOT available. '.format(
+													upload_file_name.rpartition('/')[-1])
+			error_msg += 'Available files: {}'.format(",".join(list))
+			raise ValueError(error_msg)
 
 	def _validate_upload_file_URL_availability(self, params):
 		"""
@@ -175,16 +193,20 @@ class FastqUploaderUtil:
 
 		# check URL prefix
 		if params.get('rev_file_url'):
-			if params['download_type'] == 'Direct Download' and (first_url_prefix[:4] != 'http' or second_url_prefix[:4] != 'http'):
+			if (params['download_type'] == 'Direct Download' 
+					and (first_url_prefix[:4] != 'http' or second_url_prefix[:4] != 'http')):
 				raise ValueError("Download type and URL prefix do NOT match")
-			elif params['download_type'] in ['DropBox', 'Google Drive']  and (first_url_prefix != 'https' or second_url_prefix != 'https'):
+			elif (params['download_type'] in ['DropBox', 'Google Drive']  
+					and (first_url_prefix != 'https' or second_url_prefix != 'https')):
 				raise ValueError("Download type and URL prefix do NOT match")
-			elif params['download_type'] == 'FTP' and (first_url_prefix[:3] != 'ftp' or second_url_prefix[:3] != 'ftp'):
+			elif (params['download_type'] == 'FTP' 
+					and (first_url_prefix[:3] != 'ftp' or second_url_prefix[:3] != 'ftp')):
 				raise ValueError("Download type and URL prefix do NOT match")
 		elif params.get('fwd_file_url') and not params.get('rev_file_url'):
 			if params['download_type'] == 'Direct Download' and url_prefix[:4] != 'http':
 				raise ValueError("Download type and URL prefix do NOT match")
-			elif params['download_type'] in ['DropBox', 'Google Drive'] and url_prefix != 'https':
+			elif (params['download_type'] in ['DropBox', 'Google Drive'] 
+																and url_prefix != 'https'):
 				raise ValueError("Download type and URL prefix do NOT match")
 			elif params['download_type'] == 'FTP' and url_prefix[:3] != 'ftp':
 				raise ValueError("Download type and URL prefix do NOT match")
@@ -208,7 +230,7 @@ class FastqUploaderUtil:
 		interleaved: whether reads is interleaved
 
 		"""
-		log ('---> running FastqUploaderUtil._upload_file_path')
+		log ('---> running UploaderUtil._upload_file_path')
 
 		upload_file_params = params
 
@@ -219,7 +241,8 @@ class FastqUploaderUtil:
 		else:
 			upload_file_params['wsname'] = str(workspace_name_or_id)
 
-		log('--->\nrunning ReadsUtils.upload_reads\nparams:\n%s' % json.dumps(upload_file_params, indent=1))
+		log('--->\nrunning ReadsUtils.upload_reads\nparams:\n{}'.format(
+											json.dumps(upload_file_params, indent=1)))
 		ru = ReadsUtils(self.callback_url)
 		result = ru.upload_reads(upload_file_params)
 
@@ -245,7 +268,7 @@ class FastqUploaderUtil:
 		interleaved: whether reads is interleaved
 		
 		"""
-		log ('---> running FastqUploaderUtil._upload_file_url')
+		log ('---> running UploaderUtil._upload_file_url')
 
 		upload_file_params = params
 
@@ -256,7 +279,8 @@ class FastqUploaderUtil:
 		else:
 			upload_file_params['wsname'] = str(workspace_name_or_id)
 
-		log('--->\nrunning ReadsUtils.upload_reads\nparams:\n%s' % json.dumps(upload_file_params, indent=1))
+		log('--->\nrunning ReadsUtils.upload_reads\nparams:\n{}'.format(
+											json.dumps(upload_file_params, indent=1)))
 		ru = ReadsUtils(self.callback_url)
 		result = ru.upload_reads(upload_file_params)
 

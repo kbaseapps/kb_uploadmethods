@@ -11,7 +11,7 @@ from KBaseReport.KBaseReportClient import KBaseReport
 def log(message, prefix_newline=False):
 	"""Logging function, provides a hook to suppress or redirect log messages."""
 	print(('\n' if prefix_newline else '') + 
-		str(time.time()) + ': ' + str(message))
+		'{0:.2f}'.format(time.time()) + ': ' + str(message))
 
 class UnpackFileUtil:
 
@@ -35,12 +35,12 @@ class UnpackFileUtil:
 		"""
 		count += 1
 		if os.path.isfile(file_path):
-			log('processing: {}{}'.format('-' * count, file_path))
+			log('processing:      {}{}'.format('-' * count, file_path))
 			t = magic.from_file(file_path, mime=True)
 
 			if os.path.basename(file_path).endswith('.DS_Store'):
 				os.remove(file_path)
-				log('removing file: {}{}'.format('-' * count, file_path))
+				log('removing file:   {}{}'.format('-' * count, file_path))
 			elif t in ['application/' + x for x in 
 				'x-gzip', 'gzip', 'x-bzip', 'x-bzip2', 'bzip', 'bzip2',
 				'x-tar', 'tar', 'x-gtar', 'zip', 'x-zip-compressed']:
@@ -53,7 +53,7 @@ class UnpackFileUtil:
 				for new_file in new_files:
 					self._r_unpack(os.sep.join([file_dir, new_file]), count)
 				os.remove(file_path)
-				log('removing file: {}{}'.format('-' * count, file_path))
+				log('removing file:   {}{}'.format('-' * count, file_path))
 			else:
 				return file_path
 		else:
@@ -99,9 +99,11 @@ class UnpackFileUtil:
 		for dirpath, dirnames, filenames in os.walk(
 											os.path.dirname(scratch_file_path)):
 			for filename in filenames:
-				unpacked_file_path_list.append(os.sep.join([dirpath, filename]))
+				unpacked_file_path_list.append(
+											os.sep.join([dirpath, filename]))
 
-		log ("Unpacked files:\n  {}".format('\n  '.join(unpacked_file_path_list)))
+		log ("Unpacked files:\n  {}".format(
+											'\n  '.join(unpacked_file_path_list)))
 
 		self._file_to_staging(unpacked_file_path_list)
 		unpacked_file_path = ','.join(unpacked_file_path_list)
@@ -127,15 +129,16 @@ class UnpackFileUtil:
 
 		scratch_file_path = self.dfu.download_web_file(params)
 		# scratch_file_path = '/kb/module/work/tmp/test_unpack_web_file/Archive.zip'
-
 		self._r_unpack(scratch_file_path, 0)
 		unpacked_file_path_list = []
 		for dirpath, dirnames, filenames in os.walk(
 											os.path.dirname(scratch_file_path)):
 			for filename in filenames:
-				unpacked_file_path_list.append(os.sep.join([dirpath, filename]))
+				unpacked_file_path_list.append(
+											os.sep.join([dirpath, filename]))
 
-		log ("Unpacked files:\n  {}".format('\n  '.join(unpacked_file_path_list)))
+		log ("Unpacked files:\n  {}".format(
+											'\n  '.join(unpacked_file_path_list)))
 
 		self._file_to_staging(unpacked_file_path_list)
 		unpacked_file_path = ','.join(unpacked_file_path_list)
@@ -161,14 +164,15 @@ class UnpackFileUtil:
 		upload_message += '\n'.join(unpacked_file_path_list)
 
 		report_params = { 
-						'message': upload_message,
-						'workspace_name' : params.get('workspace_name'),
-						'report_object_name' : 'kb_upload_mothods_report_' + uuid_string }
+					'message': upload_message,
+					'workspace_name' : params.get('workspace_name'),
+					'report_object_name' : 'kb_upload_mothods_report_' + uuid_string}
 
 		kbase_report_client = KBaseReport(self.callback_url, token=self.token)
 		output = kbase_report_client.create_extended_report(report_params)
 
-		report_output = { 'report_name': output['name'], 'report_ref': output['ref'] }
+		report_output = {'report_name': output['name'], 
+											'report_ref': output['ref']}
 
 		return report_output
 

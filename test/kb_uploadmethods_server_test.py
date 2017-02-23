@@ -20,7 +20,7 @@ from pprint import pprint  # noqa: F401
 from biokbase.workspace.client import Workspace as workspaceService
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
-from kb_uploadmethods.Utils.FastqUploaderUtil import FastqUploaderUtil
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 
@@ -737,7 +737,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
-
     def test_upload_fastq_file_url_ftp_trailing_space(self):
         # copy test file to FTP
         fq_filename = "Sample1.fastq"
@@ -786,14 +785,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
             'file_url': 'https://www.dropbox.com/s/cbiywh2aihjxdf5/Archive.zip?dl=0',
             'workspace_name': self.getWsName()
         }
-
-        # tmp_dir = self.cfg['scratch']
-        # test_file = "Archive.zip"
-        # unpack_dir = os.path.join(tmp_dir, 'test_unpack_web_file')
-        # test_file_path = os.path.join(unpack_dir, test_file)
-        # if not os.path.exists(unpack_dir):
-        #     os.makedirs(unpack_dir)
-        # shutil.copy('data/'+test_file, test_file_path)
 
         ref = self.getImpl().unpack_web_file(self.getContext(), params)
         self.assertTrue(ref[0].has_key('unpacked_file_path'))

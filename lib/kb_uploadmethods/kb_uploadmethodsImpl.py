@@ -3,7 +3,7 @@
 import os
 from pprint import pprint
 import json
-from kb_uploadmethods.Utils.FastqUploaderUtil import FastqUploaderUtil
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
 #END_HEADER
 
@@ -25,7 +25,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "0.1.6"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "f4d64b231f648722962e5497f01070abd2b9051e"
+    GIT_COMMIT_HASH = "bb9bb93dcd9093b7f2f6a51a0d70813332e94f98"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -102,7 +102,7 @@ class kb_uploadmethods:
                 for key, value in params_item.iteritems():
                   if isinstance(value, basestring):
                     params_item[key] = value.strip()
-                fastqUploader = FastqUploaderUtil(self.config)
+                fastqUploader = UploaderUtil(self.config)
                 itemReturnVal = fastqUploader.upload_fastq_file(params_item) 
                 returnVal['obj_ref'] += itemReturnVal['obj_ref'] + ',' 
             returnVal['obj_ref'] = returnVal['obj_ref'][:-1]
@@ -110,7 +110,7 @@ class kb_uploadmethods:
             for key, value in params.iteritems():
               if isinstance(value, basestring):
                 params[key] = value.strip()
-            fastqUploader = FastqUploaderUtil(self.config)
+            fastqUploader = UploaderUtil(self.config)
             returnVal = fastqUploader.upload_fastq_file(params)
 
         reportVal = fastqUploader.generate_report(returnVal['obj_ref'], params)
