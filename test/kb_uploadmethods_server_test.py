@@ -847,3 +847,20 @@ class kb_uploadmethodsTest(unittest.TestCase):
         for file_path in ref[0].get('unpacked_file_path').split(','):
             self.assertRegexpMatches(os.path.basename(file_path), 
                                                 'file[1-6]\.txt')
+
+    @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
+    def test_unpack_web_file_google_drive(self, _file_to_staging):
+        params = {
+            'download_type': 'Google Drive',
+            'file_url': 'https://drive.google.com/open?id=0B0exSa7ebQ0qSlJiWEVWYU5rYWM',
+            'workspace_name': self.getWsName()
+        }
+
+        ref = self.getImpl().unpack_web_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('unpacked_file_path'))
+        self.assertTrue(ref[0].has_key('report_ref'))
+        self.assertTrue(ref[0].has_key('report_name'))
+        self.assertEqual(6, len(ref[0].get('unpacked_file_path').split(',')))
+        for file_path in ref[0].get('unpacked_file_path').split(','):
+            self.assertRegexpMatches(os.path.basename(file_path), 
+                                                'file[1-6]\.txt')
