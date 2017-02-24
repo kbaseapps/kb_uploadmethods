@@ -168,7 +168,6 @@ class UnpackFileUtil:
 		"""
 		generate_report: generate summary report
 
-		 
 		unpacked_file_path: generated unpacked file path(s) in staging area. 
 							(return of unpack_staging_file or unpack_web_file)
 
