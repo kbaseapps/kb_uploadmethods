@@ -179,7 +179,7 @@ class UnpackFileUtil:
 
 		upload_message = 'Uploaded Files: {}\n'.format(
 												len(unpacked_file_path_list))
-		upload_message += '\n'.join(unpacked_file_path_list)
+		upload_message += '\n'.join(os.path.basename(unpacked_file_path_list))
 
 		report_params = { 
 					'message': upload_message,
