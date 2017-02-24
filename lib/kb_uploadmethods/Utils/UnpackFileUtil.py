@@ -174,12 +174,14 @@ class UnpackFileUtil:
 
 		"""
 
+		log ("generating report")
 		uuid_string = str(uuid.uuid4())
 		unpacked_file_path_list= unpacked_file_path.split(',')
 
 		upload_message = 'Uploaded Files: {}\n'.format(
-												len(unpacked_file_path_list))
-		upload_message += '\n'.join(os.path.basename(unpacked_file_path_list))
+																				len(unpacked_file_path_list))
+		for file_path in unpacked_file_path_list:
+			upload_message += os.path.basename(file_path) + '\n'
 
 		report_params = { 
 					'message': upload_message,
