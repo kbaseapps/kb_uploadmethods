@@ -98,8 +98,7 @@
         },
         {
           "service_method_output_path": [0,"unpacked_file_path"],
-          "target_property": "unpacked_file_path",
-          "target_type_transform": "resolved-ref"
+          "target_property": "unpacked_file_path"
         },
         {
             "service_method_output_path": [0, "report_name"],
