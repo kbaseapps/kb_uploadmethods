@@ -796,17 +796,17 @@ class kb_uploadmethodsTest(unittest.TestCase):
                                                 'file[1-6]\.txt')
 
     @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
-    def test_unpack_web_file_direct_download(self):
+    def test_unpack_web_file_direct_download(self, _file_to_staging):
 
         params = {
             'download_type': 'Direct Download',
             'workspace_name': self.getWsName(),
             'urls_to_add_web_unpack' :[
                 {
-                    'file_url': 'https://anl.box.com/shared/static/g0064wasgaoi3sax4os06paoyxay4l3r.zip'
+                    'file_url': '  https://anl.box.com/shared/static/g0064wasgaoi3sax4os06paoyxay4l3r.zip'
                 },
                 {
-                    'file_url': 'https://anl.box.com/shared/static/g0064wasgaoi3sax4os06paoyxay4l3r.zip'
+                    'file_url': '  https://anl.box.com/shared/static/g0064wasgaoi3sax4os06paoyxay4l3r.zip'
                 }
             ]
         }
@@ -821,7 +821,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
                                                 'file[1-6]\.txt')
 
     @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
-    def test_upload_fastq_file_url_ftp_trailing_space(self):
+    def test_upload_fastq_file_url_ftp_trailing_space(self, _file_to_staging):
         # copy test file to FTP
         fq_filename = "Archive.zip"
         ftp_connection = ftplib.FTP('ftp.uconn.edu')

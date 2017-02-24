@@ -29,10 +29,26 @@ class UnpackFileUtil:
 			return_code = os.popen(post_cmd).read()
 			log ("return message from server:\n{}".format(return_code))
 
+	def _remove_irrelevant_files(self, file_path):
+		"""
+		_remove_irrelevant_files: remove irrelevant files
+		"""
+		target_name = os.path.basename(file_path)
+		file_dir = os.path.dirname(file_path)
+		for dirpath, dirnames, filenames in os.walk(file_dir):
+			for filename in filenames:
+				if filename != target_name:
+					irrelevant_file_path = os.sep.join([dirpath, filename])
+					os.remove(irrelevant_file_path)
+					log('removing irrelevant file: {}'.format(irrelevant_file_path))
+
 	def _r_unpack(self, file_path, count):
 		"""
 		_r_unpack: recursively unpack file_path
 		"""
+		if count == 0:
+			self._remove_irrelevant_files(file_path)
+
 		count += 1
 		if os.path.isfile(file_path):
 			log('processing:      {}{}'.format('-' * count, file_path))
@@ -92,7 +108,8 @@ class UnpackFileUtil:
 		log('--->\nrunning UnpackFileUtil.unpack_staging_file\n' +
 			 'params:\n{}'.format(json.dumps(params, indent=1)))
 
-		scratch_file_path = self.dfu.download_staging_file(params)
+		scratch_file_path = self.dfu.download_staging_file(params).get(
+																												'copy_file_path')
 
 		self._r_unpack(scratch_file_path, 0)
 		unpacked_file_path_list = []
@@ -127,8 +144,9 @@ class UnpackFileUtil:
 		log('--->\nrunning UnpackFileUtil.unpack_web_file\n' +
 			 'params:\n{}'.format(json.dumps(params, indent=1)))
 
-		scratch_file_path = self.dfu.download_web_file(params)
-		# scratch_file_path = '/kb/module/work/tmp/test_unpack_web_file/Archive.zip'
+		scratch_file_path = self.dfu.download_web_file(params).get(
+																												'copy_file_path')
+
 		self._r_unpack(scratch_file_path, 0)
 		unpacked_file_path_list = []
 		for dirpath, dirnames, filenames in os.walk(
