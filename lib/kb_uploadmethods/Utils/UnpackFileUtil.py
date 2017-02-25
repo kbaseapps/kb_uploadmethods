@@ -15,15 +15,16 @@ def log(message, prefix_newline=False):
 
 class UnpackFileUtil:
 
-	def _file_to_staging(self, file_path_list):
+	def _file_to_staging(self, file_path_list, subdir_folder=None):
 		"""
 		_file_to_staging: upload file(s) to staging area
 		"""
+		subdir_folder_str = '' if not subdir_folder else '/{}'.format(subdir_folder)
 		for file_path in file_path_list:
 			log ("uploading [{}] to staging area".format(file_path))
 			post_cmd = 'curl -H "Authorization: {}"\\\n'.format(self.token)
 			post_cmd += ' -X POST\\\n'
-			post_cmd += ' -F "destPath=/{}"\\\n'.format(self.user_id)
+			post_cmd += ' -F "destPath=/{}{}"\\\n'.format(self.user_id, subdir_folder_str)
 			post_cmd += ' -F "uploads=@{}"\\\n'.format(file_path)
 			post_cmd += ' https://ci.kbase.us/services/kb-ftp-api/v0/upload'
 			return_code = os.popen(post_cmd).read()
@@ -122,7 +123,8 @@ class UnpackFileUtil:
 		log ("Unpacked files:\n  {}".format(
 											'\n  '.join(unpacked_file_path_list)))
 
-		self._file_to_staging(unpacked_file_path_list)
+		self._file_to_staging(unpacked_file_path_list, os.path.dirname(
+																	params.get('staging_file_subdir_path')))
 		unpacked_file_path = ','.join(unpacked_file_path_list)
 		returnVal = {'unpacked_file_path': unpacked_file_path}
 		
