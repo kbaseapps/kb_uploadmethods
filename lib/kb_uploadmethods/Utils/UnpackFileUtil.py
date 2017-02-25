@@ -181,7 +181,7 @@ class UnpackFileUtil:
 
     subdir = os.path.dirname(
                   params.get('staging_file_subdir_path')) + '/' if params.get(
-                                            'staging_file_subdir_path') else ''
+                                            'staging_file_subdir_path') else '/'
 
     upload_message = 'Uploaded Files: {}\n'.format(
                                         len(unpacked_file_path_list))
