@@ -305,11 +305,87 @@ UploadMethodResult is a reference to a hash where the following keys are defined
 obj_ref is a string
 report_name is a string
 report_ref is a string
+
 </pre>
 
 =end html
 
 =begin text
+
+$params is a kb_uploadmethods.UploadFastaGFFMethodParams
+$returnVal is a kb_uploadmethods.UploadMethodResult
+UploadFastaGFFMethodParams is a reference to a hash where the following keys are defined:
+	fasta_file has a value which is a string
+	gff_file has a value which is a string
+	genome_name has a value which is a string
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
+workspace_name is a string
+UploadMethodResult is a reference to a hash where the following keys are defined:
+	obj_ref has a value which is a kb_uploadmethods.obj_ref
+	report_name has a value which is a kb_uploadmethods.report_name
+	report_ref has a value which is a kb_uploadmethods.report_ref
+obj_ref is a string
+report_name is a string
+report_ref is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub upload_fasta_gff_file
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function upload_fasta_gff_file (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to upload_fasta_gff_file:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'upload_fasta_gff_file');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "kb_uploadmethods.upload_fasta_gff_file",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'upload_fasta_gff_file',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method upload_fasta_gff_file",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'upload_fasta_gff_file',
+				       );
+    }
+}
+ 
+
 
 =head2 unpack_staging_file
 
@@ -337,22 +413,6 @@ UnpackStagingFileOutput is a reference to a hash where the following keys are de
 
 =begin text
 
-$params is a kb_uploadmethods.UploadFastaGFFMethodParams
-$returnVal is a kb_uploadmethods.UploadMethodResult
-UploadFastaGFFMethodParams is a reference to a hash where the following keys are defined:
-	fasta_file has a value which is a string
-	gff_file has a value which is a string
-	genome_name has a value which is a string
-	workspace_name has a value which is a kb_uploadmethods.workspace_name
-workspace_name is a string
-UploadMethodResult is a reference to a hash where the following keys are defined:
-	obj_ref has a value which is a kb_uploadmethods.obj_ref
-	report_name has a value which is a kb_uploadmethods.report_name
-	report_ref has a value which is a kb_uploadmethods.report_ref
-obj_ref is a string
-report_name is a string
-report_ref is a string
-=======
 $params is a kb_uploadmethods.UnpackStagingFileParams
 $returnVal is a kb_uploadmethods.UnpackStagingFileOutput
 UnpackStagingFileParams is a reference to a hash where the following keys are defined:
@@ -361,16 +421,12 @@ UnpackStagingFileParams is a reference to a hash where the following keys are de
 workspace_name is a string
 UnpackStagingFileOutput is a reference to a hash where the following keys are defined:
 	unpacked_file_path has a value which is a string
->>>>>>> edbb94034cf6532898d0e0b632298c67ace1eba0
 
 
 =end text
 
 =item Description
 
-<<<<<<< HEAD
-
-=======
 Unpack a staging area file
 
 =back
@@ -474,17 +530,12 @@ UnpackWebFileOutput is a reference to a hash where the following keys are define
 =item Description
 
 Download and unpack a web file to staging area
->>>>>>> edbb94034cf6532898d0e0b632298c67ace1eba0
 
 =back
 
 =cut
 
-<<<<<<< HEAD
- sub upload_fasta_gff_file
-=======
  sub unpack_web_file
->>>>>>> edbb94034cf6532898d0e0b632298c67ace1eba0
 {
     my($self, @args) = @_;
 
@@ -493,11 +544,7 @@ Download and unpack a web file to staging area
     if ((my $n = @args) != 1)
     {
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-<<<<<<< HEAD
-							       "Invalid argument count for function upload_fasta_gff_file (received $n, expecting 1)");
-=======
 							       "Invalid argument count for function unpack_web_file (received $n, expecting 1)");
->>>>>>> edbb94034cf6532898d0e0b632298c67ace1eba0
     }
     {
 	my($params) = @args;
@@ -505,51 +552,31 @@ Download and unpack a web file to staging area
 	my @_bad_arguments;
         (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
         if (@_bad_arguments) {
-<<<<<<< HEAD
-	    my $msg = "Invalid arguments passed to upload_fasta_gff_file:\n" . join("", map { "\t$_\n" } @_bad_arguments);
-	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-								   method_name => 'upload_fasta_gff_file');
-=======
 	    my $msg = "Invalid arguments passed to unpack_web_file:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
 								   method_name => 'unpack_web_file');
->>>>>>> edbb94034cf6532898d0e0b632298c67ace1eba0
 	}
     }
 
     my $url = $self->{url};
     my $result = $self->{client}->call($url, $self->{headers}, {
-<<<<<<< HEAD
-	    method => "kb_uploadmethods.upload_fasta_gff_file",
-=======
 	    method => "kb_uploadmethods.unpack_web_file",
->>>>>>> edbb94034cf6532898d0e0b632298c67ace1eba0
 	    params => \@args,
     });
     if ($result) {
 	if ($result->is_error) {
 	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
 					       code => $result->content->{error}->{code},
-<<<<<<< HEAD
-					       method_name => 'upload_fasta_gff_file',
-=======
 					       method_name => 'unpack_web_file',
->>>>>>> edbb94034cf6532898d0e0b632298c67ace1eba0
 					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
 					      );
 	} else {
 	    return wantarray ? @{$result->result} : $result->result->[0];
 	}
     } else {
-<<<<<<< HEAD
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method upload_fasta_gff_file",
-					    status_line => $self->{client}->status_line,
-					    method_name => 'upload_fasta_gff_file',
-=======
         Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method unpack_web_file",
 					    status_line => $self->{client}->status_line,
 					    method_name => 'unpack_web_file',
->>>>>>> edbb94034cf6532898d0e0b632298c67ace1eba0
 				       );
     }
 }
@@ -597,26 +624,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-<<<<<<< HEAD
-                method_name => 'upload_fasta_gff_file',
-=======
                 method_name => 'unpack_web_file',
->>>>>>> edbb94034cf6532898d0e0b632298c67ace1eba0
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-<<<<<<< HEAD
-            error => "Error invoking method upload_fasta_gff_file",
-            status_line => $self->{client}->status_line,
-            method_name => 'upload_fasta_gff_file',
-=======
             error => "Error invoking method unpack_web_file",
             status_line => $self->{client}->status_line,
             method_name => 'unpack_web_file',
->>>>>>> edbb94034cf6532898d0e0b632298c67ace1eba0
         );
     }
 }
@@ -1239,11 +1256,7 @@ report_ref has a value which is a kb_uploadmethods.report_ref
 
 
 
-<<<<<<< HEAD
 =head2 UploadFastaGFFMethodParams
-=======
-=head2 UnpackStagingFileParams
->>>>>>> edbb94034cf6532898d0e0b632298c67ace1eba0
 
 =over 4
 
@@ -1251,14 +1264,52 @@ report_ref has a value which is a kb_uploadmethods.report_ref
 
 =item Description
 
-<<<<<<< HEAD
 genome_name: output genome object name
 workspace_name: workspace name/ID of the object
 
 For staging area:
 fasta_file: fasta file containing assembled contigs/chromosomes
 gff_file: gff file containing predicted gene models and corresponding features
-=======
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+fasta_file has a value which is a string
+gff_file has a value which is a string
+genome_name has a value which is a string
+workspace_name has a value which is a kb_uploadmethods.workspace_name
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+fasta_file has a value which is a string
+gff_file has a value which is a string
+genome_name has a value which is a string
+workspace_name has a value which is a kb_uploadmethods.workspace_name
+
+
+=end text
+
+=back
+
+
+
+=head2 UnpackStagingFileParams
+
+=over 4
+
+
+
+=item Description
+
 Input parameters for the "unpack_staging_file" function.
 
       Required parameters:
@@ -1269,7 +1320,6 @@ Input parameters for the "unpack_staging_file" function.
         for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
         staging_file_subdir_path is subdir_1/subdir_2/file_name
       workspace_name: workspace name/ID of the object
->>>>>>> edbb94034cf6532898d0e0b632298c67ace1eba0
 
 
 =item Definition
@@ -1278,15 +1328,8 @@ Input parameters for the "unpack_staging_file" function.
 
 <pre>
 a reference to a hash where the following keys are defined:
-<<<<<<< HEAD
-fasta_file has a value which is a string
-gff_file has a value which is a string
-genome_name has a value which is a string
-workspace_name has a value which is a kb_uploadmethods.workspace_name
-=======
 workspace_name has a value which is a kb_uploadmethods.workspace_name
 staging_file_subdir_path has a value which is a string
->>>>>>> edbb94034cf6532898d0e0b632298c67ace1eba0
 
 </pre>
 
@@ -1295,12 +1338,6 @@ staging_file_subdir_path has a value which is a string
 =begin text
 
 a reference to a hash where the following keys are defined:
-<<<<<<< HEAD
-fasta_file has a value which is a string
-gff_file has a value which is a string
-genome_name has a value which is a string
-workspace_name has a value which is a kb_uploadmethods.workspace_name
-=======
 workspace_name has a value which is a kb_uploadmethods.workspace_name
 staging_file_subdir_path has a value which is a string
 
@@ -1456,7 +1493,6 @@ unpacked_file_path has a value which is a string
 
 a reference to a hash where the following keys are defined:
 unpacked_file_path has a value which is a string
->>>>>>> edbb94034cf6532898d0e0b632298c67ace1eba0
 
 
 =end text
