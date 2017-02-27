@@ -407,8 +407,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def test_upload_fastq_file_url_google_drive_paired_end(self):
         params = {
             'download_type': 'Google Drive',
-            'fwd_file_url': 'https://drive.google.com/file/d/0B0exSa7ebQ0qMDFRMXdYNE5neHM/view?usp=sharing',
-            'rev_file_url': 'https://drive.google.com/file/d/0B0exSa7ebQ0qekw4bm9RXzlBczA/view?usp=sharing',
+            'fwd_file_url': 'https://drive.google.com/open?id=0B0exSa7ebQ0qSGlmVzIwNXV5OWc',
+            'rev_file_url': 'https://drive.google.com/file/d/0B0exSa7ebQ0qYml1c1BXTEhtR00/view?usp=sharing',
             'sequencing_tech': 'Unknown',
             'name': 'test_reads_file_name.reads',
             'workspace_name': self.getWsName(),
