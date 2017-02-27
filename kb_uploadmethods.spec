@@ -49,7 +49,8 @@ module kb_uploadmethods {
 	    fwd_file_url: single-end fastq file URL or forward/left paired-end fastq file URL
 	    rev_file_url: reverse/right paired-end fastq file URL
 	     
-	    urls_to_add: used for parameter-groups. dict of {fwd_file_url, rev_file_url, name}
+	    urls_to_add: used for parameter-groups. dict of {fwd_file_url, rev_file_url, name,
+	    			single_genome, interleaved, insert_size_mean and read_orientation_outward}
 
 	    Optional Params:
 	    single_genome: whether the reads are from a single genome or a metagenome.
@@ -84,7 +85,6 @@ module kb_uploadmethods {
 	funcdef upload_fastq_file(UploadMethodParams params)
 		returns (UploadMethodResult returnVal) authentication required;
 
-
 	/*
 	    genome_name: output genome object name
 	    workspace_name: workspace name/ID of the object
@@ -103,4 +103,65 @@ module kb_uploadmethods {
 	funcdef upload_fasta_gff_file(UploadFastaGFFMethodParams params)
 		returns (UploadMethodResult returnVal) authentication required;
 
+	/* Input parameters for the "unpack_staging_file" function.
+
+      Required parameters:
+      staging_file_subdir_path: subdirectory file path
+      e.g. 
+        for file: /data/bulk/user_name/file_name
+        staging_file_subdir_path is file_name
+        for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+        staging_file_subdir_path is subdir_1/subdir_2/file_name
+      workspace_name: workspace name/ID of the object
+    */
+    typedef structure {
+      workspace_name workspace_name;
+      string staging_file_subdir_path;
+    }UnpackStagingFileParams;
+
+    /* Results from the unpack_staging_file function.
+
+      unpacked_file_path: unpacked file path(s) in staging area
+    */
+    typedef structure {
+      string unpacked_file_path;
+    }UnpackStagingFileOutput;
+
+    /* Unpack a staging area file */
+    funcdef unpack_staging_file(UnpackStagingFileParams params)
+        returns(UnpackStagingFileOutput returnVal) authentication required;
+
+    typedef structure{
+    	string file_url;
+    }urls_to_add_web_unpack;
+
+    /* Input parameters for the "unpack_web_file" function.
+
+      Required parameters:
+      workspace_name: workspace name/ID of the object
+      file_url: file URL
+      download_type: one of ['Direct Download', 'FTP', 'DropBox', 'Google Drive']
+
+      Optional:
+      urls_to_add_web_unpack: used for parameter-groups. dict of {file_url}
+
+    */
+    typedef structure {
+      workspace_name workspace_name;
+      string file_url;
+      string download_type;
+      urls_to_add_web_unpack urls_to_add_web_unpack;
+    }UnpackWebFileParams;
+
+    /* Results from the unpack_web_file function.
+
+      unpacked_file_path: unpacked file path(s) in staging area
+    */
+    typedef structure {
+      string unpacked_file_path;
+    }UnpackWebFileOutput;
+
+    /* Download and unpack a web file to staging area */
+    funcdef unpack_web_file(UnpackWebFileParams params)
+        returns(UnpackWebFileOutput returnVal) authentication required;
 };

@@ -6,6 +6,8 @@ import time
 import requests
 import hashlib
 import ftplib
+import shutil
+from mock import patch 
 
 from os import environ
 try:
@@ -18,8 +20,8 @@ from pprint import pprint  # noqa: F401
 from biokbase.workspace.client import Workspace as workspaceService
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
-from kb_uploadmethods.FastqUploaderUtil import FastqUploaderUtil
-from ReadsUtils.ReadsUtilsClient import ReadsUtils
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
+from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -213,7 +215,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(d['single_genome'], 1)
         self.assertEqual('source' not in d, True)
         self.assertEqual('strain' not in d, True)
-        self.check_lib(d['lib'], 2841, 'tmp_fwd_fastq.fastq.gz',
+        self.check_lib(d['lib'], 2835, 'Sample1.fastq.gz',
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
@@ -266,7 +268,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(d["gc_content"], 0.6)
         self.assertEqual(d["read_length_mean"], 251)
         self.assertEqual(d["read_length_stdev"], 0)
-        self.check_lib(d['lib1'], 1044, 'tmp_fwd_fastq.fastq.gz',
+        self.check_lib(d['lib1'], 1050, 'Sample5_interleaved.fastq.gz',
                        '971a5f445055c85fd45b17459e15e3ed')
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
@@ -332,7 +334,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(d['single_genome'], 1)
         self.assertEqual('source' not in d, True)
         self.assertEqual('strain' not in d, True)
-        self.check_lib(d['lib'], 2841, 'tmp_fwd_fastq.fastq.gz',
+        self.check_lib(d['lib'], 2835, 'Sample1.fastq.gz',
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
@@ -397,7 +399,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(d['single_genome'], 1)
         self.assertEqual('source' not in d, True)
         self.assertEqual('strain' not in d, True)
-        self.check_lib(d['lib'], 2841, 'tmp_fwd_fastq.fastq.gz',
+        self.check_lib(d['lib'], 2835, 'Sample1.fastq.gz',
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
@@ -405,8 +407,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def test_upload_fastq_file_url_google_drive_paired_end(self):
         params = {
             'download_type': 'Google Drive',
-            'fwd_file_url': 'https://drive.google.com/file/d/0B0exSa7ebQ0qMDFRMXdYNE5neHM/view?usp=sharing',
-            'rev_file_url': 'https://drive.google.com/file/d/0B0exSa7ebQ0qekw4bm9RXzlBczA/view?usp=sharing',
+            'fwd_file_url': 'https://drive.google.com/open?id=0B0exSa7ebQ0qSGlmVzIwNXV5OWc',
+            'rev_file_url': 'https://drive.google.com/file/d/0B0exSa7ebQ0qYml1c1BXTEhtR00/view?usp=sharing',
             'sequencing_tech': 'Unknown',
             'name': 'test_reads_file_name.reads',
             'workspace_name': self.getWsName(),
@@ -473,7 +475,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(d['single_genome'], 1)
         self.assertEqual('source' not in d, True)
         self.assertEqual('strain' not in d, True)
-        self.check_lib(d['lib'], 2841, 'tmp_fwd_fastq.fastq.gz',
+        self.check_lib(d['lib'], 2835, 'Sample1.fastq.gz',
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
@@ -565,7 +567,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(d['single_genome'], 1)
         self.assertEqual('source' not in d, True)
         self.assertEqual('strain' not in d, True)
-        self.check_lib(d['lib'], 2841, 'tmp_fwd_fastq.fastq.gz',
+        self.check_lib(d['lib'], 2835, 'Sample1.fastq.gz',
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
@@ -579,7 +581,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(d['single_genome'], 1)
         self.assertEqual('source' not in d, True)
         self.assertEqual('strain' not in d, True)
-        self.check_lib(d['lib'], 2841, 'tmp_fwd_fastq.fastq.gz',
+        self.check_lib(d['lib'], 2835, 'Sample1.fastq.gz',
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
@@ -680,7 +682,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(d['single_genome'], 1)
         self.assertEqual('source' not in d, True)
         self.assertEqual('strain' not in d, True)
-        self.check_lib(d['lib'], 2841, 'tmp_fwd_fastq.fastq.gz',
+        self.check_lib(d['lib'], 2835, 'Sample1.fastq.gz',
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
@@ -716,7 +718,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(d['single_genome'], 1)
         self.assertEqual('source' not in d, True)
         self.assertEqual('strain' not in d, True)
-        self.check_lib(d['lib'], 2841, 'tmp_fwd_fastq.fastq.gz',
+        self.check_lib(d['lib'], 2835, 'Sample1.fastq.gz',
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
@@ -730,11 +732,10 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(d['single_genome'], 1)
         self.assertEqual('source' not in d, True)
         self.assertEqual('strain' not in d, True)
-        self.check_lib(d['lib'], 2841, 'tmp_fwd_fastq.fastq.gz',
+        self.check_lib(d['lib'], 2835, 'Sample1.fastq.gz',
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
-
 
     def test_upload_fastq_file_url_ftp_trailing_space(self):
         # copy test file to FTP
@@ -768,7 +769,98 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(d['single_genome'], 1)
         self.assertEqual('source' not in d, True)
         self.assertEqual('strain' not in d, True)
-        self.check_lib(d['lib'], 2841, 'tmp_fwd_fastq.fastq.gz',
+        self.check_lib(d['lib'], 2835, 'Sample1.fastq.gz',
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
+
+    def mock_file_to_staging(file_path_list):
+        print 'Mocking _file_to_staging'
+        print "Mocking uploaded files to staging area:\n{}".format('\n'.join(file_path_list))
+
+    @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
+    def test_unpack_web_file_dropbox(self, _file_to_staging):
+        params = {
+            'download_type': 'DropBox',
+            'file_url': 'https://www.dropbox.com/s/cbiywh2aihjxdf5/Archive.zip?dl=0',
+            'workspace_name': self.getWsName()
+        }
+
+        ref = self.getImpl().unpack_web_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('unpacked_file_path'))
+        self.assertTrue(ref[0].has_key('report_ref'))
+        self.assertTrue(ref[0].has_key('report_name'))
+        self.assertEqual(6, len(ref[0].get('unpacked_file_path').split(',')))
+        for file_path in ref[0].get('unpacked_file_path').split(','):
+            self.assertRegexpMatches(os.path.basename(file_path), 
+                                                'file[1-6]\.txt')
+
+    @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
+    def test_unpack_web_file_direct_download(self, _file_to_staging):
+
+        params = {
+            'download_type': 'Direct Download',
+            'workspace_name': self.getWsName(),
+            'urls_to_add_web_unpack' :[
+                {
+                    'file_url': '  https://anl.box.com/shared/static/g0064wasgaoi3sax4os06paoyxay4l3r.zip'
+                },
+                {
+                    'file_url': '  https://anl.box.com/shared/static/g0064wasgaoi3sax4os06paoyxay4l3r.zip'
+                }
+            ]
+        }
+
+        ref = self.getImpl().unpack_web_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('unpacked_file_path'))
+        self.assertTrue(ref[0].has_key('report_ref'))
+        self.assertTrue(ref[0].has_key('report_name'))
+        self.assertEqual(12, len(ref[0].get('unpacked_file_path').split(',')))
+        for file_path in ref[0].get('unpacked_file_path').split(','):
+            self.assertRegexpMatches(os.path.basename(file_path), 
+                                                'file[1-6]\.txt')
+
+    @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
+    def test_upload_fastq_file_url_ftp_trailing_space(self, _file_to_staging):
+        # copy test file to FTP
+        fq_filename = "Archive.zip"
+        ftp_connection = ftplib.FTP('ftp.uconn.edu')
+        ftp_connection.login('anonymous', 'anonymous@domain.com')
+        ftp_connection.cwd("/48_hour/")
+
+        if fq_filename not in ftp_connection.nlst():
+            fh = open(os.path.join("data", fq_filename), 'rb')
+            ftp_connection.storbinary('STOR Archive.zip', fh)
+            fh.close()
+
+        params = {
+            'download_type': 'FTP',
+            'file_url': 'ftp://ftp.uconn.edu/48_hour/Archive.zip   ',
+            'workspace_name': self.getWsName()   
+        }
+
+        ref = self.getImpl().unpack_web_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('unpacked_file_path'))
+        self.assertTrue(ref[0].has_key('report_ref'))
+        self.assertTrue(ref[0].has_key('report_name'))
+        self.assertEqual(6, len(ref[0].get('unpacked_file_path').split(',')))
+        for file_path in ref[0].get('unpacked_file_path').split(','):
+            self.assertRegexpMatches(os.path.basename(file_path), 
+                                                'file[1-6]\.txt')
+
+    @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
+    def test_unpack_web_file_google_drive(self, _file_to_staging):
+        params = {
+            'download_type': 'Google Drive',
+            'file_url': 'https://drive.google.com/open?id=0B0exSa7ebQ0qSlJiWEVWYU5rYWM',
+            'workspace_name': self.getWsName()
+        }
+
+        ref = self.getImpl().unpack_web_file(self.getContext(), params)
+        self.assertTrue(ref[0].has_key('unpacked_file_path'))
+        self.assertTrue(ref[0].has_key('report_ref'))
+        self.assertTrue(ref[0].has_key('report_name'))
+        self.assertEqual(6, len(ref[0].get('unpacked_file_path').split(',')))
+        for file_path in ref[0].get('unpacked_file_path').split(','):
+            self.assertRegexpMatches(os.path.basename(file_path), 
+                                                'file[1-6]\.txt')

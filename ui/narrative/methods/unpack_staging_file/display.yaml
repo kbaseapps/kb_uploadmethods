@@ -1,0 +1,29 @@
+name     : Unpack Staging File
+subtitle : Unpack A Staging Compressed File
+tooltip  : Unpack A Staging Compressed File
+
+screenshots :
+    []
+
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+parameters :
+    staging_file_subdir_path :
+        ui-name : File Path
+        short-hint : Staging file subdirectory file path
+        long-hint  : Staging file subdirectory file path
+
+description : |
+    <p> Unpack a staging compressed file. </p>
+
+technical-description : none

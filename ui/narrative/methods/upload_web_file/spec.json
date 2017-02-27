@@ -1,0 +1,115 @@
+{
+  "ver" : "1.0.0",
+  "authors" : ["tgu2"],
+  "contact" : "help@kbase.us",
+  "visble" : true,
+  "categories" : [ "active","upload" ],
+  "widgets" : 
+  {
+    "input" : null,
+    "output" : "no-display"
+  },
+  "parameter-groups": 
+  [
+    {
+        "id": "urls_to_add_web_unpack",
+        "parameters": [
+            "file_url"
+        ],
+        "optional": false,
+        "advanced": false,
+        "allow_multiple": true,
+        "with_border": true
+    }
+  ],
+  "parameters" : 
+  [ 
+    {
+      "id" : "download_type",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "Direct Download" ],
+      "field_type" : "dropdown",
+      "dropdown_options": 
+      {
+        "options": 
+        [
+          {
+              "display": "Direct Download Link",
+              "value": "Direct Download"
+          },
+          {
+              "display": "FTP Link",
+              "value": "FTP"
+          },
+          {
+              "display": "DropBox Public Shared Link",
+              "value": "DropBox"
+          },
+          {
+              "display": "Google Drive Public Shared Link",
+              "value": "Google Drive"
+          }
+        ]
+      }
+    },
+    {
+      "id" : "file_url",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options": {}
+    }
+  ],
+  "behavior" : 
+  {
+    "service-mapping" : 
+    {
+      "url" : "",
+      "name" : "kb_uploadmethods",
+      "method" : "unpack_web_file",
+      "input_mapping" : 
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "download_type",
+          "target_property": "download_type"
+        },
+        {
+          "input_parameter": "file_url",
+          "target_property": "file_url" 
+        },
+        {
+          "input_parameter": "urls_to_add_web_unpack",
+          "target_property": "urls_to_add_web_unpack"
+        }
+      ],
+      "output_mapping" : 
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "service_method_output_path": [0,"unpacked_file_path"],
+          "target_property": "unpacked_file_path"
+        },
+        {
+            "service_method_output_path": [0, "report_name"],
+            "target_property": "report_name"
+        },
+        {
+            "service_method_output_path": [0, "report_ref"],
+            "target_property": "report_ref"
+        }
+      ]
+    }
+  },
+  "job_id_output_field": "docker"
+}

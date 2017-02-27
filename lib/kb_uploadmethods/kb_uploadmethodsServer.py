@@ -337,6 +337,14 @@ class Application(object):
                              name='kb_uploadmethods.upload_fasta_gff_file',
                              types=[dict])
         self.method_authentication['kb_uploadmethods.upload_fasta_gff_file'] = 'required' # noqa
+        self.rpc_service.add(impl_kb_uploadmethods.unpack_staging_file,
+                             name='kb_uploadmethods.unpack_staging_file',
+                             types=[dict])
+        self.method_authentication['kb_uploadmethods.unpack_staging_file'] = 'required' # noqa
+        self.rpc_service.add(impl_kb_uploadmethods.unpack_web_file,
+                             name='kb_uploadmethods.unpack_web_file',
+                             types=[dict])
+        self.method_authentication['kb_uploadmethods.unpack_web_file'] = 'required' # noqa
         self.rpc_service.add(impl_kb_uploadmethods.status,
                              name='kb_uploadmethods.status',
                              types=[dict])
