@@ -169,12 +169,14 @@ class UploaderUtil:
       _validate_upload_file_path_availability: validates file availability in user's staging area
 
       """
-      list = ftp_service(self.callback_url).list_files() #get available file list in user's staging area
-      if upload_file_name.rpartition('/')[-1] not in list:
-        error_msg = 'Target file: {} is NOT available. '.format(
-                                                upload_file_name.rpartition('/')[-1])
-        error_msg += 'Available files: {}'.format(",".join(list))
-        raise ValueError(error_msg)
+      #TODO: either ftp_service.list_files needs to recursively call itself or update nodjs
+      pass
+      # list = ftp_service(self.callback_url).list_files() #get available file list in user's staging area
+      # if upload_file_name.rpartition('/')[-1] not in list:
+      #   error_msg = 'Target file: {} is NOT available. '.format(
+      #                                           upload_file_name.rpartition('/')[-1])
+      #   error_msg += 'Available files: {}'.format(",".join(list))
+      #   raise ValueError(error_msg)
 
   def _validate_upload_file_URL_availability(self, params):
       """
