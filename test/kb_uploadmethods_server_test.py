@@ -156,11 +156,11 @@ class kb_uploadmethodsTest(unittest.TestCase):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)          
 
         # Testing _validate_upload_file_availability
-        invalidate_input_params = self.getDefaultParams()
-        nonexistent_file_name = 'fake_file_0123456.fastq'
-        invalidate_input_params['fwd_staging_file_name'] = nonexistent_file_name
-        with self.assertRaisesRegexp(ValueError, 'Target file: %s is NOT available.' % nonexistent_file_name):
-            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)  
+        # invalidate_input_params = self.getDefaultParams()
+        # nonexistent_file_name = 'fake_file_0123456.fastq'
+        # invalidate_input_params['fwd_staging_file_name'] = nonexistent_file_name
+        # with self.assertRaisesRegexp(ValueError, 'Target file: %s is NOT available.' % nonexistent_file_name):
+        #     self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)  
 
         # Testing duplicate forward/reverse  
         invalidate_input_params = self.getDefaultParams()
