@@ -1,4 +1,4 @@
-name     : IMPORT GENBANK GENOMES FILE
+name     : Import Genbank Genomes File
 subtitle : none
 tooltip  : |
     Import a genome in GenBank format or as a zip file of multiple GenBank files, creating GenomeAnnotation and Assembly objects for use in various analysis methods.
