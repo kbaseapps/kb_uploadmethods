@@ -215,6 +215,23 @@ public class KbUploadmethodsClient {
         return res.get(0);
     }
 
+    /**
+     * <p>Original spec-file function name: import_genbank_from_staging</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.kbuploadmethods.GenbankToGenomeParams GenbankToGenomeParams}
+     * @return   parameter "returnVal" of type {@link us.kbase.kbuploadmethods.GenomeSaveResult GenomeSaveResult}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public GenomeSaveResult importGenbankFromStaging(GenbankToGenomeParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<GenomeSaveResult>> retType = new TypeReference<List<GenomeSaveResult>>() {};
+        List<GenomeSaveResult> res = caller.jsonrpcCall("kb_uploadmethods.import_genbank_from_staging", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
     public Map<String, Object> status(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         TypeReference<List<Map<String, Object>>> retType = new TypeReference<List<Map<String, Object>>>() {};

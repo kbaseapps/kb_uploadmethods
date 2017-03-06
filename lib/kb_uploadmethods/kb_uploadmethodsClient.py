@@ -128,6 +128,37 @@ class kb_uploadmethods(object):
             'kb_uploadmethods.unpack_web_file',
             [params], self._service_ver, context)
 
+    def import_genbank_from_staging(self, params, context=None):
+        """
+        :param params: instance of type "GenbankToGenomeParams"
+           (import_genbank_from_staging: wrapper method for
+           GenomeFileUtil.genbank_to_genome required params:
+           staging_file_subdir_path - subdirectory file path e.g. for file:
+           /data/bulk/user_name/file_name staging_file_subdir_path is
+           file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name
+           genome_name - becomes the name of the object workspace_name - the
+           name of the workspace it gets saved to. source - Source of the
+           file typically something like RefSeq or Ensembl optional params:
+           release - Release or version number of the data per example
+           Ensembl has numbered releases of all their data: Release 31
+           generate_ids_if_needed - If field used for feature id is not
+           there, generate ids (default behavior is raising an exception)
+           genetic_code - Genetic code of organism. Overwrites determined GC
+           from taxon object type - Reference, Representative or User upload)
+           -> structure: parameter "staging_file_subdir_path" of String,
+           parameter "genome_name" of String, parameter "workspace_name" of
+           String, parameter "source" of String, parameter "release" of
+           String, parameter "genetic_code" of Long, parameter "type" of
+           String, parameter "generate_ids_if_needed" of String
+        :returns: instance of type "GenomeSaveResult" -> structure: parameter
+           "genome_ref" of String
+        """
+        return self._client.call_method(
+            'kb_uploadmethods.import_genbank_from_staging',
+            [params], self._service_ver, context)
+
     def status(self, context=None):
         return self._client.call_method('kb_uploadmethods.status',
                                         [], self._service_ver, context)

@@ -2,7 +2,7 @@
   "ver" : "1.0.0",
   "authors" : ["tgu2"],
   "contact" : "help@kbase.us",
-  "visble" : true,
+  "visible" : true,
   "categories" : [ "active","upload" ],
   "widgets" : 
   {
