@@ -1,0 +1,160 @@
+{
+  "ver" : "",
+  "authors" : ["tgu2"],
+  "contact" : "help@kbase.us",
+  "visible" : true,
+  "categories" : [ "active","upload" ],
+  "widgets": {
+    "input": null,
+    "output": "kbaseGenomeView"
+  },
+  "parameters" : [ 
+    {
+      "id" : "staging_file_subdir_path",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    }, 
+    {
+      "id" : "genome_name",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "valid_ws_types" : [ "KBaseGenomes.Genome" ],
+        "is_output_name" : true
+      }
+    },
+    {
+      "id" : "source",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "RefSeq" ],
+      "field_type" : "dropdown",
+      "dropdown_options":{
+      "options": [
+        {
+          "value": "RefSeq",
+          "display": "RefSeq"
+        },
+        {
+          "value": "Ensembl",
+          "display": "Ensembl"
+        },
+        {
+          "value": "Other",
+          "display": "Other"
+        }
+      ]}
+     },
+    {  
+      "id": "release",
+      "optional": true,
+      "advanced": true,
+      "allow_multiple": false,
+      "default_values": [ "" ],
+      "field_type" : "text" 
+    },
+    {  
+      "id": "genetic_code",
+      "optional": true,
+      "advanced": true,
+      "allow_multiple": false,
+      "default_values": [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "validate_as": "int"
+      }
+    },
+    {
+      "id": "generate_ids_if_needed",
+      "optional":true,
+      "advanced":true,
+      "allow_multiple":false,
+      "default_values":["1"],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
+      }
+    },
+    {
+      "id": "exclude_ontologies",
+      "optional":true,
+      "advanced":true,
+      "allow_multiple":false,
+      "default_values":[""],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
+      }
+    }
+  ],
+  "behavior" : {
+    "service-mapping" : {
+      "url" : "",
+      "name" : "kb_uploadmethods",
+      "method" : "import_genbank_from_staging",
+      "input_mapping" : [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "genome_name",
+          "target_property": "genome_name"
+        },
+        {
+          "input_parameter": "staging_file_subdir_path",
+          "target_property": "staging_file_subdir_path"
+        },
+        {
+          "input_parameter": "source",
+          "target_property": "source"
+        },
+        {
+          "input_parameter": "release",
+          "target_property": "release"
+        },
+        {
+          "input_parameter": "genetic_code",
+          "target_property": "genetic_code"
+        },
+        {
+          "input_parameter": "generate_ids_if_needed",
+          "target_property": "generate_ids_if_needed"
+        },
+        {
+          "input_parameter": "exclude_ontologies",
+          "target_property": "exclude_ontologies"
+        }
+      ],
+      "output_mapping" : [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "ws"
+        },
+        {
+          "constant_value": "KBaseGenomes.Genome",
+          "target_property": "type"
+        },
+        {
+          "input_parameter": "genome_name",
+          "target_property": "id"
+        },
+        {
+            "constant_value": "16",
+            "target_property": "report_window_line_height"
+        }
+      ]
+    }
+  },
+  "job_id_output_field": "docker"
+}

@@ -101,8 +101,8 @@ class UnpackFileUtil:
             for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
             staging_file_subdir_path is subdir_1/subdir_2/file_name
 
-        result:
-        unpacked_file_path: unpacked file path(s) in staging area
+    result:
+    unpacked_file_path: unpacked file path(s) in staging area
 
     """
 

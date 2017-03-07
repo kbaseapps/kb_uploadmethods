@@ -164,4 +164,51 @@ module kb_uploadmethods {
     /* Download and unpack a web file to staging area */
     funcdef unpack_web_file(UnpackWebFileParams params)
         returns(UnpackWebFileOutput returnVal) authentication required;
+
+
+    /* 
+    import_genbank_from_staging: wrapper method for GenomeFileUtil.genbank_to_genome
+    
+      required params:
+      staging_file_subdir_path - subdirectory file path
+      e.g. 
+        for file: /data/bulk/user_name/file_name
+        staging_file_subdir_path is file_name
+        for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+        staging_file_subdir_path is subdir_1/subdir_2/file_name
+      genome_name - becomes the name of the object
+      workspace_name - the name of the workspace it gets saved to.
+      source - Source of the file typically something like RefSeq or Ensembl
+
+      optional params:
+      release - Release or version number of the data 
+          per example Ensembl has numbered releases of all their data: Release 31
+      generate_ids_if_needed - If field used for feature id is not there, 
+          generate ids (default behavior is raising an exception)
+      genetic_code - Genetic code of organism. Overwrites determined GC from 
+          taxon object
+      type - Reference, Representative or User upload
+    */
+    typedef structure {
+      string staging_file_subdir_path;
+      string genome_name;
+      string workspace_name;
+      string source;
+
+      string release;
+      int    genetic_code;
+      string type;
+      string generate_ids_if_needed;
+      string exclude_ontologies;
+    } GenbankToGenomeParams;
+
+    typedef structure {
+        string genome_ref;
+    } GenomeSaveResult;
+
+    funcdef import_genbank_from_staging(GenbankToGenomeParams params)
+                returns (GenomeSaveResult returnVal) authentication required;
+
+
+
 };
