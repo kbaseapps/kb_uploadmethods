@@ -8,7 +8,6 @@ from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
 from kb_uploadmethods.Utils.ImportGenbankUtil import ImportGenbankUtil
 #END_HEADER
 
-
 class kb_uploadmethods:
     '''
     Module Name:
@@ -143,6 +142,7 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN upload_fasta_gff_file
+
         print '--->\nRunning uploadmethods.upload_fasta_gff_file\nparams:'
         print json.dumps(params, indent=1)
 
