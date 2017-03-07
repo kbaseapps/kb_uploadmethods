@@ -181,6 +181,7 @@ module kb_uploadmethods {
       int    genetic_code;
       string type;
       string generate_ids_if_needed;
+      string exclude_ontologies;
     } GenbankToGenomeParams;
 
     typedef structure {
