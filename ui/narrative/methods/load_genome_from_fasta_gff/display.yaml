@@ -18,7 +18,7 @@ suggestions :
             []
 
 parameters :
-    fasta_file
+    fasta_file :
         ui-name : Fasta File
         short-hint : Fasta File containing assembled contigs or chromosomes
         long-hint  : |

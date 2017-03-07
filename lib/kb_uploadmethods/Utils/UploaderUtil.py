@@ -1,11 +1,12 @@
-import os
-import json
+#Standard packages
+import json,uuid,time
+
+#KBase packages
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
+from kb_gffupload.kb_gffuploadClient import kb_gffupload
 from ftp_service.ftp_serviceClient import ftp_service
 from KBaseReport.KBaseReportClient import KBaseReport
 from DataFileUtil.DataFileUtilClient import DataFileUtil
-import uuid
-import time
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
@@ -51,6 +52,25 @@ class UploaderUtil:
                                 json.dumps(params, indent=1)))
 
     return returnVal
+
+  def upload_gff_fasta_file(self, params):
+      """
+      upload_gff_fasta_file: load gff and fasta to workspace as genome using files from user's staging area
+      
+      params: 
+      fasta_file: fasta file from user's staging area
+      gff_file: gff file from user's staging area
+      genome_name: output genome object name
+      workspace_name: workspace name that genome will be stored to
+      """
+      log('--->\nrunning UploaderUtil.upload_gff_fasta_file\nparams:\n%s' % json.dumps(params, indent=1))
+      
+      #Test file availability
+#      self._validate_upload_file_path_availability(params["fasta_file"])
+#      self._validate_upload_file_path_availability(params["gff_file"])
+      
+      returnVal = self._load_gff_fasta_file_path(params)
+      return returnVal
 
   def generate_report(self, obj_refs, params):
       """
@@ -247,6 +267,29 @@ class UploaderUtil:
       ru = ReadsUtils(self.callback_url)
       result = ru.upload_reads(upload_file_params)
 
+      return result
+
+  def _load_gff_fasta_file_path(self, params):
+      """
+      _load_gff_fasta_file_path: load gff and fasta to workspace as genome using files from user's staging area
+      
+      fasta_file: fasta file from user's staging area
+      gff_file: gff file from user's staging area
+      genome_name: output genome object name
+      workspace_name: workspace name that genome will be stored to
+      """
+      log ('---> running UploaderUtil._load_gff_fasta_file_path')
+      
+      workspace_name_or_id = params.get('workspace_name')
+      
+      #for now must use workspace name, but no ws_id_to_name() function available
+      if str(workspace_name_or_id).isdigit():
+          raise ValueError('"' + workspace_name_or_id + '" parameter is a workspace id and workspace name is required')
+
+      log('--->\nrunning kb_gffupload.fasta_gff_to_genome\nparams:\n%s' % json.dumps(params, indent=1))
+      gff_upload = kb_gffupload(self.callback_url,service_ver='dev')
+      result = gff_upload.fasta_gff_to_genome(params)
+      
       return result
 
   def _upload_file_url(self, params):

@@ -113,7 +113,7 @@ class kb_uploadmethods:
             fastqUploader = UploaderUtil(self.config)
             returnVal = fastqUploader.upload_fastq_file(params)
 
-        reportVal = Uploader.generate_report(returnVal['obj_ref'], params)
+        reportVal = fastqUploader.generate_report(returnVal['obj_ref'], params)
         returnVal.update(reportVal)
         #END upload_fastq_file
 
@@ -142,12 +142,15 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN upload_fasta_gff_file
-        print '--->\nRunning uploadmethods.upload_fastq_file\nparams:'
+        print '--->\nRunning uploadmethods.upload_fasta_gff_file\nparams:'
         print json.dumps(params, indent=1)
 
-        #Text entry used, stripping whitespace
         for key, value in params.iteritems():
-            params[key] = value.strip()
+            if isinstance(value, basestring):
+                params[key] = value.strip()
+            
+        uploader = UploaderUtil(self.config)
+        returnVal = uploader.upload_gff_fasta_file(params)
         
         #END upload_fasta_gff_file
 

@@ -9,7 +9,8 @@ MAINTAINER KBase Developer
 RUN pip install coverage
 RUN pip install dropbox
 RUN pip install requests --upgrade \
-	&& ( [ $(pip show filemagic|grep -c filemagic) -eq 0 ] || pip uninstall -y filemagic ) \
+    && pip install 'requests[security]' --upgrade \
+    && ( [ $(pip show filemagic|grep -c filemagic) -eq 0 ] || pip uninstall -y filemagic ) \
     && pip install python-magic
 
 # -----------------------------------------
