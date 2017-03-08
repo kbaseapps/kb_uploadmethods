@@ -90,18 +90,28 @@ class kb_uploadmethodsTest(unittest.TestCase):
         shutil.copy(data_dir+"/"+fasta_file, fasta_path)
         shutil.copy(data_dir+"/"+gff_file, gff_path)
 
+        fasta_path=self.dfu.unpack_file({'file_path':fasta_path}).get('file_path')
+        gff_path=self.dfu.unpack_file({'file_path':gff_path}).get('file_path')
+        
+        pprint([fasta_path,gff_path])
+
         ws_obj_name = 'MyGenome'
         ws_name = self.getWsName()
+        scientific_name = "Populus trichocarpa"
 
         ### Test for a Local Function Call
         print('attempting upload via local function directly')
 
         result = kb_uploadmethods.upload_fasta_gff_file(self.getContext(), 
             {
-                'fasta_file' : { 'path': fasta_path },
-                'gff_file' : { 'path' : gff_path },
+                'fasta_file' : fasta_path,
+                'gff_file' : gff_path,
                 'workspace_name':ws_name,
-                'genome_name':ws_obj_name
+                'genome_name':ws_obj_name,
+                'scientific_name':scientific_name
             })[0]
         pprint(result)
         #self.assertIsNotNone(result['genome_ref'])
+
+        shutil.rmtree(scratch_data_dir)
+

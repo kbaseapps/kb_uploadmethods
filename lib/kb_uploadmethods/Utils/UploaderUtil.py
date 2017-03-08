@@ -67,10 +67,6 @@ class UploaderUtil:
           'params:\n{}'.format(json.dumps(params, indent=1)))
 
       self.validate_upload_gff_fasta_file_parameters(params)
-
-      #Test file availability
-#      self._validate_upload_file_path_availability(params["fasta_file"])
-#      self._validate_upload_file_path_availability(params["gff_file"])
       
       returnVal = self._load_gff_fasta_file_path(params)
       return returnVal
@@ -203,8 +199,8 @@ class UploaderUtil:
           raise ValueError('"' + params["workspace_name"] + '" parameter is a workspace id and workspace name is required')
 
       # check for file paths
-      self._validate_upload_file_path_availability(params["fasta_file"]["path"])
-      self._validate_upload_file_path_availability(params["gff_file"]["path"])
+      self._validate_upload_file_path_availability(params["fasta_file"])
+      self._validate_upload_file_path_availability(params["gff_file"])
       
   def _validate_upload_file_path_availability(self, upload_file_name):
       """

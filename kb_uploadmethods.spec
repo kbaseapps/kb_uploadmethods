@@ -88,7 +88,8 @@ module kb_uploadmethods {
 	/*
 	    genome_name: output genome object name
 	    workspace_name: workspace name/ID of the object
-	    
+	    scientific_name: proper name for species, key for taxonomy lookup
+
 	    For staging area:
 	    fasta_file: fasta file containing assembled contigs/chromosomes
 	    gff_file: gff file containing predicted gene models and corresponding features
@@ -97,6 +98,7 @@ module kb_uploadmethods {
 		string fasta_file;
 		string gff_file;
 		string genome_name;
+                string scientific_name;
 		workspace_name workspace_name;
 	} UploadFastaGFFMethodParams;
 

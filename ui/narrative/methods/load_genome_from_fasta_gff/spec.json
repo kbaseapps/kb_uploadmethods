@@ -4,8 +4,7 @@
   "contact" : "help@kbase.us",
   "visble" : true,
   "categories" : [ "active","upload" ],
-  "widgets" : 
-  {
+  "widgets" : {
     "input" : null,
     "output" : "kbaseGenomeView"
   },
@@ -41,6 +40,15 @@
         "valid_ws_types" : [ "KBaseGenomes.Genome" ],
         "is_output_name" : true
       }
+    },
+    {
+      "id" : "scientific_name",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "unknown_taxon" ],
+      "field_type" : "text",
+      "text_options" : {}
     }
   ],
   "behavior" : 
@@ -67,26 +75,29 @@
         {
           "input_parameter": "genome_name",
           "target_property": "genome_name"
+        },
+        {
+          "input_parameter": "scientific_name",
+          "target_property": "scientific_name"
         }
       ],
       "output_mapping" : 
       [
         {
           "narrative_system_variable": "workspace",
-          "target_property": "wsName"
+          "target_property": "ws"
         },
         {
-          "service_method_output_path": [0,"obj_ref"],
-          "target_property": "obj_ref",
-          "target_type_transform": "resolved-ref"
+          "constant_value": "KBaseGenomes.Genome",
+          "target_property": "type"
         },
         {
-            "service_method_output_path": [0, "report_name"],
-            "target_property": "report_name"
+          "input_parameter": "genome_name",
+          "target_property": "id"
         },
         {
-            "service_method_output_path": [0, "report_ref"],
-            "target_property": "report_ref"
+            "constant_value": "16",
+            "target_property": "report_window_line_height"
         }
       ]
     }

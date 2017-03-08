@@ -35,6 +35,11 @@ parameters :
         short-hint : Provide a name for the output object that will be created by this upload
         long-hint  : Provide a name for the output object that will be created by this upload
 
+    scientific_name :
+        ui-name : Scientific Name
+        short-hint : Provide the scientific name of the species
+        long-hint  : Provide the scientific name of the species, i.e. "Escherichia coli". This is important for taxonomy lookup.
+
 description : |
     <p> Upload a Genome into your Narrative. </p>
 

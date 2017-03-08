@@ -152,7 +152,9 @@ class kb_uploadmethods:
             
         uploader = UploaderUtil(self.config)
         returnVal = uploader.upload_gff_fasta_file(params)
-        
+
+        print json.dumps(returnVal, indent=1)
+
         #END upload_fasta_gff_file
 
         # At some point might do deeper type checking...
