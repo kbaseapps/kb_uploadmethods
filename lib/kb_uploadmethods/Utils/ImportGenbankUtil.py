@@ -75,7 +75,7 @@ class ImportGenbankUtil:
 
   def validate_import_genbank_from_staging_params(self, params):
     """
-    validate_upload_fastq_file_parameters: validates params passed to import_genbank_from_staging method
+    validate_import_genbank_from_staging_params: validates params passed to import_genbank_from_staging method
 
     """
 
