@@ -211,14 +211,14 @@ class UploaderUtil:
             elif (params['download_type'] == 'FTP' and
                     (first_url_prefix[:3] != 'ftp' or second_url_prefix[:3] != 'ftp')):
                 raise ValueError("Download type and URL prefix do NOT match")
-            elif params.get('fwd_file_url') and not params.get('rev_file_url'):
-                if params['download_type'] == 'Direct Download' and url_prefix[:4] != 'http':
-                    raise ValueError("Download type and URL prefix do NOT match")
-                elif(params['download_type'] in ['DropBox', 'Google Drive'] and
-                        url_prefix != 'https'):
-                    raise ValueError("Download type and URL prefix do NOT match")
-                elif params['download_type'] == 'FTP' and url_prefix[:3] != 'ftp':
-                    raise ValueError("Download type and URL prefix do NOT match")
+        elif params.get('fwd_file_url') and not params.get('rev_file_url'):
+            if params['download_type'] == 'Direct Download' and url_prefix[:4] != 'http':
+                raise ValueError("Download type and URL prefix do NOT match")
+            elif(params['download_type'] in ['DropBox', 'Google Drive'] and
+                    url_prefix != 'https'):
+                raise ValueError("Download type and URL prefix do NOT match")
+            elif params['download_type'] == 'FTP' and url_prefix[:3] != 'ftp':
+                raise ValueError("Download type and URL prefix do NOT match")
 
     def _upload_file_path(self, params):
         """
