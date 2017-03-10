@@ -107,10 +107,13 @@ class kb_uploadmethodsTest(unittest.TestCase):
         return {'copy_file_path': fq_path}
 
     @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
-    def test_unpack_web_file_dropbox(self, _file_to_staging):
+    def test_unpack_web_file_direct_download_trailing_space(self, _file_to_staging):
+        file_url = 'https://anl.box.com/shared/static/'
+        file_url += 'g0064wasgaoi3sax4os06paoyxay4l3r.zip   '
+
         params = {
-            'download_type': 'DropBox',
-            'file_url': 'https://www.dropbox.com/s/cbiywh2aihjxdf5/Archive.zip?dl=0',
+            'download_type': 'Direct Download',
+            'file_url': file_url,
             'workspace_name': self.getWsName()
         }
 
@@ -125,7 +128,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
                                 'file[1-6]\.txt')
 
     @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
-    def test_unpack_web_file_direct_download(self, _file_to_staging):
+    def test_unpack_web_file_direct_download_multiple_urls(self, _file_to_staging):
         file_url = '  https://anl.box.com/shared/static/'
         file_url += 'g0064wasgaoi3sax4os06paoyxay4l3r.zip'
         params = {
@@ -152,7 +155,25 @@ class kb_uploadmethodsTest(unittest.TestCase):
                             'file[1-6]\.txt')
 
     @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
-    def test_unpack_web_file_google_drive_ftp(self, _file_to_staging):
+    def test_unpack_web_file_dropbox(self, _file_to_staging):
+        params = {
+            'download_type': 'DropBox',
+            'file_url': 'https://www.dropbox.com/s/cbiywh2aihjxdf5/Archive.zip?dl=0',
+            'workspace_name': self.getWsName()
+        }
+
+        ref = self.getImpl().unpack_web_file(self.getContext(), params)
+        self.assertTrue('unpacked_file_path' in ref[0])
+        self.assertTrue('report_ref' in ref[0])
+        self.assertTrue('report_name' in ref[0])
+        self.assertEqual(6, len(ref[0].get('unpacked_file_path').split(',')))
+        for file_path in ref[0].get('unpacked_file_path').split(','):
+            self.assertRegexpMatches(
+                                os.path.basename(file_path),
+                                'file[1-6]\.txt')
+
+    @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
+    def test_unpack_web_file_ftp(self, _file_to_staging):
         # copy test file to FTP
         fq_filename = "Archive.zip"
         ftp_connection = ftplib.FTP('ftp.uconn.edu')
@@ -216,3 +237,4 @@ class kb_uploadmethodsTest(unittest.TestCase):
             self.assertRegexpMatches(
                         os.path.basename(file_path),
                         'file[1-6]\.txt')
+

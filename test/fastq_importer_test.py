@@ -134,20 +134,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(libfile['type'], 'shock')
         self.assertEqual(libfile['url'], self.shockURL)
 
-    # def mock_file_to_staging(file_path_list, subdir_folder=None):
-    #     print 'Mocking _file_to_staging'
-    #     print "Mocking uploaded files to staging area:\n{}".format('\n'.join(file_path_list))
-
-    # def mock_download_staging_file(params):
-    #     print 'Mocking DataFileUtilClient.download_staging_file'
-    #     print params
-
-    #     fq_filename = params.get('staging_file_subdir_path')
-    #     fq_path = os.path.join('/kb/module/work/tmp', fq_filename)
-    #     shutil.copy(os.path.join("data", fq_filename), fq_path)
-
-    #     return {'copy_file_path': fq_path}
-
     def test_validate_upload_fastq_file_parameters(self):
 
         # Testing required params
