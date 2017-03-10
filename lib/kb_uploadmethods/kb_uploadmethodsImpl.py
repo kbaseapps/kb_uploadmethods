@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 #BEGIN_HEADER
 import os
-from pprint import pprint
 import json
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
@@ -26,7 +25,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "0.1.7"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "0469400ce49fe3bcf7ff1a73420acf5d740c78a8"
+    GIT_COMMIT_HASH = "2da1d5c616dc7391bf12248811ca1ada079b3e6b"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -39,8 +38,6 @@ class kb_uploadmethods:
         self.config['SDK_CALLBACK_URL'] = os.environ['SDK_CALLBACK_URL']
         self.config['KB_AUTH_TOKEN'] = os.environ['KB_AUTH_TOKEN']
         #END_CONSTRUCTOR
-        pass
-
 
     def upload_fastq_file(self, ctx, params):
         """
@@ -101,16 +98,16 @@ class kb_uploadmethods:
                 params_item['sequencing_tech'] = params.get('sequencing_tech')
                 params_item['interleaved'] = params.get('interleaved')
                 for key, value in params_item.iteritems():
-                  if isinstance(value, basestring):
-                    params_item[key] = value.strip()
+                    if isinstance(value, basestring):
+                        params_item[key] = value.strip()
                 fastqUploader = UploaderUtil(self.config)
-                itemReturnVal = fastqUploader.upload_fastq_file(params_item) 
-                returnVal['obj_ref'] += itemReturnVal['obj_ref'] + ',' 
+                itemReturnVal = fastqUploader.upload_fastq_file(params_item)
+                returnVal['obj_ref'] += itemReturnVal['obj_ref'] + ','
             returnVal['obj_ref'] = returnVal['obj_ref'][:-1]
         else:
             for key, value in params.iteritems():
-              if isinstance(value, basestring):
-                params[key] = value.strip()
+                if isinstance(value, basestring):
+                    params[key] = value.strip()
             fastqUploader = UploaderUtil(self.config)
             returnVal = fastqUploader.upload_fastq_file(params)
 
@@ -150,12 +147,12 @@ class kb_uploadmethods:
         print json.dumps(params, indent=1)
 
         for key, value in params.iteritems():
-          if isinstance(value, basestring):
-            params[key] = value.strip()
+            if isinstance(value, basestring):
+                params[key] = value.strip()
 
         self.config['USER_ID'] = ctx['user_id']
         unpacker = UnpackFileUtil(self.config)
-        returnVal = unpacker.unpack_staging_file(params) 
+        returnVal = unpacker.unpack_staging_file(params)
 
         reportVal = unpacker.generate_report(returnVal['unpacked_file_path'], params)
         returnVal.update(reportVal)
@@ -205,18 +202,18 @@ class kb_uploadmethods:
                 params_item['download_type'] = download_type
                 params_item['workspace_name'] = workspace_name
                 for key, value in params_item.iteritems():
-                  if isinstance(value, basestring):
-                    params_item[key] = value.strip()
+                    if isinstance(value, basestring):
+                        params_item[key] = value.strip()
                 unpacker = UnpackFileUtil(self.config)
-                itemReturnVal = unpacker.unpack_web_file(params_item) 
-                returnVal['unpacked_file_path'] += itemReturnVal['unpacked_file_path'] + ',' 
+                itemReturnVal = unpacker.unpack_web_file(params_item)
+                returnVal['unpacked_file_path'] += itemReturnVal['unpacked_file_path'] + ','
             returnVal['unpacked_file_path'] = returnVal['unpacked_file_path'][:-1]
         else:
             for key, value in params.iteritems():
-              if isinstance(value, basestring):
-                params[key] = value.strip()
+                if isinstance(value, basestring):
+                    params[key] = value.strip()
             unpacker = UnpackFileUtil(self.config)
-            returnVal = unpacker.unpack_web_file(params) 
+            returnVal = unpacker.unpack_web_file(params)
 
         reportVal = unpacker.generate_report(returnVal['unpacked_file_path'], params)
         returnVal.update(reportVal)
@@ -253,7 +250,8 @@ class kb_uploadmethods:
            parameter "genome_name" of String, parameter "workspace_name" of
            String, parameter "source" of String, parameter "release" of
            String, parameter "genetic_code" of Long, parameter "type" of
-           String, parameter "generate_ids_if_needed" of String
+           String, parameter "generate_ids_if_needed" of String, parameter
+           "exclude_ontologies" of String
         :returns: instance of type "GenomeSaveResult" -> structure: parameter
            "genome_ref" of String
         """
@@ -261,11 +259,11 @@ class kb_uploadmethods:
         # return variables are: returnVal
         #BEGIN import_genbank_from_staging
         for key, value in params.iteritems():
-          if isinstance(value, basestring):
-            params[key] = value.strip()
+            if isinstance(value, basestring):
+                params[key] = value.strip()
 
         importer = ImportGenbankUtil(self.config)
-        returnVal = importer.import_genbank_from_staging(params) 
+        returnVal = importer.import_genbank_from_staging(params)
         #END import_genbank_from_staging
 
         # At some point might do deeper type checking...
@@ -274,6 +272,7 @@ class kb_uploadmethods:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
+
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",
