@@ -10,8 +10,7 @@ import time
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') +
-        '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
 
 
 class UploaderUtil:
@@ -175,7 +174,7 @@ class UploaderUtil:
 
         """
 
-        #TODO: either ftp_service.list_files needs to recursively call itself or update nodjs
+        # TODO: either ftp_service.list_files needs to recursively call itself or update nodjs
         pass
         # list = ftp_service(self.callback_url).list_files()
         # if upload_file_name.rpartition('/')[-1] not in list:

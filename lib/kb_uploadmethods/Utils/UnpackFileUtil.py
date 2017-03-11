@@ -11,8 +11,7 @@ from KBaseReport.KBaseReportClient import KBaseReport
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') +
-        '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
 
 
 class UnpackFileUtil:
