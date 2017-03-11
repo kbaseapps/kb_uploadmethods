@@ -4,10 +4,6 @@ import os  # noqa: F401
 import json  # noqa: F401
 import time
 import requests
-import hashlib
-import ftplib
-import shutil
-from mock import patch
 
 from os import environ
 try:
@@ -20,8 +16,6 @@ from pprint import pprint  # noqa: F401
 from biokbase.workspace.client import Workspace as workspaceService
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
-from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
-from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 
 
