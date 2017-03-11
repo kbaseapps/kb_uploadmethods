@@ -151,7 +151,8 @@ class kb_uploadmethods(object):
            parameter "genome_name" of String, parameter "workspace_name" of
            String, parameter "source" of String, parameter "release" of
            String, parameter "genetic_code" of Long, parameter "type" of
-           String, parameter "generate_ids_if_needed" of String
+           String, parameter "generate_ids_if_needed" of String, parameter
+           "exclude_ontologies" of String
         :returns: instance of type "GenomeSaveResult" -> structure: parameter
            "genome_ref" of String
         """

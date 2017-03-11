@@ -92,9 +92,74 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def getContext(self):
         return self.__class__.ctx
 
-    def test_contructor(self):
-        ret = self.getImpl()
-        print 'self.config: %s' % ret.config
-        print 'self.callback_url: %s' % ret.config['SDK_CALLBACK_URL']
-        self.assertIsNotNone(ret.config)
-        self.assertIsNotNone(ret.config['SDK_CALLBACK_URL'])
+    def mock_download_staging_file(params):
+        print 'Mocking DataFileUtilClient.download_staging_file'
+        print params
+
+        fq_filename = params.get('staging_file_subdir_path')
+        fq_path = os.path.join('/kb/module/work/tmp', fq_filename)
+        shutil.copy(os.path.join("data", fq_filename), fq_path)
+
+        return {'copy_file_path': fq_path}
+
+    def test_bad_import_genbank_from_staging_params(self):
+        invalidate_input_params = {
+          'missing_staging_file_subdir_path': 'staging_file_subdir_path',
+          'genome_name': 'genome_name',
+          'workspace_name': 'workspace_name',
+          'source': 'source'
+        }
+        with self.assertRaisesRegexp(
+                    ValueError,
+                    '"staging_file_subdir_path" parameter is required, but missing'):
+            self.getImpl().import_genbank_from_staging(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = {
+          'staging_file_subdir_path': 'staging_file_subdir_path',
+          'missing_genome_name': 'genome_name',
+          'workspace_name': 'workspace_name',
+          'source': 'source'
+        }
+        with self.assertRaisesRegexp(
+                    ValueError,
+                    '"genome_name" parameter is required, but missing'):
+            self.getImpl().import_genbank_from_staging(self.getContext(), invalidate_input_params)
+        invalidate_input_params = {
+          'staging_file_subdir_path': 'staging_file_subdir_path',
+          'genome_name': 'genome_name',
+          'missing_workspace_name': 'workspace_name',
+          'source': 'source'
+        }
+        with self.assertRaisesRegexp(
+                ValueError,
+                '"workspace_name" parameter is required, but missing'):
+            self.getImpl().import_genbank_from_staging(self.getContext(), invalidate_input_params)
+        invalidate_input_params = {
+          'staging_file_subdir_path': 'staging_file_subdir_path',
+          'genome_name': 'genome_name',
+          'workspace_name': 'workspace_name',
+          'missing_source': 'source'
+        }
+        with self.assertRaisesRegexp(
+                ValueError,
+                '"source" parameter is required, but missing'):
+            self.getImpl().import_genbank_from_staging(self.getContext(), invalidate_input_params)
+
+    @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
+    def test_genbank_to_genome(self, download_staging_file):
+
+        gbk_path = 'GCF_000005845.2_ASM584v2_genomic.gbff'
+        ws_obj_name = 'MyGenome'
+
+        params = {
+          'staging_file_subdir_path': gbk_path,
+          'genome_name': ws_obj_name,
+          'workspace_name': self.getWsName(),
+          'source': 'RefSeq'
+        }
+
+        ref = self.getImpl().import_genbank_from_staging(self.getContext(), params)
+        self.assertTrue('genome_ref' in ref[0])
+        self.assertTrue('genome_info' in ref[0])
+        self.assertTrue('report_ref' in ref[0])
+        self.assertTrue('report_name' in ref[0])

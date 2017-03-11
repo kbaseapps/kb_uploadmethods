@@ -497,6 +497,7 @@ GenbankToGenomeParams is a reference to a hash where the following keys are defi
 	genetic_code has a value which is an int
 	type has a value which is a string
 	generate_ids_if_needed has a value which is a string
+	exclude_ontologies has a value which is a string
 GenomeSaveResult is a reference to a hash where the following keys are defined:
 	genome_ref has a value which is a string
 
@@ -517,6 +518,7 @@ GenbankToGenomeParams is a reference to a hash where the following keys are defi
 	genetic_code has a value which is an int
 	type has a value which is a string
 	generate_ids_if_needed has a value which is a string
+	exclude_ontologies has a value which is a string
 GenomeSaveResult is a reference to a hash where the following keys are defined:
 	genome_ref has a value which is a string
 
@@ -1496,6 +1498,7 @@ release has a value which is a string
 genetic_code has a value which is an int
 type has a value which is a string
 generate_ids_if_needed has a value which is a string
+exclude_ontologies has a value which is a string
 
 </pre>
 
@@ -1512,6 +1515,7 @@ release has a value which is a string
 genetic_code has a value which is an int
 type has a value which is a string
 generate_ids_if_needed has a value which is a string
+exclude_ontologies has a value which is a string
 
 
 =end text
