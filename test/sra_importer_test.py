@@ -210,7 +210,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
             self.getImpl().import_sra_from_staging(self.getContext(), invalidate_input_params)
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    @patch.object(ImportSRAUtil, "SRA_TOOLKIT_PATH", new='/kb/module/work/tmp/fastq-dump')
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_pe)
@@ -260,7 +259,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.delete_shock_node(node)
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    @patch.object(ImportSRAUtil, "SRA_TOOLKIT_PATH", new='/kb/module/work/tmp/fastq-dump')
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_se)

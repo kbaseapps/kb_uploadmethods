@@ -100,12 +100,14 @@ class ImportSRAUtil:
         _validate_upload_file_path_availability: validates file availability in user's staging area
 
         """
-        list = ftp_service(self.callback_url).list_files()
-        if staging_file_subdir_path not in list:
-            error_msg = 'Target file: {} is NOT available.\n'.format(
-                                                staging_file_subdir_path.rpartition('/')[-1])
-            error_msg += 'Available files:\n {}'.format("\n".join(list))
-            raise ValueError(error_msg)
+        pass
+        # TODO ftp_server needs to be fixed for subdir
+        # list = ftp_service(self.callback_url).list_files()
+        # if staging_file_subdir_path not in list:
+        #     error_msg = 'Target file: {} is NOT available.\n'.format(
+        #                                         staging_file_subdir_path.rpartition('/')[-1])
+        #     error_msg += 'Available files:\n {}'.format("\n".join(list))
+        #     raise ValueError(error_msg)
 
     def __init__(self, config):
         self.callback_url = config['SDK_CALLBACK_URL']
