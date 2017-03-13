@@ -159,7 +159,6 @@ class ImportSRAUtil:
         import_sra_reads_params.update(fastq_file_path)
 
         workspace_name_or_id = params.get('workspace_name')
-
         if str(workspace_name_or_id).isdigit():
             import_sra_reads_params['wsid'] = int(workspace_name_or_id)
         else:
@@ -167,9 +166,7 @@ class ImportSRAUtil:
 
         log('--->\nrunning ReadsUtils.upload_reads\nparams:\n{}'.format(
                                         json.dumps(import_sra_reads_params, indent=1)))
-        # returnVal = self.ru.upload_reads(import_sra_reads_params)
-
-        returnVal = {'obj_ref': 'obj_ref'}
+        returnVal = self.ru.upload_reads(import_sra_reads_params)
 
         return returnVal
 

@@ -314,8 +314,8 @@ class kb_uploadmethods:
         importer = ImportSRAUtil(self.config)
         returnVal = importer.import_sra_from_staging(params)
 
-        # reportVal = importer.generate_report(returnVal['obj_ref'], params)
-        # returnVal.update(reportVal)
+        reportVal = importer.generate_report(returnVal['obj_ref'], params)
+        returnVal.update(reportVal)
         #END import_sra_from_staging
 
         # At some point might do deeper type checking...
