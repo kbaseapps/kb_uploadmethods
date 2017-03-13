@@ -100,12 +100,14 @@ class ImportSRAUtil:
         _validate_upload_file_path_availability: validates file availability in user's staging area
 
         """
-        list = ftp_service(self.callback_url).list_files()
-        if staging_file_subdir_path not in list:
-            error_msg = 'Target file: {} is NOT available.\n'.format(
-                                                staging_file_subdir_path.rpartition('/')[-1])
-            error_msg += 'Available files:\n {}'.format("\n".join(list))
-            raise ValueError(error_msg)
+        pass
+        # TODO ftp_server needs to be fixed for subdir
+        # list = ftp_service(self.callback_url).list_files()
+        # if staging_file_subdir_path not in list:
+        #     error_msg = 'Target file: {} is NOT available.\n'.format(
+        #                                         staging_file_subdir_path.rpartition('/')[-1])
+        #     error_msg += 'Available files:\n {}'.format("\n".join(list))
+        #     raise ValueError(error_msg)
 
     def __init__(self, config):
         self.callback_url = config['SDK_CALLBACK_URL']
@@ -159,7 +161,6 @@ class ImportSRAUtil:
         import_sra_reads_params.update(fastq_file_path)
 
         workspace_name_or_id = params.get('workspace_name')
-
         if str(workspace_name_or_id).isdigit():
             import_sra_reads_params['wsid'] = int(workspace_name_or_id)
         else:
@@ -167,9 +168,7 @@ class ImportSRAUtil:
 
         log('--->\nrunning ReadsUtils.upload_reads\nparams:\n{}'.format(
                                         json.dumps(import_sra_reads_params, indent=1)))
-        # returnVal = self.ru.upload_reads(import_sra_reads_params)
-
-        returnVal = {'obj_ref': 'obj_ref'}
+        returnVal = self.ru.upload_reads(import_sra_reads_params)
 
         return returnVal
 

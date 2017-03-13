@@ -6,7 +6,7 @@ import time
 import requests
 import shutil
 from mock import patch
-import subprocess
+import hashlib
 
 from os import environ
 try:
@@ -90,6 +90,30 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def getContext(self):
         return self.__class__.ctx
 
+    def check_lib(self, lib, size, filename, md5):
+        shock_id = lib["file"]["id"]
+        print "LIB: {}".format(str(lib))
+        print "Shock ID: {}".format(str(shock_id))
+        fileinput = [{
+                    'shock_id': shock_id,
+                    'file_path': self.scratch + '/temp',
+                    'unpack': 'uncompress'}]
+        print "File Input: {}".format(str(fileinput))
+        files = self.dfu.shock_to_file_mass(fileinput)
+        path = files[0]["file_path"]
+        file_md5 = hashlib.md5(open(path, 'rb').read()).hexdigest()
+        libfile = lib['file']
+        self.assertEqual(file_md5, md5)
+        self.assertEqual(lib['size'], size)
+        self.assertEqual(lib['type'], 'fq')
+        self.assertEqual(lib['encoding'], 'ascii')
+
+        self.assertEqual(libfile['file_name'], filename)
+        self.assertEqual(libfile['hid'].startswith('KBH_'), True)
+
+        self.assertEqual(libfile['type'], 'shock')
+        self.assertEqual(libfile['url'], self.shockURL)
+
     def mock_download_staging_file(params):
         print 'Mocking DataFileUtilClient.download_staging_file'
         print params
@@ -103,6 +127,42 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def mock_validate_upload_staging_file_availability(staging_file_subdir_path):
         print 'Mocking ImportSRAUtil._validate_upload_staging_file_availability'
         print staging_file_subdir_path
+
+    def mock_run_command_pe(command):
+        print 'Mocking ImportSRAUtil._run_command'
+
+        tmp_dir = command.split(' ')[-2]
+        scratch_sra_file_path = command.split(' ')[-1]
+
+        sra_name = os.path.basename(scratch_sra_file_path).partition('.')[0]
+
+        fwd_file_path = os.path.join(tmp_dir, sra_name, '1')
+        os.makedirs(fwd_file_path)
+        rev_file_path = os.path.join(tmp_dir, sra_name, '2')
+        os.makedirs(rev_file_path)
+
+        fwd_filename = 'small.forward.fq'
+        shutil.copy(os.path.join("data", fwd_filename), fwd_file_path)
+        os.rename(os.path.join(fwd_file_path, fwd_filename), os.path.join(fwd_file_path, 'fastq'))
+
+        rev_filename = 'small.reverse.fq'
+        shutil.copy(os.path.join("data", rev_filename), rev_file_path)
+        os.rename(os.path.join(rev_file_path, rev_filename), os.path.join(rev_file_path, 'fastq'))
+
+    def mock_run_command_se(command):
+        print 'Mocking ImportSRAUtil._run_command'
+
+        tmp_dir = command.split(' ')[-2]
+        scratch_sra_file_path = command.split(' ')[-1]
+
+        sra_name = os.path.basename(scratch_sra_file_path).partition('.')[0]
+
+        fwd_file_path = os.path.join(tmp_dir, sra_name)
+        os.makedirs(fwd_file_path)
+
+        fq_filename = 'Sample1.fastq'
+        shutil.copy(os.path.join("data", fq_filename), fwd_file_path)
+        os.rename(os.path.join(fwd_file_path, fq_filename), os.path.join(fwd_file_path, 'fastq'))
 
     def test_bad_import_genbank_from_staging_params(self):
         invalidate_input_params = {
@@ -150,51 +210,89 @@ class kb_uploadmethodsTest(unittest.TestCase):
             self.getImpl().import_sra_from_staging(self.getContext(), invalidate_input_params)
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    @patch.object(ImportSRAUtil, "SRA_TOOLKIT_PATH", new='/kb/module/work/tmp/fastq-dump')
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
-    def test_import_sra_pired_end(self, download_staging_file,
-                                  _validate_upload_staging_file_availability):
+    @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_pe)
+    def test_import_sra_paired_end(self, download_staging_file,
+                                   _validate_upload_staging_file_availability,
+                                   _run_command):
 
-        #TODO Tian add more tests
-        fq_filename = 'fastq-dump'
-        fq_path = os.path.join('/kb/module/work/tmp', fq_filename)
-        linkto = os.readlink(os.path.join("data/sra_toolkit", fq_filename))
-        os.symlink(linkto, fq_path)
+        sra_path = 'empty.sra'
+        obj_name = 'MyReads'
 
-        fq_filename = 'fastq-dump.2'
-        fq_path = os.path.join('/kb/module/work/tmp', fq_filename)
-        linkto = os.readlink(os.path.join("data/sra_toolkit", fq_filename))
-        os.symlink(linkto, fq_path)
+        params = {
+            'staging_file_subdir_path': sra_path,
+            'name': obj_name,
+            'workspace_name': self.getWsName(),
+            'sequencing_tech': 'Unknown',
+            'single_genome': 0,
+            'insert_size_mean': 99.9,
+            'insert_size_std_dev': 10.1,
+            'read_orientation_outward': 1
+        }
 
-        fq_filename = 'fastq-dump.2.8.2'
-        fq_path = os.path.join('/kb/module/work/tmp', fq_filename)
-        shutil.copy(os.path.join("data/sra_toolkit", fq_filename), fq_path)
+        ref = self.getImpl().import_sra_from_staging(self.getContext(), params)
+        self.assertTrue('obj_ref' in ref[0])
+        self.assertTrue('report_ref' in ref[0])
+        self.assertTrue('report_name' in ref[0])
 
-        # print os.listdir('/kb/module/work/tmp')
-        # print os.listdir('/kb/deployment/bin')
-        # subprocess.call(["ls", "-l", "/kb/module/work/tmp"])
+        obj = self.dfu.get_objects(
+            {'object_refs': [self.getWsName() + '/MyReads']})['data'][0]
+        self.assertEqual(ref[0]['obj_ref'], self.make_ref(obj['info']))
+        self.assertEqual(obj['info'][2].startswith(
+            'KBaseFile.PairedEndLibrary'), True)
 
-        # command = '/kb/module/work/tmp/fastq-dump.2.8.2'
-        # command = '/kb/deployment/bin/fastq-dump'
-        # os.system(command)
-        # subprocess.call(command)
-        # pipe = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-        # output = pipe.communicate()[0]
-        # exitCode = pipe.returncode
+        d = obj['data']
+        file_name = d["lib1"]["file"]["file_name"]
+        self.assertTrue(file_name.endswith(".inter.fastq.gz"))
+        self.assertEqual(d['sequencing_tech'], 'Unknown')
+        self.assertEqual(d['single_genome'], 0)
+        self.assertEqual('source' not in d, True)
+        self.assertEqual('strain' not in d, True)
+        self.assertEqual(d['interleaved'], 1)
+        self.assertEqual(d['read_orientation_outward'], 1)
+        self.assertEqual(d['insert_size_mean'], 99.9)
+        self.assertEqual(d['insert_size_std_dev'], 10.1)
+        self.check_lib(d['lib1'], 2491520, file_name,
+                       '1c58d7d59c656db39cedcb431376514b')
+        node = d['lib1']['file']['id']
+        self.delete_shock_node(node)
 
-        # sra_path = 'SRR402019.sra'
-        # obj_name = 'MyReads'
+    @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
+    @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
+                  side_effect=mock_validate_upload_staging_file_availability)
+    @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_se)
+    def test_import_sra_single_end(self, download_staging_file,
+                                   _validate_upload_staging_file_availability,
+                                   _run_command):
 
-        # params = {
-        #   'staging_file_subdir_path': sra_path,
-        #   'name': obj_name,
-        #   'workspace_name': self.getWsName(),
-        #   'sequencing_tech': 'Unknown'
-        # }
+        sra_path = 'empty.sra'
+        obj_name = 'MyReads'
 
-        # ref = self.getImpl().import_sra_from_staging(self.getContext(), params)
-        # print ref
-        # self.assertTrue('obj_ref' in ref[0])
-        # self.assertTrue('report_ref' in ref[0])
-        # self.assertTrue('report_name' in ref[0])
+        params = {
+            'staging_file_subdir_path': sra_path,
+            'name': obj_name,
+            'workspace_name': self.getWsName(),
+            'sequencing_tech': 'Unknown',
+            'single_genome': 1
+        }
+
+        ref = self.getImpl().import_sra_from_staging(self.getContext(), params)
+        self.assertTrue('obj_ref' in ref[0])
+        self.assertTrue('report_ref' in ref[0])
+        self.assertTrue('report_name' in ref[0])
+
+        obj = self.dfu.get_objects(
+            {'object_refs': [self.getWsName() + '/MyReads']})['data'][0]
+        self.assertEqual(ref[0]['obj_ref'], self.make_ref(obj['info']))
+        self.assertEqual(obj['info'][2].startswith(
+            'KBaseFile.SingleEndLibrary'), True)
+        d = obj['data']
+        self.assertEqual(d['sequencing_tech'], 'Unknown')
+        self.assertEqual(d['single_genome'], 1)
+        self.assertEqual('source' not in d, True)
+        self.assertEqual('strain' not in d, True)
+        self.check_lib(d['lib'], 2833, 'fastq.fastq.gz',
+                       'f118ee769a5e1b40ec44629994dfc3cd')
+        node = d['lib']['file']['id']
+        self.delete_shock_node(node)
