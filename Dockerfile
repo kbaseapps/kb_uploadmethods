@@ -12,6 +12,12 @@ RUN pip install requests --upgrade \
 	&& ( [ $(pip show filemagic|grep -c filemagic) -eq 0 ] || pip uninstall -y filemagic ) \
     && pip install python-magic
 
+# Get NCBI SRATools (for fastq-dump)
+RUN cd /kb/dev_container/modules && \
+    mkdir NCBI_SRA_tools && cd NCBI_SRA_tools && \
+    curl 'https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.8.2/sratoolkit.2.8.2-ubuntu64.tar.gz' -O && \
+    tar zxf sratoolkit.2.8.2-ubuntu64.tar.gz && \
+    cp sratoolkit.2.8.2-ubuntu64/bin/fastq-dump.2.8.2  /kb/deployment/bin/fastq-dump
 # -----------------------------------------
 
 COPY ./ /kb/module
