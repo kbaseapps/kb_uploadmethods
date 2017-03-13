@@ -156,19 +156,21 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def test_import_sra_pired_end(self, download_staging_file,
                                   _validate_upload_staging_file_availability):
 
+        #TODO Tian add more tests
         fq_filename = 'fastq-dump'
-        # fq_path = os.path.join('/kb/module/work/tmp', fq_filename)
-        # shutil.copy(os.path.join("data/sra_toolkit", fq_filename), fq_path)
+        fq_path = os.path.join('/kb/module/work/tmp', fq_filename)
+        linkto = os.readlink(os.path.join("data/sra_toolkit", fq_filename))
+        os.symlink(linkto, fq_path)
 
-        # fq_filename = 'fastq-dump.2'
-        # fq_path = os.path.join('/kb/module/work/tmp', fq_filename)
-        # shutil.copy(os.path.join("data/sra_toolkit", fq_filename), fq_path)
+        fq_filename = 'fastq-dump.2'
+        fq_path = os.path.join('/kb/module/work/tmp', fq_filename)
+        linkto = os.readlink(os.path.join("data/sra_toolkit", fq_filename))
+        os.symlink(linkto, fq_path)
 
-        # fq_filename = 'fastq-dump.2.8.2'
-        # fq_path = os.path.join('/kb/module/work/tmp', fq_filename)
-        # shutil.copy(os.path.join("data/sra_toolkit", fq_filename), fq_path)
+        fq_filename = 'fastq-dump.2.8.2'
+        fq_path = os.path.join('/kb/module/work/tmp', fq_filename)
+        shutil.copy(os.path.join("data/sra_toolkit", fq_filename), fq_path)
 
-        # print 'gdsafd'
         # print os.listdir('/kb/module/work/tmp')
         # print os.listdir('/kb/deployment/bin')
         # subprocess.call(["ls", "-l", "/kb/module/work/tmp"])
@@ -180,9 +182,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
         # pipe = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
         # output = pipe.communicate()[0]
         # exitCode = pipe.returncode
-
-        # print 'gdasdsa'
-        # print exitCode
 
         # sra_path = 'SRR402019.sra'
         # obj_name = 'MyReads'
