@@ -157,7 +157,6 @@ class ImportSRAUtil:
         fastq_file_path = self._sra_to_fastq(scratch_sra_file_path)
 
         import_sra_reads_params = params
-        del import_sra_reads_params['staging_file_subdir_path']
         import_sra_reads_params.update(fastq_file_path)
 
         workspace_name_or_id = params.get('workspace_name')
