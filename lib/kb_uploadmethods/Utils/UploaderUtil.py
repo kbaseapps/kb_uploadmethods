@@ -1,11 +1,12 @@
 
 import json
+import uuid
+import time
+
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
 from ftp_service.ftp_serviceClient import ftp_service
 from KBaseReport.KBaseReportClient import KBaseReport
 from DataFileUtil.DataFileUtilClient import DataFileUtil
-import uuid
-import time
 
 
 def log(message, prefix_newline=False):
@@ -86,28 +87,28 @@ class UploaderUtil:
                 'ignore_errors': False
             }
 
-        object_data = dfu.get_objects(get_objects_params)
-        number_of_reads = object_data.get('data')[0].get('data').get('read_count')
+            object_data = dfu.get_objects(get_objects_params)
+            number_of_reads = object_data.get('data')[0].get('data').get('read_count')
 
-        upload_message += "Reads Name: "
-        upload_message += str(object_data.get('data')[0].get('info')[1]) + '\n'
-        if params.get('fwd_staging_file_name'):
-            if params.get('rev_staging_file_name'):
-                upload_message += 'Imported Reads Files:\n'
-                upload_message += 'Forward: {}\n'.format(
+            upload_message += "Reads Name: "
+            upload_message += str(object_data.get('data')[0].get('info')[1]) + '\n'
+            if params.get('fwd_staging_file_name'):
+                if params.get('rev_staging_file_name'):
+                    upload_message += 'Imported Reads Files:\n'
+                    upload_message += 'Forward: {}\n'.format(
+                                      params.get('fwd_staging_file_name'))
+                    upload_message += 'Reverse: {}\n'.format(
+                                  params.get('rev_staging_file_name'))
+                else:
+                    upload_message += 'Imported Reads File: {}\n'.format(
                                   params.get('fwd_staging_file_name'))
-                upload_message += 'Reverse: {}\n'.format(
-                              params.get('rev_staging_file_name'))
+                if isinstance(number_of_reads, (int, long)):
+                    upload_message += 'Number of Reads: {:,}\n'.format(number_of_reads)
             else:
-                upload_message += 'Imported Reads File: {}\n'.format(
-                              params.get('fwd_staging_file_name'))
-            if isinstance(number_of_reads, (int, long)):
-                upload_message += 'Number of Reads: {:,}\n'.format(number_of_reads)
-        else:
-            reads_info = object_data.get('data')[0].get('info')[-1]
-            if isinstance(reads_info, dict):
-                upload_message += "Reads Info: "
-                upload_message += json.dumps(reads_info, indent=1)[1:-1] + '\n'
+                reads_info = object_data.get('data')[0].get('info')[-1]
+                if isinstance(reads_info, dict):
+                    upload_message += "Reads Info: "
+                    upload_message += json.dumps(reads_info, indent=1)[1:-1] + '\n'
 
         report_params = {
               'message': upload_message,
