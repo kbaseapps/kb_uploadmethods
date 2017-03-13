@@ -1,0 +1,59 @@
+name     : Import SRA File From Staging Area
+subtitle : Import A SRA File As Reads Into Your Narrative
+tooltip  : Import A SRA File As Reads Into Your Narrative
+
+screenshots :
+    []
+
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+parameters :
+    staging_file_subdir_path :
+        ui-name : SRA File Path
+        short-hint : SRA Staging Subdirectory File Path
+        long-hint  : SRA Staging Subdirectory File Path
+
+    sequencing_tech :
+        ui-name : Sequencing Technology
+        short-hint : The name of the sequencing technology used to create the reads file
+        long-hint  : The name of the sequencing technology used to create the reads file
+
+    name :
+        ui-name : Reads Object Name
+        short-hint : Provide a name for the output object that will be created by this upload
+        long-hint  : Provide a name for the output object that will be created by this upload
+
+    single_genome:
+        ui-name: Single Genome
+        short-hint: Select if the reads are from a single genome, leave blank if from a metagenome
+        long-hint: Select if the reads are from a single genome, leave blank if from a metagenome
+
+    insert_size_mean :
+        ui-name : Mean Insert Size
+        short-hint : The mean (average) insert length
+        long-hint  : The mean (average) insert length
+
+    insert_size_std_dev :
+        ui-name : St. Dev. of Insert Size
+        short-hint : The standard deviation of insert lengths
+        long-hint  : The standard deviation of insert lengths
+
+    read_orientation_outward :
+        ui-name : Reads Orientation Outward
+        short-hint : Select if reads in a pair point outward
+        long-hint  : Select if reads in a pair point outward
+
+description : |
+    <p> Import a SRA file as Reads into your Narrative. </p>
+
+technical-description : none

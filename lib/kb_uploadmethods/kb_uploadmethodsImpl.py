@@ -5,6 +5,7 @@ import json
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
 from kb_uploadmethods.Utils.ImportGenbankUtil import ImportGenbankUtil
+from kb_uploadmethods.Utils.ImportSRAUtil import ImportSRAUtil
 #END_HEADER
 
 
@@ -25,7 +26,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "0.1.7"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "2da1d5c616dc7391bf12248811ca1ada079b3e6b"
+    GIT_COMMIT_HASH = "344990f06217595cc6429069611eccc2439e14fb"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -269,6 +270,57 @@ class kb_uploadmethods:
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method import_genbank_from_staging return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def import_sra_from_staging(self, ctx, params):
+        """
+        :param params: instance of type "SRAToReadsParams" (required params:
+           staging_file_subdir_path: subdirectory file path e.g. for file:
+           /data/bulk/user_name/file_name staging_file_subdir_path is
+           file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name
+           sequencing_tech: sequencing technology name: output reads file
+           name workspace_name: workspace name/ID of the object Optional
+           Params: single_genome: whether the reads are from a single genome
+           or a metagenome. insert_size_mean: mean (average) insert length
+           insert_size_std_dev: standard deviation of insert lengths
+           read_orientation_outward: whether reads in a pair point outward)
+           -> structure: parameter "staging_file_subdir_path" of String,
+           parameter "sequencing_tech" of type "sequencing_tech", parameter
+           "name" of type "name", parameter "workspace_name" of type
+           "workspace_name" (workspace name of the object), parameter
+           "single_genome" of type "single_genome", parameter
+           "insert_size_mean" of type "insert_size_mean", parameter
+           "insert_size_std_dev" of type "insert_size_std_dev", parameter
+           "read_orientation_outward" of type "read_orientation_outward"
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN import_sra_from_staging
+        print '--->\nRunning uploadmethods.import_sra_from_staging\nparams:'
+        print json.dumps(params, indent=1)
+
+        for key, value in params.iteritems():
+            if isinstance(value, basestring):
+                params[key] = value.strip()
+
+        self.config['USER_ID'] = ctx['user_id']
+        importer = ImportSRAUtil(self.config)
+        returnVal = importer.import_sra_from_staging(params)
+
+        # reportVal = importer.generate_report(returnVal['obj_ref'], params)
+        # returnVal.update(reportVal)
+        #END import_sra_from_staging
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method import_sra_from_staging return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
