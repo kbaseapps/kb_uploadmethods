@@ -19,6 +19,7 @@ from biokbase.workspace.client import Workspace as workspaceService
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
 from DataFileUtil.DataFileUtilClient import DataFileUtil
+from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -60,10 +61,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
             print('Test workspace was deleted')
 
     @classmethod
-    def make_ref(self, objinfo):
-        return str(objinfo[6]) + '/' + str(objinfo[0]) + '/' + str(objinfo[4])
-
-    @classmethod
     def delete_shock_node(cls, node_id):
         header = {'Authorization': 'Oauth {0}'.format(cls.token)}
         requests.delete(cls.shockURL + '/node/' + node_id, headers=header,
@@ -98,64 +95,80 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         return {'copy_file_path': fq_path}
 
-    def test_bad_import_genbank_from_staging_params(self):
+    def test_bad_import_fasta_as_assembly_from_staging_params(self):
         invalidate_input_params = {
           'missing_staging_file_subdir_path': 'staging_file_subdir_path',
-          'genome_name': 'genome_name',
           'workspace_name': 'workspace_name',
-          'source': 'source'
+          'assembly_name': 'assembly_name'
         }
         with self.assertRaisesRegexp(
                     ValueError,
                     '"staging_file_subdir_path" parameter is required, but missing'):
-            self.getImpl().import_genbank_from_staging(self.getContext(), invalidate_input_params)
+            self.getImpl().import_fasta_as_assembly_from_staging(self.getContext(),
+                                                                 invalidate_input_params)
 
         invalidate_input_params = {
           'staging_file_subdir_path': 'staging_file_subdir_path',
-          'missing_genome_name': 'genome_name',
-          'workspace_name': 'workspace_name',
-          'source': 'source'
+          'missing_workspace_name': 'workspace_name',
+          'assembly_name': 'assembly_name'
         }
         with self.assertRaisesRegexp(
                     ValueError,
-                    '"genome_name" parameter is required, but missing'):
-            self.getImpl().import_genbank_from_staging(self.getContext(), invalidate_input_params)
+                    '"workspace_name" parameter is required, but missing'):
+            self.getImpl().import_fasta_as_assembly_from_staging(self.getContext(),
+                                                                 invalidate_input_params)
         invalidate_input_params = {
           'staging_file_subdir_path': 'staging_file_subdir_path',
-          'genome_name': 'genome_name',
-          'missing_workspace_name': 'workspace_name',
-          'source': 'source'
-        }
-        with self.assertRaisesRegexp(
-                ValueError,
-                '"workspace_name" parameter is required, but missing'):
-            self.getImpl().import_genbank_from_staging(self.getContext(), invalidate_input_params)
-        invalidate_input_params = {
-          'staging_file_subdir_path': 'staging_file_subdir_path',
-          'genome_name': 'genome_name',
           'workspace_name': 'workspace_name',
-          'missing_source': 'source'
+          'missing_assembly_name': 'assembly_name'
         }
         with self.assertRaisesRegexp(
                 ValueError,
-                '"source" parameter is required, but missing'):
-            self.getImpl().import_genbank_from_staging(self.getContext(), invalidate_input_params)
+                '"assembly_name" parameter is required, but missing'):
+            self.getImpl().import_fasta_as_assembly_from_staging(self.getContext(),
+                                                                 invalidate_input_params)
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     def test_genbank_to_genome(self, download_staging_file):
 
-        gbk_path = 'small_genbank.gbff'
-        ws_obj_name = 'MyGenome'
+        fasta_file = 'small_fasta.fna'
+        ws_obj_name = 'MyAssembly'
 
         params = {
-          'staging_file_subdir_path': gbk_path,
-          'genome_name': ws_obj_name,
+          'staging_file_subdir_path': fasta_file,
           'workspace_name': self.getWsName(),
-          'source': 'RefSeq'
+          'assembly_name': ws_obj_name
         }
 
-        ref = self.getImpl().import_genbank_from_staging(self.getContext(), params)
-        self.assertTrue('genome_ref' in ref[0])
-        self.assertTrue('genome_info' in ref[0])
+        ref = self.getImpl().import_fasta_as_assembly_from_staging(self.getContext(), params)
+        self.assertTrue('obj_ref' in ref[0])
         self.assertTrue('report_ref' in ref[0])
         self.assertTrue('report_name' in ref[0])
+
+        fasta_file_path = os.path.join('/kb/module/work/tmp', fasta_file)
+        assemblyUtil = AssemblyUtil(os.environ['SDK_CALLBACK_URL'])
+        fasta_assembly = assemblyUtil.get_assembly_as_fasta(
+                            {'ref': self.getWsName() + "/{}".format(ws_obj_name)})
+
+        expected_data = None
+        with open(fasta_file_path, 'r') as f:
+            expected_data = f.read()
+        actual_data = None
+        with open(fasta_assembly['path'], 'r') as f:
+            actual_data = f.read()
+        self.assertEqual(actual_data, expected_data)
+
+        get_objects_params = {
+            'object_refs': [ref[0].get('obj_ref')],
+            'ignore_errors': False
+        }
+
+        object_data = self.dfu.get_objects(get_objects_params)
+        base_count = object_data.get('data')[0].get('data').get('base_counts')
+        dna_size = object_data.get('data')[0].get('data').get('dna_size')
+
+        self.assertEqual(dna_size, 2520)
+
+        expected_base_count = {'A': 700, 'C': 558, 'T': 671, 'G': 591}
+        self.assertDictContainsSubset(base_count, expected_base_count)
+        self.assertDictContainsSubset(expected_base_count, base_count)

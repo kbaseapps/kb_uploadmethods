@@ -224,4 +224,24 @@ module kb_uploadmethods {
     funcdef import_sra_from_staging(SRAToReadsParams params)
             returns (UploadMethodResult returnVal) authentication required;
 
+    /*
+      required params:
+      staging_file_subdir_path: subdirectory file path
+      e.g. 
+        for file: /data/bulk/user_name/file_name
+        staging_file_subdir_path is file_name
+        for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+        staging_file_subdir_path is subdir_1/subdir_2/file_name
+      assembly_name: output Assembly file name
+      workspace_name: workspace name/ID of the object
+    */
+    typedef structure {
+      string staging_file_subdir_path;
+      string assembly_name;
+      workspace_name workspace_name;
+    } FastaToAssemblyParams;
+
+    funcdef import_fasta_as_assembly_from_staging(FastaToAssemblyParams params)
+            returns (UploadMethodResult returnVal) authentication required;
+
 };

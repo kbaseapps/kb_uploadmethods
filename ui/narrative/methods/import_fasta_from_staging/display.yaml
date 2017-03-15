@@ -1,0 +1,37 @@
+name     : Import Fasta File
+subtitle : Import DNA sequence(s) in FASTA format (creating an Assembly).
+tooltip  : Import DNA sequence(s) in FASTA format (creating an Assembly).
+
+screenshots :
+    []
+
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+parameters :
+    staging_file_subdir_path :
+        ui-name : |
+            FASTA file path
+        short-hint : |
+            File with DNA data (one or more sequences) in FASTA format.
+        long-hint  : |
+            Recognized extensions for the FASTA input file are .fasta, .fna, or .fa
+
+    assembly_name :
+        ui-name : |
+            Assembly name
+        short-hint : |
+            Provide a name for the Assembly that will be created by this importer
+        long-hint : |
+            Provide a name for the Assembly that will be created by this importer
+
+description : Upload DNA sequence(s) in FASTA format (creating an Assembly)

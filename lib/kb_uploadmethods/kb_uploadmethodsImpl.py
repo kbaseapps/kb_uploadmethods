@@ -6,6 +6,7 @@ from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
 from kb_uploadmethods.Utils.ImportGenbankUtil import ImportGenbankUtil
 from kb_uploadmethods.Utils.ImportSRAUtil import ImportSRAUtil
+from kb_uploadmethods.Utils.ImportAssemblyUtil import ImportAssemblyUtil
 #END_HEADER
 
 
@@ -24,9 +25,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.1.7"
+    VERSION = "0.1.8"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "344990f06217595cc6429069611eccc2439e14fb"
+    GIT_COMMIT_HASH = "91fd745ad9b30d003e5637438f9cd14c30859634"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -39,6 +40,8 @@ class kb_uploadmethods:
         self.config['SDK_CALLBACK_URL'] = os.environ['SDK_CALLBACK_URL']
         self.config['KB_AUTH_TOKEN'] = os.environ['KB_AUTH_TOKEN']
         #END_CONSTRUCTOR
+        pass
+
 
     def upload_fastq_file(self, ctx, params):
         """
@@ -310,7 +313,6 @@ class kb_uploadmethods:
             if isinstance(value, basestring):
                 params[key] = value.strip()
 
-        self.config['USER_ID'] = ctx['user_id']
         importer = ImportSRAUtil(self.config)
         returnVal = importer.import_sra_from_staging(params)
 
@@ -321,6 +323,47 @@ class kb_uploadmethods:
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method import_sra_from_staging return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def import_fasta_as_assembly_from_staging(self, ctx, params):
+        """
+        :param params: instance of type "FastaToAssemblyParams" (required
+           params: staging_file_subdir_path: subdirectory file path e.g. for
+           file: /data/bulk/user_name/file_name staging_file_subdir_path is
+           file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name
+           assembly_name: output Assembly file name workspace_name: workspace
+           name/ID of the object) -> structure: parameter
+           "staging_file_subdir_path" of String, parameter "assembly_name" of
+           String, parameter "workspace_name" of type "workspace_name"
+           (workspace name of the object)
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN import_fasta_as_assembly_from_staging
+        print '--->\nRunning uploadmethods.import_fasta_as_assembly_from_staging\nparams:'
+        print json.dumps(params, indent=1)
+
+        for key, value in params.iteritems():
+            if isinstance(value, basestring):
+                params[key] = value.strip()
+
+        importer = ImportAssemblyUtil(self.config)
+        returnVal = importer.import_fasta_as_assembly_from_staging(params)
+
+        reportVal = importer.generate_report(returnVal['obj_ref'], params)
+        returnVal.update(reportVal)
+        #END import_fasta_as_assembly_from_staging
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method import_fasta_as_assembly_from_staging return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
