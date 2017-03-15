@@ -46,7 +46,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "release",
     "genetic_code",
     "type",
-    "generate_ids_if_needed"
+    "generate_ids_if_needed",
+    "exclude_ontologies"
 })
 public class GenbankToGenomeParams {
 
@@ -66,6 +67,8 @@ public class GenbankToGenomeParams {
     private String type;
     @JsonProperty("generate_ids_if_needed")
     private String generateIdsIfNeeded;
+    @JsonProperty("exclude_ontologies")
+    private String excludeOntologies;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("staging_file_subdir_path")
@@ -188,6 +191,21 @@ public class GenbankToGenomeParams {
         return this;
     }
 
+    @JsonProperty("exclude_ontologies")
+    public String getExcludeOntologies() {
+        return excludeOntologies;
+    }
+
+    @JsonProperty("exclude_ontologies")
+    public void setExcludeOntologies(String excludeOntologies) {
+        this.excludeOntologies = excludeOntologies;
+    }
+
+    public GenbankToGenomeParams withExcludeOntologies(String excludeOntologies) {
+        this.excludeOntologies = excludeOntologies;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -200,7 +218,7 @@ public class GenbankToGenomeParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((("GenbankToGenomeParams"+" [stagingFileSubdirPath=")+ stagingFileSubdirPath)+", genomeName=")+ genomeName)+", workspaceName=")+ workspaceName)+", source=")+ source)+", release=")+ release)+", geneticCode=")+ geneticCode)+", type=")+ type)+", generateIdsIfNeeded=")+ generateIdsIfNeeded)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((("GenbankToGenomeParams"+" [stagingFileSubdirPath=")+ stagingFileSubdirPath)+", genomeName=")+ genomeName)+", workspaceName=")+ workspaceName)+", source=")+ source)+", release=")+ release)+", geneticCode=")+ geneticCode)+", type=")+ type)+", generateIdsIfNeeded=")+ generateIdsIfNeeded)+", excludeOntologies=")+ excludeOntologies)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

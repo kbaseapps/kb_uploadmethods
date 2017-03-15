@@ -209,8 +209,59 @@ module kb_uploadmethods {
     } GenomeSaveResult;
 
     funcdef import_genbank_from_staging(GenbankToGenomeParams params)
-                returns (GenomeSaveResult returnVal) authentication required;
+            returns (GenomeSaveResult returnVal) authentication required;
 
+    /*
+      required params:
+      staging_file_subdir_path: subdirectory file path
+      e.g. 
+        for file: /data/bulk/user_name/file_name
+        staging_file_subdir_path is file_name
+        for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+        staging_file_subdir_path is subdir_1/subdir_2/file_name
+      sequencing_tech: sequencing technology
+      name: output reads file name
+      workspace_name: workspace name/ID of the object
+      
+      Optional Params:
+      single_genome: whether the reads are from a single genome or a metagenome.
+      insert_size_mean: mean (average) insert length
+      insert_size_std_dev: standard deviation of insert lengths
+      read_orientation_outward: whether reads in a pair point outward
+    */
+    typedef structure {
+      string staging_file_subdir_path;
+      sequencing_tech sequencing_tech;
+      name name;
+      workspace_name workspace_name;
 
+      single_genome single_genome;
+      insert_size_mean insert_size_mean;
+      insert_size_std_dev insert_size_std_dev;
+      read_orientation_outward read_orientation_outward;
+    } SRAToReadsParams;
+
+    funcdef import_sra_from_staging(SRAToReadsParams params)
+            returns (UploadMethodResult returnVal) authentication required;
+
+    /*
+      required params:
+      staging_file_subdir_path: subdirectory file path
+      e.g. 
+        for file: /data/bulk/user_name/file_name
+        staging_file_subdir_path is file_name
+        for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+        staging_file_subdir_path is subdir_1/subdir_2/file_name
+      assembly_name: output Assembly file name
+      workspace_name: workspace name/ID of the object
+    */
+    typedef structure {
+      string staging_file_subdir_path;
+      string assembly_name;
+      workspace_name workspace_name;
+    } FastaToAssemblyParams;
+
+    funcdef import_fasta_as_assembly_from_staging(FastaToAssemblyParams params)
+            returns (UploadMethodResult returnVal) authentication required;
 
 };

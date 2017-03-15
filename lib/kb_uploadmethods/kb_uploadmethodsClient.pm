@@ -605,6 +605,7 @@ GenbankToGenomeParams is a reference to a hash where the following keys are defi
 	genetic_code has a value which is an int
 	type has a value which is a string
 	generate_ids_if_needed has a value which is a string
+	exclude_ontologies has a value which is a string
 GenomeSaveResult is a reference to a hash where the following keys are defined:
 	genome_ref has a value which is a string
 
@@ -625,6 +626,7 @@ GenbankToGenomeParams is a reference to a hash where the following keys are defi
 	genetic_code has a value which is an int
 	type has a value which is a string
 	generate_ids_if_needed has a value which is a string
+	exclude_ontologies has a value which is a string
 GenomeSaveResult is a reference to a hash where the following keys are defined:
 	genome_ref has a value which is a string
 
@@ -685,6 +687,240 @@ GenomeSaveResult is a reference to a hash where the following keys are defined:
     }
 }
  
+
+
+=head2 import_sra_from_staging
+
+  $returnVal = $obj->import_sra_from_staging($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a kb_uploadmethods.SRAToReadsParams
+$returnVal is a kb_uploadmethods.UploadMethodResult
+SRAToReadsParams is a reference to a hash where the following keys are defined:
+	staging_file_subdir_path has a value which is a string
+	sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
+	name has a value which is a kb_uploadmethods.name
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	single_genome has a value which is a kb_uploadmethods.single_genome
+	insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+	insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+	read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
+sequencing_tech is a string
+name is a string
+workspace_name is a string
+single_genome is a string
+insert_size_mean is a string
+insert_size_std_dev is a string
+read_orientation_outward is a string
+UploadMethodResult is a reference to a hash where the following keys are defined:
+	obj_ref has a value which is a kb_uploadmethods.obj_ref
+	report_name has a value which is a kb_uploadmethods.report_name
+	report_ref has a value which is a kb_uploadmethods.report_ref
+obj_ref is a string
+report_name is a string
+report_ref is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a kb_uploadmethods.SRAToReadsParams
+$returnVal is a kb_uploadmethods.UploadMethodResult
+SRAToReadsParams is a reference to a hash where the following keys are defined:
+	staging_file_subdir_path has a value which is a string
+	sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
+	name has a value which is a kb_uploadmethods.name
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	single_genome has a value which is a kb_uploadmethods.single_genome
+	insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+	insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+	read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
+sequencing_tech is a string
+name is a string
+workspace_name is a string
+single_genome is a string
+insert_size_mean is a string
+insert_size_std_dev is a string
+read_orientation_outward is a string
+UploadMethodResult is a reference to a hash where the following keys are defined:
+	obj_ref has a value which is a kb_uploadmethods.obj_ref
+	report_name has a value which is a kb_uploadmethods.report_name
+	report_ref has a value which is a kb_uploadmethods.report_ref
+obj_ref is a string
+report_name is a string
+report_ref is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub import_sra_from_staging
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function import_sra_from_staging (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to import_sra_from_staging:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'import_sra_from_staging');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "kb_uploadmethods.import_sra_from_staging",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'import_sra_from_staging',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method import_sra_from_staging",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'import_sra_from_staging',
+				       );
+    }
+}
+ 
+
+
+=head2 import_fasta_as_assembly_from_staging
+
+  $returnVal = $obj->import_fasta_as_assembly_from_staging($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a kb_uploadmethods.FastaToAssemblyParams
+$returnVal is a kb_uploadmethods.UploadMethodResult
+FastaToAssemblyParams is a reference to a hash where the following keys are defined:
+	staging_file_subdir_path has a value which is a string
+	assembly_name has a value which is a string
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
+workspace_name is a string
+UploadMethodResult is a reference to a hash where the following keys are defined:
+	obj_ref has a value which is a kb_uploadmethods.obj_ref
+	report_name has a value which is a kb_uploadmethods.report_name
+	report_ref has a value which is a kb_uploadmethods.report_ref
+obj_ref is a string
+report_name is a string
+report_ref is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a kb_uploadmethods.FastaToAssemblyParams
+$returnVal is a kb_uploadmethods.UploadMethodResult
+FastaToAssemblyParams is a reference to a hash where the following keys are defined:
+	staging_file_subdir_path has a value which is a string
+	assembly_name has a value which is a string
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
+workspace_name is a string
+UploadMethodResult is a reference to a hash where the following keys are defined:
+	obj_ref has a value which is a kb_uploadmethods.obj_ref
+	report_name has a value which is a kb_uploadmethods.report_name
+	report_ref has a value which is a kb_uploadmethods.report_ref
+obj_ref is a string
+report_name is a string
+report_ref is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub import_fasta_as_assembly_from_staging
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function import_fasta_as_assembly_from_staging (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to import_fasta_as_assembly_from_staging:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'import_fasta_as_assembly_from_staging');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "kb_uploadmethods.import_fasta_as_assembly_from_staging",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'import_fasta_as_assembly_from_staging',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method import_fasta_as_assembly_from_staging",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'import_fasta_as_assembly_from_staging',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -728,16 +964,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'import_genbank_from_staging',
+                method_name => 'import_fasta_as_assembly_from_staging',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method import_genbank_from_staging",
+            error => "Error invoking method import_fasta_as_assembly_from_staging",
             status_line => $self->{client}->status_line,
-            method_name => 'import_genbank_from_staging',
+            method_name => 'import_fasta_as_assembly_from_staging',
         );
     }
 }
@@ -1650,6 +1886,7 @@ release has a value which is a string
 genetic_code has a value which is an int
 type has a value which is a string
 generate_ids_if_needed has a value which is a string
+exclude_ontologies has a value which is a string
 
 </pre>
 
@@ -1666,6 +1903,7 @@ release has a value which is a string
 genetic_code has a value which is an int
 type has a value which is a string
 generate_ids_if_needed has a value which is a string
+exclude_ontologies has a value which is a string
 
 
 =end text
@@ -1696,6 +1934,117 @@ genome_ref has a value which is a string
 
 a reference to a hash where the following keys are defined:
 genome_ref has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 SRAToReadsParams
+
+=over 4
+
+
+
+=item Description
+
+required params:
+staging_file_subdir_path: subdirectory file path
+e.g. 
+  for file: /data/bulk/user_name/file_name
+  staging_file_subdir_path is file_name
+  for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+  staging_file_subdir_path is subdir_1/subdir_2/file_name
+sequencing_tech: sequencing technology
+name: output reads file name
+workspace_name: workspace name/ID of the object
+
+Optional Params:
+single_genome: whether the reads are from a single genome or a metagenome.
+insert_size_mean: mean (average) insert length
+insert_size_std_dev: standard deviation of insert lengths
+read_orientation_outward: whether reads in a pair point outward
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+staging_file_subdir_path has a value which is a string
+sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
+name has a value which is a kb_uploadmethods.name
+workspace_name has a value which is a kb_uploadmethods.workspace_name
+single_genome has a value which is a kb_uploadmethods.single_genome
+insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+staging_file_subdir_path has a value which is a string
+sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
+name has a value which is a kb_uploadmethods.name
+workspace_name has a value which is a kb_uploadmethods.workspace_name
+single_genome has a value which is a kb_uploadmethods.single_genome
+insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
+
+
+=end text
+
+=back
+
+
+
+=head2 FastaToAssemblyParams
+
+=over 4
+
+
+
+=item Description
+
+required params:
+staging_file_subdir_path: subdirectory file path
+e.g. 
+  for file: /data/bulk/user_name/file_name
+  staging_file_subdir_path is file_name
+  for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+  staging_file_subdir_path is subdir_1/subdir_2/file_name
+assembly_name: output Assembly file name
+workspace_name: workspace name/ID of the object
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+staging_file_subdir_path has a value which is a string
+assembly_name has a value which is a string
+workspace_name has a value which is a kb_uploadmethods.workspace_name
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+staging_file_subdir_path has a value which is a string
+assembly_name has a value which is a string
+workspace_name has a value which is a kb_uploadmethods.workspace_name
 
 
 =end text

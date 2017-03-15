@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 #BEGIN_HEADER
 import os
-from pprint import pprint
 import json
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
 from kb_uploadmethods.Utils.ImportGenbankUtil import ImportGenbankUtil
+from kb_uploadmethods.Utils.ImportSRAUtil import ImportSRAUtil
+from kb_uploadmethods.Utils.ImportAssemblyUtil import ImportAssemblyUtil
 #END_HEADER
 
 class kb_uploadmethods:
@@ -23,9 +24,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.1.7"
+    VERSION = "0.1.9"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "0469400ce49fe3bcf7ff1a73420acf5d740c78a8"
+    GIT_COMMIT_HASH = "c8dc2564e3e042e9594be29fe339bfe6a09d08d8"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -100,16 +101,16 @@ class kb_uploadmethods:
                 params_item['sequencing_tech'] = params.get('sequencing_tech')
                 params_item['interleaved'] = params.get('interleaved')
                 for key, value in params_item.iteritems():
-                  if isinstance(value, basestring):
-                    params_item[key] = value.strip()
+                    if isinstance(value, basestring):
+                        params_item[key] = value.strip()
                 fastqUploader = UploaderUtil(self.config)
-                itemReturnVal = fastqUploader.upload_fastq_file(params_item) 
-                returnVal['obj_ref'] += itemReturnVal['obj_ref'] + ',' 
+                itemReturnVal = fastqUploader.upload_fastq_file(params_item)
+                returnVal['obj_ref'] += itemReturnVal['obj_ref'] + ','
             returnVal['obj_ref'] = returnVal['obj_ref'][:-1]
         else:
             for key, value in params.iteritems():
-              if isinstance(value, basestring):
-                params[key] = value.strip()
+                if isinstance(value, basestring):
+                    params[key] = value.strip()
             fastqUploader = UploaderUtil(self.config)
             returnVal = fastqUploader.upload_fastq_file(params)
 
@@ -189,12 +190,12 @@ class kb_uploadmethods:
         print json.dumps(params, indent=1)
 
         for key, value in params.iteritems():
-          if isinstance(value, basestring):
-            params[key] = value.strip()
+            if isinstance(value, basestring):
+                params[key] = value.strip()
 
         self.config['USER_ID'] = ctx['user_id']
         unpacker = UnpackFileUtil(self.config)
-        returnVal = unpacker.unpack_staging_file(params) 
+        returnVal = unpacker.unpack_staging_file(params)
 
         reportVal = unpacker.generate_report(returnVal['unpacked_file_path'], params)
         returnVal.update(reportVal)
@@ -244,18 +245,18 @@ class kb_uploadmethods:
                 params_item['download_type'] = download_type
                 params_item['workspace_name'] = workspace_name
                 for key, value in params_item.iteritems():
-                  if isinstance(value, basestring):
-                    params_item[key] = value.strip()
+                    if isinstance(value, basestring):
+                        params_item[key] = value.strip()
                 unpacker = UnpackFileUtil(self.config)
-                itemReturnVal = unpacker.unpack_web_file(params_item) 
-                returnVal['unpacked_file_path'] += itemReturnVal['unpacked_file_path'] + ',' 
+                itemReturnVal = unpacker.unpack_web_file(params_item)
+                returnVal['unpacked_file_path'] += itemReturnVal['unpacked_file_path'] + ','
             returnVal['unpacked_file_path'] = returnVal['unpacked_file_path'][:-1]
         else:
             for key, value in params.iteritems():
-              if isinstance(value, basestring):
-                params[key] = value.strip()
+                if isinstance(value, basestring):
+                    params[key] = value.strip()
             unpacker = UnpackFileUtil(self.config)
-            returnVal = unpacker.unpack_web_file(params) 
+            returnVal = unpacker.unpack_web_file(params)
 
         reportVal = unpacker.generate_report(returnVal['unpacked_file_path'], params)
         returnVal.update(reportVal)
@@ -292,7 +293,8 @@ class kb_uploadmethods:
            parameter "genome_name" of String, parameter "workspace_name" of
            String, parameter "source" of String, parameter "release" of
            String, parameter "genetic_code" of Long, parameter "type" of
-           String, parameter "generate_ids_if_needed" of String
+           String, parameter "generate_ids_if_needed" of String, parameter
+           "exclude_ontologies" of String
         :returns: instance of type "GenomeSaveResult" -> structure: parameter
            "genome_ref" of String
         """
@@ -300,11 +302,11 @@ class kb_uploadmethods:
         # return variables are: returnVal
         #BEGIN import_genbank_from_staging
         for key, value in params.iteritems():
-          if isinstance(value, basestring):
-            params[key] = value.strip()
+            if isinstance(value, basestring):
+                params[key] = value.strip()
 
         importer = ImportGenbankUtil(self.config)
-        returnVal = importer.import_genbank_from_staging(params) 
+        returnVal = importer.import_genbank_from_staging(params)
         #END import_genbank_from_staging
 
         # At some point might do deeper type checking...
@@ -313,6 +315,98 @@ class kb_uploadmethods:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
+
+    def import_sra_from_staging(self, ctx, params):
+        """
+        :param params: instance of type "SRAToReadsParams" (required params:
+           staging_file_subdir_path: subdirectory file path e.g. for file:
+           /data/bulk/user_name/file_name staging_file_subdir_path is
+           file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name
+           sequencing_tech: sequencing technology name: output reads file
+           name workspace_name: workspace name/ID of the object Optional
+           Params: single_genome: whether the reads are from a single genome
+           or a metagenome. insert_size_mean: mean (average) insert length
+           insert_size_std_dev: standard deviation of insert lengths
+           read_orientation_outward: whether reads in a pair point outward)
+           -> structure: parameter "staging_file_subdir_path" of String,
+           parameter "sequencing_tech" of type "sequencing_tech", parameter
+           "name" of type "name", parameter "workspace_name" of type
+           "workspace_name" (workspace name of the object), parameter
+           "single_genome" of type "single_genome", parameter
+           "insert_size_mean" of type "insert_size_mean", parameter
+           "insert_size_std_dev" of type "insert_size_std_dev", parameter
+           "read_orientation_outward" of type "read_orientation_outward"
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN import_sra_from_staging
+        print '--->\nRunning uploadmethods.import_sra_from_staging\nparams:'
+        print json.dumps(params, indent=1)
+
+        for key, value in params.iteritems():
+            if isinstance(value, basestring):
+                params[key] = value.strip()
+
+        importer = ImportSRAUtil(self.config)
+        returnVal = importer.import_sra_from_staging(params)
+
+        reportVal = importer.generate_report(returnVal['obj_ref'], params)
+        returnVal.update(reportVal)
+        #END import_sra_from_staging
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method import_sra_from_staging return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def import_fasta_as_assembly_from_staging(self, ctx, params):
+        """
+        :param params: instance of type "FastaToAssemblyParams" (required
+           params: staging_file_subdir_path: subdirectory file path e.g. for
+           file: /data/bulk/user_name/file_name staging_file_subdir_path is
+           file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name
+           assembly_name: output Assembly file name workspace_name: workspace
+           name/ID of the object) -> structure: parameter
+           "staging_file_subdir_path" of String, parameter "assembly_name" of
+           String, parameter "workspace_name" of type "workspace_name"
+           (workspace name of the object)
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN import_fasta_as_assembly_from_staging
+        print '--->\nRunning uploadmethods.import_fasta_as_assembly_from_staging\nparams:'
+        print json.dumps(params, indent=1)
+
+        for key, value in params.iteritems():
+            if isinstance(value, basestring):
+                params[key] = value.strip()
+
+        importer = ImportAssemblyUtil(self.config)
+        returnVal = importer.import_fasta_as_assembly_from_staging(params)
+
+        reportVal = importer.generate_report(returnVal['obj_ref'], params)
+        returnVal.update(reportVal)
+        #END import_fasta_as_assembly_from_staging
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method import_fasta_as_assembly_from_staging return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",
