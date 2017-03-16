@@ -138,8 +138,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     def test_simple_upload(self, download_staging_file):
 
-        fasta_file = "Test_v1.0.fa.gz"
-        gff_file = "Test_v1.0.gene.gff3.gz"
+        fasta_file = "Test_v1.0.fa"
+        gff_file = "Test_v1.0.gene.gff3"
         ws_obj_name = 'MyGenome'
         scientific_name = "Populus trichocarpa"
 
@@ -153,6 +153,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         ref = self.getImpl().upload_fasta_gff_file(self.getContext(), params)
 
-        self.assertTrue('obj_ref' in ref[0])
+        self.assertTrue('genome_ref' in ref[0])
         self.assertTrue('report_ref' in ref[0])
         self.assertTrue('report_name' in ref[0])

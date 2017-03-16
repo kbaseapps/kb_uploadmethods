@@ -52,7 +52,6 @@ class ImportGFFFastaUtil:
             dfu_returnVal = self.dfu.download_staging_file(download_staging_file_params)
             params[key] = dfu_returnVal['copy_file_path']
 
-        print params
         returnVal = self.gfu.fasta_gff_to_genome(params)
         return returnVal
 
