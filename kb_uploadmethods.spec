@@ -98,7 +98,7 @@ module kb_uploadmethods {
 		string fasta_file;
 		string gff_file;
 		string genome_name;
-                string scientific_name;
+    string scientific_name;
 		workspace_name workspace_name;
 	} UploadFastaGFFMethodParams;
 

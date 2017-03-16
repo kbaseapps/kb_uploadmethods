@@ -3,7 +3,7 @@ import os
 import time
 import shutil
 import requests
-import json
+from mock import patch
 
 from os import environ
 try:
@@ -11,12 +11,13 @@ try:
 except:
     from configparser import ConfigParser  # py3
 
-from pprint import pprint
+from pprint import pprint  # noqa: F401
 
 from biokbase.workspace.client import Workspace as workspaceService
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
 from DataFileUtil.DataFileUtilClient import DataFileUtil
+
 
 class kb_uploadmethodsTest(unittest.TestCase):
 
@@ -74,45 +75,96 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def getContext(self):
         return self.__class__.ctx
 
-    def test_simple_upload(self):
-        # fetch the test files and set things up
-        kb_uploadmethods = self.getImpl()
-        data_dir="data/Test_Plant"
-        scratch_data_dir = os.path.join(self.scratch,data_dir)
-        shutil.copytree(data_dir, scratch_data_dir)
+    def mock_download_staging_file(params):
+        print 'Mocking DataFileUtilClient.download_staging_file'
+        print params
+
+        fq_filename = params.get('staging_file_subdir_path')
+        fq_path = os.path.join('/kb/module/work/tmp', fq_filename)
+        shutil.copy(os.path.join("data/Test_Plant", fq_filename), fq_path)
+
+        return {'copy_file_path': fq_path}
+
+    # def test_bad_upload_fasta_gff_file_params(self):
+
+    #     invalidate_input_params = {
+    #         'missing_fasta_file': 'fasta_file',
+    #         'gff_file': 'gff_file',
+    #         'workspace_name': 'workspace_name',
+    #         'genome_name': 'genome_name',
+    #         'scientific_name': 'scientific_name'
+    #     }
+    #     with self.assertRaisesRegexp(
+    #                 ValueError,
+    #                 '"fasta_file" parameter is required, but missing'):
+    #         self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
+
+    #     invalidate_input_params = {
+    #         'fasta_file': 'fasta_file',
+    #         'missing_gff_file': 'gff_file',
+    #         'workspace_name': 'workspace_name',
+    #         'genome_name': 'genome_name',
+    #         'scientific_name': 'scientific_name'
+    #     }
+    #     with self.assertRaisesRegexp(
+    #             ValueError,
+    #             '"gff_file" parameter is required, but missing'):
+    #         self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
+
+    #     invalidate_input_params = {
+    #         'fasta_file': 'fasta_file',
+    #         'gff_file': 'gff_file',
+    #         'missing_workspace_name': 'workspace_name',
+    #         'genome_name': 'genome_name',
+    #         'scientific_name': 'scientific_name'
+    #     }
+    #     with self.assertRaisesRegexp(
+    #             ValueError,
+    #             '"workspace_name" parameter is required, but missing'):
+    #         self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
+
+    #     invalidate_input_params = {
+    #         'fasta_file': 'fasta_file',
+    #         'gff_file': 'gff_file',
+    #         'workspace_name': 'workspace_name',
+    #         'missing_genome_name': 'genome_name',
+    #         'scientific_name': 'scientific_name'
+    #     }
+    #     with self.assertRaisesRegexp(
+    #             ValueError,
+    #             '"genome_name" parameter is required, but missing'):
+    #         self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
+
+        # invalidate_input_params = {
+        #     'fasta_file': 'fasta_file',
+        #     'gff_file': 'gff_file',
+        #     'workspace_name': 321,
+        #     'genome_name': 'genome_name',
+        #     'scientific_name': 'scientific_name'
+        # }
+        # with self.assertRaisesRegexp(
+        #         ValueError,
+        #         'parameter is a workspace id and workspace name is required'):
+        #     self.getImpl().import_genbank_from_staging(self.getContext(), invalidate_input_params)
+
+    @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
+    def test_simple_upload(self, download_staging_file):
 
         fasta_file = "Test_v1.0.fa.gz"
         gff_file = "Test_v1.0.gene.gff3.gz"
-
-        fasta_path = scratch_data_dir+"/"+fasta_file
-        gff_path = scratch_data_dir+"/"+gff_file
-
-        shutil.copy(data_dir+"/"+fasta_file, fasta_path)
-        shutil.copy(data_dir+"/"+gff_file, gff_path)
-
-        fasta_path=self.dfu.unpack_file({'file_path':fasta_path}).get('file_path')
-        gff_path=self.dfu.unpack_file({'file_path':gff_path}).get('file_path')
-        
-        pprint([fasta_path,gff_path])
-
         ws_obj_name = 'MyGenome'
-        ws_name = self.getWsName()
         scientific_name = "Populus trichocarpa"
 
-        ### Test for a Local Function Call
-        print('attempting upload via local function directly')
+        params = {
+            'fasta_file': fasta_file,
+            'gff_file': gff_file,
+            'workspace_name': self.getWsName(),
+            'genome_name': ws_obj_name,
+            'scientific_name': scientific_name
+        }
 
-        result = kb_uploadmethods.upload_fasta_gff_file(self.getContext(), 
-            {
-                'fasta_file' : fasta_path,
-                'gff_file' : gff_path,
-                'workspace_name':ws_name,
-                'genome_name':ws_obj_name,
-                'scientific_name':scientific_name,
-                'test':1
-            })[0]
-        pprint(result)
-        #self.assertIsNotNone(result['genome_ref'])
+        ref = self.getImpl().upload_fasta_gff_file(self.getContext(), params)
 
-        shutil.rmtree(scratch_data_dir)
-
+        self.assertTrue('obj_ref' in ref[0])
+        self.assertTrue('report_ref' in ref[0])
+        self.assertTrue('report_name' in ref[0])

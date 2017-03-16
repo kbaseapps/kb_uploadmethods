@@ -126,7 +126,7 @@ class kb_uploadmethods:
         # return the results
         return [returnVal]
 
-    def upload_fasta_gff_file(self, ctx, params):
+    def import_fasta_gff_file_from_staging(self, ctx, params):
         """
         :param params: instance of type "UploadFastaGFFMethodParams"
            (genome_name: output genome object name workspace_name: workspace
@@ -151,11 +151,9 @@ class kb_uploadmethods:
         for key, value in params.iteritems():
             if isinstance(value, basestring):
                 params[key] = value.strip()
-            
+
         uploader = ImportGFFFastaUtil(self.config)
         returnVal = uploader.import_gff_fasta_from_staging(params)
-
-        print json.dumps(returnVal, indent=1)
 
         #END upload_fasta_gff_file
 

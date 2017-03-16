@@ -1,7 +1,6 @@
 
 import time
 import json
-import os
 
 from kb_gffupload.kb_gffuploadClient import kb_gffupload
 from DataFileUtil.DataFileUtilClient import DataFileUtil
@@ -17,7 +16,7 @@ class ImportGFFFastaUtil:
         self.callback_url = config['SDK_CALLBACK_URL']
         self.token = config['KB_AUTH_TOKEN']
         self.dfu = DataFileUtil(self.callback_url)
-        self.gfu = kb_gffupload(self.callback_url,service_ver='dev')
+        self.gfu = kb_gffupload(self.callback_url, service_ver='dev')
 
     def import_gff_fasta_from_staging(self, params):
         '''
@@ -47,15 +46,11 @@ class ImportGFFFastaUtil:
 
         self.validate_import_gff_fasta_from_staging_params(params)
 
-        #If not testing, fetch from staging
-        if('test' not in params or params['test'] != 1):
-            for key in ('fasta_file','gff_file'):
-                file_path = params[key]
-                file = os.path.basename(file_path)
-        
-                download_staging_file_params = { 'staging_file_subdir_path': file }
-                dfu_returnVal = self.dfu.download_staging_file(download_staging_file_params)
-                params[key] = dfu_returnVal['copy_file_path']
+        for key in ('fasta_file', 'gff_file'):
+            file_path = params[key]
+            download_staging_file_params = {'staging_file_subdir_path': file_path}
+            dfu_returnVal = self.dfu.download_staging_file(download_staging_file_params)
+            params[key] = dfu_returnVal['copy_file_path']
 
         print params
         returnVal = self.gfu.fasta_gff_to_genome(params)
@@ -63,27 +58,18 @@ class ImportGFFFastaUtil:
 
     def validate_import_gff_fasta_from_staging_params(self, params):
         """
-        validate_import_gff_fasta_from_staging_params: validates params passed to fasta_gff_to_genome method
+        validate_import_gff_fasta_from_staging_params:
+                    validates params passed to import_gff_fasta_from_staging method
 
         """
 
         # check for required parameters
         for p in ['genome_name', 'workspace_name', 'fasta_file', 'gff_file']:
             if p not in params:
-                raise ValueError('"' + p + '" parameter is required, but missing')  
-
-        #for now must use workspace name, but no ws_id_to_name() function available
-        if str(params["workspace_name"]).isdigit():
-            raise ValueError('"' + params["workspace_name"] + '" parameter is a workspace id and workspace name is required')
-
-    def validate_import_genbank_from_staging_params(self, params):
-        """
-        validate_import_genbank_from_staging_params:
-                    validates params passed to import_genbank_from_staging method
-
-        """
-
-        # check for required parameters
-        for p in ['staging_file_subdir_path', 'genome_name', 'workspace_name', 'source']:
-            if p not in params:
                 raise ValueError('"' + p + '" parameter is required, but missing')
+
+        # for now must use workspace name, but no ws_id_to_name() function available
+        if str(params["workspace_name"]).isdigit():
+            error_msg = '"{}" parameter is a workspace id and workspace name is required'.format(
+                                                                        params["workspace_name"])
+            raise ValueError(error_msg)
