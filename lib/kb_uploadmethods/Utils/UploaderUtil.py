@@ -3,7 +3,6 @@ import uuid
 import time
 
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
-from kb_gffupload.kb_gffuploadClient import kb_gffupload
 from ftp_service.ftp_serviceClient import ftp_service
 from KBaseReport.KBaseReportClient import KBaseReport
 from DataFileUtil.DataFileUtilClient import DataFileUtil
@@ -294,60 +293,4 @@ class UploaderUtil:
         ru = ReadsUtils(self.callback_url)
         result = ru.upload_reads(upload_file_params)
 
-        return result
-
-    def upload_gff_fasta_file(self, params):
-        """
-        upload_gff_fasta_file: load gff and fasta to workspace as genome using files from user's staging area
-        
-        params: 
-        fasta_file: fasta file from user's staging area
-        gff_file: gff file from user's staging area
-        genome_name: output genome object name
-        workspace_name: workspace name that genome will be stored to
-        """
-        log('--->\nrunning UploaderUtil.upload_gff_fasta_file\n' + 
-            'params:\n{}'.format(json.dumps(params, indent=1)))
-
-        self.validate_upload_gff_fasta_file_parameters(params)
-      
-        returnVal = self._load_gff_fasta_file_path(params)
-        return returnVal
-
-    def validate_upload_gff_fasta_file_parameters(self, params):
-        """
-        validate_upload_gff_fasta_file_parameters: validates params passed to upload_gff_fasta_file method
-
-        """
-
-        # check for required parameters
-        for p in ['genome_name', 'workspace_name', 'fasta_file', 'gff_file']:
-            if p not in params:
-                raise ValueError('"' + p + '" parameter is required, but missing')  
-
-        #for now must use workspace name, but no ws_id_to_name() function available
-        if str(params["workspace_name"]).isdigit():
-            raise ValueError('"' + params["workspace_name"] + '" parameter is a workspace id and workspace name is required')
-
-        # check for file paths
-        self._validate_upload_file_path_availability(params["fasta_file"])
-        self._validate_upload_file_path_availability(params["gff_file"])
-
-    def _load_gff_fasta_file_path(self, params):
-        """
-        _load_gff_fasta_file_path: load gff and fasta to workspace as genome using files from user's staging area
-      
-        fasta_file: fasta file from user's staging area
-        gff_file: gff file from user's staging area
-        genome_name: output genome object name
-        workspace_name: workspace name that genome will be stored to
-        """
-        log ('---> running UploaderUtil._load_gff_fasta_file_path')
-      
-        log('--->\nrunning kb_gffupload.fasta_gff_to_genome\n' + 
-            'params:\n{}'.format(json.dumps(params, indent=1)))
-
-        gff_upload = kb_gffupload(self.callback_url,service_ver='dev')
-        result = gff_upload.fasta_gff_to_genome(params)
-      
         return result

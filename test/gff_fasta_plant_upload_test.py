@@ -108,7 +108,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
                 'gff_file' : gff_path,
                 'workspace_name':ws_name,
                 'genome_name':ws_obj_name,
-                'scientific_name':scientific_name
+                'scientific_name':scientific_name,
+                'test':1
             })[0]
         pprint(result)
         #self.assertIsNotNone(result['genome_ref'])

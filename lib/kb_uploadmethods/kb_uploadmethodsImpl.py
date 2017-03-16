@@ -5,6 +5,7 @@ import json
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
 from kb_uploadmethods.Utils.ImportGenbankUtil import ImportGenbankUtil
+from kb_uploadmethods.Utils.ImportGFFFastaUtil import ImportGFFFastaUtil
 from kb_uploadmethods.Utils.ImportSRAUtil import ImportSRAUtil
 from kb_uploadmethods.Utils.ImportAssemblyUtil import ImportAssemblyUtil
 #END_HEADER
@@ -151,8 +152,8 @@ class kb_uploadmethods:
             if isinstance(value, basestring):
                 params[key] = value.strip()
             
-        uploader = UploaderUtil(self.config)
-        returnVal = uploader.upload_gff_fasta_file(params)
+        uploader = ImportGFFFastaUtil(self.config)
+        returnVal = uploader.import_gff_fasta_from_staging(params)
 
         print json.dumps(returnVal, indent=1)
 
