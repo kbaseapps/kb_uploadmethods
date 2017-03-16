@@ -85,67 +85,55 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         return {'copy_file_path': fq_path}
 
-    # def test_bad_upload_fasta_gff_file_params(self):
+    def test_bad_upload_fasta_gff_file_params(self):
 
-    #     invalidate_input_params = {
-    #         'missing_fasta_file': 'fasta_file',
-    #         'gff_file': 'gff_file',
-    #         'workspace_name': 'workspace_name',
-    #         'genome_name': 'genome_name',
-    #         'scientific_name': 'scientific_name'
-    #     }
-    #     with self.assertRaisesRegexp(
-    #                 ValueError,
-    #                 '"fasta_file" parameter is required, but missing'):
-    #         self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
+        invalidate_input_params = {
+            'missing_fasta_file': 'fasta_file',
+            'gff_file': 'gff_file',
+            'workspace_name': 'workspace_name',
+            'genome_name': 'genome_name',
+            'scientific_name': 'scientific_name'
+        }
+        with self.assertRaisesRegexp(
+                    ValueError,
+                    '"fasta_file" parameter is required, but missing'):
+            self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
 
-    #     invalidate_input_params = {
-    #         'fasta_file': 'fasta_file',
-    #         'missing_gff_file': 'gff_file',
-    #         'workspace_name': 'workspace_name',
-    #         'genome_name': 'genome_name',
-    #         'scientific_name': 'scientific_name'
-    #     }
-    #     with self.assertRaisesRegexp(
-    #             ValueError,
-    #             '"gff_file" parameter is required, but missing'):
-    #         self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
+        invalidate_input_params = {
+            'fasta_file': 'fasta_file',
+            'missing_gff_file': 'gff_file',
+            'workspace_name': 'workspace_name',
+            'genome_name': 'genome_name',
+            'scientific_name': 'scientific_name'
+        }
+        with self.assertRaisesRegexp(
+                ValueError,
+                '"gff_file" parameter is required, but missing'):
+            self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
 
-    #     invalidate_input_params = {
-    #         'fasta_file': 'fasta_file',
-    #         'gff_file': 'gff_file',
-    #         'missing_workspace_name': 'workspace_name',
-    #         'genome_name': 'genome_name',
-    #         'scientific_name': 'scientific_name'
-    #     }
-    #     with self.assertRaisesRegexp(
-    #             ValueError,
-    #             '"workspace_name" parameter is required, but missing'):
-    #         self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
+        invalidate_input_params = {
+            'fasta_file': 'fasta_file',
+            'gff_file': 'gff_file',
+            'missing_workspace_name': 'workspace_name',
+            'genome_name': 'genome_name',
+            'scientific_name': 'scientific_name'
+        }
+        with self.assertRaisesRegexp(
+                ValueError,
+                '"workspace_name" parameter is required, but missing'):
+            self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
 
-    #     invalidate_input_params = {
-    #         'fasta_file': 'fasta_file',
-    #         'gff_file': 'gff_file',
-    #         'workspace_name': 'workspace_name',
-    #         'missing_genome_name': 'genome_name',
-    #         'scientific_name': 'scientific_name'
-    #     }
-    #     with self.assertRaisesRegexp(
-    #             ValueError,
-    #             '"genome_name" parameter is required, but missing'):
-    #         self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
-
-        # invalidate_input_params = {
-        #     'fasta_file': 'fasta_file',
-        #     'gff_file': 'gff_file',
-        #     'workspace_name': 321,
-        #     'genome_name': 'genome_name',
-        #     'scientific_name': 'scientific_name'
-        # }
-        # with self.assertRaisesRegexp(
-        #         ValueError,
-        #         'parameter is a workspace id and workspace name is required'):
-        #     self.getImpl().import_genbank_from_staging(self.getContext(), invalidate_input_params)
+        invalidate_input_params = {
+            'fasta_file': 'fasta_file',
+            'gff_file': 'gff_file',
+            'workspace_name': 'workspace_name',
+            'missing_genome_name': 'genome_name',
+            'scientific_name': 'scientific_name'
+        }
+        with self.assertRaisesRegexp(
+                ValueError,
+                '"genome_name" parameter is required, but missing'):
+            self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     def test_simple_upload(self, download_staging_file):
