@@ -180,6 +180,23 @@ public class KbUploadmethodsClient {
     }
 
     /**
+     * <p>Original spec-file function name: upload_fasta_gff_file</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.kbuploadmethods.UploadFastaGFFMethodParams UploadFastaGFFMethodParams}
+     * @return   parameter "returnVal" of type {@link us.kbase.kbuploadmethods.UploadMethodResult UploadMethodResult}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public UploadMethodResult uploadFastaGffFile(UploadFastaGFFMethodParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<UploadMethodResult>> retType = new TypeReference<List<UploadMethodResult>>() {};
+        List<UploadMethodResult> res = caller.jsonrpcCall("kb_uploadmethods.upload_fasta_gff_file", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
      * <p>Original spec-file function name: unpack_staging_file</p>
      * <pre>
      * Unpack a staging area file

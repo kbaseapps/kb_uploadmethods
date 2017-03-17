@@ -1,0 +1,46 @@
+name     : Load Genome from Fasta and GFF in Staging Area
+subtitle : Upload a Genome into your Narrative
+tooltip  : Upload a Genome into your Narrative
+
+screenshots :
+    []
+
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+parameters :
+    fasta_file :
+        ui-name : Fasta File
+        short-hint : Fasta File containing assembled contigs or chromosomes
+        long-hint  : |
+                Valid file extensions for FASTA: .fasta, .fna, .fa; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2
+
+    gff_file :
+        ui-name : GFF File
+        short-hint : GFF File containing list of predicted gene models and associated features
+        long-hint  : |
+                Valid file extensions for GFF: .gff, .gff2, .gff3; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2
+
+    genome_name :
+        ui-name : Genome Name
+        short-hint : Provide a name for the output object that will be created by this upload
+        long-hint  : Provide a name for the output object that will be created by this upload
+
+    scientific_name :
+        ui-name : Scientific Name
+        short-hint : Provide the scientific name of the species
+        long-hint  : Provide the scientific name of the species, i.e. "Escherichia coli". This is important for taxonomy lookup.
+
+description : |
+    <p> Upload a Genome into your Narrative. </p>
+
+technical-description : none
