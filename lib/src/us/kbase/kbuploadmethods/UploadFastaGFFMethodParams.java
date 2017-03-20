@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <pre>
  * genome_name: output genome object name
  * workspace_name: workspace name/ID of the object
+ * scientific_name: proper name for species, key for taxonomy lookup
  * For staging area:
  * fasta_file: fasta file containing assembled contigs/chromosomes
  * gff_file: gff file containing predicted gene models and corresponding features
@@ -28,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "fasta_file",
     "gff_file",
     "genome_name",
+    "scientific_name",
     "workspace_name"
 })
 public class UploadFastaGFFMethodParams {
@@ -38,6 +40,8 @@ public class UploadFastaGFFMethodParams {
     private String gffFile;
     @JsonProperty("genome_name")
     private String genomeName;
+    @JsonProperty("scientific_name")
+    private String scientificName;
     @JsonProperty("workspace_name")
     private String workspaceName;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
@@ -87,6 +91,21 @@ public class UploadFastaGFFMethodParams {
         return this;
     }
 
+    @JsonProperty("scientific_name")
+    public String getScientificName() {
+        return scientificName;
+    }
+
+    @JsonProperty("scientific_name")
+    public void setScientificName(String scientificName) {
+        this.scientificName = scientificName;
+    }
+
+    public UploadFastaGFFMethodParams withScientificName(String scientificName) {
+        this.scientificName = scientificName;
+        return this;
+    }
+
     @JsonProperty("workspace_name")
     public String getWorkspaceName() {
         return workspaceName;
@@ -114,7 +133,7 @@ public class UploadFastaGFFMethodParams {
 
     @Override
     public String toString() {
-        return ((((((((((("UploadFastaGFFMethodParams"+" [fastaFile=")+ fastaFile)+", gffFile=")+ gffFile)+", genomeName=")+ genomeName)+", workspaceName=")+ workspaceName)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((("UploadFastaGFFMethodParams"+" [fastaFile=")+ fastaFile)+", gffFile=")+ gffFile)+", genomeName=")+ genomeName)+", scientificName=")+ scientificName)+", workspaceName=")+ workspaceName)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

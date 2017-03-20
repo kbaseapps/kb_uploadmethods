@@ -8,7 +8,9 @@ from kb_uploadmethods.Utils.ImportGenbankUtil import ImportGenbankUtil
 from kb_uploadmethods.Utils.ImportGFFFastaUtil import ImportGFFFastaUtil
 from kb_uploadmethods.Utils.ImportSRAUtil import ImportSRAUtil
 from kb_uploadmethods.Utils.ImportAssemblyUtil import ImportAssemblyUtil
+from kb_uploadmethods.Utils.ImportMediaUtil import ImportMediaUtil
 #END_HEADER
+
 
 class kb_uploadmethods:
     '''
@@ -27,7 +29,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "0.1.9"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "c8dc2564e3e042e9594be29fe339bfe6a09d08d8"
+    GIT_COMMIT_HASH = "9ac486e747d2e79d63954825f0321e7635132519"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -130,13 +132,14 @@ class kb_uploadmethods:
         """
         :param params: instance of type "UploadFastaGFFMethodParams"
            (genome_name: output genome object name workspace_name: workspace
-           name/ID of the object For staging area: fasta_file: fasta file
+           name/ID of the object scientific_name: proper name for species,
+           key for taxonomy lookup For staging area: fasta_file: fasta file
            containing assembled contigs/chromosomes gff_file: gff file
            containing predicted gene models and corresponding features) ->
            structure: parameter "fasta_file" of String, parameter "gff_file"
            of String, parameter "genome_name" of String, parameter
-           "workspace_name" of type "workspace_name" (workspace name of the
-           object)
+           "scientific_name" of String, parameter "workspace_name" of type
+           "workspace_name" (workspace name of the object)
         :returns: instance of type "UploadMethodResult" -> structure:
            parameter "obj_ref" of type "obj_ref", parameter "report_name" of
            type "report_name", parameter "report_ref" of type "report_ref"
@@ -402,6 +405,88 @@ class kb_uploadmethods:
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method import_fasta_as_assembly_from_staging return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def import_tsv_as_media_from_staging(self, ctx, params):
+        """
+        :param params: instance of type "FileToMediaParams" (required params:
+           staging_file_subdir_path: subdirectory file path e.g. for file:
+           /data/bulk/user_name/file_name staging_file_subdir_path is
+           file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name
+           media_name: output Media file name workspace_name: workspace
+           name/ID of the object) -> structure: parameter
+           "staging_file_subdir_path" of String, parameter "media_name" of
+           String, parameter "workspace_name" of type "workspace_name"
+           (workspace name of the object)
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN import_tsv_as_media_from_staging
+        print '--->\nRunning uploadmethods.import_tsv_as_media_from_staging\nparams:'
+        print json.dumps(params, indent=1)
+
+        for key, value in params.iteritems():
+            if isinstance(value, basestring):
+                params[key] = value.strip()
+
+        importer = ImportMediaUtil(self.config)
+        returnVal = importer.import_tsv_as_media_from_staging(params)
+
+        reportVal = importer.generate_report(returnVal['obj_ref'], params)
+        returnVal.update(reportVal)
+        #END import_tsv_as_media_from_staging
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method import_tsv_as_media_from_staging return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def import_excel_as_media_from_staging(self, ctx, params):
+        """
+        :param params: instance of type "FileToMediaParams" (required params:
+           staging_file_subdir_path: subdirectory file path e.g. for file:
+           /data/bulk/user_name/file_name staging_file_subdir_path is
+           file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name
+           media_name: output Media file name workspace_name: workspace
+           name/ID of the object) -> structure: parameter
+           "staging_file_subdir_path" of String, parameter "media_name" of
+           String, parameter "workspace_name" of type "workspace_name"
+           (workspace name of the object)
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN import_excel_as_media_from_staging
+        print '--->\nRunning uploadmethods.import_excel_as_media_from_staging\nparams:'
+        print json.dumps(params, indent=1)
+
+        for key, value in params.iteritems():
+            if isinstance(value, basestring):
+                params[key] = value.strip()
+
+        importer = ImportMediaUtil(self.config)
+        returnVal = importer.import_excel_as_media_from_staging(params)
+
+        reportVal = importer.generate_report(returnVal['obj_ref'], params)
+        returnVal.update(reportVal)
+        #END import_excel_as_media_from_staging
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method import_excel_as_media_from_staging return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]

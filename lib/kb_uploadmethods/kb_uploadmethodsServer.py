@@ -357,6 +357,14 @@ class Application(object):
                              name='kb_uploadmethods.import_fasta_as_assembly_from_staging',
                              types=[dict])
         self.method_authentication['kb_uploadmethods.import_fasta_as_assembly_from_staging'] = 'required' # noqa
+        self.rpc_service.add(impl_kb_uploadmethods.import_tsv_as_media_from_staging,
+                             name='kb_uploadmethods.import_tsv_as_media_from_staging',
+                             types=[dict])
+        self.method_authentication['kb_uploadmethods.import_tsv_as_media_from_staging'] = 'required' # noqa
+        self.rpc_service.add(impl_kb_uploadmethods.import_excel_as_media_from_staging,
+                             name='kb_uploadmethods.import_excel_as_media_from_staging',
+                             types=[dict])
+        self.method_authentication['kb_uploadmethods.import_excel_as_media_from_staging'] = 'required' # noqa
         self.rpc_service.add(impl_kb_uploadmethods.status,
                              name='kb_uploadmethods.status',
                              types=[dict])
