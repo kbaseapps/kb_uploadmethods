@@ -19,7 +19,6 @@ from biokbase.workspace.client import Workspace as workspaceService
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
 from DataFileUtil.DataFileUtilClient import DataFileUtil
-from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -95,80 +94,130 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         return {'copy_file_path': fq_path}
 
-    def test_bad_import_fasta_as_assembly_from_staging_params(self):
+    def test_bad_import_media_from_staging_params(self):
         invalidate_input_params = {
           'missing_staging_file_subdir_path': 'staging_file_subdir_path',
           'workspace_name': 'workspace_name',
-          'assembly_name': 'assembly_name'
+          'media_name': 'media_name'
         }
         with self.assertRaisesRegexp(
                     ValueError,
                     '"staging_file_subdir_path" parameter is required, but missing'):
-            self.getImpl().import_fasta_as_assembly_from_staging(self.getContext(),
-                                                                 invalidate_input_params)
+            self.getImpl().import_tsv_as_media_from_staging(self.getContext(),
+                                                            invalidate_input_params)
+        with self.assertRaisesRegexp(
+                    ValueError,
+                    '"staging_file_subdir_path" parameter is required, but missing'):
+            self.getImpl().import_excel_as_media_from_staging(self.getContext(),
+                                                              invalidate_input_params)
 
         invalidate_input_params = {
           'staging_file_subdir_path': 'staging_file_subdir_path',
           'missing_workspace_name': 'workspace_name',
-          'assembly_name': 'assembly_name'
+          'media_name': 'media_name'
         }
         with self.assertRaisesRegexp(
                     ValueError,
                     '"workspace_name" parameter is required, but missing'):
-            self.getImpl().import_fasta_as_assembly_from_staging(self.getContext(),
-                                                                 invalidate_input_params)
+            self.getImpl().import_tsv_as_media_from_staging(self.getContext(),
+                                                            invalidate_input_params)
+        with self.assertRaisesRegexp(
+                    ValueError,
+                    '"workspace_name" parameter is required, but missing'):
+            self.getImpl().import_excel_as_media_from_staging(self.getContext(),
+                                                              invalidate_input_params)
+
         invalidate_input_params = {
           'staging_file_subdir_path': 'staging_file_subdir_path',
           'workspace_name': 'workspace_name',
-          'missing_assembly_name': 'assembly_name'
+          'missing_media_name': 'media_name'
         }
         with self.assertRaisesRegexp(
                 ValueError,
-                '"assembly_name" parameter is required, but missing'):
-            self.getImpl().import_fasta_as_assembly_from_staging(self.getContext(),
-                                                                 invalidate_input_params)
+                '"media_name" parameter is required, but missing'):
+            self.getImpl().import_tsv_as_media_from_staging(self.getContext(),
+                                                            invalidate_input_params)
+        with self.assertRaisesRegexp(
+                ValueError,
+                '"media_name" parameter is required, but missing'):
+            self.getImpl().import_excel_as_media_from_staging(self.getContext(),
+                                                              invalidate_input_params)
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    def test_genbank_to_genome(self, download_staging_file):
+    def test_import_excel_as_media_from_staging(self, download_staging_file):
 
-        fasta_file = 'small_fasta.fna'
-        ws_obj_name = 'MyAssembly'
+        excel_file = 'media_example.xlsx'
+        ws_obj_name = 'MyMedia'
 
         params = {
-          'staging_file_subdir_path': fasta_file,
+          'staging_file_subdir_path': excel_file,
           'workspace_name': self.getWsName(),
-          'assembly_name': ws_obj_name
+          'media_name': ws_obj_name
         }
 
-        ref = self.getImpl().import_fasta_as_assembly_from_staging(self.getContext(), params)
+        ref = self.getImpl().import_excel_as_media_from_staging(self.getContext(), params)
         self.assertTrue('obj_ref' in ref[0])
         self.assertTrue('report_ref' in ref[0])
         self.assertTrue('report_name' in ref[0])
 
-        fasta_file_path = os.path.join('/kb/module/work/tmp', fasta_file)
-        assemblyUtil = AssemblyUtil(os.environ['SDK_CALLBACK_URL'])
-        fasta_assembly = assemblyUtil.get_assembly_as_fasta(
-                            {'ref': self.getWsName() + "/{}".format(ws_obj_name)})
+    @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
+    def test_import_tsv_as_media_from_staging(self, download_staging_file):
 
-        expected_data = None
-        with open(fasta_file_path, 'r') as f:
-            expected_data = f.read()
-        actual_data = None
-        with open(fasta_assembly['path'], 'r') as f:
-            actual_data = f.read()
-        self.assertEqual(actual_data, expected_data)
+        tsv_file = 'media_example.txt'
+        ws_obj_name = 'MyMedia'
 
-        get_objects_params = {
-            'object_refs': [ref[0].get('obj_ref')],
-            'ignore_errors': False
+        params = {
+          'staging_file_subdir_path': tsv_file,
+          'workspace_name': self.getWsName(),
+          'media_name': ws_obj_name
         }
 
-        object_data = self.dfu.get_objects(get_objects_params)
-        base_count = object_data.get('data')[0].get('data').get('base_counts')
-        dna_size = object_data.get('data')[0].get('data').get('dna_size')
+        ref = self.getImpl().import_tsv_as_media_from_staging(self.getContext(), params)
+        self.assertTrue('obj_ref' in ref[0])
+        self.assertTrue('report_ref' in ref[0])
+        self.assertTrue('report_name' in ref[0])
 
-        self.assertEqual(dna_size, 2520)
+    @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
+    def test_import_as_media_from_staging(self, download_staging_file):
 
-        expected_base_count = {'A': 700, 'C': 558, 'T': 671, 'G': 591}
-        self.assertDictContainsSubset(base_count, expected_base_count)
-        self.assertDictContainsSubset(expected_base_count, base_count)
+        tsv_file = 'media_example.txt'
+        ws_obj_name = 'MyMedia'
+
+        params = {
+          'staging_file_subdir_path': tsv_file,
+          'workspace_name': self.getWsName(),
+          'media_name': ws_obj_name
+        }
+
+        ref = self.getImpl().import_tsv_or_excel_as_media_from_staging(self.getContext(), params)
+        self.assertTrue('obj_ref' in ref[0])
+        self.assertTrue('report_ref' in ref[0])
+        self.assertTrue('report_name' in ref[0])
+
+        excel_file = 'media_example.xlsx'
+        ws_obj_name = 'MyMedia'
+
+        params = {
+          'staging_file_subdir_path': excel_file,
+          'workspace_name': self.getWsName(),
+          'media_name': ws_obj_name
+        }
+
+        ref = self.getImpl().import_tsv_or_excel_as_media_from_staging(self.getContext(), params)
+        self.assertTrue('obj_ref' in ref[0])
+        self.assertTrue('report_ref' in ref[0])
+        self.assertTrue('report_name' in ref[0])
+
+        excel_file = 'Sample1.fastq'
+        ws_obj_name = 'MyMedia'
+
+        params = {
+          'staging_file_subdir_path': excel_file,
+          'workspace_name': self.getWsName(),
+          'media_name': ws_obj_name
+        }
+
+        with self.assertRaisesRegexp(
+                ValueError,
+                '"Sample1.fastq" is not a valid EXCEL nor TSV file'):
+            self.getImpl().import_tsv_or_excel_as_media_from_staging(self.getContext(), params)

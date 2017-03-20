@@ -27,9 +27,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.1.9"
+    VERSION = "0.1.10"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "9ac486e747d2e79d63954825f0321e7635132519"
+    GIT_COMMIT_HASH = "039f023b778eecd0c95e5e2dbaba2cf172eacd40"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -491,6 +491,46 @@ class kb_uploadmethods:
         # return the results
         return [returnVal]
 
+    def import_tsv_or_excel_as_media_from_staging(self, ctx, params):
+        """
+        :param params: instance of type "FileToMediaParams" (required params:
+           staging_file_subdir_path: subdirectory file path e.g. for file:
+           /data/bulk/user_name/file_name staging_file_subdir_path is
+           file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name
+           media_name: output Media file name workspace_name: workspace
+           name/ID of the object) -> structure: parameter
+           "staging_file_subdir_path" of String, parameter "media_name" of
+           String, parameter "workspace_name" of type "workspace_name"
+           (workspace name of the object)
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN import_tsv_or_excel_as_media_from_staging
+        print '--->\nRunning uploadmethods.import_tsv_or_excel_as_media_from_staging\nparams:'
+        print json.dumps(params, indent=1)
+
+        for key, value in params.iteritems():
+            if isinstance(value, basestring):
+                params[key] = value.strip()
+
+        importer = ImportMediaUtil(self.config)
+        returnVal = importer.import_media_from_staging(params)
+
+        reportVal = importer.generate_report(returnVal['obj_ref'], params)
+        returnVal.update(reportVal)
+        #END import_tsv_or_excel_as_media_from_staging
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method import_tsv_or_excel_as_media_from_staging return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",

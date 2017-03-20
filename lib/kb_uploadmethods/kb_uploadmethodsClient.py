@@ -273,6 +273,27 @@ class kb_uploadmethods(object):
             'kb_uploadmethods.import_excel_as_media_from_staging',
             [params], self._service_ver, context)
 
+    def import_tsv_or_excel_as_media_from_staging(self, params, context=None):
+        """
+        :param params: instance of type "FileToMediaParams" (required params:
+           staging_file_subdir_path: subdirectory file path e.g. for file:
+           /data/bulk/user_name/file_name staging_file_subdir_path is
+           file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name
+           media_name: output Media file name workspace_name: workspace
+           name/ID of the object) -> structure: parameter
+           "staging_file_subdir_path" of String, parameter "media_name" of
+           String, parameter "workspace_name" of type "workspace_name"
+           (workspace name of the object)
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        return self._client.call_method(
+            'kb_uploadmethods.import_tsv_or_excel_as_media_from_staging',
+            [params], self._service_ver, context)
+
     def status(self, context=None):
         return self._client.call_method('kb_uploadmethods.status',
                                         [], self._service_ver, context)

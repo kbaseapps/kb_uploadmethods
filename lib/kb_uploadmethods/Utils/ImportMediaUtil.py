@@ -20,6 +20,57 @@ class ImportMediaUtil:
         self.dfu = DataFileUtil(self.callback_url)
         self.fba = FBAFileUtil(self.callback_url)
 
+    def import_media_from_staging(self, params):
+        '''
+          import_media_from_staging: wrapper method for
+                                    FBAFileUtil.tsv_file_to_media
+                                    and
+                                    FBAFileUtil.excel_file_to_media
+
+          required params:
+          staging_file_subdir_path - subdirectory file path
+          e.g.
+            for file: /data/bulk/user_name/file_name
+            staging_file_subdir_path is file_name
+            for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+            staging_file_subdir_path is subdir_1/subdir_2/file_name
+          media_name - output Media file name
+          workspace_name - the name of the workspace it gets saved to.
+
+          return:
+          obj_ref: return object reference
+        '''
+        log('--->\nrunning ImportMediaUtil.import_media_from_staging\n' +
+            'params:\n{}'.format(json.dumps(params, indent=1)))
+
+        self.validate_import_media_from_staging_params(params)
+
+        download_staging_file_params = {
+            'staging_file_subdir_path': params.get('staging_file_subdir_path')
+        }
+        scratch_file_path = self.dfu.download_staging_file(
+                        download_staging_file_params).get('copy_file_path')
+
+        file = {
+            'path': scratch_file_path
+        }
+
+        import_media_params = params
+        import_media_params['media_file'] = file
+
+        try:
+            ref = self.fba.tsv_file_to_media(import_media_params)
+        except:
+            try:
+                ref = self.fba.excel_file_to_media(import_media_params)
+            except:
+                raise ValueError('"{}" is not a valid EXCEL nor TSV file'.format(
+                                                params.get('staging_file_subdir_path')))
+
+        returnVal = {'obj_ref': ref.get('ref')}
+
+        return returnVal
+
     def import_tsv_as_media_from_staging(self, params):
         '''
           import_tsv_as_media_from_staging: wrapper method for
@@ -55,7 +106,7 @@ class ImportMediaUtil:
         }
 
         import_media_params = params
-        import_media_params['file'] = file
+        import_media_params['media_file'] = file
 
         ref = self.fba.tsv_file_to_media(import_media_params)
 
@@ -98,7 +149,7 @@ class ImportMediaUtil:
         }
 
         import_media_params = params
-        import_media_params['file'] = file
+        import_media_params['media_file'] = file
 
         ref = self.fba.excel_file_to_media(import_media_params)
 
@@ -144,19 +195,11 @@ class ImportMediaUtil:
         }
 
         object_data = self.dfu.get_objects(get_objects_params)
-        base_count = object_data.get('data')[0].get('data').get('base_counts')
-        dna_size = object_data.get('data')[0].get('data').get('dna_size')
 
         upload_message += "Media Object Name: "
         upload_message += str(object_data.get('data')[0].get('info')[1]) + '\n'
         upload_message += 'Imported File: {}\n'.format(
                               params.get('staging_file_subdir_path'))
-
-        if isinstance(dna_size, (int, long)):
-            upload_message += 'DNA Size: {:,}\n'.format(dna_size)
-
-        if isinstance(base_count, dict):
-            upload_message += 'Base Count:\n{}\n'.format(json.dumps(base_count, indent=1)[2:-2])
 
         report_params = {
               'message': upload_message,

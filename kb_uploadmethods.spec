@@ -287,4 +287,7 @@ module kb_uploadmethods {
     funcdef import_excel_as_media_from_staging(FileToMediaParams params)
             returns (UploadMethodResult returnVal) authentication required;
 
+    funcdef import_tsv_or_excel_as_media_from_staging(FileToMediaParams params)
+            returns (UploadMethodResult returnVal) authentication required;
+
 };
