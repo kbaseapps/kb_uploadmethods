@@ -7,6 +7,12 @@ module kb_uploadmethods {
 	/* workspace name of the object */
 	typedef string workspace_name;
 
+  /*
+    Indicates true or false values, false = 0, true = 1
+    @range [0,1]
+  */
+  typedef int boolean;
+
 	/* input and output file path/url */
 	typedef string fwd_staging_file_name;
 	typedef string rev_staging_file_name;
@@ -288,6 +294,40 @@ module kb_uploadmethods {
             returns (UploadMethodResult returnVal) authentication required;
 
     funcdef import_tsv_or_excel_as_media_from_staging(FileToMediaParams params)
+            returns (UploadMethodResult returnVal) authentication required;
+
+
+    /*
+      required params:
+      staging_file_subdir_path: subdirectory file path
+      e.g.
+        for file: /data/bulk/user_name/file_name
+        staging_file_subdir_path is file_name
+        for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+        staging_file_subdir_path is subdir_1/subdir_2/file_name
+      matrix_name: output Expressin Matirx file name
+      workspace_name: workspace name/ID of the object
+
+      genome_ref: optional reference to a Genome object that will be
+          used for mapping feature IDs to
+      fill_missing_values: optional flag for filling in missing
+            values in matrix (default value is false)
+      data_type: optional filed, value is one of 'untransformed',
+            'log2_level', 'log10_level', 'log2_ratio', 'log10_ratio' or
+            'unknown' (last one is default value)
+      data_scale: optional parameter (default value is '1.0')
+    */
+    typedef structure {
+      string staging_file_subdir_path;
+      workspace_name workspace_name;
+      string matrix_name;
+      string genome_ref;
+      boolean fill_missing_values;
+      string data_type;
+      string data_scale;
+    } FileToMatrixParams;
+
+    funcdef import_tsv_as_expression_matrix_from_staging(FileToMatrixParams params)
             returns (UploadMethodResult returnVal) authentication required;
 
 };
