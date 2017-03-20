@@ -1,7 +1,6 @@
-name     : Import Genbank Genomes File
-subtitle : Import a genome in GenBank format
-tooltip  : |
-    Import a genome in GenBank format or as a zip file of multiple GenBank files, creating GenomeAnnotation and Assembly objects for use in various analysis methods.
+name     : Import Genbank File As Genome From Staging Area
+subtitle : Import A Staging Genbank File As Genome Into Your Narrative
+tooltip  : Import A Staging Genbank File As Genome Into Your Narrative
 
 screenshots :
     []
@@ -21,7 +20,7 @@ suggestions :
 parameters :
     staging_file_subdir_path :
         ui-name : |
-            GenBank file path
+            GenBank File Path
         short-hint : |
             File with genome sequence in GenBank format or zip-file with GenBank files.
         long-hint  : |
@@ -29,15 +28,15 @@ parameters :
 
     genome_name :
         ui-name : |
-            Name of the genome
+            Genome Object Name
         short-hint : |
-            Provide a name for the genome you are uploading (for example, Shewanella_MR_4)
+            Provide a name for the Genome that will be created by this importer
         long-hint  : |
-            Provide a name for the genome you are uploading (for example, Shewanella_MR_4)
+            Provide a name for the Genome that will be created by this importer
 
     source :
         ui-name : |
-            Source of the GenBank file
+            Source Of The GenBank File
         short-hint : |
             Provide name for the source of the data (If Ensembl the "gene" feature types will use the "gene" field as the id, otherwise the "locus_tag" field is used.)
         long-hint : |
@@ -45,7 +44,7 @@ parameters :
 
     release :
         ui-name : |
-            Release or Version of the source data
+            Release Or Version Of The Source Data
         short-hint : |
             Release or Version of the source data (for example: Release31, V4)
         long-hint : |
@@ -53,7 +52,7 @@ parameters :
 
     genetic_code :
         ui-name : |
-            Genetic code for the organism
+            Genetic Code For The Organism
         short-hint : |
             Valid genetic code (see http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi)
         long-hint : |
@@ -61,7 +60,7 @@ parameters :
 
     generate_ids_if_needed :
         ui-name : |
-            Generate feature ids if needed
+            Generate Feature Ids If Needed
         short-hint : |
             Generate feature ids if the fields normally used are not present
         long-hint : |
@@ -72,7 +71,7 @@ parameters :
 
     exclude_ontologies :
         ui-name : |
-            Exclude ontologies
+            Exclude Ontologies
         short-hint : |
             Do not include ontologies in the Genome object. This saves space.
         long-hint : |
@@ -80,6 +79,5 @@ parameters :
             Ontologies tend to take up quite a bit of space.  If you have a large genome
             or do not care about ontologies you should consider excluding ontologies, assuming the source file had them.
 
-
-
-description : none
+description : |
+    <p> Import A Staging Genbank File As Genome Into Your Narrative </p>

@@ -1,0 +1,38 @@
+name     : Import Media From TSV/EXCEL File 
+subtitle : Import A Staging TSV/EXCEL File As Media Into Your Narrative
+tooltip  : Import A Staging TSV/EXCEL File As Media Into Your Narrative
+
+screenshots :
+    []
+
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+parameters :
+    staging_file_subdir_path :
+        ui-name : |
+            TSV/EXCEL File Path
+        short-hint : |
+            Select a media file in TSV or Excel format. Filename should end with ".tsv", .xls" or ".xlsx"
+        long-hint  : |
+            Media file should have 4 tab-separated fields: compounds, concentrations, minflux, maxflux.
+
+    media_name :
+        ui-name : |
+            Media Object Name
+        short-hint : |
+            Provide a name for the Media that will be created by this importer
+        long-hint : |
+            Provide a name for the Media that will be created by this importer
+
+description : |
+    <p> Import A Staging TSV/EXCEL File As Media Into Your Narrative </p>

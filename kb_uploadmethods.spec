@@ -264,4 +264,30 @@ module kb_uploadmethods {
     funcdef import_fasta_as_assembly_from_staging(FastaToAssemblyParams params)
             returns (UploadMethodResult returnVal) authentication required;
 
+    /*
+      required params:
+      staging_file_subdir_path: subdirectory file path
+      e.g. 
+        for file: /data/bulk/user_name/file_name
+        staging_file_subdir_path is file_name
+        for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+        staging_file_subdir_path is subdir_1/subdir_2/file_name
+      media_name: output Media file name
+      workspace_name: workspace name/ID of the object
+    */
+    typedef structure {
+      string staging_file_subdir_path;
+      string media_name;
+      workspace_name workspace_name;
+    } FileToMediaParams;
+
+    funcdef import_tsv_as_media_from_staging(FileToMediaParams params)
+            returns (UploadMethodResult returnVal) authentication required;
+
+    funcdef import_excel_as_media_from_staging(FileToMediaParams params)
+            returns (UploadMethodResult returnVal) authentication required;
+
+    funcdef import_tsv_or_excel_as_media_from_staging(FileToMediaParams params)
+            returns (UploadMethodResult returnVal) authentication required;
+
 };

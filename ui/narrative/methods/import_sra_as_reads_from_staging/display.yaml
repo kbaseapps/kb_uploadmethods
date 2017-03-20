@@ -1,4 +1,4 @@
-name     : Import SRA File From Staging Area
+name     : Import SRA File As Reads From Staging Area
 subtitle : Import A SRA File As Reads Into Your Narrative
 tooltip  : Import A SRA File As Reads Into Your Narrative
 
@@ -30,8 +30,8 @@ parameters :
 
     name :
         ui-name : Reads Object Name
-        short-hint : Provide a name for the output object that will be created by this upload
-        long-hint  : Provide a name for the output object that will be created by this upload
+        short-hint : Provide a name for the Reads that will be created by this importer
+        long-hint  : Provide a name for the Reads that will be created by this importer
 
     single_genome:
         ui-name: Single Genome
@@ -54,6 +54,6 @@ parameters :
         long-hint  : Select if reads in a pair point outward
 
 description : |
-    <p> Import a SRA file as Reads into your Narrative. </p>
+    <p> Import A SRA File As Reads Into Your Narrative </p>
 
 technical-description : none
