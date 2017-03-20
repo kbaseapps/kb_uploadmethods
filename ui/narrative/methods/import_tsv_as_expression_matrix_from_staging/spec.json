@@ -1,0 +1,162 @@
+{
+  "ver" : "",
+  "authors" : ["tgu2"],
+  "contact" : "help@kbase.us",
+  "visible" : true,
+  "categories" : [ "active","upload" ],
+  "widgets": {
+    "input": "kbaseNarrativeMethodInput"
+  },
+  "parameters" : [ 
+    {
+      "id" : "staging_file_subdir_path",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    }, 
+    {
+      "id" : "matrix_name",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "valid_ws_types" : [ "KBaseFeatureValues.ExpressionMatrix" ],
+        "is_output_name" : true
+      }
+    },
+    {
+      "id" : "genome_ref",
+      "optional" : true,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "valid_ws_types" : [ "KBaseGenomes.Genome" ]
+      }
+    }, 
+    {
+      "id" : "fill_missing_values",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values":["0"],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
+      }
+    }, 
+    {
+      "id" : "data_type",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "unknown" ],
+      "field_type" : "dropdown",
+      "dropdown_options":{
+        "options": [
+          {
+            "value": "untransformed",
+            "display": "Untransformed Raw Values"
+          },
+          {
+            "value": "log2_level",
+            "display": "log2 Level"
+          },
+          {
+            "value": "log10_level",
+            "display": "log10 Level"
+          },
+          {
+            "value": "log2_ratio",
+            "display": "log2 Ratio"
+          },
+          {
+            "value": "log10_ratio",
+            "display": "log10 Ratio"
+          },
+          {
+            "value": "unknown",
+            "display": "Unknown"
+          }
+        ]
+      }
+    }, 
+    {
+      "id" : "data_scale",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text"
+    }
+  ],
+  "behavior" : {
+    "service-mapping" : {
+      "url" : "",
+      "name" : "kb_uploadmethods",
+      "method" : "import_tsv_as_expression_matrix_from_staging",
+      "input_mapping" : [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "matrix_name",
+          "target_property": "matrix_name"
+        },
+        {
+          "input_parameter": "staging_file_subdir_path",
+          "target_property": "staging_file_subdir_path"
+        },
+        {
+          "input_parameter": "genome_ref",
+          "target_property": "genome_ref",
+          "target_type_transform": "ref"
+        },
+        {
+          "input_parameter": "fill_missing_values",
+          "target_property": "fill_missing_values"
+        },
+        {
+          "input_parameter": "data_type",
+          "target_property": "data_type"
+        },
+        {
+          "input_parameter": "data_scale",
+          "target_property": "data_scale"
+        }
+      ],
+      "output_mapping" : [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "wsName"
+        },
+        {
+          "service_method_output_path": [0,"obj_ref"],
+          "target_property": "obj_ref",
+          "target_type_transform": "resolved-ref"
+        },
+        {
+            "service_method_output_path": [0, "report_name"],
+            "target_property": "report_name"
+        },
+        {
+            "service_method_output_path": [0, "report_ref"],
+            "target_property": "report_ref"
+        },
+        {
+            "constant_value": "16",
+            "target_property": "report_window_line_height"
+        }
+      ]
+    }
+  },
+  "job_id_output_field": "docker"
+}

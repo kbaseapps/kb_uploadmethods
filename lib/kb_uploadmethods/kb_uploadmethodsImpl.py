@@ -9,6 +9,7 @@ from kb_uploadmethods.Utils.ImportGFFFastaUtil import ImportGFFFastaUtil
 from kb_uploadmethods.Utils.ImportSRAUtil import ImportSRAUtil
 from kb_uploadmethods.Utils.ImportAssemblyUtil import ImportAssemblyUtil
 from kb_uploadmethods.Utils.ImportMediaUtil import ImportMediaUtil
+from kb_uploadmethods.Utils.ImportExpressionMatrixUtil import ImportExpressionMatrixUtil
 #END_HEADER
 
 
@@ -27,9 +28,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.1.10"
+    VERSION = "0.1.11"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "039f023b778eecd0c95e5e2dbaba2cf172eacd40"
+    GIT_COMMIT_HASH = "8907d4b0868b1b47f9cb03a47c6e2d5059c4eb4e"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -531,6 +532,58 @@ class kb_uploadmethods:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
+
+    def import_tsv_as_expression_matrix_from_staging(self, ctx, params):
+        """
+        :param params: instance of type "FileToMatrixParams" (required
+           params: staging_file_subdir_path: subdirectory file path e.g. for
+           file: /data/bulk/user_name/file_name staging_file_subdir_path is
+           file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name
+           matrix_name: output Expressin Matirx file name workspace_name:
+           workspace name/ID of the object genome_ref: optional reference to
+           a Genome object that will be used for mapping feature IDs to
+           fill_missing_values: optional flag for filling in missing values
+           in matrix (default value is false) data_type: optional filed,
+           value is one of 'untransformed', 'log2_level', 'log10_level',
+           'log2_ratio', 'log10_ratio' or 'unknown' (last one is default
+           value) data_scale: optional parameter (default value is '1.0')) ->
+           structure: parameter "staging_file_subdir_path" of String,
+           parameter "workspace_name" of type "workspace_name" (workspace
+           name of the object), parameter "matrix_name" of String, parameter
+           "genome_ref" of String, parameter "fill_missing_values" of type
+           "boolean" (Indicates true or false values, false = 0, true = 1
+           @range [0,1]), parameter "data_type" of String, parameter
+           "data_scale" of String
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN import_tsv_as_expression_matrix_from_staging
+        print '--->\nRunning uploadmethods.import_tsv_as_expression_matrix_from_staging\nparams:'
+        print json.dumps(params, indent=1)
+
+        for key, value in params.iteritems():
+            if isinstance(value, basestring):
+                params[key] = value.strip()
+
+        importer = ImportExpressionMatrixUtil(self.config)
+        returnVal = importer.import_tsv_as_expression_matrix_from_staging(params)
+
+        reportVal = importer.generate_report(returnVal['obj_ref'], params)
+        returnVal.update(reportVal)
+        #END import_tsv_as_expression_matrix_from_staging
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method import_tsv_as_expression_matrix_from_staging return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",

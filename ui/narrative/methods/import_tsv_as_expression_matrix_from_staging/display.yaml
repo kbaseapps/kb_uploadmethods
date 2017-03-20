@@ -1,0 +1,61 @@
+name     : Import TSV File As Expression Matrix From Staging Area
+subtitle : Import A Staging TSV File As Expression Matrix Into Your Narrative
+tooltip  : Import A Staging TSV File As Expression Matrix Into Your Narrative
+
+screenshots :
+    []
+
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+parameters :
+    staging_file_subdir_path :
+        ui-name : |
+            TSV File Path
+        short-hint : |
+            File with expression data in TSV format with Features in rows and Conditions in columns
+        long-hint  : |
+            The filename should end with ".tsv"
+
+    matrix_name :
+        ui-name : |
+            Expression Matrix Object Name
+        short-hint : |
+            Provide a name for the Expression Matrix that will be created by this importer
+        long-hint : |
+            Provide a name for the Expression Matrix that will be created by this importer
+
+    genome_ref :
+        ui-name : Genome
+        short-hint : Select the Genome that contains features referenced by the Expression Matrix
+        long-hint  : Feature IDs as listed in the first column will be matched against feature ids or aliases of the Genome
+
+    fill_missing_values :
+        ui-name : Impute missing values?
+        short-hint : Check this box to fill any missing values in the data
+
+    data_type :
+        ui-name : Value Type
+        short-hint : Indicate if the numbers are absolute expression levels, ratios, or log-ratios
+
+    data_scale :
+        ui-name : Value Scaling Factor
+        short-hint : If the data was rescaled by a constant factor, indicate that here
+
+description : |
+    <p> Import A Staging TSV File As Expression Matrix Into Your Narrative </p><br>
+    <p>This uploader enables you to upload a gene expression data matrix in TSV (Tab-Separated Values) format.</p><br>
+    <p> The .tsv file is a tab-delimited text file, with genes down the rows and sample/observations across the columns (see <a href="http://kbase.us/data-upload-download-guide/expression-matrix/"" target="_blank">http://kbase.us/data-upload-download-guide/expression-matrix/</a> for more information). Make sure the first label in the first column 
+    is "gene-id" followed by tab-delimited labels for samples. Each row (gene) should have an identifier (in green) that always goes in the first column. Each column 
+    (sample) should have a label (in blue) that is always in the first row. The remaining cells in the table contain expression values for the appropriate gene and sample. 
+    Be sure to exclude gene features for which all expressions are missing or are the same for all the conditions/samples.  See the 
+    <a href="http://kbase.us/data-upload-download-guide/" target="_blank">Data Upload and Download Guide</a> for more information about formatting your expression data file.</p>
