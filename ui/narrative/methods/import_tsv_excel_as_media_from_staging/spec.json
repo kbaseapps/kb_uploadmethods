@@ -5,7 +5,8 @@
   "visible" : true,
   "categories" : [ "inactive","upload" ],
   "widgets": {
-    "input": "kbaseNarrativeMethodInput"
+    "input": "kbaseNarrativeMethodInput",
+    "output" : "no-display"
   },
   "parameters" : [ 
     {
