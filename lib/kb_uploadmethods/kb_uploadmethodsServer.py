@@ -20,7 +20,7 @@ from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 
 DEPLOY = 'KB_DEPLOYMENT_CONFIG'
 SERVICE = 'KB_SERVICE_NAME'
-AUTH = 'auth-server-url'
+AUTH = 'auth-service-url'
 
 # Note that the error fields do not match the 2.0 JSONRPC spec
 
@@ -109,7 +109,11 @@ class JSONRPCServiceCustom(JSONRPCService):
             # Exception was raised inside the method.
             newerr = JSONServerError()
             newerr.trace = traceback.format_exc()
-            newerr.data = e.message
+            if isinstance(e.message, basestring):
+                newerr.data = e.message
+            else:
+                # Some exceptions embed other exceptions as the message
+                newerr.data = repr(e.message)
             raise newerr
         return result
 
@@ -332,47 +336,47 @@ class Application(object):
         self.rpc_service.add(impl_kb_uploadmethods.upload_fastq_file,
                              name='kb_uploadmethods.upload_fastq_file',
                              types=[dict])
-        self.method_authentication['kb_uploadmethods.upload_fastq_file'] = 'required' # noqa
+        self.method_authentication['kb_uploadmethods.upload_fastq_file'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_uploadmethods.upload_fasta_gff_file,
                              name='kb_uploadmethods.upload_fasta_gff_file',
                              types=[dict])
-        self.method_authentication['kb_uploadmethods.upload_fasta_gff_file'] = 'required' # noqa
+        self.method_authentication['kb_uploadmethods.upload_fasta_gff_file'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_uploadmethods.unpack_staging_file,
                              name='kb_uploadmethods.unpack_staging_file',
                              types=[dict])
-        self.method_authentication['kb_uploadmethods.unpack_staging_file'] = 'required' # noqa
+        self.method_authentication['kb_uploadmethods.unpack_staging_file'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_uploadmethods.unpack_web_file,
                              name='kb_uploadmethods.unpack_web_file',
                              types=[dict])
-        self.method_authentication['kb_uploadmethods.unpack_web_file'] = 'required' # noqa
+        self.method_authentication['kb_uploadmethods.unpack_web_file'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_uploadmethods.import_genbank_from_staging,
                              name='kb_uploadmethods.import_genbank_from_staging',
                              types=[dict])
-        self.method_authentication['kb_uploadmethods.import_genbank_from_staging'] = 'required' # noqa
+        self.method_authentication['kb_uploadmethods.import_genbank_from_staging'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_uploadmethods.import_sra_from_staging,
                              name='kb_uploadmethods.import_sra_from_staging',
                              types=[dict])
-        self.method_authentication['kb_uploadmethods.import_sra_from_staging'] = 'required' # noqa
+        self.method_authentication['kb_uploadmethods.import_sra_from_staging'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_uploadmethods.import_fasta_as_assembly_from_staging,
                              name='kb_uploadmethods.import_fasta_as_assembly_from_staging',
                              types=[dict])
-        self.method_authentication['kb_uploadmethods.import_fasta_as_assembly_from_staging'] = 'required' # noqa
+        self.method_authentication['kb_uploadmethods.import_fasta_as_assembly_from_staging'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_uploadmethods.import_tsv_as_media_from_staging,
                              name='kb_uploadmethods.import_tsv_as_media_from_staging',
                              types=[dict])
-        self.method_authentication['kb_uploadmethods.import_tsv_as_media_from_staging'] = 'required' # noqa
+        self.method_authentication['kb_uploadmethods.import_tsv_as_media_from_staging'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_uploadmethods.import_excel_as_media_from_staging,
                              name='kb_uploadmethods.import_excel_as_media_from_staging',
                              types=[dict])
-        self.method_authentication['kb_uploadmethods.import_excel_as_media_from_staging'] = 'required' # noqa
+        self.method_authentication['kb_uploadmethods.import_excel_as_media_from_staging'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_uploadmethods.import_tsv_or_excel_as_media_from_staging,
                              name='kb_uploadmethods.import_tsv_or_excel_as_media_from_staging',
                              types=[dict])
-        self.method_authentication['kb_uploadmethods.import_tsv_or_excel_as_media_from_staging'] = 'required' # noqa
+        self.method_authentication['kb_uploadmethods.import_tsv_or_excel_as_media_from_staging'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_uploadmethods.import_tsv_as_expression_matrix_from_staging,
                              name='kb_uploadmethods.import_tsv_as_expression_matrix_from_staging',
                              types=[dict])
-        self.method_authentication['kb_uploadmethods.import_tsv_as_expression_matrix_from_staging'] = 'required' # noqa
+        self.method_authentication['kb_uploadmethods.import_tsv_as_expression_matrix_from_staging'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_uploadmethods.status,
                              name='kb_uploadmethods.status',
                              types=[dict])

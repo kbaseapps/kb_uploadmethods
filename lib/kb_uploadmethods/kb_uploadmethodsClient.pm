@@ -81,20 +81,19 @@ sub new
     # We create an auth token, passing through the arguments that we were (hopefully) given.
 
     {
-	my $token = Bio::KBase::AuthToken->new(@args);
-	
-	if (!$token->error_message)
-	{
-	    $self->{token} = $token->token;
-	    $self->{client}->{token} = $token->token;
+	my %arg_hash2 = @args;
+	if (exists $arg_hash2{"token"}) {
+	    $self->{token} = $arg_hash2{"token"};
+	} elsif (exists $arg_hash2{"user_id"}) {
+	    my $token = Bio::KBase::AuthToken->new(@args);
+	    if (!$token->error_message) {
+	        $self->{token} = $token->token;
+	    }
 	}
-        else
-        {
-	    #
-	    # All methods in this module require authentication. In this case, if we
-	    # don't have a token, we can't continue.
-	    #
-	    die "Authentication failed: " . $token->error_message;
+	
+	if (exists $self->{token})
+	{
+	    $self->{client}->{token} = $self->{token};
 	}
     }
 
@@ -2581,7 +2580,7 @@ workspace_name has a value which is a kb_uploadmethods.workspace_name
 
 required params:
 staging_file_subdir_path: subdirectory file path
-e.g. 
+e.g.
   for file: /data/bulk/user_name/file_name
   staging_file_subdir_path is file_name
   for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
@@ -2591,7 +2590,7 @@ workspace_name: workspace name/ID of the object
 
 genome_ref: optional reference to a Genome object that will be
     used for mapping feature IDs to
-fill_missing_values: optional flag for filling in missing 
+fill_missing_values: optional flag for filling in missing
       values in matrix (default value is false)
 data_type: optional filed, value is one of 'untransformed',
       'log2_level', 'log10_level', 'log2_ratio', 'log10_ratio' or

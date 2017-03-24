@@ -70,18 +70,18 @@ class KBaseReport(object):
            parameter "ref" of type "ws_id" (@id ws), parameter "description"
            of String, parameter "file_links" of list of type "LinkedFile"
            (Represents a file or html archive that the report should like to
-           @optional description) -> structure: parameter "handle" of type
-           "handle_ref" (Reference to a handle @id handle), parameter
+           @optional description label) -> structure: parameter "handle" of
+           type "handle_ref" (Reference to a handle @id handle), parameter
            "description" of String, parameter "name" of String, parameter
            "label" of String, parameter "URL" of String, parameter
            "html_links" of list of type "LinkedFile" (Represents a file or
-           html archive that the report should like to @optional description)
-           -> structure: parameter "handle" of type "handle_ref" (Reference
-           to a handle @id handle), parameter "description" of String,
-           parameter "name" of String, parameter "label" of String, parameter
-           "URL" of String, parameter "direct_html" of String, parameter
-           "direct_html_link_index" of Long, parameter "workspace_name" of
-           String
+           html archive that the report should like to @optional description
+           label) -> structure: parameter "handle" of type "handle_ref"
+           (Reference to a handle @id handle), parameter "description" of
+           String, parameter "name" of String, parameter "label" of String,
+           parameter "URL" of String, parameter "direct_html" of String,
+           parameter "direct_html_link_index" of Long, parameter
+           "workspace_name" of String
         :returns: instance of type "ReportInfo" (The reference to the saved
            KBaseReport.  The structure is: reportInfo = { ref:
            'ws/objid/ver', name: 'myreport.2262323452' }) -> structure:
