@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <pre>
  * required params:
  * staging_file_subdir_path: subdirectory file path
- * e.g. 
+ * e.g.
  *   for file: /data/bulk/user_name/file_name
  *   staging_file_subdir_path is file_name
  *   for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * workspace_name: workspace name/ID of the object
  * genome_ref: optional reference to a Genome object that will be
  *     used for mapping feature IDs to
- * fill_missing_values: optional flag for filling in missing 
+ * fill_missing_values: optional flag for filling in missing
  *       values in matrix (default value is false)
  * data_type: optional filed, value is one of 'untransformed',
  *       'log2_level', 'log10_level', 'log2_ratio', 'log10_ratio' or

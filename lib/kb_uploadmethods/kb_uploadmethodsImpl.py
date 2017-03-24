@@ -28,9 +28,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.1.11"
+    VERSION = "0.1.12"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "8907d4b0868b1b47f9cb03a47c6e2d5059c4eb4e"
+    GIT_COMMIT_HASH = "ba7fd0ecd44f357702b1762272aa10e189858218"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -583,7 +583,6 @@ class kb_uploadmethods:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
-
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",
