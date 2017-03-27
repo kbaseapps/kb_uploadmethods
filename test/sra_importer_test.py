@@ -298,3 +298,89 @@ class kb_uploadmethodsTest(unittest.TestCase):
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
+
+    @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
+    @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
+                  side_effect=mock_validate_upload_staging_file_availability)
+    @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_se)
+    def test_validate_advanced_params(self, download_staging_file,
+                                      _validate_upload_staging_file_availability,
+                                      _run_command):
+        sra_path = 'empty.sra'
+        obj_name = 'MyReads'
+
+        error_msg = 'Advanced params "Mean Insert Size", "St. Dev. of Insert Size" or '
+        error_msg += '"Reads Orientation Outward" is Paried End Reads specific'
+
+        invalidate_input_params = {
+            'staging_file_subdir_path': sra_path,
+            'name': obj_name,
+            'workspace_name': self.getWsName(),
+            'sequencing_tech': 'Unknown',
+            'single_genome': 1,
+            'insert_size_mean': 10
+        }
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().import_sra_from_staging(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = {
+            'staging_file_subdir_path': sra_path,
+            'name': obj_name,
+            'workspace_name': self.getWsName(),
+            'sequencing_tech': 'Unknown',
+            'single_genome': 1,
+            'insert_size_std_dev': 0.4
+        }
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().import_sra_from_staging(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = {
+            'staging_file_subdir_path': sra_path,
+            'name': obj_name,
+            'workspace_name': self.getWsName(),
+            'sequencing_tech': 'Unknown',
+            'single_genome': 1,
+            'read_orientation_outward': 1
+        }
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().import_sra_from_staging(self.getContext(), invalidate_input_params)
+
+    @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
+    @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
+                  side_effect=mock_validate_upload_staging_file_availability)
+    @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_pe)
+    def test_import_sra_paired_end(self, download_staging_file,
+                                   _validate_upload_staging_file_availability,
+                                   _run_command):
+
+        sra_path = 'empty.sra'
+        obj_name = 'MyReads'
+
+        error_msg = 'Sequencing Technology: "PacBio CCS" or "PacBio CLR" '
+        error_msg += 'is Single End Reads specific'
+
+        invalidate_input_params = {
+            'staging_file_subdir_path': sra_path,
+            'name': obj_name,
+            'workspace_name': self.getWsName(),
+            'sequencing_tech': 'PacBio CCS',
+            'single_genome': 0,
+            'insert_size_mean': 99.9,
+            'insert_size_std_dev': 10.1,
+            'read_orientation_outward': 1
+        }
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().import_sra_from_staging(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = {
+            'staging_file_subdir_path': sra_path,
+            'name': obj_name,
+            'workspace_name': self.getWsName(),
+            'sequencing_tech': 'PacBio CLR',
+            'single_genome': 0,
+            'insert_size_mean': 99.9,
+            'insert_size_std_dev': 10.1,
+            'read_orientation_outward': 1
+        }
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().import_sra_from_staging(self.getContext(), invalidate_input_params)
