@@ -59,7 +59,7 @@ class ImportSRAUtil:
         """
         return os.path.exists(tmp_dir + '/' + sra_name + '/1')
 
-    def _sra_to_fastq(self, scratch_sra_file_path):
+    def _sra_to_fastq(self, scratch_sra_file_path, params):
         """
         _sra_to_fastq: convert SRA file to FASTQ file(s)
         """
@@ -76,6 +76,7 @@ class ImportSRAUtil:
         paired_end = self._check_fastq_dump_result(tmp_dir, sra_name)
 
         if paired_end:
+            self._validate_paired_end_advanced_params(params)
             fwd_file = os.path.join(tmp_dir, sra_name, '1', 'fastq')
             os.rename(fwd_file, fwd_file + '.fastq')
             fwd_file = fwd_file + '.fastq'
@@ -84,6 +85,7 @@ class ImportSRAUtil:
             os.rename(rev_file, rev_file + '.fastq')
             rev_file = rev_file + '.fastq'
         else:
+            self._validate_single_end_advanced_params(params)
             fwd_file = os.path.join(tmp_dir, sra_name, 'fastq')
             os.rename(fwd_file, fwd_file + '.fastq')
             fwd_file = fwd_file + '.fastq'
@@ -94,6 +96,38 @@ class ImportSRAUtil:
             'rev_file': rev_file
         }
         return fastq_file_path
+
+    def _validate_single_end_advanced_params(self, params):
+        """
+        _validate_single_end_advanced_params: validate advanced params for single end reads
+        """
+        if (params.get('insert_size_mean')
+           or params.get('insert_size_std_dev')
+           or params.get('read_orientation_outward')):
+            error_msg = 'Advanced params "Mean Insert Size", "St. Dev. of Insert Size" or '
+            error_msg += '"Reads Orientation Outward" is Paried End Reads specific'
+            raise ValueError(error_msg)
+
+        sequencing_tech = params.get('sequencing_tech')
+
+        if sequencing_tech in ['']:
+            error_msg = ''
+            raise ValueError(error_msg)
+
+    def _validate_paired_end_advanced_params(self, params):
+        """
+        _validate_paired_end_advanced_params: validate advanced params for paired end reads
+
+        """
+        sequencing_tech = params.get('sequencing_tech')
+        print 'fdsfds'
+        print sequencing_tech in ['PacBio CLR', 'PacBio CCS']
+        print sequencing_tech
+
+        if sequencing_tech in ['PacBio CCS', 'PacBio CLR']:
+            error_msg = 'Sequencing Technology: "PacBio CCS" or "PacBio CLR" '
+            error_msg += 'is Single End Reads specific'
+            raise ValueError(error_msg)
 
     def _validate_upload_staging_file_availability(self, staging_file_subdir_path):
         """
@@ -154,7 +188,7 @@ class ImportSRAUtil:
                         download_staging_file_params).get('copy_file_path')
         log('Downloaded staging file to: {}'.format(scratch_sra_file_path))
 
-        fastq_file_path = self._sra_to_fastq(scratch_sra_file_path)
+        fastq_file_path = self._sra_to_fastq(scratch_sra_file_path, params)
 
         import_sra_reads_params = params
         import_sra_reads_params.update(fastq_file_path)
