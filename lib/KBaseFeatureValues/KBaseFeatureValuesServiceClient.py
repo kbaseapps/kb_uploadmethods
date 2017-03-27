@@ -24,7 +24,7 @@ class KBaseFeatureValues(object):
             password=None, token=None, ignore_authrc=False,
             trust_all_ssl_certificates=False,
             auth_svc='https://kbase.us/services/authorization/Sessions/Login',
-            service_ver='release'):
+            service_ver='dev'):
         if url is None:
             url = 'https://kbase.us/services/service_wizard'
         self._service_ver = service_ver
