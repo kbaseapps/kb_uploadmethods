@@ -325,6 +325,44 @@ class kb_uploadmethods(object):
             'kb_uploadmethods.import_tsv_as_expression_matrix_from_staging',
             [params], self._service_ver, context)
 
+    def import_reads_from_staging(self, params, context=None):
+        """
+        :param params: instance of type "UploadReadsParams" (sequencing_tech:
+           sequencing technology name: output reads file name workspace_name:
+           workspace name/ID of the object import_type: either FASTQ or SRA
+           For files in user's staging area:
+           fastq_fwd_or_sra_staging_file_name: single-end fastq file name Or
+           forward/left paired-end fastq file name from user's staging area
+           Or SRA staging file fastq_rev_staging_file_name: reverse/right
+           paired-end fastq file name user's staging area e.g. for file:
+           /data/bulk/user_name/file_name staging_file_subdir_path is
+           file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name Optional
+           Params: single_genome: whether the reads are from a single genome
+           or a metagenome. interleaved: whether reads is interleaved
+           insert_size_mean: mean (average) insert length
+           insert_size_std_dev: standard deviation of insert lengths
+           read_orientation_outward: whether reads in a pair point outward)
+           -> structure: parameter "import_type" of String, parameter
+           "fastq_fwd_staging_file_name" of String, parameter
+           "fastq_rev_staging_file_name" of String, parameter
+           "sra_staging_file_name" of String, parameter "sequencing_tech" of
+           type "sequencing_tech", parameter "workspace_name" of type
+           "workspace_name" (workspace name of the object), parameter "name"
+           of String, parameter "single_genome" of type "single_genome",
+           parameter "interleaved" of type "interleaved", parameter
+           "insert_size_mean" of type "insert_size_mean", parameter
+           "insert_size_std_dev" of type "insert_size_std_dev", parameter
+           "read_orientation_outward" of type "read_orientation_outward"
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        return self._client.call_method(
+            'kb_uploadmethods.import_reads_from_staging',
+            [params], self._service_ver, context)
+
     def status(self, context=None):
         return self._client.call_method('kb_uploadmethods.status',
                                         [], self._service_ver, context)

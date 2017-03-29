@@ -209,6 +209,75 @@ class kb_uploadmethodsTest(unittest.TestCase):
                         'Download type parameter is required, but missing'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
+        error_msg = 'Advanced params "Mean Insert Size", "St. Dev. of Insert Size" or '
+        error_msg += '"Reads Orientation Outward" is Paried End Reads specific'
+
+        invalidate_input_params = self.getDefaultParams()
+        invalidate_input_params['insert_size_mean'] = 10
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = self.getDefaultParams()
+        invalidate_input_params['insert_size_std_dev'] = 0.4
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = self.getDefaultParams()
+        invalidate_input_params['read_orientation_outward'] = 1
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
+
+        error_msg = 'Sequencing Technology: "PacBio CCS" or "PacBio CLR" '
+        error_msg += 'is Single End Reads specific'
+
+        invalidate_input_params = self.getDefaultParams()
+        invalidate_input_params['sequencing_tech'] = 'PacBio CCS'
+        invalidate_input_params['rev_staging_file_name'] = 'rev_staging_file_name'
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = self.getDefaultParams()
+        invalidate_input_params['sequencing_tech'] = 'PacBio CLR'
+        invalidate_input_params['rev_staging_file_name'] = 'rev_staging_file_name'
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = self.getDefaultParams()
+        invalidate_input_params['sequencing_tech'] = 'PacBio CCS'
+        invalidate_input_params['interleaved'] = 1
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = self.getDefaultParams()
+        invalidate_input_params['sequencing_tech'] = 'PacBio CLR'
+        invalidate_input_params['interleaved'] = 1
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = self.getDefaultParams(file_path=False)
+        invalidate_input_params['sequencing_tech'] = 'PacBio CCS'
+        invalidate_input_params['rev_file_url'] = 'rev_file_url'
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = self.getDefaultParams(file_path=False)
+        invalidate_input_params['sequencing_tech'] = 'PacBio CLR'
+        invalidate_input_params['rev_file_url'] = 'rev_file_url'
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = self.getDefaultParams(file_path=False)
+        invalidate_input_params['sequencing_tech'] = 'PacBio CCS'
+        invalidate_input_params['interleaved'] = 1
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = self.getDefaultParams(file_path=False)
+        invalidate_input_params['sequencing_tech'] = 'PacBio CLR'
+        invalidate_input_params['interleaved'] = 1
+        with self.assertRaisesRegexp(ValueError, error_msg):
+            self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
+
     def test_upload_fastq_file_url_direct_download(self):
         fwd_file_url = 'https://anl.box.com/shared/static/'
         fwd_file_url += 'qwadp20dxtwnhc8r3sjphen6h0k1hdyo.fastq'

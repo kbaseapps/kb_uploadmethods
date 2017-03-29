@@ -10,6 +10,7 @@ from kb_uploadmethods.Utils.ImportSRAUtil import ImportSRAUtil
 from kb_uploadmethods.Utils.ImportAssemblyUtil import ImportAssemblyUtil
 from kb_uploadmethods.Utils.ImportMediaUtil import ImportMediaUtil
 from kb_uploadmethods.Utils.ImportExpressionMatrixUtil import ImportExpressionMatrixUtil
+from kb_uploadmethods.Utils.ImportReadsUtil import ImportReadsUtil
 #END_HEADER
 
 
@@ -28,9 +29,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.1.17"
+    VERSION = "0.1.18"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "f582ee821305ad1673f3f93dec4cd94d23cdb3fd"
+    GIT_COMMIT_HASH = "510576e814f93c1aa551907239b697b8715904b9"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -580,6 +581,61 @@ class kb_uploadmethods:
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method import_tsv_as_expression_matrix_from_staging return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def import_reads_from_staging(self, ctx, params):
+        """
+        :param params: instance of type "UploadReadsParams" (sequencing_tech:
+           sequencing technology name: output reads file name workspace_name:
+           workspace name/ID of the object import_type: either FASTQ or SRA
+           For files in user's staging area:
+           fastq_fwd_or_sra_staging_file_name: single-end fastq file name Or
+           forward/left paired-end fastq file name from user's staging area
+           Or SRA staging file fastq_rev_staging_file_name: reverse/right
+           paired-end fastq file name user's staging area e.g. for file:
+           /data/bulk/user_name/file_name staging_file_subdir_path is
+           file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name Optional
+           Params: single_genome: whether the reads are from a single genome
+           or a metagenome. interleaved: whether reads is interleaved
+           insert_size_mean: mean (average) insert length
+           insert_size_std_dev: standard deviation of insert lengths
+           read_orientation_outward: whether reads in a pair point outward)
+           -> structure: parameter "import_type" of String, parameter
+           "fastq_fwd_staging_file_name" of String, parameter
+           "fastq_rev_staging_file_name" of String, parameter
+           "sra_staging_file_name" of String, parameter "sequencing_tech" of
+           type "sequencing_tech", parameter "workspace_name" of type
+           "workspace_name" (workspace name of the object), parameter "name"
+           of String, parameter "single_genome" of type "single_genome",
+           parameter "interleaved" of type "interleaved", parameter
+           "insert_size_mean" of type "insert_size_mean", parameter
+           "insert_size_std_dev" of type "insert_size_std_dev", parameter
+           "read_orientation_outward" of type "read_orientation_outward"
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN import_reads_from_staging
+        print '--->\nRunning uploadmethods.import_reads_from_staging\nparams:'
+        print json.dumps(params, indent=1)
+
+        for key, value in params.iteritems():
+            if isinstance(value, basestring):
+                params[key] = value.strip()
+
+        importer = ImportReadsUtil(self.config)
+        returnVal = importer.import_reads_from_staging(params)
+        #END import_reads_from_staging
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method import_reads_from_staging return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]

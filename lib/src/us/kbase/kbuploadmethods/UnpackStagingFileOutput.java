@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <p>Original spec-file type: UnpackStagingFileOutput</p>
  * <pre>
  * Results from the unpack_staging_file function.
- *       unpacked_file_path: unpacked file path(s) in staging area
+ *     unpacked_file_path: unpacked file path(s) in staging area
  * </pre>
  * 
  */

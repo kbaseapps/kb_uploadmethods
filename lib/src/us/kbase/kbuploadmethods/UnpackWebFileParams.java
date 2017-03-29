@@ -15,12 +15,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <p>Original spec-file type: UnpackWebFileParams</p>
  * <pre>
  * Input parameters for the "unpack_web_file" function.
- *       Required parameters:
- *       workspace_name: workspace name/ID of the object
- *       file_url: file URL
- *       download_type: one of ['Direct Download', 'FTP', 'DropBox', 'Google Drive']
- *       Optional:
- *       urls_to_add_web_unpack: used for parameter-groups. dict of {file_url}
+ *     Required parameters:
+ *     workspace_name: workspace name/ID of the object
+ *     file_url: file URL
+ *     download_type: one of ['Direct Download', 'FTP', 'DropBox', 'Google Drive']
+ *     Optional:
+ *     urls_to_add_web_unpack: used for parameter-groups. dict of {file_url}
  * </pre>
  * 
  */
