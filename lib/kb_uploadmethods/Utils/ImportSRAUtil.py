@@ -120,9 +120,6 @@ class ImportSRAUtil:
 
         """
         sequencing_tech = params.get('sequencing_tech')
-        print 'fdsfds'
-        print sequencing_tech in ['PacBio CLR', 'PacBio CCS']
-        print sequencing_tech
 
         if sequencing_tech in ['PacBio CCS', 'PacBio CLR']:
             error_msg = 'Sequencing Technology: "PacBio CCS" or "PacBio CLR" '

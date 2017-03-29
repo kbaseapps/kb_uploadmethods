@@ -1356,6 +1356,142 @@ report_ref is a string
     }
 }
  
+
+
+=head2 import_reads_from_staging
+
+  $returnVal = $obj->import_reads_from_staging($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a kb_uploadmethods.UploadReadsParams
+$returnVal is a kb_uploadmethods.UploadMethodResult
+UploadReadsParams is a reference to a hash where the following keys are defined:
+	import_type has a value which is a string
+	fastq_fwd_staging_file_name has a value which is a string
+	fastq_rev_staging_file_name has a value which is a string
+	sra_staging_file_name has a value which is a string
+	sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	name has a value which is a string
+	single_genome has a value which is a kb_uploadmethods.single_genome
+	interleaved has a value which is a kb_uploadmethods.interleaved
+	insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+	insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+	read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
+sequencing_tech is a string
+workspace_name is a string
+single_genome is a string
+interleaved is a string
+insert_size_mean is a string
+insert_size_std_dev is a string
+read_orientation_outward is a string
+UploadMethodResult is a reference to a hash where the following keys are defined:
+	obj_ref has a value which is a kb_uploadmethods.obj_ref
+	report_name has a value which is a kb_uploadmethods.report_name
+	report_ref has a value which is a kb_uploadmethods.report_ref
+obj_ref is a string
+report_name is a string
+report_ref is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a kb_uploadmethods.UploadReadsParams
+$returnVal is a kb_uploadmethods.UploadMethodResult
+UploadReadsParams is a reference to a hash where the following keys are defined:
+	import_type has a value which is a string
+	fastq_fwd_staging_file_name has a value which is a string
+	fastq_rev_staging_file_name has a value which is a string
+	sra_staging_file_name has a value which is a string
+	sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	name has a value which is a string
+	single_genome has a value which is a kb_uploadmethods.single_genome
+	interleaved has a value which is a kb_uploadmethods.interleaved
+	insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+	insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+	read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
+sequencing_tech is a string
+workspace_name is a string
+single_genome is a string
+interleaved is a string
+insert_size_mean is a string
+insert_size_std_dev is a string
+read_orientation_outward is a string
+UploadMethodResult is a reference to a hash where the following keys are defined:
+	obj_ref has a value which is a kb_uploadmethods.obj_ref
+	report_name has a value which is a kb_uploadmethods.report_name
+	report_ref has a value which is a kb_uploadmethods.report_ref
+obj_ref is a string
+report_name is a string
+report_ref is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub import_reads_from_staging
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function import_reads_from_staging (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to import_reads_from_staging:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'import_reads_from_staging');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "kb_uploadmethods.import_reads_from_staging",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'import_reads_from_staging',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method import_reads_from_staging",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'import_reads_from_staging',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -1399,16 +1535,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'import_tsv_as_expression_matrix_from_staging',
+                method_name => 'import_reads_from_staging',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method import_tsv_as_expression_matrix_from_staging",
+            error => "Error invoking method import_reads_from_staging",
             status_line => $self->{client}->status_line,
-            method_name => 'import_tsv_as_expression_matrix_from_staging',
+            method_name => 'import_reads_from_staging',
         );
     }
 }
@@ -1969,14 +2105,14 @@ fwd_file_url: single-end fastq file URL or forward/left paired-end fastq file UR
 rev_file_url: reverse/right paired-end fastq file URL
  
 urls_to_add: used for parameter-groups. dict of {fwd_file_url, rev_file_url, name,
-                        single_genome, interleaved, insert_size_mean and read_orientation_outward}
+      single_genome, interleaved, insert_size_mean and read_orientation_outward}
 
 Optional Params:
 single_genome: whether the reads are from a single genome or a metagenome.
-    interleaved: whether reads is interleaved
-    insert_size_mean: mean (average) insert length
-    insert_size_std_dev: standard deviation of insert lengths
-    read_orientation_outward: whether reads in a pair point outward
+interleaved: whether reads is interleaved
+insert_size_mean: mean (average) insert length
+insert_size_std_dev: standard deviation of insert lengths
+read_orientation_outward: whether reads in a pair point outward
 
 
 =item Definition
@@ -2168,7 +2304,7 @@ staging_file_subdir_path has a value which is a string
 
 Results from the unpack_staging_file function.
 
-      unpacked_file_path: unpacked file path(s) in staging area
+    unpacked_file_path: unpacked file path(s) in staging area
 
 
 =item Definition
@@ -2235,13 +2371,13 @@ file_url has a value which is a string
 
 Input parameters for the "unpack_web_file" function.
 
-      Required parameters:
-      workspace_name: workspace name/ID of the object
-      file_url: file URL
-      download_type: one of ['Direct Download', 'FTP', 'DropBox', 'Google Drive']
+    Required parameters:
+    workspace_name: workspace name/ID of the object
+    file_url: file URL
+    download_type: one of ['Direct Download', 'FTP', 'DropBox', 'Google Drive']
 
-      Optional:
-      urls_to_add_web_unpack: used for parameter-groups. dict of {file_url}
+    Optional:
+    urls_to_add_web_unpack: used for parameter-groups. dict of {file_url}
 
 
 =item Definition
@@ -2284,7 +2420,7 @@ urls_to_add_web_unpack has a value which is a kb_uploadmethods.urls_to_add_web_u
 
 Results from the unpack_web_file function.
 
-      unpacked_file_path: unpacked file path(s) in staging area
+    unpacked_file_path: unpacked file path(s) in staging area
 
 
 =item Definition
@@ -2626,6 +2762,82 @@ genome_ref has a value which is a string
 fill_missing_values has a value which is a kb_uploadmethods.boolean
 data_type has a value which is a string
 data_scale has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 UploadReadsParams
+
+=over 4
+
+
+
+=item Description
+
+sequencing_tech: sequencing technology
+name: output reads file name
+workspace_name: workspace name/ID of the object
+import_type: either FASTQ or SRA
+
+For files in user's staging area:
+fastq_fwd_or_sra_staging_file_name: single-end fastq file name Or forward/left paired-end fastq file name from user's staging area Or SRA staging file 
+fastq_rev_staging_file_name: reverse/right paired-end fastq file name user's staging area
+e.g. 
+  for file: /data/bulk/user_name/file_name
+  staging_file_subdir_path is file_name
+  for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+  staging_file_subdir_path is subdir_1/subdir_2/file_name
+
+Optional Params:
+single_genome: whether the reads are from a single genome or a metagenome.
+interleaved: whether reads is interleaved
+insert_size_mean: mean (average) insert length
+insert_size_std_dev: standard deviation of insert lengths
+read_orientation_outward: whether reads in a pair point outward
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+import_type has a value which is a string
+fastq_fwd_staging_file_name has a value which is a string
+fastq_rev_staging_file_name has a value which is a string
+sra_staging_file_name has a value which is a string
+sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
+workspace_name has a value which is a kb_uploadmethods.workspace_name
+name has a value which is a string
+single_genome has a value which is a kb_uploadmethods.single_genome
+interleaved has a value which is a kb_uploadmethods.interleaved
+insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+import_type has a value which is a string
+fastq_fwd_staging_file_name has a value which is a string
+fastq_rev_staging_file_name has a value which is a string
+sra_staging_file_name has a value which is a string
+sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
+workspace_name has a value which is a kb_uploadmethods.workspace_name
+name has a value which is a string
+single_genome has a value which is a kb_uploadmethods.single_genome
+interleaved has a value which is a kb_uploadmethods.interleaved
+insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
+insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
+read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
 
 
 =end text

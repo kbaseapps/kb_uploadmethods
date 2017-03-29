@@ -26,13 +26,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * rev_file_url: reverse/right paired-end fastq file URL
  *  
  * urls_to_add: used for parameter-groups. dict of {fwd_file_url, rev_file_url, name,
- *                         single_genome, interleaved, insert_size_mean and read_orientation_outward}
+ *       single_genome, interleaved, insert_size_mean and read_orientation_outward}
  * Optional Params:
  * single_genome: whether the reads are from a single genome or a metagenome.
- *     interleaved: whether reads is interleaved
- *     insert_size_mean: mean (average) insert length
- *     insert_size_std_dev: standard deviation of insert lengths
- *     read_orientation_outward: whether reads in a pair point outward
+ * interleaved: whether reads is interleaved
+ * insert_size_mean: mean (average) insert length
+ * insert_size_std_dev: standard deviation of insert lengths
+ * read_orientation_outward: whether reads in a pair point outward
  * </pre>
  * 
  */

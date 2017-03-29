@@ -7,6 +7,7 @@ from ftp_service.ftp_serviceClient import ftp_service
 from KBaseReport.KBaseReportClient import KBaseReport
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 
+
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
     print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
@@ -144,6 +145,12 @@ class UploaderUtil:
         if upload_file_path and upload_file_URL:
             raise ValueError('Cannot upload Reads for both file path and file URL')
 
+        if (params.get('interleaved') or params.get('rev_staging_file_name')
+           or params.get('rev_file_url')):
+            self._validate_paired_end_advanced_params(params)
+        else:
+            self._validate_single_end_advanced_params(params)
+
         if (upload_file_path and
                 (params.get('fwd_staging_file_name') == params.get('rev_staging_file_name'))):
             error_msg = 'Same file [{}] is used for forward and reverse. '.format(
@@ -166,6 +173,35 @@ class UploaderUtil:
         # check for file URL parameters
         if upload_file_URL:
             self._validate_upload_file_URL_availability(params)
+
+    def _validate_single_end_advanced_params(self, params):
+        """
+        _validate_single_end_advanced_params: validate advanced params for single end reads
+        """
+        if (params.get('insert_size_mean')
+           or params.get('insert_size_std_dev')
+           or params.get('read_orientation_outward')):
+            error_msg = 'Advanced params "Mean Insert Size", "St. Dev. of Insert Size" or '
+            error_msg += '"Reads Orientation Outward" is Paried End Reads specific'
+            raise ValueError(error_msg)
+
+        sequencing_tech = params.get('sequencing_tech')
+
+        if sequencing_tech in ['']:
+            error_msg = ''
+            raise ValueError(error_msg)
+
+    def _validate_paired_end_advanced_params(self, params):
+        """
+        _validate_paired_end_advanced_params: validate advanced params for paired end reads
+
+        """
+        sequencing_tech = params.get('sequencing_tech')
+
+        if sequencing_tech in ['PacBio CCS', 'PacBio CLR']:
+            error_msg = 'Sequencing Technology: "PacBio CCS" or "PacBio CLR" '
+            error_msg += 'is Single End Reads specific'
+            raise ValueError(error_msg)
 
     def _validate_upload_file_path_availability(self, upload_file_name):
         """
