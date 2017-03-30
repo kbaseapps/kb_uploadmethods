@@ -3,7 +3,7 @@
   "authors" : ["tgu2"],
   "contact" : "help@kbase.us",
   "visible" : false,
-  "categories" : [ "active","upload" ],
+  "categories" : [ "upload" ],
   "widgets": {
     "input": "kbaseNarrativeMethodInput",
     "output" : "no-display"
