@@ -181,7 +181,7 @@
       [
         {
           "narrative_system_variable": "workspace",
-          "target_property": "wsName"
+          "target_property": "ws"
         },
         {
           "constant_value": "KBaseGenomes.Genome",
