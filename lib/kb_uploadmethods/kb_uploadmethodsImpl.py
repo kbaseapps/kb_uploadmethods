@@ -107,7 +107,10 @@ class kb_uploadmethods:
                 params_item['interleaved'] = params.get('interleaved')
                 for key, value in params_item.iteritems():
                     if isinstance(value, basestring):
-                        params_item[key] = value.strip()
+                        if value.strip() == '':
+                            params[key] = None
+                        else:
+                            params[key] = value.strip()
                 fastqUploader = UploaderUtil(self.config)
                 itemReturnVal = fastqUploader.upload_fastq_file(params_item)
                 returnVal['obj_ref'] += itemReturnVal['obj_ref'] + ','
@@ -115,7 +118,10 @@ class kb_uploadmethods:
         else:
             for key, value in params.iteritems():
                 if isinstance(value, basestring):
-                    params[key] = value.strip()
+                    if value.strip() == '':
+                        params[key] = None
+                    else:
+                        params[key] = value.strip()
             fastqUploader = UploaderUtil(self.config)
             returnVal = fastqUploader.upload_fastq_file(params)
 
@@ -166,7 +172,10 @@ class kb_uploadmethods:
 
         for key, value in params.iteritems():
             if isinstance(value, basestring):
-                params[key] = value.strip()
+                if value.strip() == '':
+                    params[key] = None
+                else:
+                    params[key] = value.strip()
 
         uploader = ImportGFFFastaUtil(self.config)
         returnVal = uploader.import_gff_fasta_from_staging(params)
@@ -206,7 +215,10 @@ class kb_uploadmethods:
 
         for key, value in params.iteritems():
             if isinstance(value, basestring):
-                params[key] = value.strip()
+                if value.strip() == '':
+                    params[key] = None
+                else:
+                    params[key] = value.strip()
 
         self.config['USER_ID'] = ctx['user_id']
         unpacker = UnpackFileUtil(self.config)
@@ -261,7 +273,10 @@ class kb_uploadmethods:
                 params_item['workspace_name'] = workspace_name
                 for key, value in params_item.iteritems():
                     if isinstance(value, basestring):
-                        params_item[key] = value.strip()
+                        if value.strip() == '':
+                            params[key] = None
+                        else:
+                            params[key] = value.strip()
                 unpacker = UnpackFileUtil(self.config)
                 itemReturnVal = unpacker.unpack_web_file(params_item)
                 returnVal['unpacked_file_path'] += itemReturnVal['unpacked_file_path'] + ','
@@ -269,7 +284,10 @@ class kb_uploadmethods:
         else:
             for key, value in params.iteritems():
                 if isinstance(value, basestring):
-                    params[key] = value.strip()
+                    if value.strip() == '':
+                        params[key] = None
+                    else:
+                        params[key] = value.strip()
             unpacker = UnpackFileUtil(self.config)
             returnVal = unpacker.unpack_web_file(params)
 
@@ -318,7 +336,10 @@ class kb_uploadmethods:
         #BEGIN import_genbank_from_staging
         for key, value in params.iteritems():
             if isinstance(value, basestring):
-                params[key] = value.strip()
+                if value.strip() == '':
+                    params[key] = None
+                else:
+                    params[key] = value.strip()
 
         importer = ImportGenbankUtil(self.config)
         returnVal = importer.import_genbank_from_staging(params)
@@ -365,7 +386,10 @@ class kb_uploadmethods:
 
         for key, value in params.iteritems():
             if isinstance(value, basestring):
-                params[key] = value.strip()
+                if value.strip() == '':
+                    params[key] = None
+                else:
+                    params[key] = value.strip()
 
         importer = ImportSRAUtil(self.config)
         returnVal = importer.import_sra_from_staging(params)
@@ -406,7 +430,10 @@ class kb_uploadmethods:
 
         for key, value in params.iteritems():
             if isinstance(value, basestring):
-                params[key] = value.strip()
+                if value.strip() == '':
+                    params[key] = None
+                else:
+                    params[key] = value.strip()
 
         importer = ImportAssemblyUtil(self.config)
         returnVal = importer.import_fasta_as_assembly_from_staging(params)
@@ -447,7 +474,10 @@ class kb_uploadmethods:
 
         for key, value in params.iteritems():
             if isinstance(value, basestring):
-                params[key] = value.strip()
+                if value.strip() == '':
+                    params[key] = None
+                else:
+                    params[key] = value.strip()
 
         importer = ImportMediaUtil(self.config)
         returnVal = importer.import_tsv_as_media_from_staging(params)
@@ -488,7 +518,10 @@ class kb_uploadmethods:
 
         for key, value in params.iteritems():
             if isinstance(value, basestring):
-                params[key] = value.strip()
+                if value.strip() == '':
+                    params[key] = None
+                else:
+                    params[key] = value.strip()
 
         importer = ImportMediaUtil(self.config)
         returnVal = importer.import_excel_as_media_from_staging(params)
@@ -529,7 +562,10 @@ class kb_uploadmethods:
 
         for key, value in params.iteritems():
             if isinstance(value, basestring):
-                params[key] = value.strip()
+                if value.strip() == '':
+                    params[key] = None
+                else:
+                    params[key] = value.strip()
 
         importer = ImportMediaUtil(self.config)
         returnVal = importer.import_media_from_staging(params)
@@ -580,7 +616,10 @@ class kb_uploadmethods:
 
         for key, value in params.iteritems():
             if isinstance(value, basestring):
-                params[key] = value.strip()
+                if value.strip() == '':
+                    params[key] = None
+                else:
+                    params[key] = value.strip()
 
         importer = ImportExpressionMatrixUtil(self.config)
         returnVal = importer.import_tsv_as_expression_matrix_from_staging(params)
@@ -638,7 +677,10 @@ class kb_uploadmethods:
 
         for key, value in params.iteritems():
             if isinstance(value, basestring):
-                params[key] = value.strip()
+                if value.strip() == '':
+                    params[key] = None
+                else:
+                    params[key] = value.strip()
 
         importer = ImportReadsUtil(self.config)
         returnVal = importer.import_reads_from_staging(params)
@@ -650,6 +692,7 @@ class kb_uploadmethods:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
+
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",
