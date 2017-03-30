@@ -170,12 +170,16 @@ class kb_uploadmethods:
         print '--->\nRunning uploadmethods.upload_fasta_gff_file\nparams:'
         print json.dumps(params, indent=1)
 
-        for key, value in params.iteritems():
-            if isinstance(value, basestring):
-                if value.strip() == '':
-                    params[key] = None
-                else:
-                    params[key] = value.strip()
+        for key in params.keys():
+            value = params[key]
+            if value is None:
+                del params[key]
+            else:
+                if isinstance(value, basestring):
+                    if value.strip() == '':
+                        params[key] = None
+                    else:
+                        params[key] = value.strip()
 
         uploader = ImportGFFFastaUtil(self.config)
         returnVal = uploader.import_gff_fasta_from_staging(params)
