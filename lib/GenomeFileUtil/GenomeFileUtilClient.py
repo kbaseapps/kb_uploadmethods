@@ -25,7 +25,7 @@ class GenomeFileUtil(object):
             password=None, token=None, ignore_authrc=False,
             trust_all_ssl_certificates=False,
             auth_svc='https://kbase.us/services/authorization/Sessions/Login',
-            service_ver='release',
+            service_ver='dev',
             async_job_check_time_ms=100, async_job_check_time_scale_percent=150, 
             async_job_check_max_time_ms=300000):
         if url is None:
@@ -166,6 +166,50 @@ class GenomeFileUtil(object):
            "shock_id" of String
         """
         job_id = self._export_genome_as_genbank_submit(params, context)
+        async_job_check_time = self._client.async_job_check_time
+        while True:
+            time.sleep(async_job_check_time)
+            async_job_check_time = (async_job_check_time *
+                self._client.async_job_check_time_scale_percent / 100.0)
+            if async_job_check_time > self._client.async_job_check_max_time:
+                async_job_check_time = self._client.async_job_check_max_time
+            job_state = self._check_job(job_id)
+            if job_state['finished']:
+                return job_state['result'][0]
+
+    def _fasta_gff_to_genome_submit(self, params, context=None):
+        return self._client._submit_job(
+             'GenomeFileUtil.fasta_gff_to_genome', [params],
+             self._service_ver, context)
+
+    def fasta_gff_to_genome(self, params, context=None):
+        """
+        :param params: instance of type "FastaGFFToGenomeParams" (genome_name
+           - becomes the name of the object workspace_name - the name of the
+           workspace it gets saved to. source - Source of the file typically
+           something like RefSeq or Ensembl taxon_ws_name - where the
+           reference taxons are : ReferenceTaxons taxon_reference - if
+           defined, will try to link the Genome to the specified taxonomy
+           object insteas of performing the lookup during upload release -
+           Release or version number of the data per example Ensembl has
+           numbered releases of all their data: Release 31 genetic_code -
+           Genetic code of organism. Overwrites determined GC from taxon
+           object type - Reference, Representative or User upload) ->
+           structure: parameter "fasta_file" of type "File" -> structure:
+           parameter "path" of String, parameter "shock_id" of String,
+           parameter "ftp_url" of String, parameter "gff_file" of type "File"
+           -> structure: parameter "path" of String, parameter "shock_id" of
+           String, parameter "ftp_url" of String, parameter "genome_name" of
+           String, parameter "workspace_name" of String, parameter "source"
+           of String, parameter "taxon_wsname" of String, parameter
+           "taxon_reference" of String, parameter "release" of String,
+           parameter "genetic_code" of Long, parameter "type" of String,
+           parameter "scientific_name" of String, parameter "metadata" of
+           type "usermeta" -> mapping from String to String
+        :returns: instance of type "GenomeSaveResult" -> structure: parameter
+           "genome_ref" of String
+        """
+        job_id = self._fasta_gff_to_genome_submit(params, context)
         async_job_check_time = self._client.async_job_check_time
         while True:
             time.sleep(async_job_check_time)

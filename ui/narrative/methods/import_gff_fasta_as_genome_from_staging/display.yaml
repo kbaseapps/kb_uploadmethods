@@ -1,0 +1,88 @@
+name     : Import GFF/FASTA File As Genome From Staging Area
+subtitle : Import A Staging GFF/FASTA File As Genome Into Your Narrative
+tooltip  : Import A Staging GFF/FASTA File As Genome Into Your Narrative
+
+screenshots :
+    []
+
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+parameters :
+    fasta_file :
+        ui-name : Fasta File Path
+        short-hint : Fasta File containing assembled contigs or chromosomes
+        long-hint  : |
+                Valid file extensions for FASTA: .fasta, .fna, .fa; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2
+
+    gff_file :
+        ui-name : GFF File Path
+        short-hint : GFF File containing list of predicted gene models and associated features
+        long-hint  : |
+                Valid file extensions for GFF: .gff, .gff2, .gff3; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2
+
+    genome_name :
+        ui-name : Genome Object Name
+        short-hint : Provide a name for the output object that will be created by this upload
+        long-hint  : Provide a name for the output object that will be created by this upload
+
+    scientific_name :
+        ui-name : Scientific Name
+        short-hint : Provide the scientific name of the species
+        long-hint  : Provide the scientific name of the species, i.e. "Escherichia coli". This is important for taxonomy lookup.
+    
+    source :
+        ui-name : Source Of The GenBank File
+        short-hint : |
+            Provide name for the source of the data (If Ensembl the "gene" feature types will use the "gene" field as the id, otherwise the "locus_tag" field is used.)
+        long-hint : |
+            Provide name for the source of the data (If Ensembl the "gene" feature types will use the "gene" field as the id, otherwise the "locus_tag" field is used.)
+
+    release :
+        ui-name : Release Or Version Of The Source Data
+        short-hint : |
+            Release or Version of the source data (for example: Release31, V4)
+        long-hint : |
+            Release or Version of the source data (for example: Release31, V4)
+
+    taxon_wsname:
+        ui-name: Taxon Workspace Name
+        short-hint: where the reference taxons are. default to ReferenceTaxons
+        long-hint: where the reference taxons are. default to ReferenceTaxons
+
+    taxon_reference:
+        ui-name: Taxonomy Object Reference
+        short-hint: Link the Genome to the specified taxonomy object
+        long-hint: Link the Genome to the specified taxonomy object
+
+    release:
+        ui-name: Release
+        short-hint: Release Or Version Of The Source Data
+        long-hint: Release Or Version Of The Source Data
+
+    genetic_code :
+        ui-name : |
+            Genetic Code For The Organism
+        short-hint : |
+            Valid genetic code (see http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi)
+        long-hint : |
+            Valid genetic code integer for translation purposes(see http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi)
+
+    type:
+        ui-name: Type
+        short-hint: one of 'Reference', 'User upload', 'Representative'
+        long-hint: one of 'Reference', 'User upload', 'Representative'
+
+description : |
+    <p> Import A Staging GFF/FASTA File As Genome Into Your Narrative </p>
+
+technical-description : none

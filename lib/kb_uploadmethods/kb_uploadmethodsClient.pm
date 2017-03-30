@@ -290,19 +290,25 @@ report_ref is a string
 
 <pre>
 $params is a kb_uploadmethods.UploadFastaGFFMethodParams
-$returnVal is a kb_uploadmethods.UploadMethodResult
+$returnVal is a kb_uploadmethods.UploadFastaGFFMethodResult
 UploadFastaGFFMethodParams is a reference to a hash where the following keys are defined:
 	fasta_file has a value which is a string
 	gff_file has a value which is a string
 	genome_name has a value which is a string
-	scientific_name has a value which is a string
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	scientific_name has a value which is a string
+	source has a value which is a string
+	taxon_wsname has a value which is a string
+	taxon_reference has a value which is a string
+	release has a value which is a string
+	genetic_code has a value which is an int
+	type has a value which is a string
 workspace_name is a string
-UploadMethodResult is a reference to a hash where the following keys are defined:
-	obj_ref has a value which is a kb_uploadmethods.obj_ref
+UploadFastaGFFMethodResult is a reference to a hash where the following keys are defined:
+	genome_ref has a value which is a string
+	genome_info has a value which is a string
 	report_name has a value which is a kb_uploadmethods.report_name
 	report_ref has a value which is a kb_uploadmethods.report_ref
-obj_ref is a string
 report_name is a string
 report_ref is a string
 
@@ -313,19 +319,25 @@ report_ref is a string
 =begin text
 
 $params is a kb_uploadmethods.UploadFastaGFFMethodParams
-$returnVal is a kb_uploadmethods.UploadMethodResult
+$returnVal is a kb_uploadmethods.UploadFastaGFFMethodResult
 UploadFastaGFFMethodParams is a reference to a hash where the following keys are defined:
 	fasta_file has a value which is a string
 	gff_file has a value which is a string
 	genome_name has a value which is a string
-	scientific_name has a value which is a string
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	scientific_name has a value which is a string
+	source has a value which is a string
+	taxon_wsname has a value which is a string
+	taxon_reference has a value which is a string
+	release has a value which is a string
+	genetic_code has a value which is an int
+	type has a value which is a string
 workspace_name is a string
-UploadMethodResult is a reference to a hash where the following keys are defined:
-	obj_ref has a value which is a kb_uploadmethods.obj_ref
+UploadFastaGFFMethodResult is a reference to a hash where the following keys are defined:
+	genome_ref has a value which is a string
+	genome_info has a value which is a string
 	report_name has a value which is a kb_uploadmethods.report_name
 	report_ref has a value which is a kb_uploadmethods.report_ref
-obj_ref is a string
 report_name is a string
 report_ref is a string
 
@@ -2207,13 +2219,21 @@ report_ref has a value which is a kb_uploadmethods.report_ref
 
 =item Description
 
+Required:
 genome_name: output genome object name
 workspace_name: workspace name/ID of the object
-scientific_name: proper name for species, key for taxonomy lookup
-
 For staging area:
 fasta_file: fasta file containing assembled contigs/chromosomes
 gff_file: gff file containing predicted gene models and corresponding features
+
+Optional params:
+scientific_name: proper name for species, key for taxonomy lookup. Default to 'unknown_taxon'
+source: Source Of The GenBank File. Default to 'User'
+taxon_wsname - where the reference taxons are. Default to 'ReferenceTaxons'
+taxon_reference - if defined, will try to link the Genome to the specified taxonomy object
+release: Release Or Version Of The Source Data
+genetic_code: Genetic Code For The Organism
+type: 'Reference', 'User upload', 'Representative'
 
 
 =item Definition
@@ -2225,8 +2245,14 @@ a reference to a hash where the following keys are defined:
 fasta_file has a value which is a string
 gff_file has a value which is a string
 genome_name has a value which is a string
-scientific_name has a value which is a string
 workspace_name has a value which is a kb_uploadmethods.workspace_name
+scientific_name has a value which is a string
+source has a value which is a string
+taxon_wsname has a value which is a string
+taxon_reference has a value which is a string
+release has a value which is a string
+genetic_code has a value which is an int
+type has a value which is a string
 
 </pre>
 
@@ -2238,8 +2264,50 @@ a reference to a hash where the following keys are defined:
 fasta_file has a value which is a string
 gff_file has a value which is a string
 genome_name has a value which is a string
-scientific_name has a value which is a string
 workspace_name has a value which is a kb_uploadmethods.workspace_name
+scientific_name has a value which is a string
+source has a value which is a string
+taxon_wsname has a value which is a string
+taxon_reference has a value which is a string
+release has a value which is a string
+genetic_code has a value which is an int
+type has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 UploadFastaGFFMethodResult
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+genome_ref has a value which is a string
+genome_info has a value which is a string
+report_name has a value which is a kb_uploadmethods.report_name
+report_ref has a value which is a kb_uploadmethods.report_ref
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+genome_ref has a value which is a string
+genome_info has a value which is a string
+report_name has a value which is a kb_uploadmethods.report_name
+report_ref has a value which is a kb_uploadmethods.report_ref
 
 
 =end text
