@@ -2,8 +2,8 @@
   "ver" : "",
   "authors" : ["tgu2"],
   "contact" : "help@kbase.us",
-  "visible" : true,
-  "categories" : [ "inactive","upload" ],
+  "visible" : false,
+  "categories" : [ "active","upload" ],
   "widgets": {
     "input": null,
     "output": "kbaseGenomeView"
