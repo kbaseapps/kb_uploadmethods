@@ -107,7 +107,7 @@ class kb_uploadmethods:
                 params_item['interleaved'] = params.get('interleaved')
                 for key, value in params_item.iteritems():
                     if isinstance(value, basestring):
-                        params[key] = value.strip()
+                        params_item[key] = value.strip()
                 fastqUploader = UploaderUtil(self.config)
                 itemReturnVal = fastqUploader.upload_fastq_file(params_item)
                 returnVal['obj_ref'] += itemReturnVal['obj_ref'] + ','
@@ -268,7 +268,7 @@ class kb_uploadmethods:
                 params_item['workspace_name'] = workspace_name
                 for key, value in params_item.iteritems():
                     if isinstance(value, basestring):
-                        params[key] = value.strip()
+                        params_item[key] = value.strip()
                 unpacker = UnpackFileUtil(self.config)
                 itemReturnVal = unpacker.unpack_web_file(params_item)
                 returnVal['unpacked_file_path'] += itemReturnVal['unpacked_file_path'] + ','
