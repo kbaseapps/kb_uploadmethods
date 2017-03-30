@@ -31,7 +31,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "0.1.18"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "510576e814f93c1aa551907239b697b8715904b9"
+    GIT_COMMIT_HASH = "b1c5752e1d734393bea62eb6f96158297177ced2"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -133,18 +133,29 @@ class kb_uploadmethods:
     def upload_fasta_gff_file(self, ctx, params):
         """
         :param params: instance of type "UploadFastaGFFMethodParams"
-           (genome_name: output genome object name workspace_name: workspace
-           name/ID of the object scientific_name: proper name for species,
-           key for taxonomy lookup For staging area: fasta_file: fasta file
-           containing assembled contigs/chromosomes gff_file: gff file
-           containing predicted gene models and corresponding features) ->
-           structure: parameter "fasta_file" of String, parameter "gff_file"
-           of String, parameter "genome_name" of String, parameter
-           "scientific_name" of String, parameter "workspace_name" of type
-           "workspace_name" (workspace name of the object)
-        :returns: instance of type "UploadMethodResult" -> structure:
-           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
-           type "report_name", parameter "report_ref" of type "report_ref"
+           (Required: genome_name: output genome object name workspace_name:
+           workspace name/ID of the object For staging area: fasta_file:
+           fasta file containing assembled contigs/chromosomes gff_file: gff
+           file containing predicted gene models and corresponding features
+           Optional params: scientific_name: proper name for species, key for
+           taxonomy lookup. Default to 'unknown_taxon' source: Source Of The
+           GenBank File. Default to 'User' taxon_wsname - where the reference
+           taxons are. Default to 'ReferenceTaxons' taxon_reference - if
+           defined, will try to link the Genome to the specified taxonomy
+           object release: Release Or Version Of The Source Data
+           genetic_code: Genetic Code For The Organism type: 'Reference',
+           'User upload', 'Representative') -> structure: parameter
+           "fasta_file" of String, parameter "gff_file" of String, parameter
+           "genome_name" of String, parameter "workspace_name" of type
+           "workspace_name" (workspace name of the object), parameter
+           "scientific_name" of String, parameter "source" of String,
+           parameter "taxon_wsname" of String, parameter "taxon_reference" of
+           String, parameter "release" of String, parameter "genetic_code" of
+           Long, parameter "type" of String
+        :returns: instance of type "UploadFastaGFFMethodResult" -> structure:
+           parameter "genome_ref" of String, parameter "genome_info" of
+           String, parameter "report_name" of type "report_name", parameter
+           "report_ref" of type "report_ref"
         """
         # ctx is the context object
         # return variables are: returnVal

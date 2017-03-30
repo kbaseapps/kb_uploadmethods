@@ -92,24 +92,46 @@ module kb_uploadmethods {
     returns (UploadMethodResult returnVal) authentication required;
 
   /*
+    Required:
     genome_name: output genome object name
     workspace_name: workspace name/ID of the object
-    scientific_name: proper name for species, key for taxonomy lookup
-
     For staging area:
     fasta_file: fasta file containing assembled contigs/chromosomes
     gff_file: gff file containing predicted gene models and corresponding features
+
+    Optional params:
+    scientific_name: proper name for species, key for taxonomy lookup. Default to 'unknown_taxon'
+    source: Source Of The GenBank File. Default to 'User'
+    taxon_wsname - where the reference taxons are. Default to 'ReferenceTaxons'
+    taxon_reference - if defined, will try to link the Genome to the specified taxonomy object
+    release: Release Or Version Of The Source Data
+    genetic_code: Genetic Code For The Organism
+    type: 'Reference', 'User upload', 'Representative'
   */
   typedef structure {
     string fasta_file;
     string gff_file;
     string genome_name;
-    string scientific_name;
     workspace_name workspace_name;
+
+    string scientific_name;
+    string source;
+    string taxon_wsname;
+    string taxon_reference;
+    string release;
+    int    genetic_code;
+    string type;
   } UploadFastaGFFMethodParams;
 
+  typedef structure {
+    string genome_ref;
+    string genome_info;
+    report_name report_name;
+    report_ref report_ref;
+  } UploadFastaGFFMethodResult;
+
   funcdef upload_fasta_gff_file(UploadFastaGFFMethodParams params)
-    returns (UploadMethodResult returnVal) authentication required;
+    returns (UploadFastaGFFMethodResult returnVal) authentication required;
 
   /* Input parameters for the "unpack_staging_file" function.
 

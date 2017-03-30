@@ -1,0 +1,214 @@
+{
+  "ver" : "1.0.0",
+  "authors" : ["seaver","tgu2"],
+  "contact" : "help@kbase.us",
+  "visble" : true,
+  "categories" : [ "active","upload" ],
+  "widgets" : {
+    "input" : null,
+    "output" : "kbaseGenomeView"
+  },
+  "parameters" : 
+  [ 
+    {
+      "id" : "fasta_file",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },    
+    {
+      "id" : "gff_file",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {
+      "id" : "genome_name",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : 
+      {
+        "valid_ws_types" : [ "KBaseGenomes.Genome" ],
+        "is_output_name" : true
+      }
+    },
+    {
+      "id" : "scientific_name",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "unknown_taxon" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {
+      "id" : "source",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {
+      "id" : "taxon_wsname",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {
+      "id" : "taxon_reference",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {  
+      "id": "release",
+      "optional": true,
+      "advanced": true,
+      "allow_multiple": false,
+      "default_values": [ "" ],
+      "field_type" : "text" 
+    },
+    {  
+      "id": "genetic_code",
+      "optional": true,
+      "advanced": true,
+      "allow_multiple": false,
+      "default_values": [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "validate_as": "int"
+      }
+    },
+    {
+      "id" : "type",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "dropdown",
+      "dropdown_options": 
+      {
+        "options": 
+        [
+          {
+              "display": "User upload",
+              "value": "User upload"
+          },
+          {
+              "display": "Reference",
+              "value": "Reference"
+          },
+          {
+              "display": "Representative",
+              "value": "Representative"
+          }
+        ]
+      }
+    }
+  ],
+  "behavior" : 
+  {
+    "service-mapping" : 
+    {
+      "url" : "",
+      "name" : "kb_uploadmethods",
+      "method" : "upload_fasta_gff_file",
+      "input_mapping" : 
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "fasta_file",
+          "target_property": "fasta_file"
+        },
+        {
+          "input_parameter": "gff_file",
+          "target_property": "gff_file"
+        },
+        {
+          "input_parameter": "genome_name",
+          "target_property": "genome_name"
+        },
+        {
+          "input_parameter": "scientific_name",
+          "target_property": "scientific_name"
+        },
+        {
+          "input_parameter": "source",
+          "target_property": "source"
+        },
+        {
+          "input_parameter": "taxon_wsname",
+          "target_property": "taxon_wsname"
+        },
+        {
+          "input_parameter": "taxon_reference",
+          "target_property": "taxon_reference"
+        },
+        {
+          "input_parameter": "release",
+          "target_property": "release"
+        },
+        {
+          "input_parameter": "genetic_code",
+          "target_property": "genetic_code"
+        },
+        {
+          "input_parameter": "type",
+          "target_property": "type"
+        }
+      ],
+      "output_mapping" : 
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "wsName"
+        },
+        {
+          "constant_value": "KBaseGenomes.Genome",
+          "target_property": "type"
+        },
+        {
+          "input_parameter": "genome_name",
+          "target_property": "id"
+        },
+        {
+            "service_method_output_path": [0, "report_name"],
+            "target_property": "report_name"
+        },
+        {
+            "service_method_output_path": [0, "report_ref"],
+            "target_property": "report_ref"
+        },
+        {
+          "service_method_output_path": [0,"obj_ref"],
+          "target_property": "obj_ref"
+        },
+        {
+            "constant_value": "16",
+            "target_property": "report_window_line_height"
+        }
+      ]
+    }
+  },
+  "job_id_output_field": "docker"
+}
