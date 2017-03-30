@@ -142,11 +142,17 @@ class kb_uploadmethodsTest(unittest.TestCase):
         scientific_name = "Populus trichocarpa"
 
         params = {
-            'fasta_file': fasta_file,
-            'gff_file': gff_file,
-            'workspace_name': self.getWsName(),
-            'genome_name': ws_obj_name,
-            'scientific_name': scientific_name
+            "fasta_file": fasta_file,
+            "gff_file": gff_file,
+            "workspace_name": self.getWsName(),
+            "genome_name": ws_obj_name,
+            "scientific_name": scientific_name,
+            "taxon_reference": None,
+            "genetic_code": None,
+            "source": None,
+            "taxon_wsname": None,
+            "release": None,
+            "type": "User upload"
         }
 
         ref = self.getImpl().upload_fasta_gff_file(self.getContext(), params)
