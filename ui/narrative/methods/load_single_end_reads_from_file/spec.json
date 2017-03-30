@@ -2,8 +2,8 @@
   "ver" : "1.0.0",
   "authors" : ["tgu2"],
   "contact" : "help@kbase.us",
-  "visible" : false,
-  "categories" : [ "active","upload" ],
+  "visible" : true,
+  "categories" : [ "inactive","upload" ],
   "widgets" : 
   {
     "input" : null,
