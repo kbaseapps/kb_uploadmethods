@@ -108,11 +108,8 @@ class ImportSRAUtil:
             error_msg += '"Reads Orientation Outward" is Paried End Reads specific'
             raise ValueError(error_msg)
 
-        sequencing_tech = params.get('sequencing_tech')
-
-        if sequencing_tech in ['']:
-            error_msg = ''
-            raise ValueError(error_msg)
+        if 'interleaved' in params:
+            del params['interleaved']
 
     def _validate_paired_end_advanced_params(self, params):
         """
