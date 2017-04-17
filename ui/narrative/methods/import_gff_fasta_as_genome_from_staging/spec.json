@@ -3,7 +3,7 @@
   "authors" : ["seaver","tgu2"],
   "contact" : "help@kbase.us",
   "visble" : true,
-  "categories" : [ "active","upload" ],
+  "categories" : [ "inactive","upload" ],
   "widgets" : {
     "input" : null,
     "output" : "kbaseGenomeView"
