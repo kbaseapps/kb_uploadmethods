@@ -1,0 +1,216 @@
+{
+  "ver" : "1.0.0",
+  "authors" : ["tgu2"],
+  "contact" : "help@kbase.us",
+  "visible" : true,
+  "categories" : [ "active","upload" ],
+  "widgets" : 
+  {
+    "input" : null,
+    "output" : "no-display"
+  },
+  "parameter-groups": 
+  [
+    {
+        "id": "sra_urls_to_add",
+        "parameters": [
+            "file_url",
+            "name",
+            "single_genome",
+            "insert_size_mean",
+            "insert_size_std_dev",
+            "read_orientation_outward"
+        ],
+        "optional": false,
+        "advanced": false,
+        "allow_multiple": true,
+        "with_border": true
+    }
+  ],
+  "parameters" : 
+  [ 
+    {
+      "id" : "download_type",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "Direct Download" ],
+      "field_type" : "dropdown",
+      "dropdown_options": 
+      {
+        "options": 
+        [
+          {
+              "display": "Direct Download Link",
+              "value": "Direct Download"
+          },
+          {
+              "display": "FTP Link",
+              "value": "FTP"
+          },
+          {
+              "display": "DropBox Public Shared Link",
+              "value": "DropBox"
+          },
+          {
+              "display": "Google Drive Public Shared Link",
+              "value": "Google Drive"
+          }
+        ]
+      }
+    },
+    {
+      "id" : "file_url",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {
+      "id" : "sequencing_tech",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "Unknown" ],
+      "field_type" : "dropdown",
+      "dropdown_options": 
+      {
+        "options": 
+        [
+          {
+              "display": "Illumina",
+              "value": "Illumina"
+          },
+          {
+              "display": "PacBio CLR",
+              "value": "PacBio CLR"
+          },
+          {
+              "display": "PacBio CCS",
+              "value": "PacBio CCS"
+          },
+          {
+              "display": "IonTorrent",
+              "value": "IonTorrent"
+          },
+          {
+              "display": "NanoPore",
+              "value": "NanoPore"
+          },
+          {
+              "display": "Unknown",
+              "value": "Unknown"
+          }
+        ]
+      }
+    },
+    {
+      "id" : "name",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : 
+      {
+        "is_output_name" : true
+      }
+    }, 
+    {
+      "id" : "insert_size_mean",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "validate_as": "float"
+      }
+    }, 
+    {
+      "id" : "insert_size_std_dev",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "validate_as": "float"
+        }
+    },
+    {
+      "id": "read_orientation_outward",
+      "optional":true,
+      "advanced":true,
+      "allow_multiple":false,
+      "default_values":[0],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
+        }
+    },
+    {
+      "id": "single_genome",
+      "optional":false,
+      "advanced":false,
+      "allow_multiple":false,
+      "default_values":[1],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
+        }
+    }
+  ],
+  "behavior" : 
+  {
+    "service-mapping" : 
+    {
+      "url" : "",
+      "name" : "kb_uploadmethods",
+      "method" : "import_sra_from_web",
+      "input_mapping" : 
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "narrative_system_variable": "download_type",
+          "target_property": "download_type"
+        },
+        {
+          "narrative_system_variable": "sra_urls_to_add",
+          "target_property": "sra_urls_to_add"
+        }
+      ],
+      "output_mapping" : 
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "wsName"
+        },
+        {
+          "service_method_output_path": [0,"obj_refs"],
+          "target_property": "obj_refs"
+        },
+        {
+            "service_method_output_path": [0, "report_name"],
+            "target_property": "report_name"
+        },
+        {
+            "service_method_output_path": [0, "report_ref"],
+            "target_property": "report_ref"
+        },
+        {
+            "constant_value": "16",
+            "target_property": "report_window_line_height"
+        }
+      ]
+    }
+  },
+  "job_id_output_field": "docker"
+}

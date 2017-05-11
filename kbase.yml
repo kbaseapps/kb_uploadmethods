@@ -2,13 +2,13 @@ module-name:
     kb_uploadmethods
 
 module-description:
-    Uploads Reads from staging area or web source (using ReadsUtils).
+    Import objects from staging area or web source.
 
 service-language:
     python
 
 module-version:
-    0.1.18
+    1.0.2
 
 owners:
     [tgu2]
