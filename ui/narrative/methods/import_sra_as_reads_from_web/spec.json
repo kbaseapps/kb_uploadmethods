@@ -16,6 +16,7 @@
         "parameters": [
             "file_url",
             "name",
+            "sequencing_tech",
             "single_genome",
             "insert_size_mean",
             "insert_size_std_dev",
