@@ -199,11 +199,71 @@ class ImportSRAUtil:
 
         return returnVal
 
+    def import_sra_from_web(self, params):
+        '''
+        import_sra_from_web: wrapper method for GenomeFileUtil.genbank_to_genome
+
+        required params:
+        download_type: download type for web source fastq file
+                       ('Direct Download', 'FTP', 'DropBox', 'Google Drive')
+        workspace_name: workspace name/ID of the object
+
+        sra_urls_to_add: dict of SRA file URLs
+            required params:
+            file_url: SRA file URL
+            sequencing_tech: sequencing technology
+            name: output reads file name
+
+            Optional Params:
+            single_genome: whether the reads are from a single genome or a metagenome.
+            insert_size_mean: mean (average) insert length
+            insert_size_std_dev: standard deviation of insert lengths
+            read_orientation_outward: whether reads in a pair point outward
+
+        return:
+        obj_ref: return object reference
+        '''
+
+        log('--->\nrunning ImportSRAUtil.import_sra_from_web\n' +
+            'params:\n{}'.format(json.dumps(params, indent=1)))
+
+        self.validate_import_sra_from_web_params(params)
+
+        download_type = params.get('download_type')
+        workspace_name = params.get('workspace_name')
+        obj_refs = []
+
+        for sra_url_to_add in params.get('sra_urls_to_add'):
+            download_web_file_params = {
+                'download_type': download_type,
+                'file_url': sra_url_to_add.get('file_url')
+            }
+            scratch_sra_file_path = self.dfu.download_web_file(
+                        download_web_file_params).get('copy_file_path')
+            log('Downloaded web file to: {}'.format(scratch_sra_file_path))
+
+            fastq_file_path = self._sra_to_fastq(scratch_sra_file_path, sra_url_to_add)
+
+            import_sra_reads_params = sra_url_to_add
+            import_sra_reads_params.update(fastq_file_path)
+
+            workspace_name_or_id = workspace_name
+            if str(workspace_name_or_id).isdigit():
+                import_sra_reads_params['wsid'] = int(workspace_name_or_id)
+            else:
+                import_sra_reads_params['wsname'] = str(workspace_name_or_id)
+
+            log('--->\nrunning ReadsUtils.upload_reads\nparams:\n{}'.format(
+                                            json.dumps(import_sra_reads_params, indent=1)))
+            obj_ref = self.ru.upload_reads(import_sra_reads_params).get('obj_ref')
+            obj_refs.append(obj_ref)
+
+        return {'obj_refs': obj_refs}
+
     def validate_import_sra_from_staging_params(self, params):
         """
         validate_import_genbank_from_staging_params:
                     validates params passed to import_genbank_from_staging method
-
         """
 
         # check for required parameters
@@ -213,12 +273,32 @@ class ImportSRAUtil:
 
         self._validate_upload_staging_file_availability(params.get('staging_file_subdir_path'))
 
-    def generate_report(self, obj_ref, params):
+    def validate_import_sra_from_web_params(self, params):
+        """
+        validate_import_genbank_from_staging_params:
+                    validates params passed to import_genbank_from_staging method
+
+        """
+
+        # check for required parameters
+        for p in ['download_type', 'workspace_name', 'sra_urls_to_add']:
+            if p not in params:
+                raise ValueError('"{}" parameter is required, but missing'.format(p))
+
+        if not isinstance(params.get('sra_urls_to_add'), list):
+            raise ValueError('sra_urls_to_add is not type list as required')
+
+        for sra_url_to_add in params.get('sra_urls_to_add'):
+            for p in ['file_url', 'sequencing_tech', 'name']:
+                if p not in sra_url_to_add:
+                    raise ValueError('"{}" parameter is required, but missing'.format(p))
+
+    def generate_report(self, obj_refs, params):
         """
         generate_report: generate summary report
 
 
-        obj_ref: generated workspace object references. (return of import_sra_from_staging)
+        obj_refs: generated workspace object references. (return of import_sra_from_staging/web)
         params:
         staging_file_subdir_path: subdirectory file path
           e.g.
@@ -231,22 +311,39 @@ class ImportSRAUtil:
         """
 
         uuid_string = str(uuid.uuid4())
-        upload_message = 'Import Finished\n'
+        upload_message = 'Import Finished\n\n'
 
-        get_objects_params = {
-            'object_refs': [obj_ref],
-            'ignore_errors': False
-        }
+        if isinstance(obj_refs, list):
+            upload_message += "Imported Reads: {}\n\n".format(len(obj_refs))
 
-        object_data = self.dfu.get_objects(get_objects_params)
-        number_of_reads = object_data.get('data')[0].get('data').get('read_count')
+            for obj_ref in obj_refs:
+                get_objects_params = {
+                    'object_refs': [obj_ref],
+                    'ignore_errors': False
+                }
 
-        upload_message += "Reads Name: "
-        upload_message += str(object_data.get('data')[0].get('info')[1]) + '\n'
-        upload_message += 'Imported Reads File: {}\n'.format(
-                              params.get('staging_file_subdir_path'))
-        if isinstance(number_of_reads, (int, long)):
-            upload_message += 'Number of Reads: {:,}\n'.format(number_of_reads)
+                object_data = self.dfu.get_objects(get_objects_params)
+                number_of_reads = object_data.get('data')[0].get('data').get('read_count')
+
+                upload_message += "Reads Name: "
+                upload_message += str(object_data.get('data')[0].get('info')[1]) + '\n'
+                if isinstance(number_of_reads, (int, long)):
+                    upload_message += 'Number of Reads: {:,}\n\n'.format(number_of_reads)
+        else:
+            get_objects_params = {
+                'object_refs': [obj_refs],
+                'ignore_errors': False
+            }
+
+            object_data = self.dfu.get_objects(get_objects_params)
+            number_of_reads = object_data.get('data')[0].get('data').get('read_count')
+
+            upload_message += "Reads Name: "
+            upload_message += str(object_data.get('data')[0].get('info')[1]) + '\n'
+            upload_message += 'Imported Reads File: {}\n'.format(
+                                  params.get('staging_file_subdir_path'))
+            if isinstance(number_of_reads, (int, long)):
+                upload_message += 'Number of Reads: {:,}\n'.format(number_of_reads)
 
         report_params = {
               'message': upload_message,

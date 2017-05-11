@@ -29,9 +29,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.1.18"
+    VERSION = "1.0.2"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "b1c5752e1d734393bea62eb6f96158297177ced2"
+    GIT_COMMIT_HASH = "cac123b09271d200e018fbef52286b98e56daf42"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -388,6 +388,55 @@ class kb_uploadmethods:
         # return the results
         return [returnVal]
 
+    def import_sra_from_web(self, ctx, params):
+        """
+        :param params: instance of type "WebSRAToReadsParams" -> structure:
+           parameter "download_type" of String, parameter "sra_urls_to_add"
+           of type "sra_urls_to_add" (download_type: download type for web
+           source fastq file ('Direct Download', 'FTP', 'DropBox', 'Google
+           Drive') sra_urls_to_add: dict of SRA file URLs required params:
+           file_url: SRA file URL sequencing_tech: sequencing technology
+           name: output reads file name workspace_name: workspace name/ID of
+           the object Optional Params: single_genome: whether the reads are
+           from a single genome or a metagenome. insert_size_mean: mean
+           (average) insert length insert_size_std_dev: standard deviation of
+           insert lengths read_orientation_outward: whether reads in a pair
+           point outward) -> structure: parameter "file_url" of String,
+           parameter "sequencing_tech" of type "sequencing_tech", parameter
+           "name" of type "name", parameter "workspace_name" of type
+           "workspace_name" (workspace name of the object), parameter
+           "single_genome" of type "single_genome", parameter
+           "insert_size_mean" of type "insert_size_mean", parameter
+           "insert_size_std_dev" of type "insert_size_std_dev", parameter
+           "read_orientation_outward" of type "read_orientation_outward"
+        :returns: instance of type "WebSRAToReadsResult" -> structure:
+           parameter "obj_refs" of list of String, parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN import_sra_from_web
+        print '--->\nRunning uploadmethods.import_sra_from_web\nparams:'
+        print json.dumps(params, indent=1)
+
+        for key, value in params.iteritems():
+            if isinstance(value, basestring):
+                params[key] = value.strip()
+
+        importer = ImportSRAUtil(self.config)
+        returnVal = importer.import_sra_from_web(params)
+
+        reportVal = importer.generate_report(returnVal['obj_refs'], params)
+        returnVal.update(reportVal)
+        #END import_sra_from_web
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method import_sra_from_web return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
     def import_fasta_as_assembly_from_staging(self, ctx, params):
         """
         :param params: instance of type "FastaToAssemblyParams" (required
@@ -657,7 +706,6 @@ class kb_uploadmethods:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
-
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",

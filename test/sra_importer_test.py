@@ -7,6 +7,7 @@ import requests
 import shutil
 from mock import patch
 import hashlib
+import ftplib
 
 from os import environ
 try:
@@ -166,7 +167,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         shutil.copy(os.path.join("data", fq_filename), fwd_file_path)
         os.rename(os.path.join(fwd_file_path, fq_filename), os.path.join(fwd_file_path, 'fastq'))
 
-    def test_bad_import_genbank_from_staging_params(self):
+    def test_bad_import_sra_from_staging_params(self):
         invalidate_input_params = {
           'missing_staging_file_subdir_path': 'staging_file_subdir_path',
           'sequencing_tech': 'sequencing_tech',
@@ -210,6 +211,113 @@ class kb_uploadmethodsTest(unittest.TestCase):
                 ValueError,
                 '"workspace_name" parameter is required, but missing'):
             self.getImpl().import_sra_from_staging(self.getContext(), invalidate_input_params)
+
+    def test_bad_import_sra_from_web_params(self):
+        invalidate_input_params = {
+            'missing_download_type': 'download_type',
+            'workspace_name': 'workspace_name',
+            'sra_urls_to_add': [
+                {
+                    'file_url': 'file_url',
+                    'sequencing_tech': 'sequencing_tech',
+                    'name': 'name'
+                }
+            ]
+        }
+        with self.assertRaisesRegexp(
+                    ValueError,
+                    '"download_type" parameter is required, but missing'):
+            self.getImpl().import_sra_from_web(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = {
+            'download_type': 'download_type',
+            'missing_workspace_name': 'workspace_name',
+            'sra_urls_to_add': [
+                {
+                    'file_url': 'file_url',
+                    'sequencing_tech': 'sequencing_tech',
+                    'name': 'name'
+                }
+            ]
+        }
+        with self.assertRaisesRegexp(
+                    ValueError,
+                    '"workspace_name" parameter is required, but missing'):
+            self.getImpl().import_sra_from_web(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = {
+            'download_type': 'download_type',
+            'workspace_name': 'workspace_name',
+            'missing_sra_urls_to_add': [
+                {
+                    'file_url': 'file_url',
+                    'sequencing_tech': 'sequencing_tech',
+                    'name': 'name'
+                }
+            ]
+        }
+        with self.assertRaisesRegexp(
+                    ValueError,
+                    '"sra_urls_to_add" parameter is required, but missing'):
+            self.getImpl().import_sra_from_web(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = {
+            'download_type': 'download_type',
+            'workspace_name': 'workspace_name',
+            'sra_urls_to_add': 'not a list'
+        }
+        with self.assertRaisesRegexp(
+                    ValueError,
+                    'sra_urls_to_add is not type list as required'):
+            self.getImpl().import_sra_from_web(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = {
+            'download_type': 'download_type',
+            'workspace_name': 'workspace_name',
+            'sra_urls_to_add': [
+                {
+                    'missing_file_url': 'file_url',
+                    'sequencing_tech': 'sequencing_tech',
+                    'name': 'name'
+                }
+            ]
+        }
+        with self.assertRaisesRegexp(
+                    ValueError,
+                    '"file_url" parameter is required, but missing'):
+            self.getImpl().import_sra_from_web(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = {
+            'download_type': 'download_type',
+            'workspace_name': 'workspace_name',
+            'sra_urls_to_add': [
+                {
+                    'file_url': 'file_url',
+                    'missing_sequencing_tech': 'sequencing_tech',
+                    'name': 'name'
+                }
+            ]
+        }
+        with self.assertRaisesRegexp(
+                    ValueError,
+                    '"sequencing_tech" parameter is required, but missing'):
+            self.getImpl().import_sra_from_web(self.getContext(), invalidate_input_params)
+
+        invalidate_input_params = {
+            'download_type': 'download_type',
+            'workspace_name': 'workspace_name',
+            'sra_urls_to_add': [
+                {
+                    'file_url': 'file_url',
+                    'sequencing_tech': 'sequencing_tech',
+                    'missing_name': 'name'
+                }
+            ]
+        }
+        with self.assertRaisesRegexp(
+                    ValueError,
+                    '"name" parameter is required, but missing'):
+            self.getImpl().import_sra_from_web(self.getContext(), invalidate_input_params)
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
@@ -349,9 +457,9 @@ class kb_uploadmethodsTest(unittest.TestCase):
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_pe)
-    def test_import_sra_paired_end(self, download_staging_file,
-                                   _validate_upload_staging_file_availability,
-                                   _run_command):
+    def test_import_sra_paired_end_optional_param(self, download_staging_file,
+                                                  _validate_upload_staging_file_availability,
+                                                  _run_command):
 
         sra_path = 'empty.sra'
         obj_name = 'MyReads'
@@ -384,3 +492,52 @@ class kb_uploadmethodsTest(unittest.TestCase):
         }
         with self.assertRaisesRegexp(ValueError, error_msg):
             self.getImpl().import_sra_from_staging(self.getContext(), invalidate_input_params)
+
+    @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_se)
+    def test_import_web_sra_paired_end(self, _run_command):
+
+        # copy test file to FTP
+        fq_filename = "empty.sra"
+        ftp_connection = ftplib.FTP('ftp.uconn.edu')
+        ftp_connection.login('anonymous', 'anonymous@domain.com')
+        ftp_connection.cwd("/48_hour/")
+
+        if fq_filename not in ftp_connection.nlst():
+            fh = open(os.path.join("data", fq_filename), 'rb')
+            ftp_connection.storbinary('STOR empty.sra', fh)
+            fh.close()
+
+        obj_name = 'MyReads'
+
+        params = {
+            'download_type': 'FTP',
+            'workspace_name': self.getWsName(),
+            'sra_urls_to_add': [
+                {
+                    'file_url': 'ftp://ftp.uconn.edu/48_hour/empty.sra',
+                    'name': obj_name,
+                    'sequencing_tech': 'Unknown',
+                    'single_genome': 1
+                }
+            ]
+        }
+
+        ref = self.getImpl().import_sra_from_web(self.getContext(), params)
+        self.assertTrue('obj_refs' in ref[0])
+        self.assertTrue('report_ref' in ref[0])
+        self.assertTrue('report_name' in ref[0])
+
+        obj = self.dfu.get_objects(
+            {'object_refs': [self.getWsName() + '/MyReads']})['data'][0]
+        self.assertEqual(ref[0]['obj_refs'][0], self.make_ref(obj['info']))
+        self.assertEqual(obj['info'][2].startswith(
+            'KBaseFile.SingleEndLibrary'), True)
+        d = obj['data']
+        self.assertEqual(d['sequencing_tech'], 'Unknown')
+        self.assertEqual(d['single_genome'], 1)
+        self.assertEqual('source' not in d, True)
+        self.assertEqual('strain' not in d, True)
+        self.check_lib(d['lib'], 2833, 'fastq.fastq.gz',
+                       'f118ee769a5e1b40ec44629994dfc3cd')
+        node = d['lib']['file']['id']
+        self.delete_shock_node(node)

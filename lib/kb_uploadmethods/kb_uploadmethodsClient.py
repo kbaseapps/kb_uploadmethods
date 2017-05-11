@@ -221,6 +221,35 @@ class kb_uploadmethods(object):
             'kb_uploadmethods.import_sra_from_staging',
             [params], self._service_ver, context)
 
+    def import_sra_from_web(self, params, context=None):
+        """
+        :param params: instance of type "WebSRAToReadsParams" -> structure:
+           parameter "download_type" of String, parameter "sra_urls_to_add"
+           of type "sra_urls_to_add" (download_type: download type for web
+           source fastq file ('Direct Download', 'FTP', 'DropBox', 'Google
+           Drive') sra_urls_to_add: dict of SRA file URLs required params:
+           file_url: SRA file URL sequencing_tech: sequencing technology
+           name: output reads file name workspace_name: workspace name/ID of
+           the object Optional Params: single_genome: whether the reads are
+           from a single genome or a metagenome. insert_size_mean: mean
+           (average) insert length insert_size_std_dev: standard deviation of
+           insert lengths read_orientation_outward: whether reads in a pair
+           point outward) -> structure: parameter "file_url" of String,
+           parameter "sequencing_tech" of type "sequencing_tech", parameter
+           "name" of type "name", parameter "workspace_name" of type
+           "workspace_name" (workspace name of the object), parameter
+           "single_genome" of type "single_genome", parameter
+           "insert_size_mean" of type "insert_size_mean", parameter
+           "insert_size_std_dev" of type "insert_size_std_dev", parameter
+           "read_orientation_outward" of type "read_orientation_outward"
+        :returns: instance of type "WebSRAToReadsResult" -> structure:
+           parameter "obj_refs" of list of String, parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        return self._client.call_method(
+            'kb_uploadmethods.import_sra_from_web',
+            [params], self._service_ver, context)
+
     def import_fasta_as_assembly_from_staging(self, params, context=None):
         """
         :param params: instance of type "FastaToAssemblyParams" (required

@@ -1,6 +1,6 @@
-name     : Import SRA File As Reads From Staging Area
-subtitle : Import A SRA File As Reads Into Your Narrative
-tooltip  : Import A SRA File As Reads Into Your Narrative
+name     : Import SRA File As Reads From Web
+subtitle : Import A SRA File From Web As Reads Into Your Narrative
+tooltip  : Import A SRA File From Web As Reads Into Your Narrative
 
 screenshots :
     []
@@ -18,10 +18,15 @@ suggestions :
             []
 
 parameters :
-    staging_file_subdir_path :
-        ui-name : SRA File Path
-        short-hint : SRA Staging Subdirectory File Path
-        long-hint  : SRA Staging Subdirectory File Path
+    download_type :
+        ui-name : Download Type
+        short-hint : Download type ('Direct Download Link', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
+        long-hint  : Download type ('Direct Download Link', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
+
+    file_url:
+        ui-name : SRA File Path URL
+        short-hint : SRA File Path URL
+        long-hint  : SRA File Path URL
 
     sequencing_tech :
         ui-name : Sequencing Technology
@@ -53,7 +58,13 @@ parameters :
         short-hint : Select if reads in a pair point outward
         long-hint  : Select if reads in a pair point outward
 
+parameter-groups :
+    sra_urls_to_add :
+        ui-name : SRA URL(s)
+        short-hint : SRA file URL and output Reads file name
+        long-hint  : SRA file URL and output Reads file name
+
 description : |
-    <p> Import A SRA File As Reads Into Your Narrative </p>
+    <p> Import A SRA File From Web As Reads Into Your Narrative </p>
 
 technical-description : none

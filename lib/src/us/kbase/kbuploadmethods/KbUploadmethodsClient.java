@@ -267,6 +267,23 @@ public class KbUploadmethodsClient {
     }
 
     /**
+     * <p>Original spec-file function name: import_sra_from_web</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.kbuploadmethods.WebSRAToReadsParams WebSRAToReadsParams}
+     * @return   parameter "returnVal" of type {@link us.kbase.kbuploadmethods.WebSRAToReadsResult WebSRAToReadsResult}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public WebSRAToReadsResult importSraFromWeb(WebSRAToReadsParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<WebSRAToReadsResult>> retType = new TypeReference<List<WebSRAToReadsResult>>() {};
+        List<WebSRAToReadsResult> res = caller.jsonrpcCall("kb_uploadmethods.import_sra_from_web", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
      * <p>Original spec-file function name: import_fasta_as_assembly_from_staging</p>
      * <pre>
      * </pre>

@@ -357,6 +357,10 @@ class Application(object):
                              name='kb_uploadmethods.import_sra_from_staging',
                              types=[dict])
         self.method_authentication['kb_uploadmethods.import_sra_from_staging'] = 'required'  # noqa
+        self.rpc_service.add(impl_kb_uploadmethods.import_sra_from_web,
+                             name='kb_uploadmethods.import_sra_from_web',
+                             types=[dict])
+        self.method_authentication['kb_uploadmethods.import_sra_from_web'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_uploadmethods.import_fasta_as_assembly_from_staging,
                              name='kb_uploadmethods.import_fasta_as_assembly_from_staging',
                              types=[dict])

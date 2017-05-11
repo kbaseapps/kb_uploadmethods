@@ -195,7 +195,6 @@ module kb_uploadmethods {
   funcdef unpack_web_file(UnpackWebFileParams params)
       returns(UnpackWebFileOutput returnVal) authentication required;
 
-
   /* 
   import_genbank_from_staging: wrapper method for GenomeFileUtil.genbank_to_genome
   
@@ -271,6 +270,49 @@ module kb_uploadmethods {
 
   funcdef import_sra_from_staging(SRAToReadsParams params)
           returns (UploadMethodResult returnVal) authentication required;
+
+  /*
+    download_type: download type for web source fastq file
+                       ('Direct Download', 'FTP', 'DropBox', 'Google Drive')
+
+    sra_urls_to_add: dict of SRA file URLs
+        required params:
+        file_url: SRA file URL
+        sequencing_tech: sequencing technology
+        name: output reads file name
+        workspace_name: workspace name/ID of the object
+
+        Optional Params:
+        single_genome: whether the reads are from a single genome or a metagenome.
+        insert_size_mean: mean (average) insert length
+        insert_size_std_dev: standard deviation of insert lengths
+        read_orientation_outward: whether reads in a pair point outward
+  */
+  typedef structure {
+    string file_url;
+    sequencing_tech sequencing_tech;
+    name name;
+
+    single_genome single_genome;
+    insert_size_mean insert_size_mean;
+    insert_size_std_dev insert_size_std_dev;
+    read_orientation_outward read_orientation_outward;
+  }sra_urls_to_add;
+
+  typedef structure {
+    string download_type;
+    sra_urls_to_add sra_urls_to_add;
+    workspace_name workspace_name;
+  } WebSRAToReadsParams;
+
+  typedef structure {
+    list<string> obj_refs;
+    report_name report_name;
+    report_ref report_ref;
+  } WebSRAToReadsResult;
+
+  funcdef import_sra_from_web(WebSRAToReadsParams params)
+          returns (WebSRAToReadsResult returnVal) authentication required;
 
   /*
     required params:
