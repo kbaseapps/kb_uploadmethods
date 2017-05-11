@@ -180,11 +180,11 @@
           "target_property": "workspace_name"
         },
         {
-          "narrative_system_variable": "download_type",
+          "input_parameter": "download_type",
           "target_property": "download_type"
         },
         {
-          "narrative_system_variable": "sra_urls_to_add",
+          "input_parameter": "sra_urls_to_add",
           "target_property": "sra_urls_to_add"
         }
       ],
