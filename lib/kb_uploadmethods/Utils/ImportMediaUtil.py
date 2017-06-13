@@ -3,7 +3,7 @@ import time
 import json
 import uuid
 
-from FBAFileUtil.FBAFileUtilClient import FBAFileUtil
+from fba_tools.fba_toolsClient import fba_tools
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from KBaseReport.KBaseReportClient import KBaseReport
 
@@ -18,7 +18,7 @@ class ImportMediaUtil:
         self.callback_url = config['SDK_CALLBACK_URL']
         self.token = config['KB_AUTH_TOKEN']
         self.dfu = DataFileUtil(self.callback_url)
-        self.fba = FBAFileUtil(self.callback_url)
+        self.fba = fba_tools(self.callback_url)
 
     def import_media_from_staging(self, params):
         '''

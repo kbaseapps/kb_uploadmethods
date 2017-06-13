@@ -29,9 +29,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.0.2"
+    VERSION = "1.0.3"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "cac123b09271d200e018fbef52286b98e56daf42"
+    GIT_COMMIT_HASH = "3cf9f56efe497d6642ad6dcc2e5be800e9b9a1f8"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -403,12 +403,12 @@ class kb_uploadmethods:
            insert lengths read_orientation_outward: whether reads in a pair
            point outward) -> structure: parameter "file_url" of String,
            parameter "sequencing_tech" of type "sequencing_tech", parameter
-           "name" of type "name", parameter "workspace_name" of type
-           "workspace_name" (workspace name of the object), parameter
-           "single_genome" of type "single_genome", parameter
-           "insert_size_mean" of type "insert_size_mean", parameter
-           "insert_size_std_dev" of type "insert_size_std_dev", parameter
-           "read_orientation_outward" of type "read_orientation_outward"
+           "name" of type "name", parameter "single_genome" of type
+           "single_genome", parameter "insert_size_mean" of type
+           "insert_size_mean", parameter "insert_size_std_dev" of type
+           "insert_size_std_dev", parameter "read_orientation_outward" of
+           type "read_orientation_outward", parameter "workspace_name" of
+           type "workspace_name" (workspace name of the object)
         :returns: instance of type "WebSRAToReadsResult" -> structure:
            parameter "obj_refs" of list of String, parameter "report_name" of
            type "report_name", parameter "report_ref" of type "report_ref"

@@ -236,12 +236,12 @@ class kb_uploadmethods(object):
            insert lengths read_orientation_outward: whether reads in a pair
            point outward) -> structure: parameter "file_url" of String,
            parameter "sequencing_tech" of type "sequencing_tech", parameter
-           "name" of type "name", parameter "workspace_name" of type
-           "workspace_name" (workspace name of the object), parameter
-           "single_genome" of type "single_genome", parameter
-           "insert_size_mean" of type "insert_size_mean", parameter
-           "insert_size_std_dev" of type "insert_size_std_dev", parameter
-           "read_orientation_outward" of type "read_orientation_outward"
+           "name" of type "name", parameter "single_genome" of type
+           "single_genome", parameter "insert_size_mean" of type
+           "insert_size_mean", parameter "insert_size_std_dev" of type
+           "insert_size_std_dev", parameter "read_orientation_outward" of
+           type "read_orientation_outward", parameter "workspace_name" of
+           type "workspace_name" (workspace name of the object)
         :returns: instance of type "WebSRAToReadsResult" -> structure:
            parameter "obj_refs" of list of String, parameter "report_name" of
            type "report_name", parameter "report_ref" of type "report_ref"

@@ -846,22 +846,22 @@ $returnVal is a kb_uploadmethods.WebSRAToReadsResult
 WebSRAToReadsParams is a reference to a hash where the following keys are defined:
 	download_type has a value which is a string
 	sra_urls_to_add has a value which is a kb_uploadmethods.sra_urls_to_add
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
 sra_urls_to_add is a reference to a hash where the following keys are defined:
 	file_url has a value which is a string
 	sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 	name has a value which is a kb_uploadmethods.name
-	workspace_name has a value which is a kb_uploadmethods.workspace_name
 	single_genome has a value which is a kb_uploadmethods.single_genome
 	insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
 	insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
 	read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
 sequencing_tech is a string
 name is a string
-workspace_name is a string
 single_genome is a string
 insert_size_mean is a string
 insert_size_std_dev is a string
 read_orientation_outward is a string
+workspace_name is a string
 WebSRAToReadsResult is a reference to a hash where the following keys are defined:
 	obj_refs has a value which is a reference to a list where each element is a string
 	report_name has a value which is a kb_uploadmethods.report_name
@@ -880,22 +880,22 @@ $returnVal is a kb_uploadmethods.WebSRAToReadsResult
 WebSRAToReadsParams is a reference to a hash where the following keys are defined:
 	download_type has a value which is a string
 	sra_urls_to_add has a value which is a kb_uploadmethods.sra_urls_to_add
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
 sra_urls_to_add is a reference to a hash where the following keys are defined:
 	file_url has a value which is a string
 	sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 	name has a value which is a kb_uploadmethods.name
-	workspace_name has a value which is a kb_uploadmethods.workspace_name
 	single_genome has a value which is a kb_uploadmethods.single_genome
 	insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
 	insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
 	read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
 sequencing_tech is a string
 name is a string
-workspace_name is a string
 single_genome is a string
 insert_size_mean is a string
 insert_size_std_dev is a string
 read_orientation_outward is a string
+workspace_name is a string
 WebSRAToReadsResult is a reference to a hash where the following keys are defined:
 	obj_refs has a value which is a reference to a list where each element is a string
 	report_name has a value which is a kb_uploadmethods.report_name
@@ -2846,7 +2846,6 @@ a reference to a hash where the following keys are defined:
 file_url has a value which is a string
 sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 name has a value which is a kb_uploadmethods.name
-workspace_name has a value which is a kb_uploadmethods.workspace_name
 single_genome has a value which is a kb_uploadmethods.single_genome
 insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
 insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
@@ -2862,7 +2861,6 @@ a reference to a hash where the following keys are defined:
 file_url has a value which is a string
 sequencing_tech has a value which is a kb_uploadmethods.sequencing_tech
 name has a value which is a kb_uploadmethods.name
-workspace_name has a value which is a kb_uploadmethods.workspace_name
 single_genome has a value which is a kb_uploadmethods.single_genome
 insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
 insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
@@ -2889,6 +2887,7 @@ read_orientation_outward has a value which is a kb_uploadmethods.read_orientatio
 a reference to a hash where the following keys are defined:
 download_type has a value which is a string
 sra_urls_to_add has a value which is a kb_uploadmethods.sra_urls_to_add
+workspace_name has a value which is a kb_uploadmethods.workspace_name
 
 </pre>
 
@@ -2899,6 +2898,7 @@ sra_urls_to_add has a value which is a kb_uploadmethods.sra_urls_to_add
 a reference to a hash where the following keys are defined:
 download_type has a value which is a string
 sra_urls_to_add has a value which is a kb_uploadmethods.sra_urls_to_add
+workspace_name has a value which is a kb_uploadmethods.workspace_name
 
 
 =end text

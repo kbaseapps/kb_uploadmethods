@@ -36,7 +36,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "file_url",
     "sequencing_tech",
     "name",
-    "workspace_name",
     "single_genome",
     "insert_size_mean",
     "insert_size_std_dev",
@@ -50,8 +49,6 @@ public class SraUrlsToAdd {
     private String sequencingTech;
     @JsonProperty("name")
     private String name;
-    @JsonProperty("workspace_name")
-    private String workspaceName;
     @JsonProperty("single_genome")
     private String singleGenome;
     @JsonProperty("insert_size_mean")
@@ -104,21 +101,6 @@ public class SraUrlsToAdd {
 
     public SraUrlsToAdd withName(String name) {
         this.name = name;
-        return this;
-    }
-
-    @JsonProperty("workspace_name")
-    public String getWorkspaceName() {
-        return workspaceName;
-    }
-
-    @JsonProperty("workspace_name")
-    public void setWorkspaceName(String workspaceName) {
-        this.workspaceName = workspaceName;
-    }
-
-    public SraUrlsToAdd withWorkspaceName(String workspaceName) {
-        this.workspaceName = workspaceName;
         return this;
     }
 
@@ -194,7 +176,7 @@ public class SraUrlsToAdd {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((("SraUrlsToAdd"+" [fileUrl=")+ fileUrl)+", sequencingTech=")+ sequencingTech)+", name=")+ name)+", workspaceName=")+ workspaceName)+", singleGenome=")+ singleGenome)+", insertSizeMean=")+ insertSizeMean)+", insertSizeStdDev=")+ insertSizeStdDev)+", readOrientationOutward=")+ readOrientationOutward)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((("SraUrlsToAdd"+" [fileUrl=")+ fileUrl)+", sequencingTech=")+ sequencingTech)+", name=")+ name)+", singleGenome=")+ singleGenome)+", insertSizeMean=")+ insertSizeMean)+", insertSizeStdDev=")+ insertSizeStdDev)+", readOrientationOutward=")+ readOrientationOutward)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
