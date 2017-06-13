@@ -20,7 +20,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "download_type",
-    "sra_urls_to_add"
+    "sra_urls_to_add",
+    "workspace_name"
 })
 public class WebSRAToReadsParams {
 
@@ -47,6 +48,8 @@ public class WebSRAToReadsParams {
      */
     @JsonProperty("sra_urls_to_add")
     private SraUrlsToAdd sraUrlsToAdd;
+    @JsonProperty("workspace_name")
+    private String workspaceName;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("download_type")
@@ -117,6 +120,21 @@ public class WebSRAToReadsParams {
         return this;
     }
 
+    @JsonProperty("workspace_name")
+    public String getWorkspaceName() {
+        return workspaceName;
+    }
+
+    @JsonProperty("workspace_name")
+    public void setWorkspaceName(String workspaceName) {
+        this.workspaceName = workspaceName;
+    }
+
+    public WebSRAToReadsParams withWorkspaceName(String workspaceName) {
+        this.workspaceName = workspaceName;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -129,7 +147,7 @@ public class WebSRAToReadsParams {
 
     @Override
     public String toString() {
-        return ((((((("WebSRAToReadsParams"+" [downloadType=")+ downloadType)+", sraUrlsToAdd=")+ sraUrlsToAdd)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((("WebSRAToReadsParams"+" [downloadType=")+ downloadType)+", sraUrlsToAdd=")+ sraUrlsToAdd)+", workspaceName=")+ workspaceName)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
