@@ -363,7 +363,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(d['read_orientation_outward'], 1)
         self.assertEqual(d['insert_size_mean'], 99.9)
         self.assertEqual(d['insert_size_std_dev'], 10.1)
-        self.check_lib(d['lib1'], 2491520, file_name,
+        self.check_lib(d['lib1'], 2696029, file_name,
                        '1c58d7d59c656db39cedcb431376514b')
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
@@ -402,7 +402,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(d['single_genome'], 1)
         self.assertEqual('source' not in d, True)
         self.assertEqual('strain' not in d, True)
-        self.check_lib(d['lib'], 2833, 'fastq.fastq.gz',
+        self.check_lib(d['lib'], 2964, 'fastq.fastq.gz',
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
@@ -537,7 +537,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(d['single_genome'], 1)
         self.assertEqual('source' not in d, True)
         self.assertEqual('strain' not in d, True)
-        self.check_lib(d['lib'], 2833, 'fastq.fastq.gz',
+        self.check_lib(d['lib'], 2964, 'fastq.fastq.gz',
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
