@@ -20,6 +20,7 @@ from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
 from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from DataFileUtil.DataFileUtilClient import DataFileUtil
+from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
 
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -51,9 +52,24 @@ class kb_uploadmethodsTest(unittest.TestCase):
         cls.wsURL = cls.cfg['workspace-url']
         cls.wsClient = workspaceService(cls.wsURL, token=cls.token)
         cls.serviceImpl = kb_uploadmethods(cls.cfg)
-        cls.dfu = DataFileUtil(os.environ['SDK_CALLBACK_URL'], token=cls.token)
+        cls.callback_url = os.environ['SDK_CALLBACK_URL']
+        cls.dfu = DataFileUtil(cls.callback_url)
+        cls.gfu = GenomeFileUtil(cls.callback_url)
         cls.scratch = cls.cfg['scratch']
         cls.shockURL = cls.cfg['shock-url']
+        cls.prepare_data()
+
+    @classmethod
+    def prepare_data(cls):
+        # upload genome object
+        genbank_file_name = 'small_genbank.gbff'
+        genbank_file_path = os.path.join(cls.scratch, genbank_file_name)
+        shutil.copy(os.path.join('data', genbank_file_name), genbank_file_path)
+
+        genome_object_name = 'test_Genome'
+        cls.genome_ref = cls.gfu.genbank_to_genome(
+            {'file': {'path': genbank_file_path}, 'workspace_name': cls.getWsName(),
+             'genome_name': genome_object_name})['genome_ref']
 
     @classmethod
     def tearDownClass(cls):
@@ -96,11 +112,12 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         return {'copy_file_path': fq_path}
 
+    @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     def test_bad_as_media_from_staging(self):
         invalid_params = {
             'file_type': 'sbml',
             'workspace_name': self.getWsName(),
-            'fba_model_name': 'MyModel'
+            'model_name': 'MyModel'
         }
         with self.assertRaisesRegexp(
                     ValueError, 'Required parameter "model_file" is missing'):
@@ -111,7 +128,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
             'model_file': 'test_model-reactions.tsv',
             'file_type': 'tsv',
             'workspace_name': self.getWsName(),
-            'fba_model_name': 'MyModel'
+            'model_name': 'MyModel'
         }
         with self.assertRaisesRegexp(
                 ValueError, 'A compound file is required for tsv upload.'):
@@ -122,7 +139,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
             'model_file': 'test_model-reactions.tsv',
             'file_type': 'csv',
             'workspace_name': self.getWsName(),
-            'fba_model_name': 'MyModel'
+            'model_name': 'MyModel'
         }
         with self.assertRaisesRegexp(
                 ValueError, '"csv" is not a valid import file_type'):
@@ -136,7 +153,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'model_file': 'test_model.sbml',
           'file_type': 'sbml',
           'workspace_name': self.getWsName(),
-          'fba_model_name': 'MyModel'
+          'model_name': 'MyModel'
         }
 
         ref = self.getImpl().import_file_as_fba_model_from_staging(
@@ -148,10 +165,10 @@ class kb_uploadmethodsTest(unittest.TestCase):
         params = {
             'model_file': 'test_model.xlsx',
             'file_type': 'excel',
-            'genome': '7601/4/1',
+            'genome': self.genome_ref,
             'biomass': ['bio1'],
             'workspace_name': self.getWsName(),
-            'fba_model_name': 'MyModel'
+            'model_name': 'MyModel'
         }
 
         ref = self.getImpl().import_file_as_fba_model_from_staging(
@@ -164,10 +181,10 @@ class kb_uploadmethodsTest(unittest.TestCase):
             'model_file': 'test_model-reactions.tsv',
             'compound_file': 'test_model-compounds.tsv',
             'file_type': 'tsv',
-            'genome': '7601/4/1',
+            'genome': self.genome_ref,
             'biomass': ['bio1'],
             'workspace_name': self.getWsName(),
-            'fba_model_name': 'MyModel'
+            'model_name': 'MyModel'
         }
 
         ref = self.getImpl().import_file_as_fba_model_from_staging(

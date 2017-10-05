@@ -58,7 +58,7 @@ parameters :
         long-hint  : |
             Provide the biomass reaction identifier in Model file
 
-    fba_model_name :
+    model_name :
         ui-name : |
             FBA Model Object Name
         short-hint : |

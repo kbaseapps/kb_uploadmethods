@@ -32,8 +32,7 @@ class ImportFBAModelUtil:
         self._check_param(params, ['model_file', 'file_type', 'workspace_name',
                                    'model_name'],
                           ['biomass', 'genome', 'compounds_file'])
-        if not params['file_type'] == 'tsv' and \
-                params.get(params['compound_file'], None):
+        if params['file_type'] == 'tsv' and params.get('compound_file', None):
             raise ValueError('A compound file is required for tsv upload.')
 
         fba_tools_params = params.copy()
@@ -57,7 +56,10 @@ class ImportFBAModelUtil:
             raise ValueError('"{}" is not a valid import file_type'
                              .format(params['file_type']))
 
-        return res
+        return_val = self.generate_report(res['ref'], params)
+        return_val['obj_ref'] = res['ref']
+
+        return return_val
 
     @staticmethod
     def _check_param(in_params, req_param, opt_param=list()):

@@ -74,7 +74,7 @@
       "text_options" : {}
     },
     {
-      "id" : "fba_model_name",
+      "id" : "model_name",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -97,8 +97,8 @@
           "target_property": "workspace_name"
         },
         {
-          "input_parameter": "fba_model_name",
-          "target_property": "fba_model_name"
+          "input_parameter": "model_name",
+          "target_property": "model_name"
         },
         {
           "input_parameter": "model_file",
