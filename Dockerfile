@@ -23,7 +23,7 @@ RUN cd /kb/dev_container/modules && \
 
 COPY ./ /kb/module
 RUN mkdir -p /kb/module/work
-RUN chmod 777 /kb/module
+RUN chmod -R 777 /kb/module
 
 WORKDIR /kb/module
 
