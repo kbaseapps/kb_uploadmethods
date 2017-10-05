@@ -1,0 +1,150 @@
+{
+  "ver" : "",
+  "authors" : ["tgu2"],
+  "contact" : "help@kbase.us",
+  "visible" : true,
+  "categories" : [ "inactive","metabolic_modeling","upload" ],
+  "widgets": {
+    "input": "kbaseNarrativeMethodInput",
+    "output" : "no-display"
+  },
+  "parameters" : [
+    {
+      "id" : "file_type",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "sbml" ],
+      "field_type" : "dropdown",
+      "dropdown_options":
+      {
+        "options":
+        [
+          {
+              "display": "SBML",
+              "value": "sbml"
+          },
+          {
+              "display": "Excel",
+              "value": "excel"
+          },
+          {
+              "display": "Tab separated values",
+              "value": "tsv"
+          }
+        ]
+      }
+    },
+    {
+      "id" : "model_file",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {
+      "id" : "compounds_file",
+      "optional" : true,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {
+      "id" : "genome",
+      "optional" : true,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "valid_ws_types" : [ "KBaseGenomes.Genome" ],
+      }
+    },
+    {
+      "id" : "biomass",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : true,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {
+      "id" : "fba_model_name",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "valid_ws_types" : [ "KBaseFBA.FBAModel" ],
+        "is_output_name" : true
+      }
+    }
+  ],
+  "behavior" : {
+    "service-mapping" : {
+      "url" : "",
+      "name" : "kb_uploadmethods",
+      "method" : "import_file_as_fba_model_from_staging",
+      "input_mapping" : [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "fba_model_name",
+          "target_property": "fba_model_name"
+        },
+        {
+          "input_parameter": "model_file",
+          "target_property": "model_file"
+        },
+        {
+          "input_parameter": "compounds_file",
+          "target_property": "compounds_file"
+        },
+        {
+          "input_parameter": "file_type",
+          "target_property": "file_type"
+        },
+        {
+          "input_parameter": "biomass",
+          "target_property": "biomass"
+        },
+        {
+          "input_parameter": "genome",
+          "target_property": "genome"
+        },
+      ],
+      "output_mapping" : [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "wsName"
+        },
+        {
+          "service_method_output_path": [0,"obj_ref"],
+          "target_property": "obj_ref",
+          "target_type_transform": "resolved-ref"
+        },
+        {
+            "service_method_output_path": [0, "report_name"],
+            "target_property": "report_name"
+        },
+        {
+            "service_method_output_path": [0, "report_ref"],
+            "target_property": "report_ref"
+        },
+        {
+            "constant_value": "16",
+            "target_property": "report_window_line_height"
+        }
+      ]
+    }
+  },
+  "job_id_output_field": "docker"
+}
