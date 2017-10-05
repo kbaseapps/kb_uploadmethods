@@ -42,7 +42,7 @@ parameters :
         long-hint  : |
             Select a compounds file in TSV format.
 
-    genomeObject :
+    genome :
       ui-name : |
             Genome(optional)
       short-hint : |

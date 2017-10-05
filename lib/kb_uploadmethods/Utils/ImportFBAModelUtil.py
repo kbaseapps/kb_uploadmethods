@@ -30,7 +30,8 @@ class ImportFBAModelUtil:
                     json.dumps(params, indent=1)))
 
         self._check_param(params, ['model_file', 'file_type', 'workspace_name',
-                                   'fba_model_name'], ['compounds_file'])
+                                   'genome', 'biomass', 'fba_model_name'],
+                          ['compounds_file'])
 
         fba_tools_params = params
         for infile in ['model_file', 'compounds_file']:

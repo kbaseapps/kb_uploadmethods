@@ -370,6 +370,8 @@ module kb_uploadmethods {
     staging_file_subdir_path is subdir_1/subdir_2/file_name
   compounds_file: same as above for compound (only used for tsv)
   file_type: one of "tsv", "excel", "sbml"
+  genome: the associated species genome
+  biomasses: one or more biomass reactions in model
   fba_model_name: output FBAModel file name
   workspace_name: workspace name/ID of the object
   */
@@ -378,6 +380,8 @@ module kb_uploadmethods {
     string model_file;
     string compounds_file;
     string file_type;
+    string genome;
+    string biomass;
     string fba_model_name;
     workspace_name workspace_name;
   } FileToFBAModelParams;

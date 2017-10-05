@@ -343,12 +343,15 @@ class kb_uploadmethods(object):
            /data/bulk/user_name/subdir_1/subdir_2/file_name
            staging_file_subdir_path is subdir_1/subdir_2/file_name
            compounds_file: same as above for compound (only used for tsv)
-           file_type: one of "tsv", "excel", "sbml" fba_model_name: output
-           FBAModel file name workspace_name: workspace name/ID of the
-           object) -> structure: parameter "model_file" of String, parameter
-           "compounds_file" of String, parameter "file_type" of String,
-           parameter "fba_model_name" of String, parameter "workspace_name"
-           of type "workspace_name" (workspace name of the object)
+           file_type: one of "tsv", "excel", "sbml" genome: the associated
+           species genome biomasses: one or more biomass reactions in model
+           fba_model_name: output FBAModel file name workspace_name:
+           workspace name/ID of the object) -> structure: parameter
+           "model_file" of String, parameter "compounds_file" of String,
+           parameter "file_type" of String, parameter "genome" of String,
+           parameter "biomass" of String, parameter "fba_model_name" of
+           String, parameter "workspace_name" of type "workspace_name"
+           (workspace name of the object)
         :returns: instance of type "UploadMethodResult" -> structure:
            parameter "obj_ref" of type "obj_ref", parameter "report_name" of
            type "report_name", parameter "report_ref" of type "report_ref"
