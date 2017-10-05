@@ -2,6 +2,7 @@
 #BEGIN_HEADER
 import os
 import json
+import sys
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
 from kb_uploadmethods.Utils.ImportGenbankUtil import ImportGenbankUtil
@@ -9,6 +10,7 @@ from kb_uploadmethods.Utils.ImportGFFFastaUtil import ImportGFFFastaUtil
 from kb_uploadmethods.Utils.ImportSRAUtil import ImportSRAUtil
 from kb_uploadmethods.Utils.ImportAssemblyUtil import ImportAssemblyUtil
 from kb_uploadmethods.Utils.ImportMediaUtil import ImportMediaUtil
+from kb_uploadmethods.Utils.ImportFBAModelUtil import ImportFBAModelUtil
 from kb_uploadmethods.Utils.ImportExpressionMatrixUtil import ImportExpressionMatrixUtil
 from kb_uploadmethods.Utils.ImportReadsUtil import ImportReadsUtil
 #END_HEADER
@@ -31,7 +33,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "1.0.5"
     GIT_URL = "git@github.com:JamesJeffryes/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "04f65ecb9e67478eb6894a552f8002136bad1b02"
+    GIT_COMMIT_HASH = "d38556f06980e3fe501c7a926e2fc8d36ebdb804"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -604,17 +606,18 @@ class kb_uploadmethods:
     def import_file_as_fba_model_from_staging(self, ctx, params):
         """
         :param params: instance of type "FileToFBAModelParams" (required
-           params: staging_file_subdir_path: subdirectory file path e.g. for
+           params: model_file: subdirectory file path for model file e.g. for
            file: /data/bulk/user_name/file_name staging_file_subdir_path is
            file_name for file:
            /data/bulk/user_name/subdir_1/subdir_2/file_name
-           staging_file_subdir_path is subdir_1/subdir_2/file_name file_type:
-           one of "tsv", "excel", "sbml" fba_model_name: output FBAModel file
-           name workspace_name: workspace name/ID of the object) ->
-           structure: parameter "staging_file_subdir_path" of String,
-           parameter "file_type" of String, parameter "fba_model_name" of
-           String, parameter "workspace_name" of type "workspace_name"
-           (workspace name of the object)
+           staging_file_subdir_path is subdir_1/subdir_2/file_name
+           compounds_file: same as above for compound (only used for tsv)
+           file_type: one of "tsv", "excel", "sbml" fba_model_name: output
+           FBAModel file name workspace_name: workspace name/ID of the
+           object) -> structure: parameter "model_file" of String, parameter
+           "compounds_file" of String, parameter "file_type" of String,
+           parameter "fba_model_name" of String, parameter "workspace_name"
+           of type "workspace_name" (workspace name of the object)
         :returns: instance of type "UploadMethodResult" -> structure:
            parameter "obj_ref" of type "obj_ref", parameter "report_name" of
            type "report_name", parameter "report_ref" of type "report_ref"
@@ -622,6 +625,15 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_file_as_fba_model_from_staging
+        print('--->\nrunning {}.{}\n params:\n{}'
+            .format(self.__class__.__name__, sys._getframe().f_code.co_name,
+                    json.dumps(params, indent=1)))
+
+        importer = ImportFBAModelUtil(self.config)
+        returnVal = importer.import_fbamodel_from_staging(params)
+
+        reportVal = importer.generate_report(returnVal['obj_ref'], params)
+        returnVal.update(reportVal)
         #END import_file_as_fba_model_from_staging
 
         # At some point might do deeper type checking...

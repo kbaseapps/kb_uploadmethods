@@ -362,19 +362,21 @@ module kb_uploadmethods {
 
   /*
   required params:
-  staging_file_subdir_path: subdirectory file path
+  model_file: subdirectory file path for model file
   e.g.
     for file: /data/bulk/user_name/file_name
     staging_file_subdir_path is file_name
     for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
     staging_file_subdir_path is subdir_1/subdir_2/file_name
+  compounds_file: same as above for compound (only used for tsv)
   file_type: one of "tsv", "excel", "sbml"
   fba_model_name: output FBAModel file name
   workspace_name: workspace name/ID of the object
   */
 
   typedef structure {
-    string staging_file_subdir_path;
+    string model_file;
+    string compounds_file;
     string file_type;
     string fba_model_name;
     workspace_name workspace_name;
