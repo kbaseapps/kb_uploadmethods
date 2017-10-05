@@ -361,6 +361,29 @@ module kb_uploadmethods {
           returns (UploadMethodResult returnVal) authentication required;
 
   /*
+  required params:
+  staging_file_subdir_path: subdirectory file path
+  e.g.
+    for file: /data/bulk/user_name/file_name
+    staging_file_subdir_path is file_name
+    for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+    staging_file_subdir_path is subdir_1/subdir_2/file_name
+  file_type: one of "tsv", "excel", "sbml"
+  fba_model_name: output FBAModel file name
+  workspace_name: workspace name/ID of the object
+  */
+
+  typedef structure {
+    string staging_file_subdir_path;
+    string file_type;
+    string fba_model_name;
+    workspace_name workspace_name;
+  } FileToFBAModelParams;
+
+  funcdef import_file_as_fba_model_from_staging(FileToFBAModelParams params)
+        returns (UploadMethodResult returnVal) authentication required;
+
+  /*
     required params:
     staging_file_subdir_path: subdirectory file path
     e.g.
