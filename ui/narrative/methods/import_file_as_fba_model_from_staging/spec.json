@@ -1,6 +1,6 @@
 {
   "ver" : "",
-  "authors" : ["tgu2"],
+  "authors" : ["jjeffryes"],
   "contact" : "help@kbase.us",
   "visible" : true,
   "categories" : [ "inactive","metabolic_modeling","upload" ],
@@ -66,7 +66,7 @@
     },
     {
       "id" : "biomass",
-      "optional" : false,
+      "optional" : true,
       "advanced" : false,
       "allow_multiple" : true,
       "default_values" : [ "" ],
@@ -118,7 +118,8 @@
         },
         {
           "input_parameter": "genome",
-          "target_property": "genome"
+          "target_property": "genome",
+          "target_type_transform": "resolved-ref"
         }
       ],
       "output_mapping" : [

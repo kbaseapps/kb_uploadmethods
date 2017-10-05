@@ -44,7 +44,7 @@ parameters :
 
     genome :
       ui-name : |
-            Genome(optional)
+            Genome
       short-hint : |
             Select the Genome object that contains features referenced by the FBAModel
       long-hint  : |

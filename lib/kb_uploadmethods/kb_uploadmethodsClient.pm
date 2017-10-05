@@ -1405,7 +1405,7 @@ FileToFBAModelParams is a reference to a hash where the following keys are defin
 	file_type has a value which is a string
 	genome has a value which is a string
 	biomass has a value which is a string
-	fba_model_name has a value which is a string
+	model_name has a value which is a string
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
 workspace_name is a string
 UploadMethodResult is a reference to a hash where the following keys are defined:
@@ -1430,7 +1430,7 @@ FileToFBAModelParams is a reference to a hash where the following keys are defin
 	file_type has a value which is a string
 	genome has a value which is a string
 	biomass has a value which is a string
-	fba_model_name has a value which is a string
+	model_name has a value which is a string
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
 workspace_name is a string
 UploadMethodResult is a reference to a hash where the following keys are defined:
@@ -3168,7 +3168,7 @@ compounds_file: same as above for compound (only used for tsv)
 file_type: one of "tsv", "excel", "sbml"
 genome: the associated species genome
 biomasses: one or more biomass reactions in model
-fba_model_name: output FBAModel file name
+model_name: output FBAModel object name
 workspace_name: workspace name/ID of the object
 
 
@@ -3183,7 +3183,7 @@ compounds_file has a value which is a string
 file_type has a value which is a string
 genome has a value which is a string
 biomass has a value which is a string
-fba_model_name has a value which is a string
+model_name has a value which is a string
 workspace_name has a value which is a kb_uploadmethods.workspace_name
 
 </pre>
@@ -3198,7 +3198,7 @@ compounds_file has a value which is a string
 file_type has a value which is a string
 genome has a value which is a string
 biomass has a value which is a string
-fba_model_name has a value which is a string
+model_name has a value which is a string
 workspace_name has a value which is a kb_uploadmethods.workspace_name
 
 

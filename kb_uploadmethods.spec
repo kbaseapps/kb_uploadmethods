@@ -372,7 +372,7 @@ module kb_uploadmethods {
   file_type: one of "tsv", "excel", "sbml"
   genome: the associated species genome
   biomasses: one or more biomass reactions in model
-  fba_model_name: output FBAModel file name
+  model_name: output FBAModel object name
   workspace_name: workspace name/ID of the object
   */
 
@@ -382,7 +382,7 @@ module kb_uploadmethods {
     string file_type;
     string genome;
     string biomass;
-    string fba_model_name;
+    string model_name;
     workspace_name workspace_name;
   } FileToFBAModelParams;
 

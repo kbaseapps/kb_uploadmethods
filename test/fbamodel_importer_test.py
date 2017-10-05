@@ -96,7 +96,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         return {'copy_file_path': fq_path}
 
-    @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     def test_bad_as_media_from_staging(self):
         invalid_params = {
             'file_type': 'sbml',
@@ -149,6 +148,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         params = {
             'model_file': 'test_model.xlsx',
             'file_type': 'excel',
+            'genome': '7601/4/1',
+            'biomass': ['bio1'],
             'workspace_name': self.getWsName(),
             'fba_model_name': 'MyModel'
         }
@@ -163,6 +164,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
             'model_file': 'test_model-reactions.tsv',
             'compound_file': 'test_model-compounds.tsv',
             'file_type': 'tsv',
+            'genome': '7601/4/1',
+            'biomass': ['bio1'],
             'workspace_name': self.getWsName(),
             'fba_model_name': 'MyModel'
         }

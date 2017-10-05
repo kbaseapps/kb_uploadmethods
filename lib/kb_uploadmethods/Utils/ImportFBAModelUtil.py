@@ -30,10 +30,13 @@ class ImportFBAModelUtil:
                     json.dumps(params, indent=1)))
 
         self._check_param(params, ['model_file', 'file_type', 'workspace_name',
-                                   'genome', 'biomass', 'fba_model_name'],
-                          ['compounds_file'])
+                                   'model_name'],
+                          ['biomass', 'genome', 'compounds_file'])
+        if not params['file_type'] == 'tsv' and \
+                params.get(params['compound_file'], None):
+            raise ValueError('A compound file is required for tsv upload.')
 
-        fba_tools_params = params
+        fba_tools_params = params.copy()
         for infile in ['model_file', 'compounds_file']:
             if not params.get(infile, None):
                 continue
@@ -49,8 +52,6 @@ class ImportFBAModelUtil:
         elif params['file_type'] == 'excel':
             res = self.fba.excel_file_to_model(fba_tools_params)
         elif params['file_type'] == 'tsv':
-            if not params.get(params['compound_file'], None):
-                raise ValueError('A compound file is required for tsv upload.')
             res = self.fba.tsv_file_to_model(fba_tools_params)
         else:
             raise ValueError('"{}" is not a valid import file_type'
@@ -93,22 +94,17 @@ class ImportFBAModelUtil:
         uuid_string = str(uuid.uuid4())
         upload_message = 'Import Finished\n'
 
-        get_objects_params = {
-            'object_refs': [obj_ref],
-            'ignore_errors': False
-        }
-
-        object_data = self.dfu.get_objects(get_objects_params)
-
         upload_message += "FBAModel Object Name: "
-        upload_message += str(object_data.get('data')[0].get('info')[1]) + '\n'
+        upload_message += params['model_name'] + '\n'
         upload_message += 'Imported File: {}\n'.format(
-                              params.get('staging_file_subdir_path'))
+                              params.get('model_file'))
 
         report_params = {
               'message': upload_message,
+              'objects_created': [{'ref': obj_ref,
+                                   'description': 'Imported FBAModel'}],
               'workspace_name': params.get('workspace_name'),
-              'report_object_name': 'kb_upload_mothods_report_' + uuid_string}
+              'report_object_name': 'kb_upload_methods_report_' + uuid_string}
 
         kbase_report_client = KBaseReport(self.callback_url, token=self.token)
         output = kbase_report_client.create_extended_report(report_params)

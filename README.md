@@ -3,4 +3,6 @@
 # kb_uploadmethods
 ---
 
-This is the basic readme for this module. Include any usage or deployment instructions and links to other documentation here.
+Uploaders for kbase datatypes, especially for files in stageing area
+
+[Release Notes](RELEASE_NOTES.md)
