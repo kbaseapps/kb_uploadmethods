@@ -1,0 +1,70 @@
+name     : Import TSV/EXCEL/SBML File As A FBAModel From Staging Area
+subtitle : Import A Staging TSV/EXCEL/SBML File As A FBAModel Into Your Narrative
+tooltip  : Import A Staging TSV/EXCEL/SBML File As A FBAModel Into Your Narrative
+
+screenshots :
+    []
+
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+parameters :
+    file_type :
+        ui-name : |
+            Model File Type
+        short-hint : |
+            Format of model file to upload
+        long-hint  : |
+            Format of model file to upload
+
+    model_file :
+        ui-name : |
+            Model File Path (Reactions if TSV)
+        short-hint : |
+            Select a model file in TSV, Excel or SBML format.
+        long-hint  : |
+            Select a model file in TSV, Excel or SBML format.
+
+    biomass :
+        ui-name : |
+            Biomass
+        short-hint : |
+            Provide the biomass reaction identifier in Model file
+        long-hint  : |
+            Provide the biomass reaction identifier in Model file
+
+    compounds_file :
+        ui-name : |
+            Compounds File path (if uploading TSV)
+        short-hint : |
+            Select a compounds file in TSV format.
+        long-hint  : |
+            Select a compounds file in TSV format.
+
+    genome :
+      ui-name : |
+            Genome
+      short-hint : |
+            Select the Genome object that contains features referenced by the FBAModel
+      long-hint  : |
+            Select the Genome object that contains features referenced by the FBAModel
+
+    model_name :
+        ui-name : |
+            FBA Model Object Name
+        short-hint : |
+            Provide a name for the Model that will be created by this importer
+        long-hint : |
+            Provide a name for the Model that will be created by this importer
+
+description : |
+    <p> Import A Staging TSV/EXCEL/SBML File As A FBAModel Into Your Narrative </p>

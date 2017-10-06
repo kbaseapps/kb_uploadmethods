@@ -1,5 +1,8 @@
-1.0.3:
-replace FBAFileUtil with fba_tools module
+###Release Notes
 
-1.0.5
+**1.0.5**:
+Add FBAModel import functions (tsv/excel/sbml)
 added KBasePhenotypes.PhenotypeSet importer
+
+**1.0.3**:
+replace FBAFileUtil with fba_tools module
