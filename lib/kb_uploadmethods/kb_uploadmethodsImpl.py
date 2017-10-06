@@ -637,7 +637,7 @@ class kb_uploadmethods:
         importer = ImportFBAModelUtil(self.config)
         returnVal = importer.import_fbamodel_from_staging(params)
 
-        reportVal = importer.generate_report(returnVal['ref'], params)
+        reportVal = importer.generate_report(returnVal['obj_ref'], params)
         returnVal.update(reportVal)
         #END import_file_as_fba_model_from_staging
 

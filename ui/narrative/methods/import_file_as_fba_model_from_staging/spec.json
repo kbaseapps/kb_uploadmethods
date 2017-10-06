@@ -45,6 +45,15 @@
       "text_options" : {}
     },
     {
+      "id" : "biomass",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : true,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {
       "id" : "compounds_file",
       "optional" : true,
       "advanced" : false,
@@ -63,15 +72,6 @@
       "text_options" : {
         "valid_ws_types" : [ "KBaseGenomes.Genome" ]
       }
-    },
-    {
-      "id" : "biomass",
-      "optional" : true,
-      "advanced" : false,
-      "allow_multiple" : true,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
     },
     {
       "id" : "model_name",
@@ -118,8 +118,7 @@
         },
         {
           "input_parameter": "genome",
-          "target_property": "genome",
-          "target_type_transform": "resolved-ref"
+          "target_property": "genome"
         }
       ],
       "output_mapping" : [

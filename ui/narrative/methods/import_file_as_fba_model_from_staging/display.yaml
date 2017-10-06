@@ -34,6 +34,14 @@ parameters :
         long-hint  : |
             Select a model file in TSV, Excel or SBML format.
 
+    biomass :
+        ui-name : |
+            Biomass
+        short-hint : |
+            Provide the biomass reaction identifier in Model file
+        long-hint  : |
+            Provide the biomass reaction identifier in Model file
+
     compounds_file :
         ui-name : |
             Compounds File path (if uploading TSV)
@@ -49,14 +57,6 @@ parameters :
             Select the Genome object that contains features referenced by the FBAModel
       long-hint  : |
             Select the Genome object that contains features referenced by the FBAModel
-
-    biomass :
-        ui-name : |
-            Biomass
-        short-hint : |
-            Provide the biomass reaction identifier in Model file
-        long-hint  : |
-            Provide the biomass reaction identifier in Model file
 
     model_name :
         ui-name : |

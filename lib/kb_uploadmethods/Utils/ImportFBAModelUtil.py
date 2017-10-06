@@ -30,9 +30,9 @@ class ImportFBAModelUtil:
                     json.dumps(params, indent=1)))
 
         self._check_param(params, ['model_file', 'file_type', 'workspace_name',
-                                   'model_name'],
-                          ['biomass', 'genome', 'compounds_file'])
-        if params['file_type'] == 'tsv' and params.get('compound_file', None):
+                                   'model_name', 'biomass'],
+                          ['genome', 'compounds_file'])
+        if params['file_type'] == 'tsv' and not params.get('compounds_file', None):
             raise ValueError('A compound file is required for tsv upload.')
 
         fba_tools_params = params.copy()
