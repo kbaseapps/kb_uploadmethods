@@ -57,6 +57,10 @@ class kb_uploadmethodsTest(unittest.TestCase):
         cls.gfu = GenomeFileUtil(cls.callback_url)
         cls.scratch = cls.cfg['scratch']
         cls.shockURL = cls.cfg['shock-url']
+
+        suffix = int(time.time() * 1000)
+        cls.wsName = "test_kb_uploadmethods_fbamodel_" + str(suffix)
+        cls.wsClient.create_workspace({'workspace': cls.wsName})
         cls.prepare_data()
 
     @classmethod
@@ -68,7 +72,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         genome_object_name = 'test_Genome'
         cls.genome_ref = cls.gfu.genbank_to_genome(
-            {'file': {'path': genbank_file_path}, 'workspace_name': cls.getWsName(),
+            {'file': {'path': genbank_file_path}, 'workspace_name': cls.wsName,
              'genome_name': genome_object_name})['genome_ref']
 
     @classmethod
@@ -88,13 +92,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         return self.__class__.wsClient
 
     def getWsName(self):
-        if hasattr(self.__class__, 'wsName'):
-            return self.__class__.wsName
-        suffix = int(time.time() * 1000)
-        wsName = "test_kb_uploadmethods_" + str(suffix)
-        ret = self.getWsClient().create_workspace({'workspace': wsName})  # noqa
-        self.__class__.wsName = wsName
-        return wsName
+        return self.__class__.wsName
 
     def getImpl(self):
         return self.__class__.serviceImpl
@@ -113,7 +111,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         return {'copy_file_path': fq_path}
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    def test_bad_as_media_from_staging(self):
+    def test_bad_as_media_from_staging(self, download_staging_file):
         invalid_params = {
             'file_type': 'sbml',
             'workspace_name': self.getWsName(),

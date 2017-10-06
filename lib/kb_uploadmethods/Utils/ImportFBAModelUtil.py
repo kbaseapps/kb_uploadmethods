@@ -56,10 +56,7 @@ class ImportFBAModelUtil:
             raise ValueError('"{}" is not a valid import file_type'
                              .format(params['file_type']))
 
-        return_val = self.generate_report(res['ref'], params)
-        return_val['obj_ref'] = res['ref']
-
-        return return_val
+        return {'obj_ref': res['ref']}
 
     @staticmethod
     def _check_param(in_params, req_param, opt_param=list()):
