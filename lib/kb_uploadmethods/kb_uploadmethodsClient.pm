@@ -1636,6 +1636,114 @@ report_ref is a string
     }
 }
  
+
+
+=head2 import_tsv_as_phenotype_set_from_staging
+
+  $returnVal = $obj->import_tsv_as_phenotype_set_from_staging($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a kb_uploadmethods.FileToPhenotypeSetParams
+$returnVal is a kb_uploadmethods.UploadMethodResult
+FileToPhenotypeSetParams is a reference to a hash where the following keys are defined:
+	staging_file_subdir_path has a value which is a string
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	phenotype_set_name has a value which is a string
+	genome has a value which is a kb_uploadmethods.obj_ref
+workspace_name is a string
+obj_ref is a string
+UploadMethodResult is a reference to a hash where the following keys are defined:
+	obj_ref has a value which is a kb_uploadmethods.obj_ref
+	report_name has a value which is a kb_uploadmethods.report_name
+	report_ref has a value which is a kb_uploadmethods.report_ref
+report_name is a string
+report_ref is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a kb_uploadmethods.FileToPhenotypeSetParams
+$returnVal is a kb_uploadmethods.UploadMethodResult
+FileToPhenotypeSetParams is a reference to a hash where the following keys are defined:
+	staging_file_subdir_path has a value which is a string
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	phenotype_set_name has a value which is a string
+	genome has a value which is a kb_uploadmethods.obj_ref
+workspace_name is a string
+obj_ref is a string
+UploadMethodResult is a reference to a hash where the following keys are defined:
+	obj_ref has a value which is a kb_uploadmethods.obj_ref
+	report_name has a value which is a kb_uploadmethods.report_name
+	report_ref has a value which is a kb_uploadmethods.report_ref
+report_name is a string
+report_ref is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub import_tsv_as_phenotype_set_from_staging
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function import_tsv_as_phenotype_set_from_staging (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to import_tsv_as_phenotype_set_from_staging:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'import_tsv_as_phenotype_set_from_staging');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "kb_uploadmethods.import_tsv_as_phenotype_set_from_staging",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'import_tsv_as_phenotype_set_from_staging',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method import_tsv_as_phenotype_set_from_staging",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'import_tsv_as_phenotype_set_from_staging',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -1679,16 +1787,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'import_reads_from_staging',
+                method_name => 'import_tsv_as_phenotype_set_from_staging',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method import_reads_from_staging",
+            error => "Error invoking method import_tsv_as_phenotype_set_from_staging",
             status_line => $self->{client}->status_line,
-            method_name => 'import_reads_from_staging',
+            method_name => 'import_tsv_as_phenotype_set_from_staging',
         );
     }
 }
@@ -3167,6 +3275,58 @@ interleaved has a value which is a kb_uploadmethods.interleaved
 insert_size_mean has a value which is a kb_uploadmethods.insert_size_mean
 insert_size_std_dev has a value which is a kb_uploadmethods.insert_size_std_dev
 read_orientation_outward has a value which is a kb_uploadmethods.read_orientation_outward
+
+
+=end text
+
+=back
+
+
+
+=head2 FileToPhenotypeSetParams
+
+=over 4
+
+
+
+=item Description
+
+required params:
+staging_file_subdir_path: subdirectory file path
+e.g.
+  for file: /data/bulk/user_name/file_name
+  staging_file_subdir_path is file_name
+  for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+  staging_file_subdir_path is subdir_1/subdir_2/file_name
+phenotype_set_name: output PhenotypeSet object name
+workspace_name: workspace name/ID of the object
+
+optional:
+genome: Genome object that contains features referenced by the Phenotype Set
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+staging_file_subdir_path has a value which is a string
+workspace_name has a value which is a kb_uploadmethods.workspace_name
+phenotype_set_name has a value which is a string
+genome has a value which is a kb_uploadmethods.obj_ref
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+staging_file_subdir_path has a value which is a string
+workspace_name has a value which is a kb_uploadmethods.workspace_name
+phenotype_set_name has a value which is a string
+genome has a value which is a kb_uploadmethods.obj_ref
 
 
 =end text
