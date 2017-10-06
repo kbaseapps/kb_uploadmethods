@@ -13,6 +13,7 @@ from kb_uploadmethods.Utils.ImportMediaUtil import ImportMediaUtil
 from kb_uploadmethods.Utils.ImportFBAModelUtil import ImportFBAModelUtil
 from kb_uploadmethods.Utils.ImportExpressionMatrixUtil import ImportExpressionMatrixUtil
 from kb_uploadmethods.Utils.ImportReadsUtil import ImportReadsUtil
+from kb_uploadmethods.Utils.ImportPhenotypeSetUtil import ImportPhenotypeSetUtil
 #END_HEADER
 
 
@@ -32,9 +33,10 @@ class kb_uploadmethods:
     # the latter method is running.
     ######################################### noqa
     VERSION = "1.0.5"
-    GIT_URL = "git@github.com:JamesJeffryes/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "7e142b3fa8f0e8316df65dd973140b7e7c01f38a"
 
+    GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
+    GIT_COMMIT_HASH = "04f65ecb9e67478eb6894a552f8002136bad1b02"
+    
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
 
@@ -748,6 +750,49 @@ class kb_uploadmethods:
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method import_reads_from_staging return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def import_tsv_as_phenotype_set_from_staging(self, ctx, params):
+        """
+        :param params: instance of type "FileToPhenotypeSetParams" (required
+           params: staging_file_subdir_path: subdirectory file path e.g. for
+           file: /data/bulk/user_name/file_name staging_file_subdir_path is
+           file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name
+           phenotype_set_name: output PhenotypeSet object name
+           workspace_name: workspace name/ID of the object optional: genome:
+           Genome object that contains features referenced by the Phenotype
+           Set) -> structure: parameter "staging_file_subdir_path" of String,
+           parameter "workspace_name" of type "workspace_name" (workspace
+           name of the object), parameter "phenotype_set_name" of String,
+           parameter "genome" of type "obj_ref"
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN import_tsv_as_phenotype_set_from_staging
+        print '--->\nRunning uploadmethods.import_tsv_as_phenotype_set_from_staging\nparams:'
+        print json.dumps(params, indent=1)
+
+        for key, value in params.iteritems():
+            if isinstance(value, basestring):
+                params[key] = value.strip()
+
+        importer = ImportPhenotypeSetUtil(self.config)
+        returnVal = importer.import_phenotype_set_from_staging(params)
+
+        reportVal = importer.generate_report(returnVal['obj_ref'], params)
+        returnVal.update(reportVal)
+        #END import_tsv_as_phenotype_set_from_staging
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method import_tsv_as_phenotype_set_from_staging return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]

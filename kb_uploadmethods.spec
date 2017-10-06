@@ -462,4 +462,28 @@ module kb_uploadmethods {
   funcdef import_reads_from_staging(UploadReadsParams params)
     returns (UploadMethodResult returnVal) authentication required;
 
+  /*
+    required params:
+    staging_file_subdir_path: subdirectory file path
+    e.g.
+      for file: /data/bulk/user_name/file_name
+      staging_file_subdir_path is file_name
+      for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+      staging_file_subdir_path is subdir_1/subdir_2/file_name
+    phenotype_set_name: output PhenotypeSet object name
+    workspace_name: workspace name/ID of the object
+
+    optional:
+    genome: Genome object that contains features referenced by the Phenotype Set
+  */
+  typedef structure {
+    string staging_file_subdir_path;
+    workspace_name workspace_name;
+    string phenotype_set_name;
+    obj_ref genome;
+  } FileToPhenotypeSetParams;
+
+  funcdef import_tsv_as_phenotype_set_from_staging(FileToPhenotypeSetParams params)
+          returns (UploadMethodResult returnVal) authentication required;
+
 };
