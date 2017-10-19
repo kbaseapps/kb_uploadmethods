@@ -19,6 +19,17 @@
       "text_options" : {}
     }, 
     {
+      "id" : "min_contig_length",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "500" ],
+      "field_type" : "text",
+      "text_options" : {
+        "validate_as": "int"
+      }
+    },
+    {
       "id" : "assembly_name",
       "optional" : false,
       "advanced" : false,

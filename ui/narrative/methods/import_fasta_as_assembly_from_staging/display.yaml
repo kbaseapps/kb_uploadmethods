@@ -26,6 +26,14 @@ parameters :
         long-hint  : |
             Recognized extensions for the FASTA input file are .fasta, .fna, or .fa
 
+    min_contig_length :
+        ui-name : |
+            Minimum contig length
+        short-hint : |
+            Contigs shorter than this length will be filtered out
+        long-hint  : |
+            Contigs shorter than this value will be filtered out. Try larger value if upload fails.
+
     assembly_name :
         ui-name : |
             Assembly Object Name
