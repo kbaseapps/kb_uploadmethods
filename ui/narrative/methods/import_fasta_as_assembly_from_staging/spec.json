@@ -53,6 +53,10 @@
           "target_property": "workspace_name"
         },
         {
+          "input_parameter": "min_contig_length",
+          "target_property": "min_contig_length"
+        },
+        {
           "input_parameter": "assembly_name",
           "target_property": "assembly_name"
         },
