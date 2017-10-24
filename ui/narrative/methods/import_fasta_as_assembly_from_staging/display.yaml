@@ -1,6 +1,6 @@
-name     : Import Fasta File As Assembly From Staging Area
-subtitle : Import A Staging Fasta File As Assembly Into Your Narrative
-tooltip  : Import A Staging Fasta File As Assembly Into Your Narrative
+name     : Import FASTA File as Assembly from Staging Area
+subtitle : Import a FASTA file from your staging area into your Narrative as an Assembly data object
+tooltip  : Import a FASTA file from your staging area into your Narrative as an Assembly data object
 
 screenshots :
     []
@@ -20,7 +20,7 @@ suggestions :
 parameters :
     staging_file_subdir_path :
         ui-name : |
-            FASTA File Path
+            FASTA file path
         short-hint : |
             File with DNA data (one or more sequences) in FASTA format.
         long-hint  : |
@@ -36,11 +36,12 @@ parameters :
 
     assembly_name :
         ui-name : |
-            Assembly Object Name
+            Assembly object name
         short-hint : |
             Provide a name for the Assembly that will be created by this importer
         long-hint : |
             Provide a name for the Assembly that will be created by this importer
 
 description : |
-    <p> Import A Staging Fasta File As Assembly Into Your Narrative </p>
+    <p> Import a FASTA file from your staging area into your Narrative as an Assembly data object.
+    Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
