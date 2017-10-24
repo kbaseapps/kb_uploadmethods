@@ -1,6 +1,6 @@
-name     : Import FASTQ/SRA File As Reads From Staging Area
-subtitle : Import A FASTQ/SRA File As Reads Into Your Narrative
-tooltip  : Import A FASTQ/SRA File As Reads Into Your Narrative
+name     : Import FASTQ/SRA File as Reads from Staging Area
+subtitle : Import a FASTQ/SRA file into your Narrative as a Reads data object
+tooltip  : Import a FASTQ/SRA file into your Narrative as a Reads data object
 
 screenshots :
     []
@@ -47,8 +47,8 @@ parameters :
 
     name :
         ui-name : Reads Object Name
-        short-hint : Provide a name for the Reads that will be created by this importer
-        long-hint  : Provide a name for the Reads that will be created by this importer
+        short-hint : Provide a name for the Reads object that will be created by this importer
+        long-hint  : Provide a name for the Reads object that will be created by this importer
 
     single_genome:
         ui-name: Single Genome
@@ -57,8 +57,8 @@ parameters :
     
     interleaved:
         ui-name: Interleaved
-        short-hint: Select if reads is interleaved
-        long-hint: Select if reads is interleaved
+        short-hint: Select if reads file is interleaved
+        long-hint: Select if reads file is interleaved
 
     insert_size_mean :
         ui-name : Mean Insert Size
@@ -76,6 +76,7 @@ parameters :
         long-hint  : Select if reads in a pair point outward
 
 description : |
-    <p> Import A FASTQ/SRA File As Reads Into Your Narrative </p>
+    <p> Import a FASTA file from your staging area into your Narrative as an Assembly data object.
+    Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
 
 technical-description : none
