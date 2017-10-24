@@ -1,6 +1,6 @@
-name     : Import TSV/EXCEL/SBML File As A FBAModel From Staging Area
-subtitle : Import A Staging TSV/EXCEL/SBML File As A FBAModel Into Your Narrative
-tooltip  : Import A Staging TSV/EXCEL/SBML File As A FBAModel Into Your Narrative
+name     : Import TSV/XLS/SBML File as an FBAModel from Staging Area
+subtitle : Import a file in TSV, XLS (Excel) or SBML format from your staging area into your Narrative as an FBAModel 
+tooltip  : Import a file in TSV, XLS (Excel) or SBML format from your staging area into your Narrative as an FBAModel 
 
 screenshots :
     []
@@ -20,7 +20,7 @@ suggestions :
 parameters :
     file_type :
         ui-name : |
-            Model File Type
+            Model file type
         short-hint : |
             Format of model file to upload
         long-hint  : |
@@ -28,7 +28,7 @@ parameters :
 
     model_file :
         ui-name : |
-            Model File Path (Reactions if TSV)
+            Model file path (reactions if TSV)
         short-hint : |
             Select a model file in TSV, Excel or SBML format.
         long-hint  : |
@@ -44,7 +44,7 @@ parameters :
 
     compounds_file :
         ui-name : |
-            Compounds File path (if uploading TSV)
+            Compounds file path (if uploading TSV)
         short-hint : |
             Select a compounds file in TSV format.
         long-hint  : |
@@ -60,11 +60,12 @@ parameters :
 
     model_name :
         ui-name : |
-            FBA Model Object Name
+            FBA Model object name
         short-hint : |
             Provide a name for the Model that will be created by this importer
         long-hint : |
             Provide a name for the Model that will be created by this importer
 
 description : |
-    <p> Import A Staging TSV/EXCEL/SBML File As A FBAModel Into Your Narrative </p>
+    <p>Import a file in TSV, XLS (Excel) or SBML format from your staging area into your Narrative as an FBAModel.
+        Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
