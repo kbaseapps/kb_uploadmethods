@@ -1,6 +1,6 @@
-name     : Upload Web File To Staging - v1.0.4
-subtitle : Upload And Unpack A Web File To Staging Area
-tooltip  : Upload And Unpack A Web File To Staging Area
+name     : Upload File to Staging from Web - v1.0.4
+subtitle : Upload a data file (which may be compressed) from a web URL to your staging area
+tooltip  : Upload a data file (which may be compressed) from a web URL to your staging area
 
 screenshots :
     []
@@ -20,21 +20,21 @@ suggestions :
 parameters :
     download_type :
         ui-name : Download Type
-        short-hint : Download type ('Direct Download Link', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
-        long-hint  : Download type ('Direct Download Link', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
+        short-hint : Download type ('Direct Download Link', 'FTP Link', 'Dropbox Public Shared Link',  'Google Drive Public Shared Link')
+        long-hint  : Download type ('Direct Download Link', 'FTP Link', 'Dropbox Public Shared Link',  'Google Drive Public Shared Link')
  
     file_url :
-        ui-name : File URL
-        short-hint : Publicly Shared File URL
-        long-hint  : Publicly Shared File URL
+        ui-name : URL
+        short-hint : URL for data file (must be publicly readable)
+        long-hint  : URL for data file (must be publicly readable)
 
 parameter-groups :
     urls_to_add_web_unpack :
         ui-name : URL(s)
-        short-hint : Publicly Shared File URL(s)
-        long-hint  : Publicly Shared File URL(s)
+        short-hint : URL(s) for data file (must be publicly readable)
+        long-hint  : URL(s) for data file (must be publicly readable)
 
 description : |
-    <p> Upload and unpack a web compressed file and upload uncompressed file(s) to staging area. </p>
+    <p> Upload a data file (which may be compressed) from a web URL to your staging area. If the file is compressed (.gz or .zip), it will automatically be uncompressed.</p> 
 
 technical-description : none
