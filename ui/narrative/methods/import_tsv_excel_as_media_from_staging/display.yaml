@@ -1,6 +1,6 @@
-name     : Import TSV/EXCEL File As Media From Staging Area
-subtitle : Import A Staging TSV/EXCEL File As Media Into Your Narrative
-tooltip  : Import A Staging TSV/EXCEL File As Media Into Your Narrative
+name     : Import Media file (TSV/Excel) from Staging Area
+subtitle : Import a Media file (in TSV or Excel format) from your staging area into your Narrative
+tooltip  : Import a Media file (in TSV or Excel format) from your staging area into your Narrative
 
 screenshots :
     []
@@ -20,7 +20,7 @@ suggestions :
 parameters :
     staging_file_subdir_path :
         ui-name : |
-            TSV/EXCEL File Path
+            TSV/Excel File Path
         short-hint : |
             Select a media file in TSV or Excel format. Filename should end with ".tsv", .xls" or ".xlsx"
         long-hint  : |
@@ -35,4 +35,5 @@ parameters :
             Provide a name for the Media that will be created by this importer
 
 description : |
-    <p> Import A Staging TSV/EXCEL File As Media Into Your Narrative </p>
+    <p> Import Media file (TSV/Excel) from Staging Area
+        Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
