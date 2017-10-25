@@ -1,6 +1,6 @@
-name     : Import TSV File As Phenotype Set From Staging Area
-subtitle : Import A Staging TSV File As Phenotype Set Into Your Narrative
-tooltip  : Import A Staging TSV File As Phenotype Set Into Your Narrative
+name     : Import TSV File as Phenotype Set from Staging Area
+subtitle : Import a TSV file from your staging area into your Narrative as a Phenotype Set
+tooltip  : Import a TSV file from your staging area into your Narrative as a Phenotype Set
 
 screenshots :
     []
@@ -43,4 +43,4 @@ parameters :
             Select the Genome object that contains features referenced by the Phenotype Set
 
 description : |
-    <p> Import A Staging TSV File As Phenotype Set Into Your Narrative </p>
+    <p> Import TSV File as Phenotype Set from Staging Area </p>
