@@ -1,6 +1,6 @@
-name     : Import SRA File As Reads From Staging Area
-subtitle : Import A SRA File As Reads Into Your Narrative
-tooltip  : Import A SRA File As Reads Into Your Narrative
+name     : Import SRA File as Reads from Staging Area
+subtitle : Import an SRA file from your staging area into your Narrative as a Reads object
+tooltip  : Import an SRA file from your staging area into your Narrative as a Reads object
 
 screenshots :
     []
@@ -20,8 +20,8 @@ suggestions :
 parameters :
     staging_file_subdir_path :
         ui-name : SRA File Path
-        short-hint : SRA Staging Subdirectory File Path
-        long-hint  : SRA Staging Subdirectory File Path
+        short-hint : SRA File Path
+        long-hint  : SRA File Path
 
     sequencing_tech :
         ui-name : Sequencing Technology
@@ -54,6 +54,7 @@ parameters :
         long-hint  : Select if reads in a pair point outward
 
 description : |
-    <p> Import A SRA File As Reads Into Your Narrative </p>
+    <p> Import SRA File as Reads into Your Narrative </p>
+        Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
 
 technical-description : none
