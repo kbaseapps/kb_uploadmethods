@@ -1,6 +1,6 @@
-name     : Import SRA File As Reads From Web - v1.0.4
-subtitle : Import A SRA File From Web As Reads Into Your Narrative
-tooltip  : Import A SRA File From Web As Reads Into Your Narrative
+name     : Import SRA File as Reads From Web - v1.0.4
+subtitle : Import an SRA file from a web URL into your Narrative as a Reads data object
+tooltip  : Import an SRA file from a web URL into your Narrative as a Reads data object
 
 screenshots :
     []
@@ -20,13 +20,13 @@ suggestions :
 parameters :
     download_type :
         ui-name : Download Type
-        short-hint : Download type ('Direct Download Link', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
-        long-hint  : Download type ('Direct Download Link', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
+        short-hint : Download type ('Direct Download Link', 'FTP Link', 'Dropbox Public Shared Link',  'Google Drive Public Shared Link')
+        long-hint  : Download type ('Direct Download Link', 'FTP Link', 'Dropbox Public Shared Link',  'Google Drive Public Shared Link')
 
     file_url:
-        ui-name : SRA File Path URL
-        short-hint : SRA File Path URL
-        long-hint  : SRA File Path URL
+        ui-name : SRA URL
+        short-hint : URL for source of SRA reads
+        long-hint  : URL for source of SRA reads
 
     sequencing_tech :
         ui-name : Sequencing Technology
@@ -65,6 +65,7 @@ parameter-groups :
         long-hint  : SRA file URL and output Reads file name
 
 description : |
-    <p> Import A SRA File From Web As Reads Into Your Narrative </p>
+    <p> Import SRA File as Reads From Web
+        Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
 
 technical-description : none
