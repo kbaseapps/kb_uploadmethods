@@ -8,7 +8,7 @@ service-language:
     python
 
 module-version:
-    1.0.6
+    1.0.7
 
 owners:
     [tgu2, jjeffryes]
