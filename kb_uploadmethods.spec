@@ -329,6 +329,7 @@ module kb_uploadmethods {
     string staging_file_subdir_path;
     string assembly_name;
     workspace_name workspace_name;
+    int min_contig_length;
   } FastaToAssemblyParams;
 
   funcdef import_fasta_as_assembly_from_staging(FastaToAssemblyParams params)
