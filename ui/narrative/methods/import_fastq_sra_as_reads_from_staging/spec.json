@@ -120,29 +120,6 @@
       "text_options" : {
         "validate_as": "float"
       }
-    }, 
-    {
-      "id" : "insert_size_std_dev",
-      "optional" : true,
-      "advanced" : true,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {
-        "validate_as": "float"
-        }
-    },
-    {
-      "id": "read_orientation_outward",
-      "optional":true,
-      "advanced":true,
-      "allow_multiple":false,
-      "default_values":[0],
-      "field_type" : "checkbox",
-      "checkbox_options":{
-        "checked_value": 1,
-        "unchecked_value": 0
-        }
     },
     {
       "id": "single_genome",
@@ -160,6 +137,29 @@
       "id": "interleaved",
       "optional":false,
       "advanced":false,
+      "allow_multiple":false,
+      "default_values":[0],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
+        }
+    }, 
+    {
+      "id" : "insert_size_std_dev",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "validate_as": "float"
+        }
+    },
+    {
+      "id": "read_orientation_outward",
+      "optional":true,
+      "advanced":true,
       "allow_multiple":false,
       "default_values":[0],
       "field_type" : "checkbox",

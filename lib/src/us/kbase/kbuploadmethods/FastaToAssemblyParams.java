@@ -31,7 +31,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "staging_file_subdir_path",
     "assembly_name",
-    "workspace_name"
+    "workspace_name",
+    "min_contig_length"
 })
 public class FastaToAssemblyParams {
 
@@ -41,6 +42,8 @@ public class FastaToAssemblyParams {
     private String assemblyName;
     @JsonProperty("workspace_name")
     private String workspaceName;
+    @JsonProperty("min_contig_length")
+    private Long minContigLength;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("staging_file_subdir_path")
@@ -88,6 +91,21 @@ public class FastaToAssemblyParams {
         return this;
     }
 
+    @JsonProperty("min_contig_length")
+    public Long getMinContigLength() {
+        return minContigLength;
+    }
+
+    @JsonProperty("min_contig_length")
+    public void setMinContigLength(Long minContigLength) {
+        this.minContigLength = minContigLength;
+    }
+
+    public FastaToAssemblyParams withMinContigLength(Long minContigLength) {
+        this.minContigLength = minContigLength;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -100,7 +118,7 @@ public class FastaToAssemblyParams {
 
     @Override
     public String toString() {
-        return ((((((((("FastaToAssemblyParams"+" [stagingFileSubdirPath=")+ stagingFileSubdirPath)+", assemblyName=")+ assemblyName)+", workspaceName=")+ workspaceName)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((("FastaToAssemblyParams"+" [stagingFileSubdirPath=")+ stagingFileSubdirPath)+", assemblyName=")+ assemblyName)+", workspaceName=")+ workspaceName)+", minContigLength=")+ minContigLength)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
