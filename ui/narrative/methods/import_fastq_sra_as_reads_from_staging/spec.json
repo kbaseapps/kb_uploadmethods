@@ -109,17 +109,6 @@
       {
         "is_output_name" : true
       }
-    }, 
-    {
-      "id" : "insert_size_mean",
-      "optional" : true,
-      "advanced" : true,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {
-        "validate_as": "float"
-      }
     },
     {
       "id": "single_genome",
@@ -144,6 +133,18 @@
         "checked_value": 1,
         "unchecked_value": 0
         }
+    },
+    {
+      "id": "read_orientation_outward",
+      "optional":true,
+      "advanced":true,
+      "allow_multiple":false,
+      "default_values":[0],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
+        }
     }, 
     {
       "id" : "insert_size_std_dev",
@@ -157,16 +158,15 @@
         }
     },
     {
-      "id": "read_orientation_outward",
-      "optional":true,
-      "advanced":true,
-      "allow_multiple":false,
-      "default_values":[0],
-      "field_type" : "checkbox",
-      "checkbox_options":{
-        "checked_value": 1,
-        "unchecked_value": 0
-        }
+      "id" : "insert_size_mean",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "validate_as": "float"
+      }
     }
   ],
   "behavior" : 
