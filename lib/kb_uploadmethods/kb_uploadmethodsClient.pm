@@ -979,6 +979,7 @@ FastaToAssemblyParams is a reference to a hash where the following keys are defi
 	staging_file_subdir_path has a value which is a string
 	assembly_name has a value which is a string
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	min_contig_length has a value which is an int
 workspace_name is a string
 UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
@@ -1000,6 +1001,7 @@ FastaToAssemblyParams is a reference to a hash where the following keys are defi
 	staging_file_subdir_path has a value which is a string
 	assembly_name has a value which is a string
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	min_contig_length has a value which is an int
 workspace_name is a string
 UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
@@ -3191,6 +3193,7 @@ a reference to a hash where the following keys are defined:
 staging_file_subdir_path has a value which is a string
 assembly_name has a value which is a string
 workspace_name has a value which is a kb_uploadmethods.workspace_name
+min_contig_length has a value which is an int
 
 </pre>
 
@@ -3202,6 +3205,7 @@ a reference to a hash where the following keys are defined:
 staging_file_subdir_path has a value which is a string
 assembly_name has a value which is a string
 workspace_name has a value which is a kb_uploadmethods.workspace_name
+min_contig_length has a value which is an int
 
 
 =end text

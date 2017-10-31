@@ -262,7 +262,8 @@ class kb_uploadmethods(object):
            name/ID of the object) -> structure: parameter
            "staging_file_subdir_path" of String, parameter "assembly_name" of
            String, parameter "workspace_name" of type "workspace_name"
-           (workspace name of the object)
+           (workspace name of the object), parameter "min_contig_length" of
+           Long
         :returns: instance of type "UploadMethodResult" -> structure:
            parameter "obj_ref" of type "obj_ref", parameter "report_name" of
            type "report_name", parameter "report_ref" of type "report_ref"
