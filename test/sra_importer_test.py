@@ -318,7 +318,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
                     ValueError,
                     '"name" parameter is required, but missing'):
             self.getImpl().import_sra_from_web(self.getContext(), invalidate_input_params)
-
+    
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
@@ -367,6 +367,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
                        '1c58d7d59c656db39cedcb431376514b')
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
+
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
@@ -493,6 +494,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         with self.assertRaisesRegexp(ValueError, error_msg):
             self.getImpl().import_sra_from_staging(self.getContext(), invalidate_input_params)
 
+
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_se)
     def test_import_web_sra_paired_end(self, _run_command):
 
@@ -515,7 +517,13 @@ class kb_uploadmethodsTest(unittest.TestCase):
             'sra_urls_to_add': [
                 {
                     'file_url': 'ftp://ftp.uconn.edu/48_hour/empty.sra',
-                    'name': obj_name,
+                    'name': obj_name + '_11',
+                    'sequencing_tech': 'Unknown',
+                    'single_genome': 1
+                },
+                {
+                    'file_url': 'ftp://ftp.uconn.edu/48_hour/empty.sra',
+                    'name': obj_name + '_22',
                     'sequencing_tech': 'Unknown',
                     'single_genome': 1
                 }
@@ -528,7 +536,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertTrue('report_name' in ref[0])
 
         obj = self.dfu.get_objects(
-            {'object_refs': [self.getWsName() + '/MyReads']})['data'][0]
+            {'object_refs': [self.getWsName() + '/MyReads_11']})['data'][0]
         self.assertEqual(ref[0]['obj_refs'][0], self.make_ref(obj['info']))
         self.assertEqual(obj['info'][2].startswith(
             'KBaseFile.SingleEndLibrary'), True)
@@ -541,3 +549,5 @@ class kb_uploadmethodsTest(unittest.TestCase):
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
+
+

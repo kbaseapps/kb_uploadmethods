@@ -89,7 +89,11 @@ class ImportAssemblyUtil:
 
         assembly_name = str(assembly_data.get('data')[0].get('info')[1])
         assembly_file = params.get('staging_file_subdir_path')
+
         base_count = assembly_data.get('data')[0].get('data').get('base_counts')
+        base_count_str = ''
+        for base, count in base_count.iteritems():
+            base_count_str += '{}({}) '.format(base, count)
 
         dna_size = assembly_data.get('data')[0].get('data').get('dna_size')
 
@@ -100,7 +104,7 @@ class ImportAssemblyUtil:
 
         overview_content += '<br/><table><tr><td>Assembly Object:</td>'
         overview_content += '<td>{} ({})'.format(assembly_name,
-                                                     assembly_ref)
+                                                 assembly_ref)
         overview_content += '</td>'
         overview_content += '</tr>'
 
@@ -112,19 +116,11 @@ class ImportAssemblyUtil:
         overview_content += '<td>{}</td>'.format(dna_size)
         overview_content += '</tr>'
 
-        overview_content += '</table>'
-
-        overview_content += '<br/><table>'
-        overview_content += '<tr><th>Base</th>'
-        overview_content += '<th>Count</th>'
+        overview_content += '<tr><td>{} </td>'.format('Base Counts:')
+        overview_content += '<td>{}</td>'.format(base_count_str)
         overview_content += '</tr>'
 
-        '''
-        for base, count in base_count.iteritems():
-            overview_content += '<tr><td>"{}"</td>'.format(base)
-            overview_content += '<td>{}</td>'.format(str(count))
         overview_content += '</table>'
-        '''
 
         with open(result_file_path, 'w') as result_file:
             with open(os.path.join(os.path.dirname(__file__), 'report_template.html'),
@@ -167,21 +163,6 @@ class ImportAssemblyUtil:
             'ignore_errors': False
         }
         object_data = self.dfu.get_objects(get_objects_params)
-        base_count = object_data.get('data')[0].get('data').get('base_counts')
-        dna_size = object_data.get('data')[0].get('data').get('dna_size')
-        '''
-        upload_message = 'Import Finished\n'
-        upload_message += "Assembly Object Name: "
-        upload_message += str(object_data.get('data')[0].get('info')[1]) + '\n'
-        upload_message += 'Imported Fasta File: {}\n'.format(
-                              params.get('staging_file_subdir_path'))
-        
-        if isinstance(dna_size, (int, long)):
-            upload_message += 'DNA Size: {:,}\n'.format(dna_size)
-
-        if isinstance(base_count, dict):
-            upload_message += 'Base Count:\n{}\n'.format(json.dumps(base_count, indent=1)[2:-2])
-        '''
         objects_created = [{'ref': obj_ref,
                             'description': 'Imported Assembly'}]
 

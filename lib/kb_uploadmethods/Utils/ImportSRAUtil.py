@@ -5,6 +5,8 @@ import time
 import os
 import errno
 import subprocess
+from pprint import pprint
+import collections
 
 import handler_utils
 from DataFileUtil.DataFileUtilClient import DataFileUtil
@@ -127,8 +129,8 @@ class ImportSRAUtil:
     def __init__(self, config):
         self.callback_url = config['SDK_CALLBACK_URL']
         self.token = config['KB_AUTH_TOKEN']
-        self.scratch = config['scratch']
-
+        self.scratch = os.path.join(config['scratch'], 'import_SRA_' + str(uuid.uuid4()))
+        handler_utils._mkdir_p(self.scratch)
         self.dfu = DataFileUtil(self.callback_url)
         self.ru = ReadsUtils(self.callback_url)
 
@@ -278,73 +280,113 @@ class ImportSRAUtil:
                 if p not in sra_url_to_add:
                     raise ValueError('"{}" parameter is required, but missing'.format(p))
 
-    def generate_html_report(self, assembly_ref, assembly_data, params):
+    def generate_html_report(self, reads_ref, reads_obj, params, uuid_string):
         """
         _generate_html_report: generate html summary report
         """
         log('start generating html report')
+
         html_report = list()
 
-        result_file_path = os.path.join(self.scratch, 'report.html')
+        result_file_path = os.path.join(self.scratch, uuid_string + '_report.html')
 
-        assembly_name = str(assembly_data.get('data')[0].get('info')[1])
-        assembly_file = params.get('staging_file_subdir_path')
-        base_count = assembly_data.get('data')[0].get('data').get('base_counts')
+        reads_data = reads_obj.get('data')[0].get('data')
+        reads_info = reads_obj.get('data')[0].get('info')
+        base_percentages = ''
+        for key, val in reads_data.get('base_percentages').iteritems():
+            base_percentages += '{}({}%) '.format(key, val)
 
-        dna_size = assembly_data.get('data')[0].get('data').get('dna_size')
+        reads_overview_data = collections.OrderedDict()
 
-        overview_content = ''
+        reads_overview_data['Reads Object'] = '{} ({})'.format(str(reads_info[1]), reads_ref)
+        reads_overview_data['Reads File'] = params.get('staging_file_subdir_path')
+        reads_overview_data['Number of Reads'] = '{:0,}'.format(reads_data.get('read_count'))
 
-        overview_content += '<br/><table><tr><th>Imported Assembly'
-        overview_content += '</th><th></th><th></th><th></th></tr>'
+        reads_type = reads_info[2].lower()
+        if 'single' in reads_type:
+            reads_overview_data['Type'] = 'Single End'
+        elif 'paired' in reads_type:
+            reads_overview_data['Type'] = 'Paired End'
+        else:
+            reads_overview_data['Type'] = 'Unknown'
+        reads_overview_data['Platform'] = reads_data.get('sequencing_tech', 'Unknown')
 
-        overview_content += '<br/><table><tr><td>Assembly Object:</td>'
-        overview_content += '<td>{} ({})'.format(assembly_name,
-                                                     assembly_ref)
-        overview_content += '</td>'
-        overview_content += '</tr>'
+        reads_single_genome = str(reads_data.get('single_genome', 'Unknown'))
+        if '0' in reads_single_genome:
+            reads_overview_data['Single Genome'] = 'No'
+        elif '1' in reads_single_genome:
+            reads_overview_data['Single Genome'] = 'Yes'
+        else:
+            reads_overview_data['Single Genome'] = 'Unknown'
 
-        overview_content += '<tr><td>{} </td>'.format('Fasta File:')
-        overview_content += '<td>{}</td>'.format(assembly_file)
-        overview_content += '</tr>'
+        reads_overview_data['Insert Size Mean'] = str(reads_data.get('insert_size_mean', 'Unknown'))
+        reads_overview_data['Insert Size Std Dev'] = str(reads_data.get('insert_size_std_dev', 'Unknown'))
 
-        overview_content += '<tr><td>{} </td>'.format('DNA Size:')
-        overview_content += '<td>{}</td>'.format(dna_size)
-        overview_content += '</tr>'
+        reads_outward_orientation = str(reads_data.get('read_orientation_outward', 'Unknown'))
+        if '0' in reads_outward_orientation:
+            reads_overview_data['Outward Read Orientation'] = 'No'
+        elif '1' in reads_outward_orientation:
+            reads_overview_data['Outward Read Orientation'] = 'Yes'
+        else:
+            reads_overview_data['Outward Read Orientation'] = 'Unknown'
+
+        reads_stats_data = collections.OrderedDict()
+
+        reads_stats_data['Number of Reads'] = '{:0,}'.format(reads_data.get('read_count'))
+        reads_stats_data['Total Number of Bases'] = '{:0,}'.format(reads_data.get('total_bases'))
+        reads_stats_data['Mean Read Length'] = str(reads_data.get('read_length_mean'))
+        reads_stats_data['Read Length Std Dev'] = str(reads_data.get('read_length_stdev'))
+        dup_reads_percent = reads_data.get('number_of_duplicates') * 100 / reads_data.get('read_count')
+        reads_stats_data['Number of Duplicate Reads(%)'] = '{} ({}%)'\
+                                                            .format(str(reads_data.get('number_of_duplicates')),
+                                                                    str(dup_reads_percent))
+        reads_stats_data['Phred Type'] = str(reads_data.get('phred_type'))
+        reads_stats_data['Quality Score Mean'] = str(reads_data.get('qual_mean'))
+        reads_stats_data['Quality Score (Min/Max)'] = '{}/{}'.format(str(reads_data.get('qual_min')),
+                                                                     str(reads_data.get('qual_max')))
+        reads_stats_data['GC Percentage'] = str(round(reads_data.get('gc_content') * 100, 2)) + '%'
+        reads_stats_data['Base Percentages'] = base_percentages
+
+        overview_content = '<br/><table>'
+
+        for key, val in reads_overview_data.iteritems():
+
+            overview_content += '<tr><td>{} </td>'.format(key)
+            overview_content += '<td>{}</td>'.format(val)
+            overview_content += '</tr>'
 
         overview_content += '</table>'
 
-        overview_content += '<br/><table>'
-        overview_content += '<tr><th>Base</th>'
-        overview_content += '<th>Count</th>'
-        overview_content += '</tr>'
+        stats_content = '<br/><table>'
 
-        '''
-        for base, count in base_count.iteritems():
-            overview_content += '<tr><td>"{}"</td>'.format(base)
-            overview_content += '<td>{}</td>'.format(str(count))
-        overview_content += '</table>'
-        '''
+        for key, val in reads_stats_data.iteritems():
+            stats_content += '<tr><td>{} </td>'.format(key)
+            stats_content += '<td>{}</td>'.format(val)
+            stats_content += '</tr>'
+
+        stats_content += '</table>'
 
         with open(result_file_path, 'w') as result_file:
-            with open(os.path.join(os.path.dirname(__file__), 'report_template.html'),
+            with open(os.path.join(os.path.dirname(__file__), 'report_template2.html'),
                       'r') as report_template_file:
                 report_template = report_template_file.read()
                 report_template = report_template.replace('<p>Overview_Content</p>',
                                                           overview_content)
+                report_template = report_template.replace('<p>Stats_Content</p>',
+                                                          stats_content)
                 result_file.write(report_template)
         result_file.close()
 
         report_shock_id = self.dfu.file_to_shock({'file_path': self.scratch,
                                                   'pack': 'zip'})['shock_id']
-
         html_report.append({'shock_id': report_shock_id,
                             'name': os.path.basename(result_file_path),
                             'label': os.path.basename(result_file_path),
                             'description': 'HTML summary report for Imported Assembly'})
         return html_report
 
-    def generate_report(self, obj_refs, params):
+
+    def generate_report(self, obj_refs_list, params):
         """
         generate_report: generate summary report
 
@@ -361,44 +403,33 @@ class ImportSRAUtil:
 
         """
         uuid_string = str(uuid.uuid4())
-        upload_message = 'Import Finished\n\n'
 
-        if isinstance(obj_refs, list):
-            upload_message += "Imported Reads: {}\n\n".format(len(obj_refs))
-
-            for obj_ref in obj_refs:
-                get_objects_params = {
-                    'object_refs': [obj_ref],
-                    'ignore_errors': False
-                }
-
-                object_data = self.dfu.get_objects(get_objects_params)
-                number_of_reads = object_data.get('data')[0].get('data').get('read_count')
-
-                upload_message += "Reads Name: "
-                upload_message += str(object_data.get('data')[0].get('info')[1]) + '\n'
-                if isinstance(number_of_reads, (int, long)):
-                    upload_message += 'Number of Reads: {:,}\n\n'.format(number_of_reads)
+        if isinstance(obj_refs_list, list):
+            obj_refs = obj_refs_list[0]
         else:
-            get_objects_params = {
-                'object_refs': [obj_refs],
-                'ignore_errors': False
-            }
+            obj_refs = obj_refs_list
 
-            object_data = self.dfu.get_objects(get_objects_params)
-            number_of_reads = object_data.get('data')[0].get('data').get('read_count')
+        get_objects_params = {
+            'object_refs': [obj_refs],
+            'ignore_errors': False
+        }
 
-            upload_message += "Reads Name: "
-            upload_message += str(object_data.get('data')[0].get('info')[1]) + '\n'
-            upload_message += 'Imported Reads File: {}\n'.format(
-                                  params.get('staging_file_subdir_path'))
-            if isinstance(number_of_reads, (int, long)):
-                upload_message += 'Number of Reads: {:,}\n'.format(number_of_reads)
+        object_data = self.dfu.get_objects(get_objects_params)
+
+        objects_created = [{'ref': obj_refs,
+                            'description': 'Imported Reads'}]
+
+        output_html_files = self.generate_html_report(obj_refs, object_data, params, uuid_string)
+        upload_message = ''
 
         report_params = {
-              'message': upload_message,
-              'workspace_name': params.get('workspace_name'),
-              'report_object_name': 'kb_upload_mothods_report_' + uuid_string}
+            'message': '',
+            'workspace_name': params.get('workspace_name'),
+            'objects_created': objects_created,
+            'html_links': output_html_files,
+            'direct_html_link_index': 0,
+            'html_window_height': 333,
+            'report_object_name': 'kb_upload_mothods_report_' + uuid_string}
 
         kbase_report_client = KBaseReport(self.callback_url, token=self.token)
         output = kbase_report_client.create_extended_report(report_params)
