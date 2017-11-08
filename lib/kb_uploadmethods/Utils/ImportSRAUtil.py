@@ -319,8 +319,8 @@ class ImportSRAUtil:
         else:
             reads_overview_data['Single Genome'] = 'Unknown'
 
-        reads_overview_data['Insert Size Mean'] = str(reads_data.get('insert_size_mean', 'Not Specified'))
-        reads_overview_data['Insert Size Std Dev'] = str(reads_data.get('insert_size_std_dev', 'Not Specified'))
+        reads_overview_data['Insert Size Mean'] = str(params.get('insert_size_mean', 'Not Specified'))
+        reads_overview_data['Insert Size Std Dev'] = str(params.get('insert_size_std_dev', 'Not Specified'))
 
         reads_outward_orientation = str(reads_data.get('read_orientation_outward', 'Unknown'))
         if '0' in reads_outward_orientation:
@@ -336,10 +336,11 @@ class ImportSRAUtil:
         reads_stats_data['Total Number of Bases'] = '{:,}'.format(reads_data.get('total_bases'))
         reads_stats_data['Mean Read Length'] = str(reads_data.get('read_length_mean'))
         reads_stats_data['Read Length Std Dev'] = str(reads_data.get('read_length_stdev'))
-        dup_reads_percent = reads_data.get('number_of_duplicates') * 100 / reads_data.get('read_count')
+        dup_reads_percent = '{:.2f}'.format(reads_data.get('number_of_duplicates') * 100 / \
+                                            reads_data.get('read_count'))
         reads_stats_data['Number of Duplicate Reads(%)'] = '{} ({}%)'\
                                                             .format(str(reads_data.get('number_of_duplicates')),
-                                                                    str(dup_reads_percent))
+                                                                    dup_reads_percent)
         reads_stats_data['Phred Type'] = str(reads_data.get('phred_type'))
         reads_stats_data['Quality Score Mean'] = str(reads_data.get('qual_mean'))
         reads_stats_data['Quality Score (Min/Max)'] = '{}/{}'.format(str(reads_data.get('qual_min')),
@@ -413,7 +414,6 @@ class ImportSRAUtil:
             'object_refs': [obj_refs],
             'ignore_errors': False
         }
-
         object_data = self.dfu.get_objects(get_objects_params)
 
         objects_created = [{'ref': obj_refs,
