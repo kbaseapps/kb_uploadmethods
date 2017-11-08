@@ -299,8 +299,7 @@ class ImportSRAUtil:
         reads_overview_data = collections.OrderedDict()
 
         reads_overview_data['Reads Object'] = '{} ({})'.format(str(reads_info[1]), reads_ref)
-        reads_overview_data['Reads File'] = params.get('staging_file_subdir_path')
-        reads_overview_data['Number of Reads'] = '{:0,}'.format(reads_data.get('read_count'))
+        reads_overview_data['Number of Reads'] = '{:,}'.format(reads_data.get('read_count'))
 
         reads_type = reads_info[2].lower()
         if 'single' in reads_type:
@@ -309,6 +308,7 @@ class ImportSRAUtil:
             reads_overview_data['Type'] = 'Paired End'
         else:
             reads_overview_data['Type'] = 'Unknown'
+
         reads_overview_data['Platform'] = reads_data.get('sequencing_tech', 'Unknown')
 
         reads_single_genome = str(reads_data.get('single_genome', 'Unknown'))
@@ -319,8 +319,8 @@ class ImportSRAUtil:
         else:
             reads_overview_data['Single Genome'] = 'Unknown'
 
-        reads_overview_data['Insert Size Mean'] = str(reads_data.get('insert_size_mean', 'Unknown'))
-        reads_overview_data['Insert Size Std Dev'] = str(reads_data.get('insert_size_std_dev', 'Unknown'))
+        reads_overview_data['Insert Size Mean'] = str(reads_data.get('insert_size_mean', 'Not Specified'))
+        reads_overview_data['Insert Size Std Dev'] = str(reads_data.get('insert_size_std_dev', 'Not Specified'))
 
         reads_outward_orientation = str(reads_data.get('read_orientation_outward', 'Unknown'))
         if '0' in reads_outward_orientation:
@@ -332,8 +332,8 @@ class ImportSRAUtil:
 
         reads_stats_data = collections.OrderedDict()
 
-        reads_stats_data['Number of Reads'] = '{:0,}'.format(reads_data.get('read_count'))
-        reads_stats_data['Total Number of Bases'] = '{:0,}'.format(reads_data.get('total_bases'))
+        reads_stats_data['Number of Reads'] = '{:,}'.format(reads_data.get('read_count'))
+        reads_stats_data['Total Number of Bases'] = '{:,}'.format(reads_data.get('total_bases'))
         reads_stats_data['Mean Read Length'] = str(reads_data.get('read_length_mean'))
         reads_stats_data['Read Length Std Dev'] = str(reads_data.get('read_length_stdev'))
         dup_reads_percent = reads_data.get('number_of_duplicates') * 100 / reads_data.get('read_count')
@@ -351,7 +351,7 @@ class ImportSRAUtil:
 
         for key, val in reads_overview_data.iteritems():
 
-            overview_content += '<tr><td>{} </td>'.format(key)
+            overview_content += '<tr><td><b>{}</b></td>'.format(key)
             overview_content += '<td>{}</td>'.format(val)
             overview_content += '</tr>'
 
@@ -360,7 +360,7 @@ class ImportSRAUtil:
         stats_content = '<br/><table>'
 
         for key, val in reads_stats_data.iteritems():
-            stats_content += '<tr><td>{} </td>'.format(key)
+            stats_content += '<tr><td><b>{}</b></td>'.format(key)
             stats_content += '<td>{}</td>'.format(val)
             stats_content += '</tr>'
 
@@ -420,7 +420,6 @@ class ImportSRAUtil:
                             'description': 'Imported Reads'}]
 
         output_html_files = self.generate_html_report(obj_refs, object_data, params, uuid_string)
-        upload_message = ''
 
         report_params = {
             'message': '',
@@ -428,7 +427,7 @@ class ImportSRAUtil:
             'objects_created': objects_created,
             'html_links': output_html_files,
             'direct_html_link_index': 0,
-            'html_window_height': 333,
+            'html_window_height': 400,
             'report_object_name': 'kb_upload_mothods_report_' + uuid_string}
 
         kbase_report_client = KBaseReport(self.callback_url, token=self.token)

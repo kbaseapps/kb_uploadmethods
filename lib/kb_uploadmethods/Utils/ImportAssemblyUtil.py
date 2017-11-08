@@ -93,7 +93,7 @@ class ImportAssemblyUtil:
         base_count = assembly_data.get('data')[0].get('data').get('base_counts')
         base_count_str = ''
         for base, count in base_count.iteritems():
-            base_count_str += '{}({}) '.format(base, count)
+            base_count_str += '{}({:,}) '.format(base, count)
 
         dna_size = assembly_data.get('data')[0].get('data').get('dna_size')
 
@@ -102,21 +102,21 @@ class ImportAssemblyUtil:
         overview_content += '<br/><table><tr><th>Imported Assembly'
         overview_content += '</th><th></th><th></th><th></th></tr>'
 
-        overview_content += '<br/><table><tr><td>Assembly Object:</td>'
+        overview_content += '<br/><table><tr><td><b>Assembly Object:</b></td>'
         overview_content += '<td>{} ({})'.format(assembly_name,
                                                  assembly_ref)
         overview_content += '</td>'
         overview_content += '</tr>'
 
-        overview_content += '<tr><td>{} </td>'.format('Fasta File:')
+        overview_content += '<tr><td><b>{}</b></td>'.format('Fasta File:')
         overview_content += '<td>{}</td>'.format(assembly_file)
         overview_content += '</tr>'
 
-        overview_content += '<tr><td>{} </td>'.format('DNA Size:')
-        overview_content += '<td>{}</td>'.format(dna_size)
+        overview_content += '<tr><td><b>{}</b></td>'.format('DNA Size:')
+        overview_content += '<td>{:,}</td>'.format(dna_size)
         overview_content += '</tr>'
 
-        overview_content += '<tr><td>{} </td>'.format('Base Counts:')
+        overview_content += '<tr><td><b>{}</b></td>'.format('Base Counts:')
         overview_content += '<td>{}</td>'.format(base_count_str)
         overview_content += '</tr>'
 
@@ -174,7 +174,7 @@ class ImportAssemblyUtil:
                 'objects_created': objects_created,
                 'html_links': output_html_files,
                 'direct_html_link_index': 0,
-                'html_window_height': 333,
+                'html_window_height': 300,
                 'report_object_name': 'kb_upload_mothods_report_' + uuid_string}
 
         kbase_report_client = KBaseReport(self.callback_url, token=self.token)

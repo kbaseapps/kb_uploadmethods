@@ -7,7 +7,7 @@
   "widgets" : 
   {
     "input" : null,
-    "output" : "kbaseReadsViewer"
+    "output" : "no-display"
   },
   "parameters" : 
   [ 
