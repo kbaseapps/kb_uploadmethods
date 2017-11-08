@@ -25,7 +25,7 @@ class ImportReadsUtil:
                                                         'fastq_rev_staging_file_name')
 
             returnVal = self.fastq_importer.upload_fastq_file(fastq_importer_params)
-            reportVal = self.fastq_importer.generate_report(returnVal['obj_ref'],
+            reportVal = self.sra_importer.generate_report(returnVal['obj_ref'],
                                                             fastq_importer_params)
             returnVal.update(reportVal)
         elif params.get('import_type') == 'SRA':
