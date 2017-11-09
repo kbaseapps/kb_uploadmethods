@@ -338,8 +338,8 @@ class ImportSRAUtil:
         reads_stats_data['Total Number of Bases'] = '{:,}'.format(reads_data.get('total_bases'))
         reads_stats_data['Mean Read Length'] = str(reads_data.get('read_length_mean'))
         reads_stats_data['Read Length Std Dev'] = str(reads_data.get('read_length_stdev'))
-        dup_reads_percent = '{:.2f}'.format(float(reads_data.get('number_of_duplicates') * 100 / \
-                                            reads_data.get('read_count')))
+        dup_reads_percent = '{:.2f}'.format(float(reads_data.get('number_of_duplicates') * 100)/ \
+                                            reads_data.get('read_count'))
         reads_stats_data['Number of Duplicate Reads(%)'] = '{} ({}%)'\
                                                             .format(str(reads_data.get('number_of_duplicates')),
                                                                     dup_reads_percent)
@@ -438,7 +438,7 @@ class ImportSRAUtil:
             'objects_created': objects_created,
             'html_links': output_html_files,
             'direct_html_link_index': 0,
-            'html_window_height': 400,
+            'html_window_height': 430,
             'report_object_name': 'kb_upload_mothods_report_' + uuid_string}
 
         kbase_report_client = KBaseReport(self.callback_url, token=self.token)
