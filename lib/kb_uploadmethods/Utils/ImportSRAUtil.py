@@ -3,7 +3,9 @@ import json
 import uuid
 import time
 import os
+import fnmatch
 import errno
+import glob
 import subprocess
 from pprint import pprint
 import collections
@@ -336,8 +338,8 @@ class ImportSRAUtil:
         reads_stats_data['Total Number of Bases'] = '{:,}'.format(reads_data.get('total_bases'))
         reads_stats_data['Mean Read Length'] = str(reads_data.get('read_length_mean'))
         reads_stats_data['Read Length Std Dev'] = str(reads_data.get('read_length_stdev'))
-        dup_reads_percent = '{:.2f}'.format(reads_data.get('number_of_duplicates') * 100 / \
-                                            reads_data.get('read_count'))
+        dup_reads_percent = '{:.2f}'.format(float(reads_data.get('number_of_duplicates') * 100 / \
+                                            reads_data.get('read_count')))
         reads_stats_data['Number of Duplicate Reads(%)'] = '{} ({}%)'\
                                                             .format(str(reads_data.get('number_of_duplicates')),
                                                                     dup_reads_percent)
@@ -377,6 +379,15 @@ class ImportSRAUtil:
                                                           stats_content)
                 result_file.write(report_template)
         result_file.close()
+
+        matched_files = []
+        for root, dirnames, filenames in os.walk(self.scratch):
+            for filename in fnmatch.filter(filenames, '*.gz'):
+                matched_files.append(os.path.join(root, filename))
+
+        for gz_file in matched_files:
+            print('Removing ' + gz_file)
+            os.remove(gz_file)
 
         report_shock_id = self.dfu.file_to_shock({'file_path': self.scratch,
                                                   'pack': 'zip'})['shock_id']
