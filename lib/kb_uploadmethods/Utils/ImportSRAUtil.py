@@ -282,101 +282,113 @@ class ImportSRAUtil:
                 if p not in sra_url_to_add:
                     raise ValueError('"{}" parameter is required, but missing'.format(p))
 
-    def generate_html_report(self, reads_ref, reads_obj, params, uuid_string):
+    def generate_html_report(self, reads_objs, params, uuid_string):
         """
         _generate_html_report: generate html summary report
         """
         log('start generating html report')
 
+        result_file_path = os.path.join(self.scratch, 'report.html')
         html_report = list()
+        objects_content = ''
 
-        result_file_path = os.path.join(self.scratch, uuid_string + '_report.html')
+        for index, reads_obj in enumerate(reads_objs):
+            idx = str(index)
 
-        reads_data = reads_obj.get('data')[0].get('data')
-        reads_info = reads_obj.get('data')[0].get('info')
-        base_percentages = ''
-        for key, val in reads_data.get('base_percentages').iteritems():
-            base_percentages += '{}({}%) '.format(key, val)
+            reads_data = reads_obj.get('data')[0].get('data')
+            reads_info = reads_obj.get('data')[0].get('info')
+            reads_ref = str(reads_info[6]) + '/' + str(reads_info[0]) + '/' + str(reads_info[4])
+            reads_obj_name = str(reads_info[1])
 
-        reads_overview_data = collections.OrderedDict()
+            objects_content += '<div data-tabpanel="object' + idx + '" class="tabpanel">'
+            objects_content += '<div class="tabtoggle" title="Click for more info" href="#" '
+            objects_content += 'onclick="toggleTabpanel(\'object' + idx + '\')">' + reads_obj_name + '</div>'
+            objects_content += '<div data-tabset="object' + idx + '" class="tabset">'
+            objects_content += '<div class="tabs">'
+            objects_content += '<button class="tab" data-tab="overview" onclick="openTab(\'object' + idx + \
+                               '\',\'overview\')">Overview</button>'
+            objects_content += '<button class="tab" data-tab="stats" onclick="openTab(\'object' + idx + \
+                               '\', \'stats\')">Stats</button></div>'
 
-        reads_overview_data['Reads Object'] = '{} ({})'.format(str(reads_info[1]), reads_ref)
-        reads_overview_data['Number of Reads'] = '{:,}'.format(reads_data.get('read_count'))
+            base_percentages = ''
+            for key, val in reads_data.get('base_percentages').iteritems():
+                base_percentages += '{}({}%) '.format(key, val)
 
-        reads_type = reads_info[2].lower()
-        if 'single' in reads_type:
-            reads_overview_data['Type'] = 'Single End'
-        elif 'paired' in reads_type:
-            reads_overview_data['Type'] = 'Paired End'
-        else:
-            reads_overview_data['Type'] = 'Unknown'
+            reads_overview_data = collections.OrderedDict()
 
-        reads_overview_data['Platform'] = reads_data.get('sequencing_tech', 'Unknown')
+            reads_overview_data['Reads Object'] = '{} ({})'.format(reads_obj_name, reads_ref)
+            reads_overview_data['Number of Reads'] = '{:,}'.format(reads_data.get('read_count'))
 
-        reads_single_genome = str(reads_data.get('single_genome', 'Unknown'))
-        if '0' in reads_single_genome:
-            reads_overview_data['Single Genome'] = 'No'
-        elif '1' in reads_single_genome:
-            reads_overview_data['Single Genome'] = 'Yes'
-        else:
-            reads_overview_data['Single Genome'] = 'Unknown'
+            reads_type = reads_info[2].lower()
+            if 'single' in reads_type:
+                reads_overview_data['Type'] = 'Single End'
+            elif 'paired' in reads_type:
+                reads_overview_data['Type'] = 'Paired End'
+            else:
+                reads_overview_data['Type'] = 'Unknown'
 
-        reads_overview_data['Insert Size Mean'] = str(params.get('insert_size_mean', 'Not Specified'))
-        reads_overview_data['Insert Size Std Dev'] = str(params.get('insert_size_std_dev', 'Not Specified'))
+            reads_overview_data['Platform'] = reads_data.get('sequencing_tech', 'Unknown')
 
-        reads_outward_orientation = str(reads_data.get('read_orientation_outward', 'Unknown'))
-        if '0' in reads_outward_orientation:
-            reads_overview_data['Outward Read Orientation'] = 'No'
-        elif '1' in reads_outward_orientation:
-            reads_overview_data['Outward Read Orientation'] = 'Yes'
-        else:
-            reads_overview_data['Outward Read Orientation'] = 'Unknown'
+            reads_single_genome = str(reads_data.get('single_genome', 'Unknown'))
+            if '0' in reads_single_genome:
+                reads_overview_data['Single Genome'] = 'No'
+            elif '1' in reads_single_genome:
+                reads_overview_data['Single Genome'] = 'Yes'
+            else:
+                reads_overview_data['Single Genome'] = 'Unknown'
 
-        reads_stats_data = collections.OrderedDict()
+            reads_overview_data['Insert Size Mean'] = str(params.get('insert_size_mean', 'Not Specified'))
+            reads_overview_data['Insert Size Std Dev'] = str(params.get('insert_size_std_dev', 'Not Specified'))
 
-        reads_stats_data['Number of Reads'] = '{:,}'.format(reads_data.get('read_count'))
-        reads_stats_data['Total Number of Bases'] = '{:,}'.format(reads_data.get('total_bases'))
-        reads_stats_data['Mean Read Length'] = str(reads_data.get('read_length_mean'))
-        reads_stats_data['Read Length Std Dev'] = str(reads_data.get('read_length_stdev'))
-        dup_reads_percent = '{:.2f}'.format(float(reads_data.get('number_of_duplicates') * 100)/ \
-                                            reads_data.get('read_count'))
-        reads_stats_data['Number of Duplicate Reads(%)'] = '{} ({}%)'\
-                                                            .format(str(reads_data.get('number_of_duplicates')),
-                                                                    dup_reads_percent)
-        reads_stats_data['Phred Type'] = str(reads_data.get('phred_type'))
-        reads_stats_data['Quality Score Mean'] = str(reads_data.get('qual_mean'))
-        reads_stats_data['Quality Score (Min/Max)'] = '{}/{}'.format(str(reads_data.get('qual_min')),
-                                                                     str(reads_data.get('qual_max')))
-        reads_stats_data['GC Percentage'] = str(round(reads_data.get('gc_content') * 100, 2)) + '%'
-        reads_stats_data['Base Percentages'] = base_percentages
+            reads_outward_orientation = str(reads_data.get('read_orientation_outward', 'Unknown'))
+            if '0' in reads_outward_orientation:
+                reads_overview_data['Outward Read Orientation'] = 'No'
+            elif '1' in reads_outward_orientation:
+                reads_overview_data['Outward Read Orientation'] = 'Yes'
+            else:
+                reads_overview_data['Outward Read Orientation'] = 'Unknown'
 
-        overview_content = '<br/><table>'
+            reads_stats_data = collections.OrderedDict()
 
-        for key, val in reads_overview_data.iteritems():
+            reads_stats_data['Number of Reads'] = '{:,}'.format(reads_data.get('read_count'))
+            reads_stats_data['Total Number of Bases'] = '{:,}'.format(reads_data.get('total_bases'))
+            reads_stats_data['Mean Read Length'] = str(reads_data.get('read_length_mean'))
+            reads_stats_data['Read Length Std Dev'] = str(reads_data.get('read_length_stdev'))
+            dup_reads_percent = '{:.2f}'.format(float(reads_data.get('number_of_duplicates') * 100) / \
+                                                reads_data.get('read_count'))
+            reads_stats_data['Number of Duplicate Reads(%)'] = '{} ({}%)' \
+                .format(str(reads_data.get('number_of_duplicates')),
+                        dup_reads_percent)
+            reads_stats_data['Phred Type'] = str(reads_data.get('phred_type'))
+            reads_stats_data['Quality Score Mean'] = str(reads_data.get('qual_mean'))
+            reads_stats_data['Quality Score (Min/Max)'] = '{}/{}'.format(str(reads_data.get('qual_min')),
+                                                                         str(reads_data.get('qual_max')))
+            reads_stats_data['GC Percentage'] = str(round(reads_data.get('gc_content') * 100, 2)) + '%'
+            reads_stats_data['Base Percentages'] = base_percentages
 
-            overview_content += '<tr><td><b>{}</b></td>'.format(key)
-            overview_content += '<td>{}</td>'.format(val)
-            overview_content += '</tr>'
+            objects_content += '<div data-tabpane="overview" class="tabcontent"><br/><table>'
 
-        overview_content += '</table>'
+            for key, val in reads_overview_data.iteritems():
+                objects_content += '<tr><td><b>{}</b></td>'.format(key)
+                objects_content += '<td>{}</td>'.format(val)
+                objects_content += '</tr>'
 
-        stats_content = '<br/><table>'
+            objects_content += '</table></div>'
+            objects_content += '<div data-tabpane="stats" class="tabcontent"><br/><table><br/><table>'
 
-        for key, val in reads_stats_data.iteritems():
-            stats_content += '<tr><td><b>{}</b></td>'.format(key)
-            stats_content += '<td>{}</td>'.format(val)
-            stats_content += '</tr>'
+            for key, val in reads_stats_data.iteritems():
+                objects_content += '<tr><td><b>{}</b></td>'.format(key)
+                objects_content += '<td>{}</td>'.format(val)
+                objects_content += '</tr>'
 
-        stats_content += '</table>'
+            objects_content += '</table></div></div></div>'
 
         with open(result_file_path, 'w') as result_file:
-            with open(os.path.join(os.path.dirname(__file__), 'report_template2.html'),
+            with open(os.path.join(os.path.dirname(__file__), 'multi_obj_template.html'),
                       'r') as report_template_file:
                 report_template = report_template_file.read()
-                report_template = report_template.replace('<p>Overview_Content</p>',
-                                                          overview_content)
-                report_template = report_template.replace('<p>Stats_Content</p>',
-                                                          stats_content)
+                report_template = report_template.replace('<p>OBJECTS_DATA_TO_FILL</p>',
+                                                          objects_content)
                 result_file.write(report_template)
         result_file.close()
 
@@ -402,7 +414,6 @@ class ImportSRAUtil:
         """
         generate_report: generate summary report
 
-
         obj_refs: generated workspace object references. (return of import_sra_from_staging/web)
         params:
         staging_file_subdir_path: subdirectory file path
@@ -417,20 +428,24 @@ class ImportSRAUtil:
         uuid_string = str(uuid.uuid4())
 
         if isinstance(obj_refs_list, list):
-            obj_refs = obj_refs_list[0]
-        else:
             obj_refs = obj_refs_list
+        else:
+            obj_refs = [obj_refs_list]
 
-        get_objects_params = {
-            'object_refs': [obj_refs],
-            'ignore_errors': False
-        }
-        object_data = self.dfu.get_objects(get_objects_params)
+        objects_created = list()
+        objects_data = list()
 
-        objects_created = [{'ref': obj_refs,
-                            'description': 'Imported Reads'}]
+        for obj_ref in obj_refs:
+            get_objects_params = {
+                'object_refs': [obj_ref],
+                'ignore_errors': False
+            }
+            objects_data.append(self.dfu.get_objects(get_objects_params))
 
-        output_html_files = self.generate_html_report(obj_refs, object_data, params, uuid_string)
+            objects_created.append({'ref': obj_ref,
+                                    'description': 'Imported Reads'})
+
+        output_html_files = self.generate_html_report_NEW(objects_data, params, uuid_string)
 
         report_params = {
             'message': '',
@@ -438,7 +453,7 @@ class ImportSRAUtil:
             'objects_created': objects_created,
             'html_links': output_html_files,
             'direct_html_link_index': 0,
-            'html_window_height': 430,
+            'html_window_height': 333,
             'report_object_name': 'kb_upload_mothods_report_' + uuid_string}
 
         kbase_report_client = KBaseReport(self.callback_url, token=self.token)
