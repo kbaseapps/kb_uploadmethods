@@ -454,7 +454,7 @@ class ImportSRAUtil:
             objects_created.append({'ref': obj_ref,
                                     'description': 'Imported Reads'})
 
-        output_html_files = self.generate_html_report_NEW(objects_data, params, uuid_string)
+        output_html_files = self.generate_html_report(objects_data, params, uuid_string)
 
         report_params = {
             'message': '',
@@ -462,7 +462,7 @@ class ImportSRAUtil:
             'objects_created': objects_created,
             'html_links': output_html_files,
             'direct_html_link_index': 0,
-            'html_window_height': 333,
+            'html_window_height': 460,
             'report_object_name': 'kb_upload_mothods_report_' + uuid_string}
 
         kbase_report_client = KBaseReport(self.callback_url, token=self.token)
