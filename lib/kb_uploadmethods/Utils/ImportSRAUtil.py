@@ -337,8 +337,17 @@ class ImportSRAUtil:
             else:
                 reads_overview_data['Single Genome'] = 'Unknown'
 
-            reads_overview_data['Insert Size Mean'] = str(params.get('insert_size_mean', 'Not Specified'))
-            reads_overview_data['Insert Size Std Dev'] = str(params.get('insert_size_std_dev', 'Not Specified'))
+            insert_size_mean = params.get('insert_size_mean', 'Not Specified')
+            if insert_size_mean is not None:
+                reads_overview_data['Insert Size Mean'] = str(insert_size_mean)
+            else:
+                reads_overview_data['Insert Size Mean'] = 'Not Specified'
+
+            insert_size_std_dev = params.get('insert_size_std_dev', 'Not Specified')
+            if insert_size_std_dev is not None:
+                reads_overview_data['Insert Size Std Dev'] = str(insert_size_std_dev)
+            else:
+                reads_overview_data['Insert Size Std Dev'] = 'Not Specified'
 
             reads_outward_orientation = str(reads_data.get('read_orientation_outward', 'Unknown'))
             if '0' in reads_outward_orientation:
