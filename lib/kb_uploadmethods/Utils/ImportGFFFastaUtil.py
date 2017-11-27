@@ -1,10 +1,11 @@
 
 import time
 import json
+from pprint import pprint
 
 from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
 from DataFileUtil.DataFileUtilClient import DataFileUtil
-
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
@@ -16,6 +17,7 @@ class ImportGFFFastaUtil:
         self.callback_url = config['SDK_CALLBACK_URL']
         self.dfu = DataFileUtil(self.callback_url)
         self.gfu = GenomeFileUtil(self.callback_url)
+        self.uploader_utils = UploaderUtil(config)
 
     def import_gff_fasta_from_staging(self, params):
         """
@@ -61,15 +63,19 @@ class ImportGFFFastaUtil:
             params[key] = {'path': dfu_returnVal['copy_file_path']}
 
         returnVal = self.gfu.fasta_gff_to_genome(params)
+
+        """
+        Update the workspace object related meta-data for staged file
+        """
+        self.uploader_utils.update_staging_service(download_staging_file_params.get('staging_file_subdir_path'),
+                                                   returnVal['genome_ref'])
         return returnVal
 
     def validate_import_gff_fasta_from_staging_params(self, params):
         """
         validate_import_gff_fasta_from_staging_params:
                     validates params passed to import_gff_fasta_from_staging method
-
         """
-
         # check for required parameters
         for p in ['genome_name', 'workspace_name', 'fasta_file', 'gff_file']:
             if p not in params:

@@ -1,6 +1,7 @@
 import json
 import uuid
 import time
+import requests as _requests
 
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
 from ftp_service.ftp_serviceClient import ftp_service
@@ -311,7 +312,6 @@ class UploaderUtil:
         insert_size_std_dev: standard deviation of insert lengths
         read_orientation_outward: whether reads in a pair point outward
         interleaved: whether reads is interleaved
-
         """
         log('---> running UploaderUtil._upload_file_url')
 
@@ -330,3 +330,27 @@ class UploaderUtil:
         result = ru.upload_reads(upload_file_params)
 
         return result
+
+    def update_staging_service(self, staged_file, obj_ref):
+
+        if staged_file is None:
+            raise ValueError('Error: A valid staged file name is required')
+        if obj_ref is None:
+            raise ValueError('Error: A valid object reference is required')
+
+        url = 'https://ci.kbase.us/services/staging_service/define-upa/' + staged_file
+
+        log('Updating staging service meta-data: URL: {}  Obj_ref: {}'.format(url, obj_ref))
+        headers = {'Authorization': self.token}
+        body = {'UPA': obj_ref}
+
+        ret = _requests.post(url, headers=headers, data=body)
+
+        if not ret.ok:
+            try:
+                err = ret.json()
+            except:
+                ret.raise_for_status()
+            raise ValueError('Error connecting to staging service: {} {}\n{}'
+                             .format(ret.status_code, ret.reason,
+                                     err['error_msg']))

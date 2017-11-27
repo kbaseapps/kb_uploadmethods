@@ -15,7 +15,7 @@ from DataFileUtil.DataFileUtilClient import DataFileUtil
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
 from ftp_service.ftp_serviceClient import ftp_service
 from KBaseReport.KBaseReportClient import KBaseReport
-
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
@@ -88,6 +88,7 @@ class ImportSRAUtil:
         }
         return fastq_file_path
 
+
     def _validate_single_end_advanced_params(self, params):
         """
         _validate_single_end_advanced_params: validate advanced params for single end reads
@@ -135,6 +136,7 @@ class ImportSRAUtil:
         handler_utils._mkdir_p(self.scratch)
         self.dfu = DataFileUtil(self.callback_url)
         self.ru = ReadsUtils(self.callback_url)
+        self.uploader_utils = UploaderUtil(config)
 
     def import_sra_from_staging(self, params):
         '''
@@ -185,10 +187,16 @@ class ImportSRAUtil:
             import_sra_reads_params['wsname'] = str(workspace_name_or_id)
 
         log('--->\nrunning ReadsUtils.upload_reads\nparams:\n{}'.format(
-                                        json.dumps(import_sra_reads_params, indent=1)))
+                                            json.dumps(import_sra_reads_params, indent=1)))
         returnVal = self.ru.upload_reads(import_sra_reads_params)
 
+        """
+        Update the workspace object related meta-data for staged file
+        """
+        self.uploader_utils.update_staging_service(params.get('staging_file_subdir_path'),
+                                                   returnVal['obj_ref'])
         return returnVal
+
 
     def import_sra_from_web(self, params):
         '''
@@ -246,6 +254,7 @@ class ImportSRAUtil:
 
             log('--->\nrunning ReadsUtils.upload_reads\nparams:\n{}'.format(
                                             json.dumps(import_sra_reads_params, indent=1)))
+
             obj_ref = self.ru.upload_reads(import_sra_reads_params).get('obj_ref')
             obj_refs.append(obj_ref)
 
@@ -267,7 +276,6 @@ class ImportSRAUtil:
         """
         validate_import_genbank_from_staging_params:
                     validates params passed to import_genbank_from_staging method
-
         """
         # check for required parameters
         for p in ['download_type', 'workspace_name', 'sra_urls_to_add']:

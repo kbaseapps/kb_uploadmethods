@@ -7,7 +7,7 @@ import uuid
 from fba_tools.fba_toolsClient import fba_tools
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from KBaseReport.KBaseReportClient import KBaseReport
-
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
@@ -15,23 +15,23 @@ def log(message, prefix_newline=False):
 
 
 class ImportFBAModelUtil:
+
     def __init__(self, config):
         self.callback_url = config['SDK_CALLBACK_URL']
         self.token = config['KB_AUTH_TOKEN']
         self.dfu = DataFileUtil(self.callback_url)
         self.fba = fba_tools(self.callback_url)
+        self.uploader_utils = UploaderUtil(config)
 
     def import_fbamodel_from_staging(self, params):
-        """
 
-        """
         log('--->\nrunning {}.{}\n params:\n{}'
             .format(self.__class__.__name__, sys._getframe().f_code.co_name,
                     json.dumps(params, indent=1)))
 
         self._check_param(params, ['model_file', 'file_type', 'workspace_name',
                                    'model_name', 'biomass'],
-                          ['genome', 'compounds_file'])
+                                  ['genome', 'compounds_file'])
         if params['file_type'] == 'tsv' and not params.get('compounds_file', None):
             raise ValueError('A compound file is required for tsv upload.')
 
@@ -55,7 +55,11 @@ class ImportFBAModelUtil:
         else:
             raise ValueError('"{}" is not a valid import file_type'
                              .format(params['file_type']))
-
+        """
+        Update the workspace object related meta-data for staged file
+        """
+        self.uploader_utils.update_staging_service(download_staging_file_params.get('staging_file_subdir_path'),
+                                                   res['ref'])
         return {'obj_ref': res['ref']}
 
     @staticmethod

@@ -6,7 +6,7 @@ import uuid
 from fba_tools.fba_toolsClient import fba_tools
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from KBaseReport.KBaseReportClient import KBaseReport
-
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
@@ -19,6 +19,7 @@ class ImportMediaUtil:
         self.token = config['KB_AUTH_TOKEN']
         self.dfu = DataFileUtil(self.callback_url)
         self.fba = fba_tools(self.callback_url)
+        self.uploader_utils = UploaderUtil(config)
 
     def import_media_from_staging(self, params):
         '''
@@ -50,11 +51,9 @@ class ImportMediaUtil:
         }
         scratch_file_path = self.dfu.download_staging_file(
                         download_staging_file_params).get('copy_file_path')
-
         file = {
             'path': scratch_file_path
         }
-
         import_media_params = params
         import_media_params['media_file'] = file
 
@@ -66,6 +65,10 @@ class ImportMediaUtil:
             except:
                 raise ValueError('"{}" is not a valid EXCEL nor TSV file'.format(
                                                 params.get('staging_file_subdir_path')))
+        """
+        Update the workspace object related meta-data for staged file
+        """
+        self.uploader_utils.update_staging_service(params.get('staging_file_subdir_path'), ref.get('ref'))
 
         returnVal = {'obj_ref': ref.get('ref')}
 

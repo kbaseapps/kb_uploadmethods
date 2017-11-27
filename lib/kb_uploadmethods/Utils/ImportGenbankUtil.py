@@ -1,10 +1,11 @@
 
 import time
 import json
+from pprint import pprint
 
 from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
 from DataFileUtil.DataFileUtilClient import DataFileUtil
-
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
@@ -17,6 +18,7 @@ class ImportGenbankUtil:
         self.token = config['KB_AUTH_TOKEN']
         self.dfu = DataFileUtil(self.callback_url)
         self.gfu = GenomeFileUtil(self.callback_url)
+        self.uploader_utils = UploaderUtil(config)
 
     def import_genbank_from_staging(self, params):
         '''
@@ -56,26 +58,27 @@ class ImportGenbankUtil:
         }
         scratch_file_path = self.dfu.download_staging_file(
                         download_staging_file_params).get('copy_file_path')
-
         file = {
             'path': scratch_file_path
         }
-
         import_genbank_params = params
         import_genbank_params['file'] = file
         del import_genbank_params['staging_file_subdir_path']
 
         returnVal = self.gfu.genbank_to_genome(import_genbank_params)
 
+        """
+        Update the workspace object related meta-data for staged file
+        """
+        self.uploader_utils.update_staging_service(download_staging_file_params.get('staging_file_subdir_path'),
+                                                   returnVal['genome_ref'])
         return returnVal
 
     def validate_import_genbank_from_staging_params(self, params):
         """
         validate_import_genbank_from_staging_params:
                     validates params passed to import_genbank_from_staging method
-
         """
-
         # check for required parameters
         for p in ['staging_file_subdir_path', 'genome_name', 'workspace_name', 'source']:
             if p not in params:
