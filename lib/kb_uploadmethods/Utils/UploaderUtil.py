@@ -333,6 +333,8 @@ class UploaderUtil:
 
     def update_staging_service(self, staged_file, obj_ref):
 
+        log('In Update Staging Service: File: {}, Obj_ref: {}'.format(staged_file, obj_ref))
+
         if staged_file is None:
             raise ValueError('Error: A valid staged file name is required')
         if obj_ref is None:

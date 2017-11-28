@@ -31,8 +31,10 @@ class ImportReadsUtil:
             """
             self.uploader_utils.update_staging_service(params.get('fastq_fwd_staging_file_name'),
                                                        returnVal['obj_ref'])
-            self.uploader_utils.update_staging_service(params.get('fastq_rev_staging_file_name'),
-                                                       returnVal['obj_ref'])
+
+            if params.get('fastq_rev_staging_file_name') is not None:
+                self.uploader_utils.update_staging_service(params.get('fastq_rev_staging_file_name'),
+                                                            returnVal['obj_ref'])
 
             reportVal = self.sra_importer.generate_report(returnVal['obj_ref'],
                                                             fastq_importer_params)
