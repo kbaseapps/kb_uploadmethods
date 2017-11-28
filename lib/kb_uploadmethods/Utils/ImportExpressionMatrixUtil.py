@@ -6,7 +6,7 @@ import uuid
 from KBaseFeatureValues.KBaseFeatureValuesClient import KBaseFeatureValues
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from KBaseReport.KBaseReportClient import KBaseReport
-
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
@@ -19,6 +19,7 @@ class ImportExpressionMatrixUtil:
         self.token = config['KB_AUTH_TOKEN']
         self.dfu = DataFileUtil(self.callback_url)
         self.fv = KBaseFeatureValues(self.callback_url)
+        self.uploader_utils = UploaderUtil(config)
 
     def import_tsv_as_expression_matrix_from_staging(self, params):
         '''
@@ -66,7 +67,11 @@ class ImportExpressionMatrixUtil:
         import_matrix_params['output_obj_name'] = params.get('matrix_name')
 
         ref = self.fv.tsv_file_to_matrix(import_matrix_params)
-
+        """
+        Update the workspace object related meta-data for staged file
+        """
+        self.uploader_utils.update_staging_service(params.get('staging_file_subdir_path'),
+                                                   ref.get('output_matrix_ref'))
         returnVal = {'obj_ref': ref.get('output_matrix_ref')}
 
         return returnVal

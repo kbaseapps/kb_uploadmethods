@@ -11,11 +11,11 @@ def log(message, prefix_newline=False):
 
 class ImportReadsUtil:
     def __init__(self, config):
-        self.fastq_importer = UploaderUtil(config)
+        self.uploader_utils = UploaderUtil(config)
         self.sra_importer = ImportSRAUtil(config)
 
     def import_reads_from_staging(self, params):
-        self._validte_import_reads_from_staging_params(params)
+        self._validate_import_reads_from_staging_params(params)
 
         if params.get('import_type') == 'FASTQ/FASTA':
             fastq_importer_params = params
@@ -24,25 +24,42 @@ class ImportReadsUtil:
             fastq_importer_params['rev_staging_file_name'] = params.get(
                                                         'fastq_rev_staging_file_name')
 
-            returnVal = self.fastq_importer.upload_fastq_file(fastq_importer_params)
+            returnVal = self.uploader_utils.upload_fastq_file(fastq_importer_params)
+
+            """
+            Update the workspace object related meta-data for staged file
+            """
+            self.uploader_utils.update_staging_service(params.get('fastq_fwd_staging_file_name'),
+                                                       returnVal['obj_ref'])
+            self.uploader_utils.update_staging_service(params.get('fastq_rev_staging_file_name'),
+                                                       returnVal['obj_ref'])
+
             reportVal = self.sra_importer.generate_report(returnVal['obj_ref'],
                                                             fastq_importer_params)
             returnVal.update(reportVal)
+
         elif params.get('import_type') == 'SRA':
             sra_importer_params = params
             sra_importer_params['staging_file_subdir_path'] = params.get(
                                                         'sra_staging_file_name')
 
             returnVal = self.sra_importer.import_sra_from_staging(sra_importer_params)
+
+            """
+            Update the workspace object related meta-data for staged file
+            """
+            self.uploader_utils.update_staging_service(params.get('sra_staging_file_name'),
+                                                       returnVal['obj_ref'])
+
             reportVal = self.sra_importer.generate_report(returnVal['obj_ref'],
                                                           sra_importer_params)
             returnVal.update(reportVal)
 
         return returnVal
 
-    def _validte_import_reads_from_staging_params(self, params):
+    def _validate_import_reads_from_staging_params(self, params):
         """
-        _validte_import_reads_from_staging_params:
+        _validate_import_reads_from_staging_params:
                     validates params passed to import_reads_from_staging method
 
         """
