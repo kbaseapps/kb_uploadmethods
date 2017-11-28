@@ -2,6 +2,8 @@ name     : Import TSV/XLS/SBML File as an FBAModel from Staging Area
 subtitle : Import a file in TSV, XLS (Excel) or SBML format from your staging area into your Narrative as an FBAModel 
 tooltip  : Import a file in TSV, XLS (Excel) or SBML format from your staging area into your Narrative as an FBAModel 
 
+icon: data-teal.png
+
 screenshots :
     []
 

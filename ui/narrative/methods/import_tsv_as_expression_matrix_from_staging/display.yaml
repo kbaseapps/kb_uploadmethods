@@ -2,6 +2,8 @@ name     : Import TSV File as Expression Matrix From Staging Area
 subtitle : Import a TSV file from your staging area into your Narrative as an Expression Matrix
 tooltip  : Import a TSV (tab-separated values) file from your staging area into your Narrative as an Expression Matrix
 
+icon: data-yellow.png
+
 screenshots :
     []
 

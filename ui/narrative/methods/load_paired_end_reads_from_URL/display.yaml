@@ -2,6 +2,8 @@ name     : Load Paired-End Reads From Web - v1.0.7
 subtitle : Upload a Paired End Library from a URL into your Narrative
 tooltip  : Upload a Paired End Library from a URL into your Narrative
 
+icon: data-pink.png
+
 screenshots :
     []
 

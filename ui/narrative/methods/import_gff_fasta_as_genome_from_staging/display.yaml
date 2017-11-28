@@ -2,6 +2,8 @@ name     : Import GFF/FASTA file as Genome from Staging Area
 subtitle : Import a GFF or FASTA file from your staging area into your Narrative as a Genome data object
 tooltip  : Import a GFF or FASTA file from your staging area into your Narrative as a Genome data object
 
+icon: data-red.png
+
 screenshots :
     []
 
