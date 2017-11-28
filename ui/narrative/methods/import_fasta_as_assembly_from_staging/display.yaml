@@ -2,6 +2,8 @@ name     : Import FASTA File as Assembly from Staging Area
 subtitle : Import a FASTA file from your staging area into your Narrative as an Assembly data object
 tooltip  : Import a FASTA file from your staging area into your Narrative as an Assembly data object
 
+icon: data-blue.png
+
 screenshots :
     []
 

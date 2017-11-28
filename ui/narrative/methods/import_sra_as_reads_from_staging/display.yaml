@@ -2,6 +2,8 @@ name     : Import SRA File as Reads from Staging Area
 subtitle : Import an SRA file from your staging area into your Narrative as a Reads object
 tooltip  : Import an SRA file from your staging area into your Narrative as a Reads object
 
+icon: data-pink.png
+
 screenshots :
     []
 

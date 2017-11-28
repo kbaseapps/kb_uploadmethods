@@ -2,6 +2,8 @@ name     : Import Paired-End Reads from Staging Area
 subtitle : Import a Paired End Library from your Staging Area into your Narrative
 tooltip  : Import a Paired End Library from your Staging Area into your Narrative
 
+icon: data-pink.png
+
 screenshots :
     []
 

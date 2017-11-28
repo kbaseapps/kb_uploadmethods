@@ -2,6 +2,8 @@ name     : Unpack Staging File - v1.0.7
 subtitle : Unpack A Staging Compressed File
 tooltip  : Unpack A Staging Compressed File
 
+icon: data-orange.png
+
 screenshots :
     []
 

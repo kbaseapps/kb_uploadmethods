@@ -2,6 +2,8 @@ name     : Load Single-End Reads From Staging Area
 subtitle : Upload a Single End Library into your Narrative
 tooltip  : Upload a Single End Library into your Narrative
 
+icon: data-pink.png
+
 screenshots :
     []
 
