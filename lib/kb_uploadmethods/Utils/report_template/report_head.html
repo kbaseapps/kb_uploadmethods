@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px 10px 10px 10px;
+        }
+
+        .panel.kb-panel-report {
+            border: none;
+            box-shadow: none;
+            margin: 0;
+        }
+
+        .panel.kb-panel-report>.panel-heading {
+            background-color: transparent;
+            font-weight: bold;
+            padding-left: 0;
+            padding-bottom: 4px;
+            border: none;
+        }
+
+        .panel.kb-panel-report .panel-body {
+            padding: 14px 10px 10px 14px;
+            border: none;
+        }
+
+        .panel.kb-panel-report .panel-title>[data-toggle="collapse"]::before {
+            display: inline-block;
+            font-size: 90%;
+            width: 18px;
+            content: "\25BC";
+        }
+
+        .panel.kb-panel-report .panel-title>[data-toggle="collapse"].collapsed::before {
+            display: inline-block;
+            font-size: 90%;
+            width: 18px;
+            content: "\25BA";
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="bootstrap-3.3.7/css/bootstrap.min.css">
+</head>
+
+<body>
+    ###TABLE_PANELS_CONTENT###
+    <script src="jquery-3.2.1.min.js"></script>
+    <script src="bootstrap-3.3.7/js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -380,8 +380,8 @@ class kb_uploadmethods:
 
         importer = ImportSRAUtil(self.config)
         returnVal = importer.import_sra_from_staging(params)
-
-        reportVal = importer.generate_report(returnVal['obj_ref'], params)
+        params['uploaded_files'] = [params.get('staging_file_subdir_path')]
+        reportVal = importer.generate_report([returnVal['obj_ref']], params)
         returnVal.update(reportVal)
         #END import_sra_from_staging
 
@@ -429,7 +429,7 @@ class kb_uploadmethods:
 
         importer = ImportSRAUtil(self.config)
         returnVal = importer.import_sra_from_web(params)
-
+        params['uploaded_files'] = returnVal.get('uploaded_files')
         reportVal = importer.generate_report(returnVal['obj_refs'], params)
         returnVal.update(reportVal)
         #END import_sra_from_web
