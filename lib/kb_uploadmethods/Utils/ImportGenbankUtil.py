@@ -17,7 +17,7 @@ class ImportGenbankUtil:
         self.callback_url = config['SDK_CALLBACK_URL']
         self.token = config['KB_AUTH_TOKEN']
         self.dfu = DataFileUtil(self.callback_url)
-        self.gfu = GenomeFileUtil(self.callback_url)
+        self.gfu = GenomeFileUtil(self.callback_url, service_ver='dev')
         self.uploader_utils = UploaderUtil(config)
 
     def import_genbank_from_staging(self, params):
@@ -57,7 +57,7 @@ class ImportGenbankUtil:
             'staging_file_subdir_path': params.get('staging_file_subdir_path')
         }
         scratch_file_path = self.dfu.download_staging_file(
-                        download_staging_file_params).get('copy_file_path')
+                                 download_staging_file_params).get('copy_file_path')
         file = {
             'path': scratch_file_path
         }
