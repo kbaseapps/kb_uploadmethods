@@ -72,6 +72,10 @@ class ImportGenbankUtil:
         """
         self.uploader_utils.update_staging_service(download_staging_file_params.get('staging_file_subdir_path'),
                                                    returnVal['genome_ref'])
+
+        reportVal = {'report_name': returnVal['report_name'],
+                     'report_ref': returnVal['report_ref']}
+        returnVal.update(reportVal)
         return returnVal
 
     def validate_import_genbank_from_staging_params(self, params):
@@ -83,3 +87,12 @@ class ImportGenbankUtil:
         for p in ['staging_file_subdir_path', 'genome_name', 'workspace_name', 'source']:
             if p not in params:
                 raise ValueError('"' + p + '" parameter is required, but missing')
+
+    def generate_report(self, genome_ref, report_ref_in):
+        """
+        :param genome_ref:  Uploaded genome ref
+        :param report_ref_in: Report object from GenomeFileUtil. need to get warnings and message from it.
+        :return: 
+        """
+        report_obj_in = self.dfu.get_objects({'object_refs': [report_ref_in]})
+        pprint(report_obj_in)
