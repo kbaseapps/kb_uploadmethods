@@ -346,13 +346,14 @@ class UploaderUtil:
         headers = {'Authorization': self.token}
         body = {'UPA': obj_ref}
 
-        ret = _requests.post(url, headers=headers, data=body)
+        # TODO: staging_service url needs to be auto updated with diff env
+        # ret = _requests.post(url, headers=headers, data=body)
 
-        if not ret.ok:
-            try:
-                err = ret.json()
-            except:
-                ret.raise_for_status()
-            raise ValueError('Error connecting to staging service: {} {}\n{}'
-                             .format(ret.status_code, ret.reason,
-                                     err['error_msg']))
+        # if not ret.ok:
+        #     try:
+        #         err = ret.json()
+        #     except:
+        #         ret.raise_for_status()
+        #     raise ValueError('Error connecting to staging service: {} {}\n{}'
+        #                      .format(ret.status_code, ret.reason,
+        #                              err['error_msg']))
