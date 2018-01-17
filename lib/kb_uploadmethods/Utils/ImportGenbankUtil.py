@@ -77,11 +77,9 @@ class ImportGenbankUtil:
         """
         Update the workspace object related meta-data for staged file
         """
-        self.uploader_utils.update_staging_service(download_staging_file_params.get('staging_file_subdir_path'),
-                                                   returnVal['genome_ref'])
-        returnVal.update(self.generate_report(returnVal['genome_ref'],
-                                              returnVal['report_ref'],
-                                              params))
+        self.uploader_utils.update_staging_service(
+            download_staging_file_params.get('staging_file_subdir_path'),
+            returnVal['genome_ref'])
         return returnVal
 
     def validate_import_genbank_from_staging_params(self, params):
