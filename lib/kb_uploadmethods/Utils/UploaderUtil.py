@@ -333,7 +333,8 @@ class UploaderUtil:
         return result
 
     def _staging_service_host(self):
-        nar_path = os.environ["NARRATIVE_DIR"]
+        # nar_path = os.environ["NARRATIVE_DIR"]
+        nar_path = '/kb/dev_container/narrative'
         config_json = open(os.path.join(nar_path, "src", "config.json")).read()
         config = json.loads(config_json)
         staging_service_host = config[config['config']]['staging_api_url']
