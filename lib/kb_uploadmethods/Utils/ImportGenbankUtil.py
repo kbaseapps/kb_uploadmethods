@@ -172,8 +172,8 @@ class ImportGenbankUtil:
             'objects_created': objects_created,
             'html_links': output_html_files,
             'direct_html_link_index': 0,
-            'html_window_height': 270,
-            'report_object_name': 'kb_genbank_upload_report_' + uuid_string}
+            'html_window_height': 300,
+            'report_object_name': 'kb_genome_upload_report_' + uuid_string}
 
         kbase_report_client = KBaseReport(self.callback_url, token=self.token)
         output = kbase_report_client.create_extended_report(report_params)
