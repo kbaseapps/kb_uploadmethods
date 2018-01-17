@@ -332,6 +332,10 @@ class kb_uploadmethods:
 
         importer = ImportGenbankUtil(self.config)
         returnVal = importer.import_genbank_from_staging(params)
+        reportVal = importer.generate_report(returnVal['genome_ref'],
+                                             returnVal['report_ref'],
+                                             params)
+        returnVal.update(reportVal)
         #END import_genbank_from_staging
 
         # At some point might do deeper type checking...
