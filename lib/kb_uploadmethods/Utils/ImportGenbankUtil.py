@@ -77,12 +77,11 @@ class ImportGenbankUtil:
         """
         Update the workspace object related meta-data for staged file
         """
-        #self.uploader_utils.update_staging_service(download_staging_file_params.get('staging_file_subdir_path'),
-                                                   #returnVal['genome_ref'])
-        self.generate_report(returnVal['genome_ref'],
-                             returnVal['report_name'],
-                             returnVal['report_ref'],
-                             params)
+        self.uploader_utils.update_staging_service(download_staging_file_params.get('staging_file_subdir_path'),
+                                                   returnVal['genome_ref'])
+        returnVal.update(self.generate_report(returnVal['genome_ref'],
+                                              returnVal['report_ref'],
+                                              params))
         return returnVal
 
     def validate_import_genbank_from_staging_params(self, params):
@@ -130,11 +129,11 @@ class ImportGenbankUtil:
         genome_overview_data['Warnings'] = warnings
 
         overview_content = ''
-        overview_content += '<br/><table>'
+        overview_content += '<br/><table>\n'
         for key, val in genome_overview_data.iteritems():
             overview_content += '<tr><td><b>{}</b></td>'.format(key)
             overview_content += '<td>{}</td>'.format(val)
-            overview_content += '</tr>'
+            overview_content += '</tr>\n'
         overview_content += '</table>'
 
         with open(result_file_path, 'w') as result_file:
@@ -152,10 +151,10 @@ class ImportGenbankUtil:
         html_report.append({'shock_id': report_shock_id,
                             'name': os.path.basename(result_file_path),
                             'label': os.path.basename(result_file_path),
-                            'description': 'HTML summary report for Imported Assembly'})
+                            'description': 'HTML summary report for imported Genome'})
         return html_report
 
-    def generate_report(self, genome_ref, gfu_report_name, gfu_report_ref, params):
+    def generate_report(self, genome_ref, gfu_report_ref, params):
         """
         :param genome_ref:  Return Val from GenomeFileUtil for Uploaded genome
                             Need to get report warnings and message from it.
