@@ -3,12 +3,12 @@ import uuid
 import time
 import requests as _requests
 import os
+import re
 
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
-from ftp_service.ftp_serviceClient import ftp_service
 from KBaseReport.KBaseReportClient import KBaseReport
 from DataFileUtil.DataFileUtilClient import DataFileUtil
-from biokbase.narrative.common.url_config import URLS
+from ConfigParser import SafeConfigParser
 
 
 def log(message, prefix_newline=False):
@@ -334,13 +334,20 @@ class UploaderUtil:
         return result
 
     def _staging_service_host(self):
-        # nar_path = os.environ["NARRATIVE_DIR"]
-        # nar_path = '/kb/dev_container/narrative'
-        # config_json = open(os.path.join(nar_path, "src", "config.json")).read()
-        # config = json.loads(config_json)
-        # staging_service_host = config[config['config']]['staging_api_url']
 
-        staging_service_host = URLS.staging_api_url
+        log('Trouble shooting')
+        log(os.environ)
+
+        deployment_path = os.environ["KB_DEPLOYMENT_CONFIG"]
+
+        parser = SafeConfigParser()
+        parser.read(deployment_path)
+
+        endpoint = parser.get('kb_uploadmethods', 'kbase-endpoint')
+        staging_service_host = endpoint + '/staging_service'
+
+        log('Trouble shooting')
+        log(staging_service_host)
 
         return staging_service_host
 
@@ -355,19 +362,21 @@ class UploaderUtil:
 
         staging_service_host = self._staging_service_host()
 
-        url = staging_service_host + '/define-upa/' + staged_file
+        if re.search('https://ci', staging_service_host):
 
-        log('Updating staging service meta-data: URL: {}  Obj_ref: {}'.format(url, obj_ref))
-        headers = {'Authorization': self.token}
-        body = {'UPA': obj_ref}
+            url = staging_service_host + '/define-upa/' + staged_file
 
-        ret = _requests.post(url, headers=headers, data=body)
+            log('Updating staging service meta-data: URL: {}  Obj_ref: {}'.format(url, obj_ref))
+            headers = {'Authorization': self.token}
+            body = {'UPA': obj_ref}
 
-        if not ret.ok:
-            try:
-                err = ret.json()
-            except:
-                ret.raise_for_status()
-            raise ValueError('Error connecting to staging service: {} {}\n{}'
-                             .format(ret.status_code, ret.reason,
-                                     err['error_msg']))
+            ret = _requests.post(url, headers=headers, data=body)
+
+            if not ret.ok:
+                try:
+                    err = ret.json()
+                except:
+                    ret.raise_for_status()
+                raise ValueError('Error connecting to staging service: {} {}\n{}'
+                                 .format(ret.status_code, ret.reason,
+                                         err['error_msg']))
