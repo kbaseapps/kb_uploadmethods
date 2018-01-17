@@ -2,6 +2,7 @@ import json
 import uuid
 import time
 import requests as _requests
+import os
 
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
 from ftp_service.ftp_serviceClient import ftp_service
@@ -331,6 +332,14 @@ class UploaderUtil:
 
         return result
 
+    def _staging_service_host(self):
+        nar_path = os.environ["NARRATIVE_DIR"]
+        config_json = open(os.path.join(nar_path, "src", "config.json")).read()
+        config = json.loads(config_json)
+        staging_service_host = config[config['config']]['staging_api_url']
+
+        return staging_service_host
+
     def update_staging_service(self, staged_file, obj_ref):
 
         log('In Update Staging Service: File: {}, Obj_ref: {}'.format(staged_file, obj_ref))
@@ -340,20 +349,21 @@ class UploaderUtil:
         if obj_ref is None:
             raise ValueError('Error: A valid object reference is required')
 
-        url = 'https://ci.kbase.us/services/staging_service/define-upa/' + staged_file
+        staging_service_host = self._staging_service_host()
+
+        url = staging_service_host + '/define-upa/' + staged_file
 
         log('Updating staging service meta-data: URL: {}  Obj_ref: {}'.format(url, obj_ref))
         headers = {'Authorization': self.token}
         body = {'UPA': obj_ref}
 
-        # TODO: staging_service url needs to be auto updated with diff env
-        # ret = _requests.post(url, headers=headers, data=body)
+        ret = _requests.post(url, headers=headers, data=body)
 
-        # if not ret.ok:
-        #     try:
-        #         err = ret.json()
-        #     except:
-        #         ret.raise_for_status()
-        #     raise ValueError('Error connecting to staging service: {} {}\n{}'
-        #                      .format(ret.status_code, ret.reason,
-        #                              err['error_msg']))
+        if not ret.ok:
+            try:
+                err = ret.json()
+            except:
+                ret.raise_for_status()
+            raise ValueError('Error connecting to staging service: {} {}\n{}'
+                             .format(ret.status_code, ret.reason,
+                                     err['error_msg']))
