@@ -77,9 +77,9 @@ class ImportGenbankUtil:
         """
         Update the workspace object related meta-data for staged file
         """
-        self.uploader_utils.update_staging_service(
-            download_staging_file_params.get('staging_file_subdir_path'),
-            returnVal['genome_ref'])
+        #self.uploader_utils.update_staging_service(
+        #    download_staging_file_params.get('staging_file_subdir_path'),
+        #    returnVal['genome_ref'])
         return returnVal
 
     def validate_import_genbank_from_staging_params(self, params):
@@ -134,12 +134,21 @@ class ImportGenbankUtil:
             overview_content += '</tr>\n'
         overview_content += '</table>'
 
+        feature_content = str([[str(k), v] for k, v in
+                               genome_data.get('feature_counts', {}).items()])
+        contig_content = str([[str(c), l] for c, l in
+                              zip(genome_data.get('contig_ids'),
+                                  genome_data.get('contig_lengths'))])
         with open(result_file_path, 'w') as result_file:
-            with open(os.path.join(os.path.dirname(__file__), 'report_template.html'),
+            with open(os.path.join(os.path.dirname(__file__), 'report_template_genome.html'),
                       'r') as report_template_file:
                 report_template = report_template_file.read()
                 report_template = report_template.replace('<p>Overview_Content</p>',
                                                           overview_content)
+                report_template = report_template.replace('*FEATURE_DATA*',
+                                                          feature_content)
+                report_template = report_template.replace('*CONTIG_DATA*',
+                                                          contig_content)
                 result_file.write(report_template)
         result_file.close()
 
