@@ -77,9 +77,9 @@ class ImportGenbankUtil:
         """
         Update the workspace object related meta-data for staged file
         """
-        self.uploader_utils.update_staging_service(
-            download_staging_file_params.get('staging_file_subdir_path'),
-            returnVal['genome_ref'])
+        #self.uploader_utils.update_staging_service(
+        #    download_staging_file_params.get('staging_file_subdir_path'),
+        #    returnVal['genome_ref'])
         return returnVal
 
     def validate_import_genbank_from_staging_params(self, params):
@@ -92,20 +92,13 @@ class ImportGenbankUtil:
             if p not in params:
                 raise ValueError('"' + p + '" parameter is required, but missing')
 
-    def generate_html_report(self, genome_ref, gfu_report_ref, params):
+    def generate_html_report(self, genome_ref, params):
         """
         _generate_html_report: generate html summary report
         """
         log('start generating html report')
-
-        pprint(params)
-        gfu_report_obj = self.dfu.get_objects({'object_refs': [gfu_report_ref]})
-        pprint(gfu_report_obj)
-
         genome_obj = self.dfu.get_objects({'object_refs': [genome_ref]})
-
         html_report = list()
-
         result_file_path = os.path.join(self.scratch, 'report.html')
 
         genome_name = str(genome_obj.get('data')[0].get('info')[1])
@@ -113,18 +106,25 @@ class ImportGenbankUtil:
 
         genome_data = genome_obj.get('data')[0].get('data')
         genome_info = genome_obj.get('data')[0].get('info')
+        source = genome_info[10].get('Source')
         num_contigs = genome_info[10].get('Number contigs')
+        size = genome_info[10].get('Size')
         gc_content = genome_info[10].get('GC content')
-        warnings = gfu_report_obj.get('data')[0].get('info')[10].get('Warnings')
+        warnings = genome_data.get('warnings', [])
+        feature_counts = sorted(list(genome_data.get('feature_counts', {})
+                                     .items()))
 
         genome_overview_data = collections.OrderedDict()
 
         genome_overview_data['Name'] = '{} ({})'.format(genome_name, genome_ref)
-        genome_overview_data['Uploaded File'] = genome_file
+        #genome_overview_data['Uploaded File'] = genome_file
         genome_overview_data['Date Uploaded'] = time.strftime("%c")
+        genome_overview_data['Source'] = source
         genome_overview_data['Number of Contigs'] = num_contigs
+        genome_overview_data['Size'] = size
         genome_overview_data['GC Content'] = gc_content
-        genome_overview_data['Warnings'] = warnings
+        genome_overview_data['Warnings'] = "\n".join(warnings)
+        genome_overview_data.update(feature_counts)
 
         overview_content = ''
         overview_content += '<br/><table>\n'
@@ -134,12 +134,21 @@ class ImportGenbankUtil:
             overview_content += '</tr>\n'
         overview_content += '</table>'
 
+        feature_content = str([[str(k), v] for k, v in
+                               genome_data.get('feature_counts', {}).items()])
+        contig_content = str([[str(c), l] for c, l in
+                              zip(genome_data.get('contig_ids'),
+                                  genome_data.get('contig_lengths'))])
         with open(result_file_path, 'w') as result_file:
-            with open(os.path.join(os.path.dirname(__file__), 'report_template.html'),
+            with open(os.path.join(os.path.dirname(__file__), 'report_template_genome.html'),
                       'r') as report_template_file:
                 report_template = report_template_file.read()
                 report_template = report_template.replace('<p>Overview_Content</p>',
                                                           overview_content)
+                report_template = report_template.replace('*FEATURE_DATA*',
+                                                          feature_content)
+                report_template = report_template.replace('*CONTIG_DATA*',
+                                                          contig_content)
                 result_file.write(report_template)
         result_file.close()
 
@@ -152,7 +161,7 @@ class ImportGenbankUtil:
                             'description': 'HTML summary report for imported Genome'})
         return html_report
 
-    def generate_report(self, genome_ref, gfu_report_ref, params):
+    def generate_report(self, genome_ref, params):
         """
         :param genome_ref:  Return Val from GenomeFileUtil for Uploaded genome
                             Need to get report warnings and message from it.
@@ -163,17 +172,15 @@ class ImportGenbankUtil:
         objects_created = [{'ref': genome_ref,
                             'description': 'Imported Genome'}]
 
-        output_html_files = self.generate_html_report(genome_ref,
-                                                      gfu_report_ref,
-                                                      params)
+        output_html_files = self.generate_html_report(genome_ref, params)
         report_params = {
             'message': '',
             'workspace_name': params.get('workspace_name'),
             'objects_created': objects_created,
             'html_links': output_html_files,
             'direct_html_link_index': 0,
-            'html_window_height': 270,
-            'report_object_name': 'kb_genbank_upload_report_' + uuid_string}
+            'html_window_height': 300,
+            'report_object_name': 'kb_genome_upload_report_' + uuid_string}
 
         kbase_report_client = KBaseReport(self.callback_url, token=self.token)
         output = kbase_report_client.create_extended_report(report_params)

@@ -180,7 +180,11 @@ class kb_uploadmethods:
 
         uploader = ImportGFFFastaUtil(self.config)
         returnVal = uploader.import_gff_fasta_from_staging(params)
-
+        # reuse logic from genbank report rather than replicate
+        genbank_import = ImportGenbankUtil(self.config)
+        reportVal = genbank_import.generate_report(returnVal['genome_ref'],
+                                                   params)
+        returnVal.update(reportVal)
         #END upload_fasta_gff_file
 
         # At some point might do deeper type checking...
@@ -332,9 +336,7 @@ class kb_uploadmethods:
 
         importer = ImportGenbankUtil(self.config)
         returnVal = importer.import_genbank_from_staging(params)
-        reportVal = importer.generate_report(returnVal['genome_ref'],
-                                             returnVal['report_ref'],
-                                             params)
+        reportVal = importer.generate_report(returnVal['genome_ref'], params)
         returnVal.update(reportVal)
         #END import_genbank_from_staging
 
