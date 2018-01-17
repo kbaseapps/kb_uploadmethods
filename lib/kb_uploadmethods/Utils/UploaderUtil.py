@@ -335,9 +335,6 @@ class UploaderUtil:
 
     def _staging_service_host(self):
 
-        log('Trouble shooting')
-        log(os.environ)
-
         deployment_path = os.environ["KB_DEPLOYMENT_CONFIG"]
 
         parser = SafeConfigParser()
@@ -345,9 +342,6 @@ class UploaderUtil:
 
         endpoint = parser.get('kb_uploadmethods', 'kbase-endpoint')
         staging_service_host = endpoint + '/staging_service'
-
-        log('Trouble shooting')
-        log(staging_service_host)
 
         return staging_service_host
 
@@ -362,7 +356,10 @@ class UploaderUtil:
 
         staging_service_host = self._staging_service_host()
 
-        if re.search('https://ci', staging_service_host):
+        # TODO: should change to 'https://(ci\.|appdev\.|'')kbase'
+        #       when staging_service is deployed to appdev and prod
+        reg_expr = 'https://ci.kbase'
+        if re.search(reg_expr, staging_service_host):
 
             url = staging_service_host + '/define-upa/' + staged_file
 
