@@ -183,7 +183,6 @@ class kb_uploadmethods:
         # reuse logic from genbank report rather than replicate
         genbank_import = ImportGenbankUtil(self.config)
         reportVal = genbank_import.generate_report(returnVal['genome_ref'],
-                                                   returnVal['report_ref'],
                                                    params)
         returnVal.update(reportVal)
         #END upload_fasta_gff_file
@@ -337,9 +336,7 @@ class kb_uploadmethods:
 
         importer = ImportGenbankUtil(self.config)
         returnVal = importer.import_genbank_from_staging(params)
-        reportVal = importer.generate_report(returnVal['genome_ref'],
-                                             returnVal['report_ref'],
-                                             params)
+        reportVal = importer.generate_report(returnVal['genome_ref'], params)
         returnVal.update(reportVal)
         #END import_genbank_from_staging
 
