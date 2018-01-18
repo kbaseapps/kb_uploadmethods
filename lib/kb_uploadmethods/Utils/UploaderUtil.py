@@ -356,9 +356,7 @@ class UploaderUtil:
 
         staging_service_host = self._staging_service_host()
 
-        # TODO: should change to 'https://(ci\.|appdev\.|'')kbase'
-        #       when staging_service is deployed to appdev and prod
-        reg_expr = 'https://ci.kbase'
+        reg_expr = 'https://(ci\.|appdev\.|'')kbase'
         if re.search(reg_expr, staging_service_host):
 
             url = staging_service_host + '/define-upa/' + staged_file
