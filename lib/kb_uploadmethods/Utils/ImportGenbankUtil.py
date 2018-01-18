@@ -135,7 +135,8 @@ class ImportGenbankUtil:
         overview_content += '</table>'
 
         feature_content = str([[str(k), v] for k, v in
-                               genome_data.get('feature_counts', {}).items()])
+                               genome_data.get('feature_counts', {}).items()
+                               if k != 'gene'])
         contig_content = str([[str(c), l] for c, l in
                               zip(genome_data.get('contig_ids'),
                                   genome_data.get('contig_lengths'))])
