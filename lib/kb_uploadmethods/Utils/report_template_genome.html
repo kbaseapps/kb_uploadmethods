@@ -50,7 +50,7 @@ table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
-    font-size: 14px;
+    font-size: 12px;
 }
 td, th {
     border: 1px solid #dddddd;
@@ -78,6 +78,7 @@ tr:nth-child(even) {
         data.addRows(*FEATURE_DATA*);
 
         var options = {'title':'Genome Features',
+                       'fontSize': 12,
                        'width':400,
                        'height':300};
 
@@ -88,10 +89,13 @@ tr:nth-child(even) {
 
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Type');
-        data.addColumn('number', 'Count');
+        data.addColumn('number', 'Size');
         data.addRows(*CONTIG_DATA*);
 
         var options = {'title':'Contig Length',
+                       'legend': {'position': 'none' },
+                       'hAxis': {'slantedText': 1},
+                       'fontSize': 12,
                        'width':400,
                        'height':300};
 
@@ -116,7 +120,7 @@ tr:nth-child(even) {
 <div id="Stats" class="tabcontent">
     <table class="columns">
       <tr>
-        <td><div id="feature_chart_div"></div></td>
+        <td><div id="feature_chart_div" style="border: 1px solid #ccc"></div></td>
         <td><div id="contig_chart_div" style="border: 1px solid #ccc"></div></td>
       </tr>
     </table>
