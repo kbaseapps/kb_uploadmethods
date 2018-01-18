@@ -39,7 +39,7 @@ class UnpackFileUtil:
             log("uploading [{}] to staging area".format(file_path))
             post_cmd = 'curl -H "Authorization: {}"\\\n'.format(self.token)
             post_cmd += ' -X POST\\\n'
-            post_cmd += ' -F "destPath=/{}{}"\\\n'.format(self.user_id, subdir_folder_str)
+            post_cmd += ' -F "destPath={}"\\\n'.format(subdir_folder_str)
             post_cmd += ' -F "uploads=@{}"\\\n'.format(file_path)
             post_cmd += ' {}/upload'.format(staging_service_host)
             return_code = os.popen(post_cmd).read()
