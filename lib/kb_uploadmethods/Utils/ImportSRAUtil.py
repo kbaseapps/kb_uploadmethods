@@ -38,10 +38,10 @@ class ImportSRAUtil:
         exitCode = pipe.returncode
 
         if (exitCode == 0):
-            log('Executed commend:\n{}\n'.format(command) +
+            log('Executed command:\n{}\n'.format(command) +
                 'Exit Code: {}\nOutput:\n{}'.format(exitCode, output))
         else:
-            error_msg = 'Error running commend:\n{}\n'.format(command)
+            error_msg = 'Error running command:\n{}\n'.format(command)
             error_msg += 'Exit Code: {}\nOutput:\n{}'.format(exitCode, output)
             raise ValueError(error_msg)
 
@@ -332,7 +332,7 @@ class ImportSRAUtil:
             'html_links': output_html_files,
             'direct_html_link_index': 0,
             'html_window_height': 460,
-            'report_object_name': 'kb_upload_mothods_report_' + uuid_string}
+            'report_object_name': 'kb_sra_upload_report_' + uuid_string}
 
         kbase_report_client = KBaseReport(self.callback_url, token=self.token)
         output = kbase_report_client.create_extended_report(report_params)
@@ -360,7 +360,7 @@ class ImportSRAUtil:
             reads_ref = str(reads_info[6]) + '/' + str(reads_info[0]) + '/' + str(reads_info[4])
             reads_obj_name = str(reads_info[1])
 
-            with open(os.path.join(os.path.dirname(__file__), 'report_template/table_panel.html'),
+            with open(os.path.join(os.path.dirname(__file__), 'report_template_sra/table_panel.html'),
                       'r') as object_content_file:
                 report_template = object_content_file.read()
                 report_template = report_template.replace('_NUM', str(idx))
@@ -452,7 +452,7 @@ class ImportSRAUtil:
             objects_content = objects_content.replace('###STATS_CONTENT###', stats_content)
 
         with open(result_file_path, 'w') as result_file:
-            with open(os.path.join(os.path.dirname(__file__), 'report_template/report_head.html'),
+            with open(os.path.join(os.path.dirname(__file__), 'report_template_sra/report_head.html'),
                       'r') as report_template_file:
                 report_template = report_template_file.read()
                 report_template = report_template.replace('###TABLE_PANELS_CONTENT###',
@@ -460,9 +460,9 @@ class ImportSRAUtil:
                 result_file.write(report_template)
         result_file.close()
 
-        shutil.copytree(os.path.join(os.path.dirname(__file__), 'report_template/bootstrap-3.3.7'),
+        shutil.copytree(os.path.join(os.path.dirname(__file__), 'report_template_sra/bootstrap-3.3.7'),
                         os.path.join(self.scratch, 'bootstrap-3.3.7'))
-        shutil.copy(os.path.join(os.path.dirname(__file__), 'report_template/jquery-3.2.1.min.js'),
+        shutil.copy(os.path.join(os.path.dirname(__file__), 'report_template_sra/jquery-3.2.1.min.js'),
                     os.path.join(self.scratch, 'jquery-3.2.1.min.js'))
 
         matched_files = []
