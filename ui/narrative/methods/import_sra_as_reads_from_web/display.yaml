@@ -21,9 +21,9 @@ suggestions :
 
 parameters :
     download_type :
-        ui-name : Download Type
-        short-hint : Download type ('Direct Download Link', 'FTP Link', 'Dropbox Public Shared Link',  'Google Drive Public Shared Link')
-        long-hint  : Download type ('Direct Download Link', 'FTP Link', 'Dropbox Public Shared Link',  'Google Drive Public Shared Link')
+        ui-name : URL Type
+        short-hint : URL type ('Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox/Box Public Shared Link',  'Google Drive Public Shared Link')
+        long-hint  : URL type ('Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox/Box Public Shared Link',  'Google Drive Public Shared Link')
 
     file_url:
         ui-name : SRA URL
