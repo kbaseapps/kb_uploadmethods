@@ -138,8 +138,8 @@ class ImportGenbankUtil:
                                genome_data.get('feature_counts', {}).items()
                                if k != 'gene'])
         contig_content = str([[str(c), l] for c, l in
-                              zip(genome_data.get('contig_ids'),
-                                  genome_data.get('contig_lengths'))])
+                              zip(genome_data.get('contig_ids', []),
+                                  genome_data.get('contig_lengths', []))])
         with open(result_file_path, 'w') as result_file:
             with open(os.path.join(os.path.dirname(__file__), 'report_template_genome.html'),
                       'r') as report_template_file:
