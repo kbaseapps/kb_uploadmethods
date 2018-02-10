@@ -20,6 +20,7 @@ from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
 from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from DataFileUtil.DataFileUtilClient import DataFileUtil
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -146,7 +147,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
                                                               invalidate_input_params)
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    def test_import_excel_as_media_from_staging(self, download_staging_file):
+    @patch.object(UploaderUtil, "update_staging_service", return_value=None)
+    def test_import_excel_as_media_from_staging(self, download_staging_file, update_staging_service):
 
         excel_file = 'media_example.xlsx'
         ws_obj_name = 'MyMedia'
@@ -163,7 +165,9 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertTrue('report_name' in ref[0])
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    def test_import_tsv_as_media_from_staging(self, download_staging_file):
+    @patch.object(UploaderUtil, "update_staging_service", return_value=None)
+    def test_import_tsv_as_media_from_staging(self, download_staging_file,
+                                              update_staging_service):
 
         tsv_file = 'media_example.txt'
         ws_obj_name = 'MyMedia'
@@ -180,7 +184,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertTrue('report_name' in ref[0])
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    def test_import_as_media_from_staging(self, download_staging_file):
+    @patch.object(UploaderUtil, "update_staging_service", return_value=None)
+    def test_import_as_media_from_staging(self, download_staging_file, update_staging_service):
 
         tsv_file = 'media_example.txt'
         ws_obj_name = 'MyMedia'
