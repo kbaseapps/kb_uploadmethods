@@ -22,6 +22,7 @@ from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
 from fba_tools.fba_toolsClient import fba_tools
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -179,7 +180,9 @@ class kb_uploadmethodsTest(unittest.TestCase):
                                                                     invalidate_input_params)
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    def test_import_phenotype_set_from_staging(self, download_staging_file):
+    @patch.object(UploaderUtil, "update_staging_service", return_value=None)
+    def test_import_phenotype_set_from_staging(self, download_staging_file,
+                                               update_staging_service):
 
         ws_obj_name = 'MyPhenotypeSet'
 

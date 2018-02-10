@@ -22,6 +22,7 @@ from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
 from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from kb_uploadmethods.Utils.ImportSRAUtil import ImportSRAUtil
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -318,9 +319,10 @@ class kb_uploadmethodsTest(unittest.TestCase):
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_pe)
+    @patch.object(UploaderUtil, "update_staging_service", return_value=None)
     def test_import_sra_reads_paired_end(self, download_staging_file,
                                          _validate_upload_staging_file_availability,
-                                         _run_command):
+                                         _run_command, update_staging_service):
 
         sra_path = 'empty.sra'
         ws_obj_name = 'MyReads'
@@ -368,9 +370,10 @@ class kb_uploadmethodsTest(unittest.TestCase):
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_se)
+    @patch.object(UploaderUtil, "update_staging_service", return_value=None)
     def test_import_sra_reads_single_end(self, download_staging_file,
                                          _validate_upload_staging_file_availability,
-                                         _run_command):
+                                         _run_command, update_staging_service):
 
         sra_path = 'empty.sra'
         ws_obj_name = 'MyReads'

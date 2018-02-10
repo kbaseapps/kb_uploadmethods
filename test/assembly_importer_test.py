@@ -21,6 +21,7 @@ from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
 from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -131,7 +132,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
                                                                  invalidate_input_params)
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    def test_genbank_to_genome(self, download_staging_file):
+    @patch.object(UploaderUtil, "update_staging_service", return_value=None)
+    def test_genbank_to_genome(self, download_staging_file, update_staging_service):
 
         fasta_file = 'small_fasta.fna'
         ws_obj_name = 'MyAssembly'
