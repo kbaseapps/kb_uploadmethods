@@ -79,6 +79,16 @@ parameters :
         short-hint: one of 'Reference', 'User upload', 'Representative'
         long-hint: one of 'Reference', 'User upload', 'Representative'
 
+    generate_missing_genes :
+        ui-name : |
+            Spoof Genes for parentless CDS
+        short-hint : |
+            Generate gene feature for CDSs that do not have a parent in file
+        long-hint : |
+            Some files may contain only codeing sequences but KBase genomes are
+            expected to contain a parent gene for these CDS. This option
+            generates spoof genes based on the CDS location.
+
 description : |
     <p> Import a GFF or FASTA file from your staging area into your Narrative as a Genome data object. 
     Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>

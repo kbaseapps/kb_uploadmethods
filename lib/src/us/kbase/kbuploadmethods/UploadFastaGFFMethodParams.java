@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * gff_file: gff file containing predicted gene models and corresponding features
  * Optional params:
  * scientific_name: proper name for species, key for taxonomy lookup. Default to 'unknown_taxon'
- * source: Source Of The GenBank File. Default to 'User'
+ * source: Source Of The GFF File. Default to 'User'
  * taxon_wsname - where the reference taxons are. Default to 'ReferenceTaxons'
  * taxon_reference - if defined, will try to link the Genome to the specified taxonomy object
  * release: Release Or Version Of The Source Data
@@ -44,7 +44,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "taxon_reference",
     "release",
     "genetic_code",
-    "type"
+    "type",
+    "generate_missing_genes"
 })
 public class UploadFastaGFFMethodParams {
 
@@ -70,6 +71,8 @@ public class UploadFastaGFFMethodParams {
     private Long geneticCode;
     @JsonProperty("type")
     private String type;
+    @JsonProperty("generate_missing_genes")
+    private String generateMissingGenes;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("fasta_file")
@@ -237,6 +240,21 @@ public class UploadFastaGFFMethodParams {
         return this;
     }
 
+    @JsonProperty("generate_missing_genes")
+    public String getGenerateMissingGenes() {
+        return generateMissingGenes;
+    }
+
+    @JsonProperty("generate_missing_genes")
+    public void setGenerateMissingGenes(String generateMissingGenes) {
+        this.generateMissingGenes = generateMissingGenes;
+    }
+
+    public UploadFastaGFFMethodParams withGenerateMissingGenes(String generateMissingGenes) {
+        this.generateMissingGenes = generateMissingGenes;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -249,7 +267,7 @@ public class UploadFastaGFFMethodParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((((((("UploadFastaGFFMethodParams"+" [fastaFile=")+ fastaFile)+", gffFile=")+ gffFile)+", genomeName=")+ genomeName)+", workspaceName=")+ workspaceName)+", scientificName=")+ scientificName)+", source=")+ source)+", taxonWsname=")+ taxonWsname)+", taxonReference=")+ taxonReference)+", release=")+ release)+", geneticCode=")+ geneticCode)+", type=")+ type)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((("UploadFastaGFFMethodParams"+" [fastaFile=")+ fastaFile)+", gffFile=")+ gffFile)+", genomeName=")+ genomeName)+", workspaceName=")+ workspaceName)+", scientificName=")+ scientificName)+", source=")+ source)+", taxonWsname=")+ taxonWsname)+", taxonReference=")+ taxonReference)+", release=")+ release)+", geneticCode=")+ geneticCode)+", type=")+ type)+", generateMissingGenes=")+ generateMissingGenes)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

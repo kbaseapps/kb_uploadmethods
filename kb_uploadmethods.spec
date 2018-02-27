@@ -101,7 +101,7 @@ module kb_uploadmethods {
 
     Optional params:
     scientific_name: proper name for species, key for taxonomy lookup. Default to 'unknown_taxon'
-    source: Source Of The GenBank File. Default to 'User'
+    source: Source Of The GFF File. Default to 'User'
     taxon_wsname - where the reference taxons are. Default to 'ReferenceTaxons'
     taxon_reference - if defined, will try to link the Genome to the specified taxonomy object
     release: Release Or Version Of The Source Data
@@ -121,6 +121,7 @@ module kb_uploadmethods {
     string release;
     int    genetic_code;
     string type;
+    string generate_missing_genes;
   } UploadFastaGFFMethodParams;
 
   typedef structure {
@@ -214,6 +215,8 @@ module kb_uploadmethods {
         per example Ensembl has numbered releases of all their data: Release 31
     generate_ids_if_needed - If field used for feature id is not there, 
         generate ids (default behavior is raising an exception)
+    generate_missing_genes - Generate gene feature for CDSs that do not have
+        a parent in file
     genetic_code - Genetic code of organism. Overwrites determined GC from 
         taxon object
     type - Reference, Representative or User upload
@@ -228,7 +231,7 @@ module kb_uploadmethods {
     int    genetic_code;
     string type;
     string generate_ids_if_needed;
-    string exclude_ontologies;
+    string generate_missing_genes;
   } GenbankToGenomeParams;
 
   typedef structure {

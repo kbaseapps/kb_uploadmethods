@@ -97,6 +97,18 @@
       }
     },
     {
+      "id": "generate_missing_genes",
+      "optional":true,
+      "advanced":true,
+      "allow_multiple":false,
+      "default_values":["0"],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
+      }
+    },
+    {
       "id" : "type",
       "optional" : true,
       "advanced" : true,
@@ -175,6 +187,10 @@
         {
           "input_parameter": "type",
           "target_property": "type"
+        },
+        {
+          "input_parameter": "generate_missing_genes",
+          "target_property": "generate_missing_genes"
         }
       ],
       "output_mapping" : 
