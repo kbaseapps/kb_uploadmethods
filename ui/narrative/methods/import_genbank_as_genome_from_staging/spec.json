@@ -85,11 +85,11 @@
       }
     },
     {
-      "id": "exclude_ontologies",
+      "id": "generate_missing_genes",
       "optional":true,
       "advanced":true,
       "allow_multiple":false,
-      "default_values":[""],
+      "default_values":["0"],
       "field_type" : "checkbox",
       "checkbox_options":{
         "checked_value": 1,
@@ -132,8 +132,8 @@
           "target_property": "generate_ids_if_needed"
         },
         {
-          "input_parameter": "exclude_ontologies",
-          "target_property": "exclude_ontologies"
+          "input_parameter": "generate_missing_genes",
+          "target_property": "generate_missing_genes"
         }
       ],
       "output_mapping" : [

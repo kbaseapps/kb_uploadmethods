@@ -303,6 +303,7 @@ UploadFastaGFFMethodParams is a reference to a hash where the following keys are
 	release has a value which is a string
 	genetic_code has a value which is an int
 	type has a value which is a string
+	generate_missing_genes has a value which is a string
 workspace_name is a string
 UploadFastaGFFMethodResult is a reference to a hash where the following keys are defined:
 	genome_ref has a value which is a string
@@ -332,6 +333,7 @@ UploadFastaGFFMethodParams is a reference to a hash where the following keys are
 	release has a value which is a string
 	genetic_code has a value which is an int
 	type has a value which is a string
+	generate_missing_genes has a value which is a string
 workspace_name is a string
 UploadFastaGFFMethodResult is a reference to a hash where the following keys are defined:
 	genome_ref has a value which is a string
@@ -618,7 +620,7 @@ GenbankToGenomeParams is a reference to a hash where the following keys are defi
 	genetic_code has a value which is an int
 	type has a value which is a string
 	generate_ids_if_needed has a value which is a string
-	exclude_ontologies has a value which is a string
+	generate_missing_genes has a value which is a string
 GenomeSaveResult is a reference to a hash where the following keys are defined:
 	genome_ref has a value which is a string
 
@@ -639,7 +641,7 @@ GenbankToGenomeParams is a reference to a hash where the following keys are defi
 	genetic_code has a value which is an int
 	type has a value which is a string
 	generate_ids_if_needed has a value which is a string
-	exclude_ontologies has a value which is a string
+	generate_missing_genes has a value which is a string
 GenomeSaveResult is a reference to a hash where the following keys are defined:
 	genome_ref has a value which is a string
 
@@ -2584,7 +2586,7 @@ gff_file: gff file containing predicted gene models and corresponding features
 
 Optional params:
 scientific_name: proper name for species, key for taxonomy lookup. Default to 'unknown_taxon'
-source: Source Of The GenBank File. Default to 'User'
+source: Source Of The GFF File. Default to 'User'
 taxon_wsname - where the reference taxons are. Default to 'ReferenceTaxons'
 taxon_reference - if defined, will try to link the Genome to the specified taxonomy object
 release: Release Or Version Of The Source Data
@@ -2609,6 +2611,7 @@ taxon_reference has a value which is a string
 release has a value which is a string
 genetic_code has a value which is an int
 type has a value which is a string
+generate_missing_genes has a value which is a string
 
 </pre>
 
@@ -2628,6 +2631,7 @@ taxon_reference has a value which is a string
 release has a value which is a string
 genetic_code has a value which is an int
 type has a value which is a string
+generate_missing_genes has a value which is a string
 
 
 =end text
@@ -2897,6 +2901,8 @@ import_genbank_from_staging: wrapper method for GenomeFileUtil.genbank_to_genome
       per example Ensembl has numbered releases of all their data: Release 31
   generate_ids_if_needed - If field used for feature id is not there, 
       generate ids (default behavior is raising an exception)
+  generate_missing_genes - Generate gene feature for CDSs that do not have
+      a parent in file
   genetic_code - Genetic code of organism. Overwrites determined GC from 
       taxon object
   type - Reference, Representative or User upload
@@ -2916,7 +2922,7 @@ release has a value which is a string
 genetic_code has a value which is an int
 type has a value which is a string
 generate_ids_if_needed has a value which is a string
-exclude_ontologies has a value which is a string
+generate_missing_genes has a value which is a string
 
 </pre>
 
@@ -2933,7 +2939,7 @@ release has a value which is a string
 genetic_code has a value which is an int
 type has a value which is a string
 generate_ids_if_needed has a value which is a string
-exclude_ontologies has a value which is a string
+generate_missing_genes has a value which is a string
 
 
 =end text
