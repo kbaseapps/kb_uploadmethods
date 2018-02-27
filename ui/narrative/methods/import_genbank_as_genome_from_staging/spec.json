@@ -128,6 +128,10 @@
           "target_property": "genetic_code"
         },
         {
+          "input_parameter": "generate_ids_if_needed",
+          "target_property": "generate_ids_if_needed"
+        },
+        {
           "input_parameter": "generate_missing_genes",
           "target_property": "generate_missing_genes"
         }
