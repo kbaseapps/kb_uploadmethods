@@ -1,6 +1,6 @@
-name     : Load Single-End Reads From Web - v1.0.12
-subtitle : Upload a Single End Library into your Narrative
-tooltip  : Upload a Single End Library into your Narrative
+name     : Import Single-End Reads from Web - v1.0.12
+subtitle : Import a Single-End Library into your Narrative
+tooltip  : Import a Single-End Library into your Narrative
 
 icon: data-pink.png
 
@@ -53,6 +53,6 @@ parameter-groups :
         long-hint  : FASTQ file URL and output Reads file name
 
 description : |
-    <p> Upload a Single End Library into your Narrative. </p>
+    <p> Import a Single-End Library into your Narrative. </p>
 
 technical-description : none
