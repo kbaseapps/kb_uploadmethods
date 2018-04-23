@@ -101,37 +101,11 @@
       "optional":true,
       "advanced":true,
       "allow_multiple":false,
-      "default_values":["0"],
+      "default_values":["1"],
       "field_type" : "checkbox",
       "checkbox_options":{
         "checked_value": 1,
         "unchecked_value": 0
-      }
-    },
-    {
-      "id" : "type",
-      "optional" : true,
-      "advanced" : true,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "dropdown",
-      "dropdown_options": 
-      {
-        "options": 
-        [
-          {
-              "display": "User upload",
-              "value": "User upload"
-          },
-          {
-              "display": "Reference",
-              "value": "Reference"
-          },
-          {
-              "display": "Representative",
-              "value": "Representative"
-          }
-        ]
       }
     }
   ],
@@ -183,10 +157,6 @@
         {
           "input_parameter": "genetic_code",
           "target_property": "genetic_code"
-        },
-        {
-          "input_parameter": "type",
-          "target_property": "type"
         },
         {
           "input_parameter": "generate_missing_genes",
