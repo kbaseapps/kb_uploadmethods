@@ -26,7 +26,7 @@ parameters :
         short-hint : |
             File with DNA data (one or more sequences) in FASTA format.
         long-hint  : |
-            Recognized extensions for the FASTA input file are .fasta, .fna, or .fa
+            Recognized extensions for the FASTA input file are .fasta, .fna, .fa, or .gz 
 
     min_contig_length :
         ui-name : |
