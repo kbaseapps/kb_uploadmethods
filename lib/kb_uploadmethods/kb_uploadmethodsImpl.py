@@ -34,7 +34,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "1.0.14"
     GIT_URL = "https://github.com/kbaseapps/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "8ebb66e4f2c27bc4a9b7cddff7d7b0f27f4ee433"
+    GIT_COMMIT_HASH = "f7df3b4cb6fae1b6df737c4abcfe2f9c72ab8a1d"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -802,6 +802,35 @@ class kb_uploadmethods:
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method import_tsv_as_phenotype_set_from_staging return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def import_condition_set_from_staging(self, ctx, params):
+        """
+        :param params: instance of type "FileToConditionSetParams" (required
+           params: staging_file_subdir_path: subdirectory file path e.g. for
+           file: /data/bulk/user_name/file_name staging_file_subdir_path is
+           file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name
+           condition_set_name: output ConditionSet object name workspace_id:
+           workspace name/ID of the object) -> structure: parameter
+           "staging_file_subdir_path" of String, parameter "workspace_id" of
+           type "workspace_name" (workspace name of the object), parameter
+           "condition_set_name" of String
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN import_condition_set_from_staging
+        #END import_condition_set_from_staging
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method import_condition_set_from_staging return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]

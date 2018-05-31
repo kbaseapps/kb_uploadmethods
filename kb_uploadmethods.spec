@@ -490,4 +490,23 @@ module kb_uploadmethods {
   funcdef import_tsv_as_phenotype_set_from_staging(FileToPhenotypeSetParams params)
           returns (UploadMethodResult returnVal) authentication required;
 
+  /*
+    required params:
+    staging_file_subdir_path: subdirectory file path
+    e.g.
+      for file: /data/bulk/user_name/file_name
+      staging_file_subdir_path is file_name
+      for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+      staging_file_subdir_path is subdir_1/subdir_2/file_name
+    condition_set_name: output ConditionSet object name
+    workspace_id: workspace name/ID of the object
+  */
+  typedef structure {
+    string staging_file_subdir_path;
+    workspace_name workspace_id;
+    string condition_set_name;
+  } FileToConditionSetParams;
+
+  funcdef import_condition_set_from_staging(FileToConditionSetParams params)
+          returns (UploadMethodResult returnVal) authentication required;
 };
