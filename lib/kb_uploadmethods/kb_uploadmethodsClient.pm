@@ -1879,7 +1879,7 @@ $params is a kb_uploadmethods.FileToConditionSetParams
 $returnVal is a kb_uploadmethods.UploadMethodResult
 FileToConditionSetParams is a reference to a hash where the following keys are defined:
 	staging_file_subdir_path has a value which is a string
-	workspace_id has a value which is a kb_uploadmethods.workspace_name
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
 	condition_set_name has a value which is a string
 workspace_name is a string
 UploadMethodResult is a reference to a hash where the following keys are defined:
@@ -1900,7 +1900,7 @@ $params is a kb_uploadmethods.FileToConditionSetParams
 $returnVal is a kb_uploadmethods.UploadMethodResult
 FileToConditionSetParams is a reference to a hash where the following keys are defined:
 	staging_file_subdir_path has a value which is a string
-	workspace_id has a value which is a kb_uploadmethods.workspace_name
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
 	condition_set_name has a value which is a string
 workspace_name is a string
 UploadMethodResult is a reference to a hash where the following keys are defined:
@@ -3650,7 +3650,7 @@ workspace_id: workspace name/ID of the object
 <pre>
 a reference to a hash where the following keys are defined:
 staging_file_subdir_path has a value which is a string
-workspace_id has a value which is a kb_uploadmethods.workspace_name
+workspace_name has a value which is a kb_uploadmethods.workspace_name
 condition_set_name has a value which is a string
 
 </pre>
@@ -3661,7 +3661,7 @@ condition_set_name has a value which is a string
 
 a reference to a hash where the following keys are defined:
 staging_file_subdir_path has a value which is a string
-workspace_id has a value which is a kb_uploadmethods.workspace_name
+workspace_name has a value which is a kb_uploadmethods.workspace_name
 condition_set_name has a value which is a string
 
 

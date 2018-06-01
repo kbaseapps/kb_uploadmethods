@@ -56,7 +56,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         suffix = int(time.time() * 1000)
         cls.wsName = "test_kb_uploadmethods_condition_set" + str(suffix)
-        cls.wsID = cls.wsClient.create_workspace({'workspace': cls.wsName})
+        cls.wsID = cls.wsClient.create_workspace({'workspace': cls.wsName})[0]
 
     @classmethod
     def tearDownClass(cls):
@@ -96,7 +96,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def test_bad_import_condition_set_from_staging_params(self):
         invalidate_input_params = {
           'missing_staging_file_subdir_path': 'staging_file_subdir_path',
-          'workspace_id': 'workspace_id',
+          'workspace_name': 'workspace_name',
           'condition_set_name': 'condition_set_name',
         }
         with self.assertRaisesRegexp(
@@ -107,18 +107,18 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         invalidate_input_params = {
           'staging_file_subdir_path': 'staging_file_subdir_path',
-          'missing_workspace_id': 'workspace_id',
+          'missing_workspace_name': 'workspace_name',
           'condition_set_name': 'condition_set_name',
         }
         with self.assertRaisesRegexp(
                     ValueError,
-                    '"workspace_id" parameter is required, but missing'):
+                    '"workspace_name" parameter is required, but missing'):
             self.getImpl().import_condition_set_from_staging(self.getContext(),
                                                                     invalidate_input_params)
 
         invalidate_input_params = {
           'staging_file_subdir_path': 'staging_file_subdir_path',
-          'workspace_id': 'workspace_id',
+          'workspace_name': 'workspace_name',
           'missing_condition_set_name': 'condition_set_name',
           'genome': 'genome'
         }
@@ -136,7 +136,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         ws_obj_name = 'MyconditionSet'
 
         params = {'staging_file_subdir_path': "CS1.tsv",
-                  'workspace_id': self.getWsID(),
+                  'workspace_name': self.wsName,
                   'condition_set_name': ws_obj_name,
                   }
 
@@ -153,7 +153,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         ws_obj_name = 'MyconditionSet'
 
         params = {'staging_file_subdir_path': "CS1.xlsx",
-                  'workspace_id': self.getWsID(),
+                  'workspace_name': self.wsName,
                   'condition_set_name': ws_obj_name,
                   }
 

@@ -38,8 +38,8 @@
       "method" : "import_condition_set_from_staging",
       "input_mapping" : [
         {
-          "narrative_system_variable": "workspace_id",
-          "target_property": "workspace_id"
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
         },
         {
           "input_parameter": "condition_set_name",

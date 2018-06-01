@@ -35,7 +35,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "1.0.14"
     GIT_URL = "https://github.com/kbaseapps/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "f7df3b4cb6fae1b6df737c4abcfe2f9c72ab8a1d"
+    GIT_COMMIT_HASH = "3860f3df7f5ba3e241bf2d0f64abe5050f5232f1"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -817,8 +817,8 @@ class kb_uploadmethods:
            staging_file_subdir_path is subdir_1/subdir_2/file_name
            condition_set_name: output ConditionSet object name workspace_id:
            workspace name/ID of the object) -> structure: parameter
-           "staging_file_subdir_path" of String, parameter "workspace_id" of
-           type "workspace_name" (workspace name of the object), parameter
+           "staging_file_subdir_path" of String, parameter "workspace_name"
+           of type "workspace_name" (workspace name of the object), parameter
            "condition_set_name" of String
         :returns: instance of type "UploadMethodResult" -> structure:
            parameter "obj_ref" of type "obj_ref", parameter "report_name" of

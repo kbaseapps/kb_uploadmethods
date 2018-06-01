@@ -30,15 +30,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "staging_file_subdir_path",
-    "workspace_id",
+    "workspace_name",
     "condition_set_name"
 })
 public class FileToConditionSetParams {
 
     @JsonProperty("staging_file_subdir_path")
     private String stagingFileSubdirPath;
-    @JsonProperty("workspace_id")
-    private String workspaceId;
+    @JsonProperty("workspace_name")
+    private String workspaceName;
     @JsonProperty("condition_set_name")
     private String conditionSetName;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
@@ -58,18 +58,18 @@ public class FileToConditionSetParams {
         return this;
     }
 
-    @JsonProperty("workspace_id")
-    public String getWorkspaceId() {
-        return workspaceId;
+    @JsonProperty("workspace_name")
+    public String getWorkspaceName() {
+        return workspaceName;
     }
 
-    @JsonProperty("workspace_id")
-    public void setWorkspaceId(String workspaceId) {
-        this.workspaceId = workspaceId;
+    @JsonProperty("workspace_name")
+    public void setWorkspaceName(String workspaceName) {
+        this.workspaceName = workspaceName;
     }
 
-    public FileToConditionSetParams withWorkspaceId(String workspaceId) {
-        this.workspaceId = workspaceId;
+    public FileToConditionSetParams withWorkspaceName(String workspaceName) {
+        this.workspaceName = workspaceName;
         return this;
     }
 
@@ -100,7 +100,7 @@ public class FileToConditionSetParams {
 
     @Override
     public String toString() {
-        return ((((((((("FileToConditionSetParams"+" [stagingFileSubdirPath=")+ stagingFileSubdirPath)+", workspaceId=")+ workspaceId)+", conditionSetName=")+ conditionSetName)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((("FileToConditionSetParams"+" [stagingFileSubdirPath=")+ stagingFileSubdirPath)+", workspaceName=")+ workspaceName)+", conditionSetName=")+ conditionSetName)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

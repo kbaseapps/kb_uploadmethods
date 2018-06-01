@@ -466,8 +466,8 @@ class kb_uploadmethods(object):
            staging_file_subdir_path is subdir_1/subdir_2/file_name
            condition_set_name: output ConditionSet object name workspace_id:
            workspace name/ID of the object) -> structure: parameter
-           "staging_file_subdir_path" of String, parameter "workspace_id" of
-           type "workspace_name" (workspace name of the object), parameter
+           "staging_file_subdir_path" of String, parameter "workspace_name"
+           of type "workspace_name" (workspace name of the object), parameter
            "condition_set_name" of String
         :returns: instance of type "UploadMethodResult" -> structure:
            parameter "obj_ref" of type "obj_ref", parameter "report_name" of

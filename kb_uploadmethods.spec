@@ -503,7 +503,7 @@ module kb_uploadmethods {
   */
   typedef structure {
     string staging_file_subdir_path;
-    workspace_name workspace_id;
+    workspace_name workspace_name;
     string condition_set_name;
   } FileToConditionSetParams;
 
