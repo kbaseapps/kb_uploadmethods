@@ -14,6 +14,7 @@ from kb_uploadmethods.Utils.ImportFBAModelUtil import ImportFBAModelUtil
 from kb_uploadmethods.Utils.ImportExpressionMatrixUtil import ImportExpressionMatrixUtil
 from kb_uploadmethods.Utils.ImportReadsUtil import ImportReadsUtil
 from kb_uploadmethods.Utils.ImportPhenotypeSetUtil import ImportPhenotypeSetUtil
+from kb_uploadmethods.Utils.ImportConditionSetUtil import ImportConditionSetUtil
 #END_HEADER
 
 
@@ -826,6 +827,18 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_condition_set_from_staging
+        print '--->\nRunning uploadmethods.import_condition_set_from_staging\nparams:'
+        print json.dumps(params, indent=1)
+
+        for key, value in params.iteritems():
+            if isinstance(value, basestring):
+                params[key] = value.strip()
+
+        importer = ImportConditionSetUtil(self.config)
+        returnVal = importer.import_condition_set_from_staging(params)
+
+        reportVal = importer.generate_report(returnVal['obj_ref'], params)
+        returnVal.update(reportVal)
         #END import_condition_set_from_staging
 
         # At some point might do deeper type checking...
