@@ -16,7 +16,7 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "text",
+      "field_type" : "dynamic_dropdown",
       "text_options" : {}
     },    
     {
@@ -25,7 +25,7 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "text",
+      "field_type" : "dynamic_dropdown",
       "text_options" : {}
     },
     {
@@ -52,12 +52,26 @@
     },
     {
       "id" : "source",
-      "optional" : true,
-      "advanced" : true,
+      "optional" : false,
+      "advanced" : false,
       "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
+      "default_values" : [ "Other" ],
+      "field_type" : "dropdown",
+      "dropdown_options":{
+      "options": [
+        {
+          "value": "RefSeq user",
+          "display": "RefSeq"
+        },
+        {
+          "value": "Ensembl user",
+          "display": "Ensembl"
+        },
+        {
+          "value": "Other",
+          "display": "Other"
+        }
+      ]}
     },
     {
       "id" : "taxon_wsname",

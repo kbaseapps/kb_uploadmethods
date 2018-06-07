@@ -15,7 +15,7 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "text",
+      "field_type" : "dynamic_dropdown",
       "text_options" : {}
     }, 
     {
@@ -40,11 +40,11 @@
       "dropdown_options":{
       "options": [
         {
-          "value": "RefSeq",
+          "value": "RefSeq user",
           "display": "RefSeq"
         },
         {
-          "value": "Ensembl",
+          "value": "Ensembl user",
           "display": "Ensembl"
         },
         {
