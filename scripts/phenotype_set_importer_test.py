@@ -89,7 +89,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         cls.genome_object_name = 'test_Genome'
         cls.genome_ref = cls.gfu.genbank_to_genome({'file': {'path': genbank_file_path},
                                                     'workspace_name': cls.wsName,
-                                                    'genome_name': cls.genome_object_name
+                                                    'genome_name': cls.genome_object_name,
+                                                    'generate_missing_genes': 1,
                                                     })['genome_ref']
 
         # upload media object
@@ -122,9 +123,10 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def getContext(self):
         return self.__class__.ctx
 
+    @property
     def mock_download_staging_file(params):
-        print 'Mocking DataFileUtilClient.download_staging_file'
-        print params
+        print('Mocking DataFileUtilClient.download_staging_file')
+        print(params)
 
         tsv_file_path = params.get('staging_file_subdir_path')
 

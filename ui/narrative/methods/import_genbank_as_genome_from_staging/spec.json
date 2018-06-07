@@ -35,7 +35,7 @@
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
-      "default_values" : [ "RefSeq" ],
+      "default_values" : [ "RefSeq user" ],
       "field_type" : "dropdown",
       "dropdown_options":{
       "options": [
