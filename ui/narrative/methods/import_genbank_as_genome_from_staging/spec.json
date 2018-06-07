@@ -40,11 +40,11 @@
       "dropdown_options":{
       "options": [
         {
-          "value": "RefSeq",
+          "value": "RefSeq user",
           "display": "RefSeq"
         },
         {
-          "value": "Ensembl",
+          "value": "Ensembl user",
           "display": "Ensembl"
         },
         {
