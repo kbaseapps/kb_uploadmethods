@@ -26,6 +26,6 @@ parameters :
         long-hint  : Staging file subdirectory file path
 
 description : |
-    <p> Unpack a staging compressed file. The apps recognizes compressed files in these formats: .zip, .gz, .bz2, .tar, .tar.gz, .tar.bz2.</p>
+    <p> Unpack a staging compressed file. The app recognizes compressed files in these formats: .zip, .gz, .bz2, .tar, .tar.gz, .tar.bz2.</p>
 
 technical-description : none
