@@ -17,7 +17,7 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "dynamic_dropdown",
+      "field_type" : "text",
       "text_options" : {}
     },
     {
