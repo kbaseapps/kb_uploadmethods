@@ -16,8 +16,10 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
+      "field_type" : "dynamic_dropdown",
+      "dynamic_dropdown_options" : {
+        "data_source": "ftp_staging"
+      }
     },    
     {
       "id" : "gff_file",
@@ -25,8 +27,10 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
+      "field_type" : "dynamic_dropdown",
+      "dynamic_dropdown_options" : {
+        "data_source": "ftp_staging"
+      }
     },
     {
       "id" : "genome_name",
