@@ -1,28 +1,22 @@
 # -*- coding: utf-8 -*-
-import unittest
 import os  # noqa: F401
-import json  # noqa: F401
-import time
-import requests
 import shutil
+import time
+import unittest
+from configparser import ConfigParser
+from os import environ
+
+import requests
+from biokbase.workspace.client import Workspace as workspaceService
 from mock import patch
 
-from os import environ
-try:
-    from ConfigParser import ConfigParser  # py2
-except:
-    from configparser import ConfigParser  # py3
-
-from pprint import pprint  # noqa: F401
-
-from biokbase.workspace.client import Workspace as workspaceService
-from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
-from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
-from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
 from fba_tools.fba_toolsClient import fba_tools
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
+from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
+from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
+from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
 
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -77,7 +71,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         header = {'Authorization': 'Oauth {0}'.format(cls.token)}
         requests.delete(cls.shockURL + '/node/' + node_id, headers=header,
                         allow_redirects=True)
-        print('Deleted shock node ' + node_id)
+        print(('Deleted shock node ' + node_id))
 
     @classmethod
     def prepare_data(cls):
@@ -138,7 +132,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'phenotype_set_name': 'phenotype_set_name',
           'genome': 'genome'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                     ValueError,
                     '"staging_file_subdir_path" parameter is required, but missing'):
             self.getImpl().import_tsv_as_phenotype_set_from_staging(self.getContext(),
@@ -150,7 +144,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'phenotype_set_name': 'phenotype_set_name',
           'genome': 'genome'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                     ValueError,
                     '"workspace_name" parameter is required, but missing'):
             self.getImpl().import_tsv_as_phenotype_set_from_staging(self.getContext(),
@@ -162,7 +156,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'missing_phenotype_set_name': 'phenotype_set_name',
           'genome': 'genome'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 '"phenotype_set_name" parameter is required, but missing'):
             self.getImpl().import_tsv_as_phenotype_set_from_staging(self.getContext(),
@@ -174,7 +168,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'phenotype_set_name': 'phenotype_set_name',
           'missing_genome': 'genome'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 '"genome" parameter is required, but missing'):
             self.getImpl().import_tsv_as_phenotype_set_from_staging(self.getContext(),

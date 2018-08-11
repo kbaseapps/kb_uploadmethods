@@ -33,9 +33,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.0.14"
+    VERSION = "1.0.18"
     GIT_URL = "https://github.com/kbaseapps/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "3860f3df7f5ba3e241bf2d0f64abe5050f5232f1"
+    GIT_COMMIT_HASH = "839bdc879a7e99fb381372a48255b75afb8daef9"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -99,8 +99,8 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN upload_fastq_file
-        print '--->\nRunning uploadmethods.upload_fastq_file\nparams:'
-        print json.dumps(params, indent=1)
+        print('--->\nRunning uploadmethods.upload_fastq_file\nparams:')
+        print((json.dumps(params, indent=1)))
 
         if params.get('urls_to_add'):
             returnVal = {'obj_ref': ''}
@@ -109,16 +109,16 @@ class kb_uploadmethods:
                 params_item['download_type'] = params.get('download_type')
                 params_item['sequencing_tech'] = params.get('sequencing_tech')
                 params_item['interleaved'] = params.get('interleaved')
-                for key, value in params_item.iteritems():
-                    if isinstance(value, basestring):
+                for key, value in list(params_item.items()):
+                    if isinstance(value, str):
                         params_item[key] = value.strip()
                 fastqUploader = UploaderUtil(self.config)
                 itemReturnVal = fastqUploader.upload_fastq_file(params_item)
                 returnVal['obj_ref'] += itemReturnVal['obj_ref'] + ','
             returnVal['obj_ref'] = returnVal['obj_ref'][:-1]
         else:
-            for key, value in params.iteritems():
-                if isinstance(value, basestring):
+            for key, value in list(params.items()):
+                if isinstance(value, str):
                     params[key] = value.strip()
             fastqUploader = UploaderUtil(self.config)
             returnVal = fastqUploader.upload_fastq_file(params)
@@ -166,15 +166,15 @@ class kb_uploadmethods:
         # return variables are: returnVal
         #BEGIN upload_fasta_gff_file
 
-        print '--->\nRunning uploadmethods.upload_fasta_gff_file\nparams:'
-        print json.dumps(params, indent=1)
+        print('--->\nRunning uploadmethods.upload_fasta_gff_file\nparams:')
+        print((json.dumps(params, indent=1)))
 
-        for key in params.keys():
+        for key in list(params.keys()):
             value = params[key]
             if value is None:
                 del params[key]
             else:
-                if isinstance(value, basestring):
+                if isinstance(value, str):
                     if value.strip() == '':
                         params[key] = None
                     else:
@@ -217,11 +217,11 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN unpack_staging_file
-        print '--->\nRunning uploadmethods.unpack_staging_file\nparams:'
-        print json.dumps(params, indent=1)
+        print('--->\nRunning uploadmethods.unpack_staging_file\nparams:')
+        print((json.dumps(params, indent=1)))
 
-        for key, value in params.iteritems():
-            if isinstance(value, basestring):
+        for key, value in list(params.items()):
+            if isinstance(value, str):
                 params[key] = value.strip()
 
         self.config['USER_ID'] = ctx['user_id']
@@ -263,8 +263,8 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN unpack_web_file
-        print '--->\nRunning uploadmethods.unpack_web_file\nparams:'
-        print json.dumps(params, indent=1)
+        print('--->\nRunning uploadmethods.unpack_web_file\nparams:')
+        print((json.dumps(params, indent=1)))
 
         self.config['USER_ID'] = ctx['user_id']
 
@@ -275,16 +275,16 @@ class kb_uploadmethods:
             for params_item in params.get('urls_to_add_web_unpack'):
                 params_item['download_type'] = download_type
                 params_item['workspace_name'] = workspace_name
-                for key, value in params_item.iteritems():
-                    if isinstance(value, basestring):
+                for key, value in list(params_item.items()):
+                    if isinstance(value, str):
                         params_item[key] = value.strip()
                 unpacker = UnpackFileUtil(self.config)
                 itemReturnVal = unpacker.unpack_web_file(params_item)
                 returnVal['unpacked_file_path'] += itemReturnVal['unpacked_file_path'] + ','
             returnVal['unpacked_file_path'] = returnVal['unpacked_file_path'][:-1]
         else:
-            for key, value in params.iteritems():
-                if isinstance(value, basestring):
+            for key, value in list(params.items()):
+                if isinstance(value, str):
                     params[key] = value.strip()
             unpacker = UnpackFileUtil(self.config)
             returnVal = unpacker.unpack_web_file(params)
@@ -334,8 +334,8 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_genbank_from_staging
-        for key, value in params.iteritems():
-            if isinstance(value, basestring):
+        for key, value in list(params.items()):
+            if isinstance(value, str):
                 params[key] = value.strip()
 
         importer = ImportGenbankUtil(self.config)
@@ -380,11 +380,11 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_sra_from_staging
-        print '--->\nRunning uploadmethods.import_sra_from_staging\nparams:'
-        print json.dumps(params, indent=1)
+        print('--->\nRunning uploadmethods.import_sra_from_staging\nparams:')
+        print((json.dumps(params, indent=1)))
 
-        for key, value in params.iteritems():
-            if isinstance(value, basestring):
+        for key, value in list(params.items()):
+            if isinstance(value, str):
                 params[key] = value.strip()
 
         importer = ImportSRAUtil(self.config)
@@ -429,11 +429,11 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_sra_from_web
-        print '--->\nRunning uploadmethods.import_sra_from_web\nparams:'
-        print json.dumps(params, indent=1)
+        print('--->\nRunning uploadmethods.import_sra_from_web\nparams:')
+        print((json.dumps(params, indent=1)))
 
-        for key, value in params.iteritems():
-            if isinstance(value, basestring):
+        for key, value in list(params.items()):
+            if isinstance(value, str):
                 params[key] = value.strip()
 
         importer = ImportSRAUtil(self.config)
@@ -471,11 +471,11 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_fasta_as_assembly_from_staging
-        print '--->\nRunning uploadmethods.import_fasta_as_assembly_from_staging\nparams:'
-        print json.dumps(params, indent=1)
+        print('--->\nRunning uploadmethods.import_fasta_as_assembly_from_staging\nparams:')
+        print((json.dumps(params, indent=1)))
 
-        for key, value in params.iteritems():
-            if isinstance(value, basestring):
+        for key, value in list(params.items()):
+            if isinstance(value, str):
                 params[key] = value.strip()
 
         importer = ImportAssemblyUtil(self.config)
@@ -512,11 +512,11 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_tsv_as_media_from_staging
-        print '--->\nRunning uploadmethods.import_tsv_as_media_from_staging\nparams:'
-        print json.dumps(params, indent=1)
+        print('--->\nRunning uploadmethods.import_tsv_as_media_from_staging\nparams:')
+        print((json.dumps(params, indent=1)))
 
-        for key, value in params.iteritems():
-            if isinstance(value, basestring):
+        for key, value in list(params.items()):
+            if isinstance(value, str):
                 params[key] = value.strip()
 
         importer = ImportMediaUtil(self.config)
@@ -553,11 +553,11 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_excel_as_media_from_staging
-        print '--->\nRunning uploadmethods.import_excel_as_media_from_staging\nparams:'
-        print json.dumps(params, indent=1)
+        print('--->\nRunning uploadmethods.import_excel_as_media_from_staging\nparams:')
+        print((json.dumps(params, indent=1)))
 
-        for key, value in params.iteritems():
-            if isinstance(value, basestring):
+        for key, value in list(params.items()):
+            if isinstance(value, str):
                 params[key] = value.strip()
 
         importer = ImportMediaUtil(self.config)
@@ -594,11 +594,11 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_tsv_or_excel_as_media_from_staging
-        print '--->\nRunning uploadmethods.import_tsv_or_excel_as_media_from_staging\nparams:'
-        print json.dumps(params, indent=1)
+        print('--->\nRunning uploadmethods.import_tsv_or_excel_as_media_from_staging\nparams:')
+        print((json.dumps(params, indent=1)))
 
-        for key, value in params.iteritems():
-            if isinstance(value, basestring):
+        for key, value in list(params.items()):
+            if isinstance(value, str):
                 params[key] = value.strip()
 
         importer = ImportMediaUtil(self.config)
@@ -640,9 +640,9 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_file_as_fba_model_from_staging
-        print('--->\nrunning {}.{}\n params:\n{}'
+        print(('--->\nrunning {}.{}\n params:\n{}'
             .format(self.__class__.__name__, sys._getframe().f_code.co_name,
-                    json.dumps(params, indent=1)))
+                    json.dumps(params, indent=1))))
 
         importer = ImportFBAModelUtil(self.config)
         returnVal = importer.import_fbamodel_from_staging(params)
@@ -688,11 +688,11 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_tsv_as_expression_matrix_from_staging
-        print '--->\nRunning uploadmethods.import_tsv_as_expression_matrix_from_staging\nparams:'
-        print json.dumps(params, indent=1)
+        print('--->\nRunning uploadmethods.import_tsv_as_expression_matrix_from_staging\nparams:')
+        print((json.dumps(params, indent=1)))
 
-        for key, value in params.iteritems():
-            if isinstance(value, basestring):
+        for key, value in list(params.items()):
+            if isinstance(value, str):
                 params[key] = value.strip()
 
         importer = ImportExpressionMatrixUtil(self.config)
@@ -746,11 +746,11 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_reads_from_staging
-        print '--->\nRunning uploadmethods.import_reads_from_staging\nparams:'
-        print json.dumps(params, indent=1)
+        print('--->\nRunning uploadmethods.import_reads_from_staging\nparams:')
+        print((json.dumps(params, indent=1)))
 
-        for key, value in params.iteritems():
-            if isinstance(value, basestring):
+        for key, value in list(params.items()):
+            if isinstance(value, str):
                 params[key] = value.strip()
 
         importer = ImportReadsUtil(self.config)
@@ -786,11 +786,11 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_tsv_as_phenotype_set_from_staging
-        print '--->\nRunning uploadmethods.import_tsv_as_phenotype_set_from_staging\nparams:'
-        print json.dumps(params, indent=1)
+        print('--->\nRunning uploadmethods.import_tsv_as_phenotype_set_from_staging\nparams:')
+        print((json.dumps(params, indent=1)))
 
-        for key, value in params.iteritems():
-            if isinstance(value, basestring):
+        for key, value in list(params.items()):
+            if isinstance(value, str):
                 params[key] = value.strip()
 
         importer = ImportPhenotypeSetUtil(self.config)
@@ -827,11 +827,11 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_condition_set_from_staging
-        print '--->\nRunning uploadmethods.import_condition_set_from_staging\nparams:'
-        print json.dumps(params, indent=1)
+        print('--->\nRunning uploadmethods.import_condition_set_from_staging\nparams:')
+        print((json.dumps(params, indent=1)))
 
-        for key, value in params.iteritems():
-            if isinstance(value, basestring):
+        for key, value in list(params.items()):
+            if isinstance(value, str):
                 params[key] = value.strip()
 
         importer = ImportConditionSetUtil(self.config)

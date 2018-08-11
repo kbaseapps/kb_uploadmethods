@@ -1,15 +1,15 @@
 
-import time
 import json
-from pprint import pprint
+import time
 
-from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
 from DataFileUtil.DataFileUtilClient import DataFileUtil
+from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
+
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
 
 
 class ImportGFFFastaUtil:

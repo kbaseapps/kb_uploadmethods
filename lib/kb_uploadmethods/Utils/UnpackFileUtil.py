@@ -1,10 +1,11 @@
+import json
 import os
+import shutil
 import time
 import uuid
-import json
+from configparser import SafeConfigParser
+
 import magic
-import shutil
-from ConfigParser import SafeConfigParser
 
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from KBaseReport.KBaseReportClient import KBaseReport
@@ -12,7 +13,7 @@ from KBaseReport.KBaseReportClient import KBaseReport
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
 
 
 class UnpackFileUtil:
@@ -74,8 +75,8 @@ class UnpackFileUtil:
                 os.remove(file_path)
                 log('removing file:   {}{}'.format('-' * count, file_path))
             elif t in ['application/' + x for x in
-                        'x-gzip', 'gzip', 'x-bzip', 'x-bzip2', 'bzip', 'bzip2',
-                        'x-tar', 'tar', 'x-gtar', 'zip', 'x-zip-compressed']:
+                        ('x-gzip', 'gzip', 'x-bzip', 'x-bzip2', 'bzip', 'bzip2',
+                        'x-tar', 'tar', 'x-gtar', 'zip', 'x-zip-compressed')]:
                 file_dir = os.path.dirname(file_path)
                 files_before_unpack = os.listdir(file_dir)
                 self.dfu.unpack_file({'file_path': file_path}).get('file_path')
