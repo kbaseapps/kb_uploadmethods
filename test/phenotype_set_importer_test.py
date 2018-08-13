@@ -123,7 +123,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def getContext(self):
         return self.__class__.ctx
 
-    @property
     def mock_download_staging_file(params):
         print('Mocking DataFileUtilClient.download_staging_file')
         print(params)
