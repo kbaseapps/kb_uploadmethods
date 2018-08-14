@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.19**:
+Convert  module to Python 3
+
 **1.0.15**:
 Add ConditionSet upload
 Make all uploaders use dynamic_dropdown type for staging area uploads
