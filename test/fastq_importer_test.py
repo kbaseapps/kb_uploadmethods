@@ -1,25 +1,19 @@
 # -*- coding: utf-8 -*-
-import unittest
-import os  # noqa: F401
-import json  # noqa: F401
-import time
-import requests
-import hashlib
 import ftplib
-
+import hashlib
+import os
+import time
+import unittest
+from configparser import ConfigParser
 from os import environ
-try:
-    from ConfigParser import ConfigParser  # py2
-except:
-    from configparser import ConfigParser  # py3
 
-from pprint import pprint  # noqa: F401
-
+import requests
 from biokbase.workspace.client import Workspace as workspaceService
+
+from DataFileUtil.DataFileUtilClient import DataFileUtil
+from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
-from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
-from DataFileUtil.DataFileUtilClient import DataFileUtil
 
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -70,7 +64,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         header = {'Authorization': 'Oauth {0}'.format(cls.token)}
         requests.delete(cls.shockURL + '/node/' + node_id, headers=header,
                         allow_redirects=True)
-        print('Deleted shock node ' + node_id)
+        print(('Deleted shock node ' + node_id))
 
     def getWsClient(self):
         return self.__class__.wsClient
@@ -110,13 +104,13 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
     def check_lib(self, lib, size, filename, md5):
         shock_id = lib["file"]["id"]
-        print "LIB: {}".format(str(lib))
-        print "Shock ID: {}".format(str(shock_id))
+        print("LIB: {}".format(str(lib)))
+        print("Shock ID: {}".format(str(shock_id)))
         fileinput = [{
                     'shock_id': shock_id,
                     'file_path': self.scratch + '/temp',
                     'unpack': 'uncompress'}]
-        print "File Input: {}".format(str(fileinput))
+        print("File Input: {}".format(str(fileinput)))
         files = self.dfu.shock_to_file_mass(fileinput)
         path = files[0]["file_path"]
         file_md5 = hashlib.md5(open(path, 'rb').read()).hexdigest()
@@ -137,19 +131,19 @@ class kb_uploadmethodsTest(unittest.TestCase):
         # Testing required params
         invalidate_input_params = self.getDefaultParams()
         del invalidate_input_params['name']
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                             ValueError,
                             '"name" parameter is required, but missing'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
         invalidate_input_params = self.getDefaultParams()
         del invalidate_input_params['workspace_name']
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                             ValueError,
                             '"workspace_name" parameter is required, but missing'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
         invalidate_input_params = self.getDefaultParams()
         invalidate_input_params['fwd_file_url'] = 'https://fake_url'
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                             ValueError,
                             'Cannot upload Reads for both file path and file URL'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
@@ -169,7 +163,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         error_msg = 'Same file \[{}\] is used for forward and reverse. '.format(
                                             invalidate_input_params['rev_staging_file_name'])
         error_msg += 'Please select different files and try again.'
-        with self.assertRaisesRegexp(ValueError, error_msg):
+        with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         invalidate_input_params = self.getDefaultParams(file_path=False)
@@ -177,34 +171,34 @@ class kb_uploadmethodsTest(unittest.TestCase):
         error_msg = 'Same URL\n {}\nis used for forward and reverse. '.format(
                                                       invalidate_input_params['rev_file_url'])
         error_msg += 'Please select different files and try again.'
-        with self.assertRaisesRegexp(ValueError, error_msg):
+        with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         # Testing URL prefix
         invalidate_input_params = self.getDefaultParams(file_path=False)
         invalidate_input_params['fwd_file_url'] = 'ftp://ftp.dlptest.com/24_Hour/SP1.fq'
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                             ValueError,
                             'Download type and URL prefix do NOT match'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         invalidate_input_params = self.getDefaultParams(file_path=False)
         invalidate_input_params['download_type'] = 'DropBox'
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                             ValueError,
                             'Download type and URL prefix do NOT match'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         invalidate_input_params = self.getDefaultParams(file_path=False)
         invalidate_input_params['download_type'] = 'FTP'
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                             ValueError,
                             'Download type and URL prefix do NOT match'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         invalidate_input_params = self.getDefaultParams(file_path=False)
         del invalidate_input_params['download_type']
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                         ValueError,
                         'Download type parameter is required, but missing'):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
@@ -214,17 +208,17 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         invalidate_input_params = self.getDefaultParams()
         invalidate_input_params['insert_size_mean'] = 10
-        with self.assertRaisesRegexp(ValueError, error_msg):
+        with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         invalidate_input_params = self.getDefaultParams()
         invalidate_input_params['insert_size_std_dev'] = 0.4
-        with self.assertRaisesRegexp(ValueError, error_msg):
+        with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         invalidate_input_params = self.getDefaultParams()
         invalidate_input_params['read_orientation_outward'] = 1
-        with self.assertRaisesRegexp(ValueError, error_msg):
+        with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         error_msg = 'Sequencing Technology: "PacBio CCS" or "PacBio CLR" '
@@ -233,49 +227,49 @@ class kb_uploadmethodsTest(unittest.TestCase):
         invalidate_input_params = self.getDefaultParams()
         invalidate_input_params['sequencing_tech'] = 'PacBio CCS'
         invalidate_input_params['rev_staging_file_name'] = 'rev_staging_file_name'
-        with self.assertRaisesRegexp(ValueError, error_msg):
+        with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         invalidate_input_params = self.getDefaultParams()
         invalidate_input_params['sequencing_tech'] = 'PacBio CLR'
         invalidate_input_params['rev_staging_file_name'] = 'rev_staging_file_name'
-        with self.assertRaisesRegexp(ValueError, error_msg):
+        with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         invalidate_input_params = self.getDefaultParams()
         invalidate_input_params['sequencing_tech'] = 'PacBio CCS'
         invalidate_input_params['interleaved'] = 1
-        with self.assertRaisesRegexp(ValueError, error_msg):
+        with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         invalidate_input_params = self.getDefaultParams()
         invalidate_input_params['sequencing_tech'] = 'PacBio CLR'
         invalidate_input_params['interleaved'] = 1
-        with self.assertRaisesRegexp(ValueError, error_msg):
+        with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         invalidate_input_params = self.getDefaultParams(file_path=False)
         invalidate_input_params['sequencing_tech'] = 'PacBio CCS'
         invalidate_input_params['rev_file_url'] = 'rev_file_url'
-        with self.assertRaisesRegexp(ValueError, error_msg):
+        with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         invalidate_input_params = self.getDefaultParams(file_path=False)
         invalidate_input_params['sequencing_tech'] = 'PacBio CLR'
         invalidate_input_params['rev_file_url'] = 'rev_file_url'
-        with self.assertRaisesRegexp(ValueError, error_msg):
+        with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         invalidate_input_params = self.getDefaultParams(file_path=False)
         invalidate_input_params['sequencing_tech'] = 'PacBio CCS'
         invalidate_input_params['interleaved'] = 1
-        with self.assertRaisesRegexp(ValueError, error_msg):
+        with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         invalidate_input_params = self.getDefaultParams(file_path=False)
         invalidate_input_params['sequencing_tech'] = 'PacBio CLR'
         invalidate_input_params['interleaved'] = 1
-        with self.assertRaisesRegexp(ValueError, error_msg):
+        with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
     def test_upload_fastq_file_url_direct_download(self):

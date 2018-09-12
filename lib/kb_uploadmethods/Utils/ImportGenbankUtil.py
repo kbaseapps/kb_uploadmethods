@@ -1,20 +1,20 @@
 
+import collections
+import json
 import os
 import time
-import json
 import uuid
-import collections
-from pprint import pprint
 
-import handler_utils
-from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
 from DataFileUtil.DataFileUtilClient import DataFileUtil
+from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
 from KBaseReport.KBaseReportClient import KBaseReport
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
+from . import handler_utils
+
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
 
 
 class ImportGenbankUtil:
@@ -24,7 +24,7 @@ class ImportGenbankUtil:
         self.scratch = os.path.join(config['scratch'], 'import_GenBank_' + str(uuid.uuid4()))
         handler_utils._mkdir_p(self.scratch)
         self.dfu = DataFileUtil(self.callback_url)
-        self.gfu = GenomeFileUtil(self.callback_url, service_ver='dev')
+        self.gfu = GenomeFileUtil(self.callback_url, service_ver='beta')
         self.uploader_utils = UploaderUtil(config)
 
     def import_genbank_from_staging(self, params):
@@ -111,8 +111,7 @@ class ImportGenbankUtil:
         size = genome_info[10].get('Size')
         gc_content = genome_info[10].get('GC content')
         warnings = genome_data.get('warnings', [])
-        feature_counts = sorted(list(genome_data.get('feature_counts', {})
-                                     .items()))
+        feature_counts = sorted(list(genome_data.get('feature_counts', {}).items()))
 
         genome_overview_data = collections.OrderedDict()
 
@@ -128,14 +127,14 @@ class ImportGenbankUtil:
 
         overview_content = ''
         overview_content += '<br/><table>\n'
-        for key, val in genome_overview_data.iteritems():
+        for key, val in genome_overview_data.items():
             overview_content += '<tr><td><b>{}</b></td>'.format(key)
             overview_content += '<td>{}</td>'.format(val)
             overview_content += '</tr>\n'
         overview_content += '</table>'
 
         feature_content = str([[str(k), v] for k, v in
-                               genome_data.get('feature_counts', {}).items()
+                               list(genome_data.get('feature_counts', {}).items())
                                if k != 'gene'])
         contig_content = str([[str(c), l] for c, l in
                               zip(genome_data.get('contig_ids', []),

@@ -1,7 +1,10 @@
 ###Release Notes
 
-**1.0.16**:
+**1.0.20**:
 Take off Google and Dropbox download option
+
+**1.0.19**:
+Convert  module to Python 3
 
 **1.0.15**:
 Add ConditionSet upload

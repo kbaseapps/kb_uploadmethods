@@ -9,9 +9,10 @@ from DataFileUtil.DataFileUtilClient import DataFileUtil
 from KBaseReport.KBaseReportClient import KBaseReport
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
+
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
 
 
 class ImportFBAModelUtil:
@@ -74,8 +75,8 @@ class ImportFBAModelUtil:
         defined_param = set(req_param + opt_param)
         for param in in_params:
             if param not in defined_param:
-                print('WARNING: received unexpected parameter "{}"'
-                      .format(param))
+                print(('WARNING: received unexpected parameter "{}"'
+                      .format(param)))
 
     def generate_report(self, obj_ref, params):
         """

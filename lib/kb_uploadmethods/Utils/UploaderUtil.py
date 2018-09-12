@@ -1,19 +1,20 @@
 import json
-import uuid
-import time
-import requests as _requests
 import os
 import re
+import time
+import uuid
+from configparser import SafeConfigParser
 
-from ReadsUtils.ReadsUtilsClient import ReadsUtils
-from KBaseReport.KBaseReportClient import KBaseReport
+import requests as _requests
+
 from DataFileUtil.DataFileUtilClient import DataFileUtil
-from ConfigParser import SafeConfigParser
+from KBaseReport.KBaseReportClient import KBaseReport
+from ReadsUtils.ReadsUtilsClient import ReadsUtils
 
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
 
 
 class UploaderUtil:
@@ -104,7 +105,7 @@ class UploaderUtil:
                 else:
                     upload_message += 'Imported Reads File: {}\n'.format(
                                   params.get('fwd_staging_file_name'))
-                if isinstance(number_of_reads, (int, long)):
+                if isinstance(number_of_reads, int):
                     upload_message += 'Number of Reads: {:,}\n'.format(number_of_reads)
             else:
                 reads_info = object_data.get('data')[0].get('info')[-1]

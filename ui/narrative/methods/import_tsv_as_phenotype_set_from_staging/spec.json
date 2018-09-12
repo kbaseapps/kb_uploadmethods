@@ -16,7 +16,9 @@
       "allow_multiple" : false,
       "default_values" : [ "" ],
       "field_type" : "dynamic_dropdown",
-      "text_options" : {}
+      "dynamic_dropdown_options" : {
+        "data_source": "ftp_staging"
+      }
     }, 
     {
       "id" : "phenotype_set_name",

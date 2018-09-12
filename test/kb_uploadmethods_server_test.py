@@ -1,23 +1,17 @@
 # -*- coding: utf-8 -*-
-import unittest
 import os  # noqa: F401
-import json  # noqa: F401
 import time
-import requests
-
+import unittest
+from configparser import ConfigParser
 from os import environ
-try:
-    from ConfigParser import ConfigParser  # py2
-except:
-    from configparser import ConfigParser  # py3
 
-from pprint import pprint  # noqa: F401
-
+import requests
 from biokbase.workspace.client import Workspace as workspaceService
+
+from DataFileUtil.DataFileUtilClient import DataFileUtil
+from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
-from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
-from DataFileUtil.DataFileUtilClient import DataFileUtil
 
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -68,7 +62,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         header = {'Authorization': 'Oauth {0}'.format(cls.token)}
         requests.delete(cls.shockURL + '/node/' + node_id, headers=header,
                         allow_redirects=True)
-        print('Deleted shock node ' + node_id)
+        print(('Deleted shock node ' + node_id))
 
     def getWsClient(self):
         return self.__class__.wsClient
@@ -90,7 +84,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
     def test_contructor(self):
         ret = self.getImpl()
-        print 'self.config: %s' % ret.config
-        print 'self.callback_url: %s' % ret.config['SDK_CALLBACK_URL']
+        print('self.config: %s' % ret.config)
+        print('self.callback_url: %s' % ret.config['SDK_CALLBACK_URL'])
         self.assertIsNotNone(ret.config)
         self.assertIsNotNone(ret.config['SDK_CALLBACK_URL'])

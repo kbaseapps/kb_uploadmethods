@@ -1,20 +1,21 @@
 
-import time
-import json
-import uuid
-import os
 import collections
-from pprint import pprint
+import json
+import os
+import time
+import uuid
 
-import handler_utils
 from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from KBaseReport.KBaseReportClient import KBaseReport
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
+from . import handler_utils
+
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
+
 
 class ImportAssemblyUtil:
 
@@ -109,13 +110,13 @@ class ImportAssemblyUtil:
 
         overview_content = ''
         overview_content += '<br/><table>\n'
-        for key, val in assembly_overview_data.iteritems():
+        for key, val in assembly_overview_data.items():
             overview_content += '<tr><td><b>{}</b></td>'.format(key)
             overview_content += '<td>{}</td>'.format(val)
             overview_content += '</tr>\n'
         overview_content += '</table>'
 
-        contig_data = assembly_data.get('contigs').values()
+        contig_data = list(assembly_data.get('contigs').values())
         contig_content = str([[str(e['contig_id']), e['length']] for e in contig_data])
 
         with open(result_file_path, 'w') as result_file:

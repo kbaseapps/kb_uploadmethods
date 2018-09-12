@@ -1,26 +1,24 @@
 
-import json
-import uuid
-import time
-import os
+import collections
 import fnmatch
-import errno
-import glob
+import json
+import os
 import shutil
 import subprocess
+import time
+import uuid
 from pprint import pprint
-import collections
 
-import handler_utils
 from DataFileUtil.DataFileUtilClient import DataFileUtil
-from ReadsUtils.ReadsUtilsClient import ReadsUtils
-from ftp_service.ftp_serviceClient import ftp_service
 from KBaseReport.KBaseReportClient import KBaseReport
+from ReadsUtils.ReadsUtilsClient import ReadsUtils
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
+from . import handler_utils
+
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
 
 
 class ImportSRAUtil:
@@ -370,7 +368,7 @@ class ImportSRAUtil:
 
             objects_content += report_template
             base_percentages = ''
-            for key, val in reads_data.get('base_percentages').iteritems():
+            for key, val in reads_data.get('base_percentages').items():
                 base_percentages += '{}({}%) '.format(key, val)
 
             reads_overview_data = collections.OrderedDict()
@@ -437,13 +435,13 @@ class ImportSRAUtil:
             reads_stats_data['Base Percentages'] = base_percentages
 
             overview_content = ''
-            for key, val in reads_overview_data.iteritems():
+            for key, val in reads_overview_data.items():
                 overview_content += '<tr><td><b>{}</b></td>'.format(key)
                 overview_content += '<td>{}</td>'.format(val)
                 overview_content += '</tr>'
 
             stats_content = ''
-            for key, val in reads_stats_data.iteritems():
+            for key, val in reads_stats_data.items():
                 stats_content += '<tr><td><b>{}</b></td>'.format(key)
                 stats_content += '<td>{}</td>'.format(val)
                 stats_content += '</tr>'
@@ -471,7 +469,7 @@ class ImportSRAUtil:
                 matched_files.append(os.path.join(root, filename))
 
         for gz_file in matched_files:
-            print('Removing ' + gz_file)
+            print(('Removing ' + gz_file))
             os.remove(gz_file)
 
         report_shock_id = self.dfu.file_to_shock({'file_path': self.scratch,

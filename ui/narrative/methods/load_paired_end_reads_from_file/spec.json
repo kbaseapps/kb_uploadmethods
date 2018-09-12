@@ -18,7 +18,9 @@
       "allow_multiple" : false,
       "default_values" : [ "" ],
       "field_type" : "dynamic_dropdown",
-      "text_options" : {}
+      "dynamic_dropdown_options" : {
+        "data_source": "ftp_staging"
+      }
     },    
     {
       "id" : "rev_staging_file_name",
@@ -26,8 +28,10 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
+      "field_type" : "dynamic_dropdown",
+      "dynamic_dropdown_options" : {
+        "data_source": "ftp_staging"
+      }
     },
     {
       "id" : "sequencing_tech",
