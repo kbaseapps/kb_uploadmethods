@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.16**:
+Take off Google and Dropbox download option
+
 **1.0.15**:
 Add ConditionSet upload
 Make all uploaders use dynamic_dropdown type for staging area uploads
