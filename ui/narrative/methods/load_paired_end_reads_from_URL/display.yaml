@@ -77,5 +77,14 @@ parameter-groups :
 description : |
     <p> Import a Paired-End Library from a publicly accessible URL into your Narrative.
         Please see the <a href="http://kbase.us/data-upload-download-guide/">FASTQ/SRA Reads</a> for more information. </p>
-
+    <p> </p>
+    <p> How to get 'Google Drive Public Shared Link'</p>
+    <p> 1. Left click on the file and select 'Get shareable link'.</p>
+    <p> 2. Make sure file setting is set to 'Anyone with the link can view'. Otherwise go to 'Sharing settings'.</p>
+    <p> 3. Copy the public file sharing link. e.g. 'https://drive.google.com/open?id=0B0exSa7ebQ0qX01mZ3FaRzhuMDQ'</p>
+    <p> </p>
+    <p> How to get 'Dropbox Public Shared Link'</p>
+    <p> 1. Click on 'Share' on the file</p>
+    <p> 2. Make sure file setting is set to 'Anyone with the link can view this file'. Otherwise go to 'Link settings'.</p>
+    <p> 3. Click on 'Copy link' button. e.g. 'https://www.dropbox.com/s/w5ct52rp95cukwq/file1.txt?dl=0'</p>
 technical-description : none

@@ -34,8 +34,8 @@ class kb_uploadmethods:
     # the latter method is running.
     ######################################### noqa
     VERSION = "1.0.20"
-    GIT_URL = "https://github.com/kbaseapps/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "839bdc879a7e99fb381372a48255b75afb8daef9"
+    GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
+    GIT_COMMIT_HASH = "948df2fb247a2e485919f7824e311fce0ed90a68"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
