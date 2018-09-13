@@ -42,14 +42,6 @@
           {
               "display": "FTP Link",
               "value": "FTP"
-          },
-          {
-              "display": "Dropbox Public Shared Link",
-              "value": "DropBox"
-          },
-          {
-              "display": "Google Drive Public Shared Link",
-              "value": "Google Drive"
           }
         ]
       }
