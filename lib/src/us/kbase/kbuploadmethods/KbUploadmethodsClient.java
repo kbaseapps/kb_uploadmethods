@@ -420,7 +420,7 @@ public class KbUploadmethodsClient {
     }
 
     /**
-     * <p>Original spec-file function name: import_condition_set_from_staging</p>
+     * <p>Original spec-file function name: import_attribute_mapping_from_staging</p>
      * <pre>
      * </pre>
      * @param   params   instance of type {@link us.kbase.kbuploadmethods.FileToConditionSetParams FileToConditionSetParams}
@@ -428,11 +428,11 @@ public class KbUploadmethodsClient {
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public UploadMethodResult importConditionSetFromStaging(FileToConditionSetParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public UploadMethodResult importAttributeMappingFromStaging(FileToConditionSetParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(params);
         TypeReference<List<UploadMethodResult>> retType = new TypeReference<List<UploadMethodResult>>() {};
-        List<UploadMethodResult> res = caller.jsonrpcCall("kb_uploadmethods.import_condition_set_from_staging", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        List<UploadMethodResult> res = caller.jsonrpcCall("kb_uploadmethods.import_attribute_mapping_from_staging", args, retType, true, true, jsonRpcContext, this.serviceVersion);
         return res.get(0);
     }
 

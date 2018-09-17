@@ -2,4 +2,8 @@
   "module_name" : "ConditionUtils",
   "type" : "sdk",
   "version_tag" : "release"
+}, {
+  "module_name" : "GenericsApi",
+  "type" : "sdk",
+  "version_tag" : "release"
 } ]
