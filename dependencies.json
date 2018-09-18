@@ -1,9 +1,33 @@
 [ {
+  "module_name" : "AssemblyUtil",
+  "type" : "sdk",
+  "version_tag" : "release"
+}, {
   "module_name" : "ConditionUtils",
   "type" : "sdk",
   "version_tag" : "release"
 }, {
   "module_name" : "DataFileUtil",
+  "type" : "sdk",
+  "version_tag" : "release"
+}, {
+  "module_name" : "fba_tools",
+  "type" : "sdk",
+  "version_tag" : "release"
+}, {
+  "module_name" : "GenomeFileUtil",
+  "type" : "sdk",
+  "version_tag" : "release"
+}, {
+  "module_name" : "KBaseFeatureValues",
+  "type" : "sdk",
+  "version_tag" : "release"
+}, {
+  "module_name" : "KBaseReport",
+  "type" : "sdk",
+  "version_tag" : "release"
+}, {
+  "module_name" : "ReadsUtils",
   "type" : "sdk",
   "version_tag" : "release"
 } ]
