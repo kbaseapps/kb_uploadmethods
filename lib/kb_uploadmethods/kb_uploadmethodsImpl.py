@@ -33,9 +33,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.0.20"
+    VERSION = "1.0.21"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "948df2fb247a2e485919f7824e311fce0ed90a68"
+    GIT_COMMIT_HASH = "cf02eb8a2e90fccd5521cee7a4d54964500d3cba"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
