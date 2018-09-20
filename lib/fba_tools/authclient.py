@@ -44,8 +44,8 @@ class TokenCache(object):
         with self._lock:
             self._cache[token] = [user, _time.time()]
             if len(self._cache) > self._maxsize:
-                for i, (t, _) in enumerate(sorted(list(self._cache.items()),
-                                                  key=lambda __v: __v[1][1])):
+                for i, (t, _) in enumerate(sorted(self._cache.items(),
+                                                  key=lambda (_, v): v[1])):
                     if i <= self._halfmax:
                         del self._cache[t]
                     else:
@@ -57,7 +57,7 @@ class KBaseAuth(object):
     A very basic KBase auth client for the Python server.
     '''
 
-    _LOGIN_URL = 'https://kbase.us/services/authorization/Sessions/Login'
+    _LOGIN_URL = 'https://kbase.us/services/auth/api/legacy/KBase/Sessions/Login'
 
     def __init__(self, auth_url=None):
         '''
@@ -84,7 +84,7 @@ class KBaseAuth(object):
                 ret.raise_for_status()
             raise ValueError('Error connecting to auth service: {} {}\n{}'
                              .format(ret.status_code, ret.reason,
-                                     err['error_msg']))
+                                     err['error']['message']))
 
         user = ret.json()['user_id']
         self._cache.add_valid_token(token, user)

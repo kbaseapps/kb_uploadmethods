@@ -62,16 +62,20 @@ class GenomeFileUtil(object):
            generate_ids_if_needed - If field used for feature id is not
            there, generate ids (default behavior is raising an exception)
            genetic_code - Genetic code of organism. Overwrites determined GC
-           from taxon object type - Reference, Representative or User upload)
-           -> structure: parameter "file" of type "File" -> structure:
-           parameter "path" of String, parameter "shock_id" of String,
-           parameter "ftp_url" of String, parameter "genome_name" of String,
-           parameter "workspace_name" of String, parameter "source" of
-           String, parameter "taxon_wsname" of String, parameter
-           "taxon_reference" of String, parameter "release" of String,
-           parameter "generate_ids_if_needed" of String, parameter
-           "genetic_code" of Long, parameter "type" of String, parameter
-           "metadata" of type "usermeta" -> mapping from String to String
+           from taxon object generate_missing_genes - If the file has CDS or
+           mRNA with no corresponding gene, generate a spoofed gene.
+           use_existing_assembly - Supply an existing assembly reference) ->
+           structure: parameter "file" of type "File" -> structure: parameter
+           "path" of String, parameter "shock_id" of String, parameter
+           "ftp_url" of String, parameter "genome_name" of String, parameter
+           "workspace_name" of String, parameter "source" of String,
+           parameter "taxon_wsname" of String, parameter "taxon_reference" of
+           String, parameter "release" of String, parameter
+           "generate_ids_if_needed" of String, parameter "genetic_code" of
+           Long, parameter "metadata" of type "usermeta" -> mapping from
+           String to String, parameter "generate_missing_genes" of type
+           "boolean" (A boolean - 0 for false, 1 for true. @range (0, 1)),
+           parameter "use_existing_assembly" of String
         :returns: instance of type "GenomeSaveResult" -> structure: parameter
            "genome_ref" of String
         """
@@ -219,7 +223,8 @@ class GenomeFileUtil(object):
            Release or version number of the data per example Ensembl has
            numbered releases of all their data: Release 31 genetic_code -
            Genetic code of organism. Overwrites determined GC from taxon
-           object type - Reference, Representative or User upload) ->
+           object generate_missing_genes - If the file has CDS or mRNA with
+           no corresponding gene, generate a spoofed gene. Off by default) ->
            structure: parameter "fasta_file" of type "File" -> structure:
            parameter "path" of String, parameter "shock_id" of String,
            parameter "ftp_url" of String, parameter "gff_file" of type "File"
@@ -228,13 +233,60 @@ class GenomeFileUtil(object):
            String, parameter "workspace_name" of String, parameter "source"
            of String, parameter "taxon_wsname" of String, parameter
            "taxon_reference" of String, parameter "release" of String,
-           parameter "genetic_code" of Long, parameter "type" of String,
-           parameter "scientific_name" of String, parameter "metadata" of
-           type "usermeta" -> mapping from String to String
+           parameter "genetic_code" of Long, parameter "scientific_name" of
+           String, parameter "metadata" of type "usermeta" -> mapping from
+           String to String, parameter "generate_missing_genes" of type
+           "boolean" (A boolean - 0 for false, 1 for true. @range (0, 1))
         :returns: instance of type "GenomeSaveResult" -> structure: parameter
            "genome_ref" of String
         """
         job_id = self._fasta_gff_to_genome_submit(params, context)
+        async_job_check_time = self._client.async_job_check_time
+        while True:
+            time.sleep(async_job_check_time)
+            async_job_check_time = (async_job_check_time *
+                self._client.async_job_check_time_scale_percent / 100.0)
+            if async_job_check_time > self._client.async_job_check_max_time:
+                async_job_check_time = self._client.async_job_check_max_time
+            job_state = self._check_job(job_id)
+            if job_state['finished']:
+                return job_state['result'][0]
+
+    def _fasta_gff_to_genome_json_submit(self, params, context=None):
+        return self._client._submit_job(
+             'GenomeFileUtil.fasta_gff_to_genome_json', [params],
+             self._service_ver, context)
+
+    def fasta_gff_to_genome_json(self, params, context=None):
+        """
+        As above but returns the genome instead
+        :param params: instance of type "FastaGFFToGenomeParams" (genome_name
+           - becomes the name of the object workspace_name - the name of the
+           workspace it gets saved to. source - Source of the file typically
+           something like RefSeq or Ensembl taxon_ws_name - where the
+           reference taxons are : ReferenceTaxons taxon_reference - if
+           defined, will try to link the Genome to the specified taxonomy
+           object insteas of performing the lookup during upload release -
+           Release or version number of the data per example Ensembl has
+           numbered releases of all their data: Release 31 genetic_code -
+           Genetic code of organism. Overwrites determined GC from taxon
+           object generate_missing_genes - If the file has CDS or mRNA with
+           no corresponding gene, generate a spoofed gene. Off by default) ->
+           structure: parameter "fasta_file" of type "File" -> structure:
+           parameter "path" of String, parameter "shock_id" of String,
+           parameter "ftp_url" of String, parameter "gff_file" of type "File"
+           -> structure: parameter "path" of String, parameter "shock_id" of
+           String, parameter "ftp_url" of String, parameter "genome_name" of
+           String, parameter "workspace_name" of String, parameter "source"
+           of String, parameter "taxon_wsname" of String, parameter
+           "taxon_reference" of String, parameter "release" of String,
+           parameter "genetic_code" of Long, parameter "scientific_name" of
+           String, parameter "metadata" of type "usermeta" -> mapping from
+           String to String, parameter "generate_missing_genes" of type
+           "boolean" (A boolean - 0 for false, 1 for true. @range (0, 1))
+        :returns: instance of unspecified object
+        """
+        job_id = self._fasta_gff_to_genome_json_submit(params, context)
         async_job_check_time = self._client.async_job_check_time
         while True:
             time.sleep(async_job_check_time)
@@ -257,158 +309,204 @@ class GenomeFileUtil(object):
            parameter "workspace" of String, parameter "name" of String,
            parameter "data" of type "Genome" (Genome object holds much of the
            data relevant for a genome in KBase Genome publications should be
-           papers about the genome, not papers about certain features of the
-           genome (which go into the Feature object) Should the Genome object
-           have a list of feature ids? (in addition to having a list of
-           feature_refs) Should the Genome object contain a list of
-           contig_ids too? @optional assembly_ref quality close_genomes
-           analysis_events features source_id source contigs contig_ids
-           publications md5 taxonomy gc_content complete dna_size num_contigs
-           contig_lengths contigset_ref @metadata ws gc_content as GC content
-           @metadata ws taxonomy as Taxonomy @metadata ws md5 as MD5
-           @metadata ws dna_size as Size @metadata ws genetic_code as Genetic
-           code @metadata ws domain as Domain @metadata ws source_id as
-           Source ID @metadata ws source as Source @metadata ws
-           scientific_name as Name @metadata ws length(close_genomes) as
-           Close genomes @metadata ws length(features) as Number features
-           @metadata ws num_contigs as Number contigs) -> structure:
-           parameter "id" of type "Genome_id" (KBase genome ID @id kb),
-           parameter "scientific_name" of String, parameter "domain" of
-           String, parameter "genetic_code" of Long, parameter "dna_size" of
-           Long, parameter "num_contigs" of Long, parameter "contigs" of list
-           of type "Contig" (Type spec for a "Contig" subobject in the
-           "ContigSet" object Contig_id id - ID of contig in contigset string
-           md5 - unique hash of contig sequence string sequence - sequence of
-           the contig string description - Description of the contig (e.g.
-           everything after the ID in a FASTA file) @optional length md5
-           genetic_code cell_compartment replicon_geometry replicon_type name
-           description complete) -> structure: parameter "id" of type
-           "Contig_id" (ContigSet contig ID @id external), parameter "length"
-           of Long, parameter "md5" of String, parameter "sequence" of
-           String, parameter "genetic_code" of Long, parameter
-           "cell_compartment" of String, parameter "replicon_type" of String,
-           parameter "replicon_geometry" of String, parameter "name" of
-           String, parameter "description" of String, parameter "complete" of
-           type "Bool", parameter "contig_lengths" of list of Long, parameter
-           "contig_ids" of list of type "Contig_id" (ContigSet contig ID @id
-           external), parameter "source" of String, parameter "source_id" of
-           type "source_id" (Reference to a source_id @id external),
-           parameter "md5" of String, parameter "taxonomy" of String,
-           parameter "gc_content" of Double, parameter "complete" of Long,
-           parameter "publications" of list of type "publication" (Structure
-           for a publication (from ER API) also want to capture authors,
-           journal name (not in ER)) -> tuple of size 7: parameter "id" of
-           Long, parameter "source_db" of String, parameter "article_title"
-           of String, parameter "link" of String, parameter "pubdate" of
-           String, parameter "authors" of String, parameter "journal_name" of
-           String, parameter "features" of list of type "Feature" (Structure
-           for a single feature of a genome Should genome_id contain the
-           genome_id in the Genome object, the workspace id of the Genome
-           object, a genomeref, something else? Should sequence be in
-           separate objects too? We may want to add additional fields for
-           other CDM functions (e.g., atomic regulons, coexpressed fids,
-           co_occurring fids,...) @optional orthologs quality
-           feature_creation_event md5 location function ontology_terms
-           protein_translation protein_families subsystems publications
-           subsystem_data aliases annotations regulon_data atomic_regulons
-           coexpressed_fids co_occurring_fids dna_sequence
-           protein_translation_length dna_sequence_length) -> structure:
+           papers about the genome Should the Genome object contain a list of
+           contig_ids too? Source: allowed entries RefSeq, Ensembl,
+           Phytozome, RAST, Prokka, User_upload #allowed entries RefSeq,
+           Ensembl, Phytozome, RAST, Prokka, User_upload controlled
+           vocabulary managed by API Domain is a controlled vocabulary
+           Warnings : mostly controlled vocab but also allow for unstructured
+           Genome_tiers : controlled vocabulary (based on ap input and API
+           checked) Allowed values: #Representative, Reference, ExternalDB,
+           User Examples Tiers: All phytozome - Representative and ExternalDB
+           Phytozome flagship genomes - Reference, Representative and
+           ExternalDB Ensembl - Representative and ExternalDB RefSeq
+           Reference - Reference, Representative and ExternalDB RefSeq
+           Representative - Representative and ExternalDB RefSeq Latest or
+           All Assemblies folder - ExternalDB User Data - User tagged Example
+           Sources: RefSeq, Ensembl, Phytozome, Microcosm, User, RAST,
+           Prokka, (other annotators) @optional warnings contig_lengths
+           contig_ids source_id taxonomy publications @optional
+           ontology_events ontologies_present non_coding_features mrnas
+           @optional genbank_handle_ref gff_handle_ref
+           external_source_origination_date @optional release
+           original_source_file_name notes quality_scores suspect
+           assembly_ref @metadata ws gc_content as GC content @metadata ws
+           taxonomy as Taxonomy @metadata ws md5 as MD5 @metadata ws dna_size
+           as Size @metadata ws genetic_code as Genetic code @metadata ws
+           domain as Domain @metadata ws source_id as Source ID @metadata ws
+           source as Source @metadata ws scientific_name as Name @metadata ws
+           length(features) as Number of Protein Encoding Genes @metadata ws
+           length(cdss) as Number of CDS @metadata ws assembly_ref as
+           Assembly Object @metadata ws num_contigs as Number contigs
+           @metadata ws length(warnings) as Number of Genome Level Warnings
+           @metadata ws suspect as Suspect Genome) -> structure: parameter
+           "id" of type "Genome_id" (KBase genome ID @id kb), parameter
+           "scientific_name" of String, parameter "domain" of String,
+           parameter "warnings" of list of String, parameter "genome_tiers"
+           of list of String, parameter "feature_counts" of mapping from
+           String to Long, parameter "genetic_code" of Long, parameter
+           "dna_size" of Long, parameter "num_contigs" of Long, parameter
+           "molecule_type" of String, parameter "contig_lengths" of list of
+           Long, parameter "contig_ids" of list of String, parameter "source"
+           of String, parameter "source_id" of type "source_id" (Reference to
+           a source_id @id external), parameter "md5" of String, parameter
+           "taxonomy" of String, parameter "gc_content" of Double, parameter
+           "publications" of list of type "publication" (Structure for a
+           publication (float pubmedid string source (ex. Pubmed) string
+           title string web address string  publication year string authors
+           string journal)) -> tuple of size 7: parameter "pubmedid" of
+           Double, parameter "source" of String, parameter "title" of String,
+           parameter "url" of String, parameter "year" of String, parameter
+           "authors" of String, parameter "journal" of String, parameter
+           "ontology_events" of list of type "Ontology_event" (@optional
+           ontology_ref method_version eco) -> structure: parameter "id" of
+           String, parameter "ontology_ref" of type "Ontology_ref" (Reference
+           to a ontology object @id ws KBaseOntology.OntologyDictionary),
+           parameter "method" of String, parameter "method_version" of
+           String, parameter "timestamp" of String, parameter "eco" of
+           String, parameter "ontologies_present" of mapping from String to
+           mapping from String to String, parameter "features" of list of
+           type "Feature" (Structure for a single CDS encoding “gene” of a
+           genome ONLY PUT GENES THAT HAVE A CORRESPONDING CDS IN THIS ARRAY
+           NOTE: Sequence is optional. Ideally we can keep it in here, but
+           Recognize due to space constraints another solution may be needed.
+           We may want to add additional fields for other CDM functions
+           (e.g., atomic regulons, coexpressed fids, co_occurring fids,...)
+           protein_translation_length and protein_translation are for longest
+           coded protein (representative protein for splice variants) NOTE:
+           New Aliases field definitely breaks compatibility. As Does
+           Function. flags are flag fields in GenBank format. This will be a
+           controlled vocabulary. Initially Acceptable values are pseudo,
+           ribosomal_slippage, and trans_splicing Md5 is the md5 of
+           dna_sequence. @optional functions ontology_terms note
+           protein_translation mrnas flags warnings @optional inference_data
+           dna_sequence aliases db_xrefs children functional_descriptions) ->
+           structure: parameter "id" of type "Feature_id" (KBase Feature ID
+           @id external), parameter "location" of list of tuple of size 4:
+           type "Contig_id" (ContigSet contig ID @id external), Long, String,
+           Long, parameter "functions" of list of String, parameter
+           "functional_descriptions" of list of String, parameter
+           "ontology_terms" of mapping from String to mapping from String to
+           list of Long, parameter "note" of String, parameter "md5" of
+           String, parameter "protein_translation" of String, parameter
+           "protein_translation_length" of Long, parameter "cdss" of list of
+           String, parameter "mrnas" of list of String, parameter "children"
+           of list of String, parameter "flags" of list of String, parameter
+           "warnings" of list of String, parameter "inference_data" of list
+           of type "InferenceInfo" (category;#Maybe a controlled vocabulary
+           type;#Maybe a controlled vocabulary) -> structure: parameter
+           "category" of String, parameter "type" of String, parameter
+           "evidence" of String, parameter "dna_sequence" of String,
+           parameter "dna_sequence_length" of Long, parameter "aliases" of
+           list of tuple of size 2: parameter "fieldname" of String,
+           parameter "alias" of String, parameter "db_xrefs" of list of tuple
+           of size 2: parameter "db_source" of String, parameter
+           "db_identifier" of String, parameter "non_coding_features" of list
+           of type "NonCodingFeature" (Structure for a single feature that is
+           NOT one of the following: Protein encoding gene (gene that has a
+           corresponding CDS) mRNA CDS Note pseudo-genes and Non protein
+           encoding genes are put into this flags are flag fields in GenBank
+           format. This will be a controlled vocabulary. Initially Acceptable
+           values are pseudo, ribosomal_slippage, and trans_splicing Md5 is
+           the md5 of dna_sequence. @optional functions ontology_terms note
+           flags warnings functional_descriptions @optional inference_data
+           dna_sequence aliases db_xrefs children parent_gene) -> structure:
            parameter "id" of type "Feature_id" (KBase Feature ID @id
            external), parameter "location" of list of tuple of size 4: type
            "Contig_id" (ContigSet contig ID @id external), Long, String,
-           Long, parameter "type" of String, parameter "function" of String,
+           Long, parameter "type" of String, parameter "functions" of list of
+           String, parameter "functional_descriptions" of list of String,
            parameter "ontology_terms" of mapping from String to mapping from
-           String to type "OntologyData" -> structure: parameter "id" of
-           String, parameter "ontology_ref" of String, parameter
-           "term_lineage" of list of String, parameter "term_name" of String,
-           parameter "evidence" of list of type "OntologyEvidence" (@optional
-           translation_provenance alignment_evidence) -> structure: parameter
-           "method" of String, parameter "method_version" of String,
-           parameter "timestamp" of String, parameter
-           "translation_provenance" of tuple of size 3: parameter
-           "ontologytranslation_ref" of String, parameter "namespace" of
-           String, parameter "source_term" of String, parameter
-           "alignment_evidence" of list of tuple of size 4: parameter "start"
-           of Long, parameter "stop" of Long, parameter "align_length" of
-           Long, parameter "identify" of Double, parameter "md5" of String,
-           parameter "protein_translation" of String, parameter
-           "dna_sequence" of String, parameter "protein_translation_length"
-           of Long, parameter "dna_sequence_length" of Long, parameter
-           "publications" of list of type "publication" (Structure for a
-           publication (from ER API) also want to capture authors, journal
-           name (not in ER)) -> tuple of size 7: parameter "id" of Long,
-           parameter "source_db" of String, parameter "article_title" of
-           String, parameter "link" of String, parameter "pubdate" of String,
-           parameter "authors" of String, parameter "journal_name" of String,
-           parameter "subsystems" of list of String, parameter
-           "protein_families" of list of type "ProteinFamily" (Structure for
-           a protein family @optional query_begin query_end subject_begin
-           subject_end score evalue subject_description release_version) ->
-           structure: parameter "id" of String, parameter "subject_db" of
-           String, parameter "release_version" of String, parameter
-           "subject_description" of String, parameter "query_begin" of Long,
-           parameter "query_end" of Long, parameter "subject_begin" of Long,
-           parameter "subject_end" of Long, parameter "score" of Double,
-           parameter "evalue" of Double, parameter "aliases" of list of
-           String, parameter "orthologs" of list of tuple of size 2: String,
-           Double, parameter "annotations" of list of type "annotation" (a
-           notation by a curator of the genome object) -> tuple of size 3:
-           parameter "comment" of String, parameter "annotator" of String,
-           parameter "annotation_time" of Double, parameter "subsystem_data"
-           of list of type "subsystem_data" (Structure for subsystem data
-           (from CDMI API)) -> tuple of size 3: parameter "subsystem" of
-           String, parameter "variant" of String, parameter "role" of String,
-           parameter "regulon_data" of list of type "regulon_data" (Structure
-           for regulon data (from CDMI API)) -> tuple of size 3: parameter
-           "regulon_id" of String, parameter "regulon_set" of list of type
-           "Feature_id" (KBase Feature ID @id external), parameter "tfs" of
-           list of type "Feature_id" (KBase Feature ID @id external),
-           parameter "atomic_regulons" of list of type "atomic_regulon"
-           (Structure for an atomic regulon (from CDMI API)) -> tuple of size
-           2: parameter "atomic_regulon_id" of String, parameter
-           "atomic_regulon_size" of Long, parameter "coexpressed_fids" of
-           list of type "coexpressed_fid" (Structure for coexpressed fids
-           (from CDMI API)) -> tuple of size 2: parameter "scored_fid" of
-           type "Feature_id" (KBase Feature ID @id external), parameter
-           "score" of Double, parameter "co_occurring_fids" of list of type
-           "co_occurring_fid" (Structure for co-occurring fids (from CDMI
-           API)) -> tuple of size 2: parameter "scored_fid" of type
-           "Feature_id" (KBase Feature ID @id external), parameter "score" of
-           Double, parameter "quality" of type "Feature_quality_measure"
-           (@optional weighted_hit_count hit_count existence_priority
-           overlap_rules pyrrolysylprotein truncated_begin truncated_end
-           existence_confidence frameshifted selenoprotein) -> structure:
-           parameter "truncated_begin" of type "Bool", parameter
-           "truncated_end" of type "Bool", parameter "existence_confidence"
-           of Double, parameter "frameshifted" of type "Bool", parameter
-           "selenoprotein" of type "Bool", parameter "pyrrolysylprotein" of
-           type "Bool", parameter "overlap_rules" of list of String,
-           parameter "existence_priority" of Double, parameter "hit_count" of
-           Double, parameter "weighted_hit_count" of Double, parameter
-           "feature_creation_event" of type "Analysis_event" (@optional
-           tool_name execution_time parameters hostname) -> structure:
-           parameter "id" of type "Analysis_event_id", parameter "tool_name"
-           of String, parameter "execution_time" of Double, parameter
-           "parameters" of list of String, parameter "hostname" of String,
-           parameter "contigset_ref" of type "ContigSet_ref" (Reference to a
-           ContigSet object containing the contigs for this genome in the
-           workspace @id ws KBaseGenomes.ContigSet), parameter "assembly_ref"
-           of type "Assembly_ref" (Reference to an Assembly object in the
-           workspace @id ws KBaseGenomeAnnotations.Assembly), parameter
-           "quality" of type "Genome_quality_measure" (@optional
-           frameshift_error_rate sequence_error_rate) -> structure: parameter
-           "frameshift_error_rate" of Double, parameter "sequence_error_rate"
-           of Double, parameter "close_genomes" of list of type
-           "Close_genome" (@optional genome closeness_measure) -> structure:
-           parameter "genome" of type "Genome_id" (KBase genome ID @id kb),
-           parameter "closeness_measure" of Double, parameter
-           "analysis_events" of list of type "Analysis_event" (@optional
-           tool_name execution_time parameters hostname) -> structure:
-           parameter "id" of type "Analysis_event_id", parameter "tool_name"
-           of String, parameter "execution_time" of Double, parameter
-           "parameters" of list of String, parameter "hostname" of String,
-           parameter "hidden" of type "boolean" (A boolean - 0 for false, 1
-           for true. @range (0, 1))
+           String to list of Long, parameter "note" of String, parameter
+           "md5" of String, parameter "parent_gene" of String, parameter
+           "children" of list of String, parameter "flags" of list of String,
+           parameter "warnings" of list of String, parameter "inference_data"
+           of list of type "InferenceInfo" (category;#Maybe a controlled
+           vocabulary type;#Maybe a controlled vocabulary) -> structure:
+           parameter "category" of String, parameter "type" of String,
+           parameter "evidence" of String, parameter "dna_sequence" of
+           String, parameter "dna_sequence_length" of Long, parameter
+           "aliases" of list of tuple of size 2: parameter "fieldname" of
+           String, parameter "alias" of String, parameter "db_xrefs" of list
+           of tuple of size 2: parameter "db_source" of String, parameter
+           "db_identifier" of String, parameter "cdss" of list of type "CDS"
+           (Structure for a single feature CDS flags are flag fields in
+           GenBank format. This will be a controlled vocabulary. Initially
+           Acceptable values are pseudo, ribosomal_slippage, and
+           trans_splicing Md5 is the md5 of dna_sequence. @optional
+           parent_mrna functions ontology_terms note flags warnings @optional
+           inference_data dna_sequence aliases db_xrefs
+           functional_descriptions) -> structure: parameter "id" of type
+           "cds_id" (KBase CDS ID @id external), parameter "location" of list
+           of tuple of size 4: type "Contig_id" (ContigSet contig ID @id
+           external), Long, String, Long, parameter "md5" of String,
+           parameter "protein_md5" of String, parameter "parent_gene" of type
+           "Feature_id" (KBase Feature ID @id external), parameter
+           "parent_mrna" of type "mrna_id" (KBase mRNA ID @id external),
+           parameter "note" of String, parameter "functions" of list of
+           String, parameter "functional_descriptions" of list of String,
+           parameter "ontology_terms" of mapping from String to mapping from
+           String to list of Long, parameter "flags" of list of String,
+           parameter "warnings" of list of String, parameter "inference_data"
+           of list of type "InferenceInfo" (category;#Maybe a controlled
+           vocabulary type;#Maybe a controlled vocabulary) -> structure:
+           parameter "category" of String, parameter "type" of String,
+           parameter "evidence" of String, parameter "protein_translation" of
+           String, parameter "protein_translation_length" of Long, parameter
+           "aliases" of list of tuple of size 2: parameter "fieldname" of
+           String, parameter "alias" of String, parameter "db_xrefs" of list
+           of tuple of size 2: parameter "db_source" of String, parameter
+           "db_identifier" of String, parameter "dna_sequence" of String,
+           parameter "dna_sequence_length" of Long, parameter "mrnas" of list
+           of type "mRNA" (Structure for a single feature mRNA flags are flag
+           fields in GenBank format. This will be a controlled vocabulary.
+           Initially Acceptable values are pseudo, ribosomal_slippage, and
+           trans_splicing Md5 is the md5 of dna_sequence. @optional cds
+           functions ontology_terms note flags warnings @optional
+           inference_data dna_sequence aliases db_xrefs
+           functional_descriptions) -> structure: parameter "id" of type
+           "mrna_id" (KBase mRNA ID @id external), parameter "location" of
+           list of tuple of size 4: type "Contig_id" (ContigSet contig ID @id
+           external), Long, String, Long, parameter "md5" of String,
+           parameter "parent_gene" of type "Feature_id" (KBase Feature ID @id
+           external), parameter "cds" of type "cds_id" (KBase CDS ID @id
+           external), parameter "dna_sequence" of String, parameter
+           "dna_sequence_length" of Long, parameter "note" of String,
+           parameter "functions" of list of String, parameter
+           "functional_descriptions" of list of String, parameter
+           "ontology_terms" of mapping from String to mapping from String to
+           list of Long, parameter "flags" of list of String, parameter
+           "warnings" of list of String, parameter "inference_data" of list
+           of type "InferenceInfo" (category;#Maybe a controlled vocabulary
+           type;#Maybe a controlled vocabulary) -> structure: parameter
+           "category" of String, parameter "type" of String, parameter
+           "evidence" of String, parameter "aliases" of list of tuple of size
+           2: parameter "fieldname" of String, parameter "alias" of String,
+           parameter "db_xrefs" of list of tuple of size 2: parameter
+           "db_source" of String, parameter "db_identifier" of String,
+           parameter "assembly_ref" of type "Assembly_ref" (Reference to an
+           Assembly object in the workspace @id ws
+           KBaseGenomeAnnotations.Assembly), parameter "taxon_ref" of type
+           "Taxon_ref" (Reference to a taxon object @id ws
+           KBaseGenomeAnnotations.Taxon), parameter "genbank_handle_ref" of
+           type "genbank_handle_ref" (Reference to a handle to the Genbank
+           file on shock @id handle), parameter "gff_handle_ref" of type
+           "gff_handle_ref" (Reference to a handle to the GFF file on shock
+           @id handle), parameter "external_source_origination_date" of
+           String, parameter "release" of String, parameter
+           "original_source_file_name" of String, parameter "notes" of
+           String, parameter "quality_scores" of list of type
+           "GenomeQualityScore" (Score_interpretation : fraction_complete -
+           controlled vocabulary managed by API @optional method_report_ref
+           method_version) -> structure: parameter "method" of String,
+           parameter "method_report_ref" of type "Method_report_ref"
+           (Reference to a report object @id ws KBaseReport.Report),
+           parameter "method_version" of String, parameter "score" of String,
+           parameter "score_interpretation" of String, parameter "timestamp"
+           of String, parameter "suspect" of type "Bool", parameter "hidden"
+           of type "boolean" (A boolean - 0 for false, 1 for true. @range (0,
+           1)), parameter "upgrade" of type "boolean" (A boolean - 0 for
+           false, 1 for true. @range (0, 1))
         :returns: instance of type "SaveGenomeResult" -> structure: parameter
            "info" of type "object_info" (Information about an object,
            including user provided metadata. obj_id objid - the numerical id
