@@ -21,7 +21,7 @@
       }
     },
     {
-      "id" : "condition_set_name",
+      "id" : "attribute_mapping_name",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -37,15 +37,15 @@
     "service-mapping" : {
       "url" : "",
       "name" : "kb_uploadmethods",
-      "method" : "import_condition_set_from_staging",
+      "method" : "import_attribute_mapping_from_staging",
       "input_mapping" : [
         {
           "narrative_system_variable": "workspace",
           "target_property": "workspace_name"
         },
         {
-          "input_parameter": "condition_set_name",
-          "target_property": "condition_set_name"
+          "input_parameter": "attribute_mapping_name",
+          "target_property": "attribute_mapping_name"
         },
         {
           "input_parameter": "staging_file_subdir_path",

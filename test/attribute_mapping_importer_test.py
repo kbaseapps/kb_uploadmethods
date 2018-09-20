@@ -51,7 +51,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         cls.shockURL = cls.cfg['shock-url']
 
         suffix = int(time.time() * 1000)
-        cls.wsName = "test_kb_uploadmethods_condition_set" + str(suffix)
+        cls.wsName = "test_kb_uploadmethods_attribute_mapping" + str(suffix)
         cls.wsID = cls.wsClient.create_workspace({'workspace': cls.wsName})[0]
 
     @classmethod
@@ -89,71 +89,71 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         return {'copy_file_path': fq_path}
 
-    def test_bad_import_condition_set_from_staging_params(self):
+    def test_bad_import_attribute_mapping_from_staging_params(self):
         invalidate_input_params = {
           'missing_staging_file_subdir_path': 'staging_file_subdir_path',
           'workspace_name': 'workspace_name',
-          'condition_set_name': 'condition_set_name',
+          'attribute_mapping_name': 'attribute_mapping_name',
         }
         with self.assertRaisesRegex(
                     ValueError,
                     '"staging_file_subdir_path" parameter is required, but missing'):
-            self.getImpl().import_condition_set_from_staging(self.getContext(),
+            self.getImpl().import_attribute_mapping_from_staging(self.getContext(),
                                                                     invalidate_input_params)
 
         invalidate_input_params = {
           'staging_file_subdir_path': 'staging_file_subdir_path',
           'missing_workspace_name': 'workspace_name',
-          'condition_set_name': 'condition_set_name',
+          'attribute_mapping_name': 'attribute_mapping_name',
         }
         with self.assertRaisesRegex(
                     ValueError,
                     '"workspace_name" parameter is required, but missing'):
-            self.getImpl().import_condition_set_from_staging(self.getContext(),
+            self.getImpl().import_attribute_mapping_from_staging(self.getContext(),
                                                                     invalidate_input_params)
 
         invalidate_input_params = {
           'staging_file_subdir_path': 'staging_file_subdir_path',
           'workspace_name': 'workspace_name',
-          'missing_condition_set_name': 'condition_set_name',
+          'missing_attribute_mapping_name': 'attribute_mapping_name',
           'genome': 'genome'
         }
         with self.assertRaisesRegex(
                 ValueError,
-                '"condition_set_name" parameter is required, but missing'):
-            self.getImpl().import_condition_set_from_staging(self.getContext(),
+                '"attribute_mapping_name" parameter is required, but missing'):
+            self.getImpl().import_attribute_mapping_from_staging(self.getContext(),
                                                                     invalidate_input_params)
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
-    def test_import_tsv_condition_set_from_staging(self, download_staging_file,
+    def test_import_tsv_attribute_mapping_from_staging(self, download_staging_file,
                                                update_staging_service):
 
-        ws_obj_name = 'MyconditionSet'
+        ws_obj_name = 'MyAttributeMapping'
 
-        params = {'staging_file_subdir_path': "CS1.tsv",
+        params = {'staging_file_subdir_path': "AM1.tsv",
                   'workspace_name': self.wsName,
-                  'condition_set_name': ws_obj_name,
+                  'attribute_mapping_name': ws_obj_name,
                   }
 
-        ref = self.getImpl().import_condition_set_from_staging(self.getContext(), params)
+        ref = self.getImpl().import_attribute_mapping_from_staging(self.getContext(), params)
         self.assertTrue('obj_ref' in ref[0])
         self.assertTrue('report_ref' in ref[0])
         self.assertTrue('report_name' in ref[0])
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
-    def test_import_excel_condition_set_from_staging(self, download_staging_file,
+    def test_import_excel_attribute_mapping_from_staging(self, download_staging_file,
                                                update_staging_service):
 
-        ws_obj_name = 'MyconditionSet'
+        ws_obj_name = 'MyAttributeMapping'
 
-        params = {'staging_file_subdir_path': "CS1.xlsx",
+        params = {'staging_file_subdir_path': "AM1.xlsx",
                   'workspace_name': self.wsName,
-                  'condition_set_name': ws_obj_name,
+                  'attribute_mapping_name': ws_obj_name,
                   }
 
-        ref = self.getImpl().import_condition_set_from_staging(self.getContext(), params)
+        ref = self.getImpl().import_attribute_mapping_from_staging(self.getContext(), params)
         self.assertTrue('obj_ref' in ref[0])
         self.assertTrue('report_ref' in ref[0])
         self.assertTrue('report_name' in ref[0])

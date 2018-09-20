@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  *   staging_file_subdir_path is file_name
  *   for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
  *   staging_file_subdir_path is subdir_1/subdir_2/file_name
- * condition_set_name: output ConditionSet object name
+ * attribute_mapping_name: output ConditionSet object name
  * workspace_id: workspace name/ID of the object
  * </pre>
  * 
@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "staging_file_subdir_path",
     "workspace_name",
-    "condition_set_name"
+    "attribute_mapping_name"
 })
 public class FileToConditionSetParams {
 
@@ -39,8 +39,8 @@ public class FileToConditionSetParams {
     private String stagingFileSubdirPath;
     @JsonProperty("workspace_name")
     private String workspaceName;
-    @JsonProperty("condition_set_name")
-    private String conditionSetName;
+    @JsonProperty("attribute_mapping_name")
+    private String attributeMappingName;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("staging_file_subdir_path")
@@ -73,18 +73,18 @@ public class FileToConditionSetParams {
         return this;
     }
 
-    @JsonProperty("condition_set_name")
-    public String getConditionSetName() {
-        return conditionSetName;
+    @JsonProperty("attribute_mapping_name")
+    public String getAttributeMappingName() {
+        return attributeMappingName;
     }
 
-    @JsonProperty("condition_set_name")
-    public void setConditionSetName(String conditionSetName) {
-        this.conditionSetName = conditionSetName;
+    @JsonProperty("attribute_mapping_name")
+    public void setAttributeMappingName(String attributeMappingName) {
+        this.attributeMappingName = attributeMappingName;
     }
 
-    public FileToConditionSetParams withConditionSetName(String conditionSetName) {
-        this.conditionSetName = conditionSetName;
+    public FileToConditionSetParams withAttributeMappingName(String attributeMappingName) {
+        this.attributeMappingName = attributeMappingName;
         return this;
     }
 
@@ -100,7 +100,7 @@ public class FileToConditionSetParams {
 
     @Override
     public String toString() {
-        return ((((((((("FileToConditionSetParams"+" [stagingFileSubdirPath=")+ stagingFileSubdirPath)+", workspaceName=")+ workspaceName)+", conditionSetName=")+ conditionSetName)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((("FileToConditionSetParams"+" [stagingFileSubdirPath=")+ stagingFileSubdirPath)+", workspaceName=")+ workspaceName)+", attributeMappingName=")+ attributeMappingName)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

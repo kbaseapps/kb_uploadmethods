@@ -1864,9 +1864,9 @@ report_ref is a string
  
 
 
-=head2 import_condition_set_from_staging
+=head2 import_attribute_mapping_from_staging
 
-  $returnVal = $obj->import_condition_set_from_staging($params)
+  $returnVal = $obj->import_attribute_mapping_from_staging($params)
 
 =over 4
 
@@ -1880,7 +1880,7 @@ $returnVal is a kb_uploadmethods.UploadMethodResult
 FileToConditionSetParams is a reference to a hash where the following keys are defined:
 	staging_file_subdir_path has a value which is a string
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
-	condition_set_name has a value which is a string
+	attribute_mapping_name has a value which is a string
 workspace_name is a string
 UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
@@ -1901,7 +1901,7 @@ $returnVal is a kb_uploadmethods.UploadMethodResult
 FileToConditionSetParams is a reference to a hash where the following keys are defined:
 	staging_file_subdir_path has a value which is a string
 	workspace_name has a value which is a kb_uploadmethods.workspace_name
-	condition_set_name has a value which is a string
+	attribute_mapping_name has a value which is a string
 workspace_name is a string
 UploadMethodResult is a reference to a hash where the following keys are defined:
 	obj_ref has a value which is a kb_uploadmethods.obj_ref
@@ -1922,7 +1922,7 @@ report_ref is a string
 
 =cut
 
- sub import_condition_set_from_staging
+ sub import_attribute_mapping_from_staging
 {
     my($self, @args) = @_;
 
@@ -1931,7 +1931,7 @@ report_ref is a string
     if ((my $n = @args) != 1)
     {
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function import_condition_set_from_staging (received $n, expecting 1)");
+							       "Invalid argument count for function import_attribute_mapping_from_staging (received $n, expecting 1)");
     }
     {
 	my($params) = @args;
@@ -1939,31 +1939,31 @@ report_ref is a string
 	my @_bad_arguments;
         (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
         if (@_bad_arguments) {
-	    my $msg = "Invalid arguments passed to import_condition_set_from_staging:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    my $msg = "Invalid arguments passed to import_attribute_mapping_from_staging:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-								   method_name => 'import_condition_set_from_staging');
+								   method_name => 'import_attribute_mapping_from_staging');
 	}
     }
 
     my $url = $self->{url};
     my $result = $self->{client}->call($url, $self->{headers}, {
-	    method => "kb_uploadmethods.import_condition_set_from_staging",
+	    method => "kb_uploadmethods.import_attribute_mapping_from_staging",
 	    params => \@args,
     });
     if ($result) {
 	if ($result->is_error) {
 	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
 					       code => $result->content->{error}->{code},
-					       method_name => 'import_condition_set_from_staging',
+					       method_name => 'import_attribute_mapping_from_staging',
 					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
 					      );
 	} else {
 	    return wantarray ? @{$result->result} : $result->result->[0];
 	}
     } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method import_condition_set_from_staging",
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method import_attribute_mapping_from_staging",
 					    status_line => $self->{client}->status_line,
-					    method_name => 'import_condition_set_from_staging',
+					    method_name => 'import_attribute_mapping_from_staging',
 				       );
     }
 }
@@ -2011,16 +2011,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'import_condition_set_from_staging',
+                method_name => 'import_attribute_mapping_from_staging',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method import_condition_set_from_staging",
+            error => "Error invoking method import_attribute_mapping_from_staging",
             status_line => $self->{client}->status_line,
-            method_name => 'import_condition_set_from_staging',
+            method_name => 'import_attribute_mapping_from_staging',
         );
     }
 }
@@ -3639,7 +3639,7 @@ e.g.
   staging_file_subdir_path is file_name
   for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
   staging_file_subdir_path is subdir_1/subdir_2/file_name
-condition_set_name: output ConditionSet object name
+attribute_mapping_name: output ConditionSet object name
 workspace_id: workspace name/ID of the object
 
 
@@ -3651,7 +3651,7 @@ workspace_id: workspace name/ID of the object
 a reference to a hash where the following keys are defined:
 staging_file_subdir_path has a value which is a string
 workspace_name has a value which is a kb_uploadmethods.workspace_name
-condition_set_name has a value which is a string
+attribute_mapping_name has a value which is a string
 
 </pre>
 
@@ -3662,7 +3662,7 @@ condition_set_name has a value which is a string
 a reference to a hash where the following keys are defined:
 staging_file_subdir_path has a value which is a string
 workspace_name has a value which is a kb_uploadmethods.workspace_name
-condition_set_name has a value which is a string
+attribute_mapping_name has a value which is a string
 
 
 =end text
