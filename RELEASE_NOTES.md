@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.22**:
+Added KBase paper citation in PLOS format
+
 **1.0.19**:
 Convert  module to Python 3
 
