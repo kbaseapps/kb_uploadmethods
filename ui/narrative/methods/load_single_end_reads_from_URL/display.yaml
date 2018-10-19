@@ -24,7 +24,7 @@ parameters :
         ui-name : URL Type
         short-hint : URL type ('Regular URL (Direct Download Link)', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
         long-hint  : URL type ('Regular URL (Direct Download Link)', 'FTP Link', 'DropBox Public Shared Link',  'Google Drive Public Shared Link')
-        
+
     sequencing_tech :
         ui-name : Sequencing Technology
         short-hint : The name of the sequencing technology used to create the reads file
@@ -67,3 +67,9 @@ description : |
     <p> 3. Click on 'Copy link' button. e.g. 'https://www.dropbox.com/s/w5ct52rp95cukwq/file1.txt?dl=0'</p>
 
 technical-description : none
+
+publications :
+    -
+        display-text: |
+            Arkin AP, Cottingham RW, Henry CS, Harris NL, Stevens RL, Maslov S, et al. KBase: The United States Department of Energy Systems Biology Knowledgebase. Nature Biotechnology. 2018;36: 566. doi: 10.1038/nbt.4163
+        link: https://www.nature.com/articles/nbt.4163
