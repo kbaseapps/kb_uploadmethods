@@ -92,7 +92,9 @@ class ImportAssemblyUtil:
         assembly_data = assembly_object.get('data')[0].get('data')
         assembly_info = assembly_object.get('data')[0].get('info')
 
-        result_file_path = os.path.join(self.scratch, 'report.html')
+        tmp_dir = os.path.join(self.scratch, str(uuid.uuid4()))
+        handler_utils._mkdir_p(tmp_dir)
+        result_file_path = os.path.join(tmp_dir, 'report.html')
 
         assembly_name = str(assembly_info[1])
         assembly_file = params.get('staging_file_subdir_path')
@@ -130,7 +132,7 @@ class ImportAssemblyUtil:
                 result_file.write(report_template)
         result_file.close()
 
-        report_shock_id = self.dfu.file_to_shock({'file_path': self.scratch,
+        report_shock_id = self.dfu.file_to_shock({'file_path': tmp_dir,
                                                   'pack': 'zip'})['shock_id']
 
         html_report.append({'shock_id': report_shock_id,

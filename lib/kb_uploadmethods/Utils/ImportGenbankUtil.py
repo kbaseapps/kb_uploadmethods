@@ -99,7 +99,9 @@ class ImportGenbankUtil:
         log('start generating html report')
         genome_obj = self.dfu.get_objects({'object_refs': [genome_ref]})
         html_report = list()
-        result_file_path = os.path.join(self.scratch, 'report.html')
+        tmp_dir = os.path.join(self.scratch, str(uuid.uuid4()))
+        handler_utils._mkdir_p(tmp_dir)
+        result_file_path = os.path.join(tmp_dir, 'report.html')
 
         genome_name = str(genome_obj.get('data')[0].get('info')[1])
         genome_file = params.get('staging_file_subdir_path')
@@ -152,7 +154,7 @@ class ImportGenbankUtil:
                 result_file.write(report_template)
         result_file.close()
 
-        report_shock_id = self.dfu.file_to_shock({'file_path': self.scratch,
+        report_shock_id = self.dfu.file_to_shock({'file_path': tmp_dir,
                                                   'pack': 'zip'})['shock_id']
 
         html_report.append({'shock_id': report_shock_id,
