@@ -131,7 +131,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         ws_obj_name = 'MyAttributeMapping'
 
-        params = {'staging_file_subdir_path': "AM1.tsv",
+        params = {'staging_file_subdir_path': "AM2.tsv",
                   'workspace_name': self.wsName,
                   'attribute_mapping_name': ws_obj_name,
                   }
