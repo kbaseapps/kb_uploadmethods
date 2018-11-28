@@ -346,7 +346,9 @@ class ImportSRAUtil:
         log('Start generating html report')
         pprint(params)
 
-        result_file_path = os.path.join(self.scratch, 'report.html')
+        tmp_dir = os.path.join(self.scratch, uuid_string)
+        handler_utils._mkdir_p(tmp_dir)
+        result_file_path = os.path.join(tmp_dir, 'report.html')
         html_report = list()
         objects_content = ''
 
@@ -459,12 +461,12 @@ class ImportSRAUtil:
         result_file.close()
 
         shutil.copytree(os.path.join(os.path.dirname(__file__), 'report_template_sra/bootstrap-3.3.7'),
-                        os.path.join(self.scratch, 'bootstrap-3.3.7'))
+                        os.path.join(tmp_dir, 'bootstrap-3.3.7'))
         shutil.copy(os.path.join(os.path.dirname(__file__), 'report_template_sra/jquery-3.2.1.min.js'),
-                    os.path.join(self.scratch, 'jquery-3.2.1.min.js'))
+                    os.path.join(tmp_dir, 'jquery-3.2.1.min.js'))
 
         matched_files = []
-        for root, dirnames, filenames in os.walk(self.scratch):
+        for root, dirnames, filenames in os.walk(tmp_dir):
             for filename in fnmatch.filter(filenames, '*.gz'):
                 matched_files.append(os.path.join(root, filename))
 
@@ -472,7 +474,7 @@ class ImportSRAUtil:
             print(('Removing ' + gz_file))
             os.remove(gz_file)
 
-        report_shock_id = self.dfu.file_to_shock({'file_path': self.scratch,
+        report_shock_id = self.dfu.file_to_shock({'file_path': tmp_dir,
                                                   'pack': 'zip'})['shock_id']
         html_report.append({'shock_id': report_shock_id,
                             'name': os.path.basename(result_file_path),
