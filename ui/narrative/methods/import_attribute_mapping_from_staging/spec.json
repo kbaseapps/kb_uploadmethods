@@ -3,7 +3,7 @@
   "authors" : ["jjeffryes"],
   "contact" : "http://kbase.us/contact-us/",
   "visible" : true,
-  "categories" : ["upload", "inactive"],
+  "categories" : ["upload"],
   "widgets": {
     "input": "kbaseNarrativeMethodInput",
     "output" : "no-display"
