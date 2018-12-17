@@ -36,6 +36,7 @@ class UnpackFileUtil:
         """
         subdir_folder_str = '' if not subdir_folder else '/{}'.format(subdir_folder)
         staging_service_host = self._staging_service_host()
+
         for file_path in file_path_list:
             log("uploading [{}] to staging area".format(file_path))
             post_cmd = 'curl -H "Authorization: {}"\\\n'.format(self.token)
@@ -43,6 +44,7 @@ class UnpackFileUtil:
             post_cmd += ' -F "destPath={}"\\\n'.format(subdir_folder_str)
             post_cmd += ' -F "uploads=@{}"\\\n'.format(file_path)
             post_cmd += ' {}/upload'.format(staging_service_host)
+            log("running command: {}".format(post_cmd))
             return_code = os.popen(post_cmd).read()
             log("return message from server:\n{}".format(return_code))
 
