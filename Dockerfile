@@ -17,6 +17,8 @@ RUN mkdir NCBI_SRA_tools && cd NCBI_SRA_tools && \
     curl 'https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.9.2/sratoolkit.2.9.2-ubuntu64.tar.gz' -O && \
     tar zxf sratoolkit.2.9.2-ubuntu64.tar.gz && \
     cp sratoolkit.2.9.2-ubuntu64/bin/fastq-dump.2.9.2  /kb/deployment/bin/fastq-dump
+
+RUN pip install aiohttp==3.4.4
 # -----------------------------------------
 
 COPY ./ /kb/module
