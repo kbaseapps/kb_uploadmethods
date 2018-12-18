@@ -5,6 +5,7 @@ import time
 import uuid
 from configparser import SafeConfigParser
 import aiohttp
+import asyncio
 
 import magic
 
@@ -146,8 +147,10 @@ class UnpackFileUtil:
         log("Unpacked files:\n  {}".format(
                           '\n  '.join(unpacked_file_path_list)))
 
-        self._file_to_staging(unpacked_file_path_list, os.path.dirname(
-                                      params.get('staging_file_subdir_path')))
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(self._file_to_staging(unpacked_file_path_list, os.path.dirname(
+                                      params.get('staging_file_subdir_path'))))
+
         unpacked_file_path = ','.join(unpacked_file_path_list)
         returnVal = {'unpacked_file_path': unpacked_file_path}
 
@@ -183,7 +186,8 @@ class UnpackFileUtil:
         log("Unpacked files:\n  {}".format(
                           '\n  '.join(unpacked_file_path_list)))
 
-        self._file_to_staging(unpacked_file_path_list)
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(self._file_to_staging(unpacked_file_path_list))
         unpacked_file_path = ','.join(unpacked_file_path_list)
         returnVal = {'unpacked_file_path': unpacked_file_path}
 
