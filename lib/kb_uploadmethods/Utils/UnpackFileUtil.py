@@ -112,7 +112,7 @@ class UnpackFileUtil:
         self.scratch = config['scratch']
         self.dfu = DataFileUtil(self.callback_url)
 
-    def unpack_staging_file(self, params):
+    async def unpack_staging_file(self, params):
         """
         Unpack a staging area file
 
@@ -146,14 +146,14 @@ class UnpackFileUtil:
         log("Unpacked files:\n  {}".format(
                           '\n  '.join(unpacked_file_path_list)))
 
-        self._file_to_staging(unpacked_file_path_list, os.path.dirname(
+        await self._file_to_staging(unpacked_file_path_list, os.path.dirname(
                                       params.get('staging_file_subdir_path')))
         unpacked_file_path = ','.join(unpacked_file_path_list)
         returnVal = {'unpacked_file_path': unpacked_file_path}
 
         return returnVal
 
-    def unpack_web_file(self, params):
+    async def unpack_web_file(self, params):
         """
         Download and unpack a web file to staging area
 
@@ -183,7 +183,7 @@ class UnpackFileUtil:
         log("Unpacked files:\n  {}".format(
                           '\n  '.join(unpacked_file_path_list)))
 
-        self._file_to_staging(unpacked_file_path_list)
+        await self._file_to_staging(unpacked_file_path_list)
         unpacked_file_path = ','.join(unpacked_file_path_list)
         returnVal = {'unpacked_file_path': unpacked_file_path}
 
