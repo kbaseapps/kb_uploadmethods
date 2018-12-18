@@ -4,6 +4,7 @@ import shutil
 import time
 import uuid
 from configparser import SafeConfigParser
+import aiohttp
 
 import magic
 
@@ -30,23 +31,27 @@ class UnpackFileUtil:
 
         return staging_service_host
 
-    def _file_to_staging(self, file_path_list, subdir_folder=None):
+    async def _file_to_staging(self, file_path_list, subdir_folder=None):
         """
         _file_to_staging: upload file(s) to staging area
         """
         subdir_folder_str = '' if not subdir_folder else '/{}'.format(subdir_folder)
         staging_service_host = self._staging_service_host()
+        end_point = staging_service_host + '/upload'
+        headers = {'Authorization': self.token}
+        data = {'destPath': subdir_folder_str}
 
         for file_path in file_path_list:
-            log("uploading [{}] to staging area".format(file_path))
-            post_cmd = 'curl -H "Authorization: {}"\\\n'.format(self.token)
-            post_cmd += ' -X POST\\\n'
-            post_cmd += ' -F "destPath={}"\\\n'.format(subdir_folder_str)
-            post_cmd += ' -F "uploads=@{}"\\\n'.format(file_path)
-            post_cmd += ' {}/upload'.format(staging_service_host)
-            log("running command: {}".format(post_cmd))
-            return_code = os.popen(post_cmd).read()
-            log("return message from server:\n{}".format(return_code))
+            data.update({'uploads': open(file_path, 'rb')})
+
+            async with aiohttp.ClientSession() as session:
+                async with session.post(end_point, data=data, headers=headers) as resp:
+                    if resp.status != 200:
+                        raise ValueError('Upload file {} failed.\nError Code: {}\n{}\n'
+                                         .format(file_path, resp.status,
+                                                 await resp.text()))
+                    else:
+                        log("return message from server:\n{}\n".format(await resp.text()))
 
     def _remove_irrelevant_files(self, file_path):
         """
