@@ -9,8 +9,8 @@ import asyncio
 
 import magic
 
-from DataFileUtil.DataFileUtilClient import DataFileUtil
-from KBaseReport.KBaseReportClient import KBaseReport
+from installed_clients.DataFileUtilClient import DataFileUtil
+from installed_clients.KBaseReportClient import KBaseReport
 
 
 def log(message, prefix_newline=False):

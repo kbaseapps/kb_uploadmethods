@@ -12,10 +12,9 @@ from __future__ import print_function
 try:
     # baseclient and this client are in a package
     from .baseclient import BaseClient as _BaseClient  # @UnusedImport
-except:
+except ImportError:
     # no they aren't
     from baseclient import BaseClient as _BaseClient  # @Reimport
-import time
 
 
 class ReadsUtils(object):
@@ -24,7 +23,7 @@ class ReadsUtils(object):
             self, url=None, timeout=30 * 60, user_id=None,
             password=None, token=None, ignore_authrc=False,
             trust_all_ssl_certificates=False,
-            auth_svc='https://kbase.us/services/authorization/Sessions/Login',
+            auth_svc='https://ci.kbase.us/services/auth/api/legacy/KBase/Sessions/Login',
             service_ver='release',
             async_job_check_time_ms=100, async_job_check_time_scale_percent=150, 
             async_job_check_max_time_ms=300000):
@@ -39,14 +38,6 @@ class ReadsUtils(object):
             async_job_check_time_ms=async_job_check_time_ms,
             async_job_check_time_scale_percent=async_job_check_time_scale_percent,
             async_job_check_max_time_ms=async_job_check_max_time_ms)
-
-    def _check_job(self, job_id):
-        return self._client._check_job('ReadsUtils', job_id)
-
-    def _validateFASTQ_submit(self, params, context=None):
-        return self._client._submit_job(
-             'ReadsUtils.validateFASTQ', [params],
-             self._service_ver, context)
 
     def validateFASTQ(self, params, context=None):
         """
@@ -66,22 +57,8 @@ class ReadsUtils(object):
            "validated" of type "boolean" (A boolean - 0 for false, 1 for
            true. @range (0, 1))
         """
-        job_id = self._validateFASTQ_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _upload_reads_submit(self, params, context=None):
-        return self._client._submit_job(
-             'ReadsUtils.upload_reads', [params],
-             self._service_ver, context)
+        return self._client.run_job('ReadsUtils.validateFASTQ',
+                                    [params], self._service_ver, context)
 
     def upload_reads(self, params, context=None):
         """
@@ -211,22 +188,8 @@ class ReadsUtils(object):
            object ID, and Z is the version.) -> structure: parameter
            "obj_ref" of String
         """
-        job_id = self._upload_reads_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _download_reads_submit(self, params, context=None):
-        return self._client._submit_job(
-             'ReadsUtils.download_reads', [params],
-             self._service_ver, context)
+        return self._client.run_job('ReadsUtils.upload_reads',
+                                    [params], self._service_ver, context)
 
     def download_reads(self, params, context=None):
         """
@@ -360,22 +323,8 @@ class ReadsUtils(object):
            parameter "qual_mean" of Double, parameter "qual_stdev" of Double,
            parameter "base_percentages" of mapping from String to Double
         """
-        job_id = self._download_reads_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_reads_submit(self, params, context=None):
-        return self._client._submit_job(
-             'ReadsUtils.export_reads', [params],
-             self._service_ver, context)
+        return self._client.run_job('ReadsUtils.download_reads',
+                                    [params], self._service_ver, context)
 
     def export_reads(self, params, context=None):
         """
@@ -386,28 +335,9 @@ class ReadsUtils(object):
         :returns: instance of type "ExportOutput" (Standard KBase downloader
            output.) -> structure: parameter "shock_id" of String
         """
-        job_id = self._export_reads_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
+        return self._client.run_job('ReadsUtils.export_reads',
+                                    [params], self._service_ver, context)
 
     def status(self, context=None):
-        job_id = self._client._submit_job('ReadsUtils.status', 
-            [], self._service_ver, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
+        return self._client.run_job('ReadsUtils.status',
+                                    [], self._service_ver, context)

@@ -2,8 +2,8 @@
 import json
 import time
 
-from DataFileUtil.DataFileUtilClient import DataFileUtil
-from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
+from installed_clients.DataFileUtilClient import DataFileUtil
+from installed_clients.GenomeFileUtilClient import GenomeFileUtil
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
 

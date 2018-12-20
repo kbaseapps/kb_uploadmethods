@@ -12,10 +12,9 @@ from __future__ import print_function
 try:
     # baseclient and this client are in a package
     from .baseclient import BaseClient as _BaseClient  # @UnusedImport
-except:
+except ImportError:
     # no they aren't
     from baseclient import BaseClient as _BaseClient  # @Reimport
-import time
 
 
 class KBaseFeatureValues(object):
@@ -24,29 +23,17 @@ class KBaseFeatureValues(object):
             self, url=None, timeout=30 * 60, user_id=None,
             password=None, token=None, ignore_authrc=False,
             trust_all_ssl_certificates=False,
-            auth_svc='https://kbase.us/services/authorization/Sessions/Login',
-            service_ver='release',
-            async_job_check_time_ms=100, async_job_check_time_scale_percent=150, 
-            async_job_check_max_time_ms=300000):
+            auth_svc='https://ci.kbase.us/services/auth/api/legacy/KBase/Sessions/Login',
+            service_ver='release'):
         if url is None:
-            raise ValueError('A url is required')
+            url = 'https://kbase.us/services/service_wizard'
         self._service_ver = service_ver
         self._client = _BaseClient(
             url, timeout=timeout, user_id=user_id, password=password,
             token=token, ignore_authrc=ignore_authrc,
             trust_all_ssl_certificates=trust_all_ssl_certificates,
             auth_svc=auth_svc,
-            async_job_check_time_ms=async_job_check_time_ms,
-            async_job_check_time_scale_percent=async_job_check_time_scale_percent,
-            async_job_check_max_time_ms=async_job_check_max_time_ms)
-
-    def _check_job(self, job_id):
-        return self._client._check_job('KBaseFeatureValues', job_id)
-
-    def _estimate_k_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.estimate_k', [params],
-             self._service_ver, context)
+            lookup_url=True)
 
     def estimate_k(self, params, context=None):
         """
@@ -62,22 +49,8 @@ class KBaseFeatureValues(object):
            parameter "max_items" of Long, parameter "out_workspace" of
            String, parameter "out_estimate_result" of String
         """
-        job_id = self._estimate_k_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return
-
-    def _estimate_k_new_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.estimate_k_new', [params],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.estimate_k',
+                                        [params], self._service_ver, context)
 
     def estimate_k_new(self, params, context=None):
         """
@@ -96,22 +69,8 @@ class KBaseFeatureValues(object):
            "random_seed" of Long, parameter "out_workspace" of String,
            parameter "out_estimate_result" of String
         """
-        job_id = self._estimate_k_new_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return
-
-    def _cluster_k_means_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.cluster_k_means', [params],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.estimate_k_new',
+                                        [params], self._service_ver, context)
 
     def cluster_k_means(self, params, context=None):
         """
@@ -125,22 +84,8 @@ class KBaseFeatureValues(object):
            "random_seed" of Long, parameter "algorithm" of String, parameter
            "out_workspace" of String, parameter "out_clusterset_id" of String
         """
-        job_id = self._cluster_k_means_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return
-
-    def _cluster_hierarchical_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.cluster_hierarchical', [params],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.cluster_k_means',
+                                        [params], self._service_ver, context)
 
     def cluster_hierarchical(self, params, context=None):
         """
@@ -156,22 +101,8 @@ class KBaseFeatureValues(object):
            "algorithm" of String, parameter "out_workspace" of String,
            parameter "out_clusterset_id" of String
         """
-        job_id = self._cluster_hierarchical_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return
-
-    def _clusters_from_dendrogram_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.clusters_from_dendrogram', [params],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.cluster_hierarchical',
+                                        [params], self._service_ver, context)
 
     def clusters_from_dendrogram(self, params, context=None):
         """
@@ -186,22 +117,8 @@ class KBaseFeatureValues(object):
            KBaseFeatureValues.FeatureClusters), parameter "out_workspace" of
            String, parameter "out_clusterset_id" of String
         """
-        job_id = self._clusters_from_dendrogram_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return
-
-    def _evaluate_clusterset_quality_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.evaluate_clusterset_quality', [params],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.clusters_from_dendrogram',
+                                        [params], self._service_ver, context)
 
     def evaluate_clusterset_quality(self, params, context=None):
         """
@@ -214,22 +131,8 @@ class KBaseFeatureValues(object):
            data object. @id ws KBaseFeatureValues.FeatureClusters), parameter
            "out_workspace" of String, parameter "out_report_id" of String
         """
-        job_id = self._evaluate_clusterset_quality_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return
-
-    def _validate_matrix_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.validate_matrix', [params],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.evaluate_clusterset_quality',
+                                        [params], self._service_ver, context)
 
     def validate_matrix(self, params, context=None):
         """
@@ -241,22 +144,8 @@ class KBaseFeatureValues(object):
            KBaseFeatureValues.ExpressionMatrix
            KBaseFeatureValues.SingleKnockoutFitnessMatrix)
         """
-        job_id = self._validate_matrix_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return
-
-    def _correct_matrix_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.correct_matrix', [params],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.validate_matrix',
+                                        [params], self._service_ver, context)
 
     def correct_matrix(self, params, context=None):
         """
@@ -271,22 +160,8 @@ class KBaseFeatureValues(object):
            KBaseFeatureValues.SingleKnockoutFitnessMatrix), parameter
            "out_workspace" of String, parameter "out_matrix_id" of String
         """
-        job_id = self._correct_matrix_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return
-
-    def _reconnect_matrix_to_genome_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.reconnect_matrix_to_genome', [params],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.correct_matrix',
+                                        [params], self._service_ver, context)
 
     def reconnect_matrix_to_genome(self, params, context=None):
         """
@@ -301,22 +176,8 @@ class KBaseFeatureValues(object):
            data object. @id ws KBaseGenomes.Genome), parameter
            "out_workspace" of String, parameter "out_matrix_id" of String
         """
-        job_id = self._reconnect_matrix_to_genome_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return
-
-    def _build_feature_set_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.build_feature_set', [params],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.reconnect_matrix_to_genome',
+                                        [params], self._service_ver, context)
 
     def build_feature_set(self, params, context=None):
         """
@@ -331,22 +192,8 @@ class KBaseFeatureValues(object):
            "description" of String, parameter "out_workspace" of String,
            parameter "output_feature_set" of String
         """
-        job_id = self._build_feature_set_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return
-
-    def _get_matrix_descriptor_submit(self, GetMatrixDescriptorParams, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.get_matrix_descriptor', [GetMatrixDescriptorParams],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.build_feature_set',
+                                        [params], self._service_ver, context)
 
     def get_matrix_descriptor(self, GetMatrixDescriptorParams, context=None):
         """
@@ -366,22 +213,8 @@ class KBaseFeatureValues(object):
            "type" of String, parameter "row_normalization" of String,
            parameter "col_normalization" of String
         """
-        job_id = self._get_matrix_descriptor_submit(GetMatrixDescriptorParams, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _get_matrix_row_descriptors_submit(self, GetMatrixItemDescriptorsParams, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.get_matrix_row_descriptors', [GetMatrixItemDescriptorsParams],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.get_matrix_descriptor',
+                                        [GetMatrixDescriptorParams], self._service_ver, context)
 
     def get_matrix_row_descriptors(self, GetMatrixItemDescriptorsParams, context=None):
         """
@@ -415,22 +248,8 @@ class KBaseFeatureValues(object):
            parameter "name" of String, parameter "description" of String,
            parameter "properties" of mapping from String to String
         """
-        job_id = self._get_matrix_row_descriptors_submit(GetMatrixItemDescriptorsParams, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _get_matrix_column_descriptors_submit(self, GetMatrixItemDescriptorsParams, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.get_matrix_column_descriptors', [GetMatrixItemDescriptorsParams],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.get_matrix_row_descriptors',
+                                        [GetMatrixItemDescriptorsParams], self._service_ver, context)
 
     def get_matrix_column_descriptors(self, GetMatrixItemDescriptorsParams, context=None):
         """
@@ -464,22 +283,8 @@ class KBaseFeatureValues(object):
            parameter "name" of String, parameter "description" of String,
            parameter "properties" of mapping from String to String
         """
-        job_id = self._get_matrix_column_descriptors_submit(GetMatrixItemDescriptorsParams, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _get_matrix_rows_stat_submit(self, GetMatrixItemsStatParams, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.get_matrix_rows_stat', [GetMatrixItemsStatParams],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.get_matrix_column_descriptors',
+                                        [GetMatrixItemDescriptorsParams], self._service_ver, context)
 
     def get_matrix_rows_stat(self, GetMatrixItemsStatParams, context=None):
         """
@@ -524,22 +329,8 @@ class KBaseFeatureValues(object):
            parameter "min" of Double, parameter "max" of Double, parameter
            "std" of Double, parameter "missing_values" of Long
         """
-        job_id = self._get_matrix_rows_stat_submit(GetMatrixItemsStatParams, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _get_matrix_columns_stat_submit(self, GetMatrixItemsStatParams, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.get_matrix_columns_stat', [GetMatrixItemsStatParams],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.get_matrix_rows_stat',
+                                        [GetMatrixItemsStatParams], self._service_ver, context)
 
     def get_matrix_columns_stat(self, GetMatrixItemsStatParams, context=None):
         """
@@ -584,22 +375,8 @@ class KBaseFeatureValues(object):
            parameter "min" of Double, parameter "max" of Double, parameter
            "std" of Double, parameter "missing_values" of Long
         """
-        job_id = self._get_matrix_columns_stat_submit(GetMatrixItemsStatParams, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _get_matrix_row_sets_stat_submit(self, GetMatrixSetsStatParams, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.get_matrix_row_sets_stat', [GetMatrixSetsStatParams],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.get_matrix_columns_stat',
+                                        [GetMatrixItemsStatParams], self._service_ver, context)
 
     def get_matrix_row_sets_stat(self, GetMatrixSetsStatParams, context=None):
         """
@@ -672,22 +449,8 @@ class KBaseFeatureValues(object):
            of Double, parameter "maxs" of list of Double, parameter "stds" of
            list of Double, parameter "missing_values" of list of Long
         """
-        job_id = self._get_matrix_row_sets_stat_submit(GetMatrixSetsStatParams, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _get_matrix_column_sets_stat_submit(self, GetMatrixSetsStatParams, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.get_matrix_column_sets_stat', [GetMatrixSetsStatParams],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.get_matrix_row_sets_stat',
+                                        [GetMatrixSetsStatParams], self._service_ver, context)
 
     def get_matrix_column_sets_stat(self, GetMatrixSetsStatParams, context=None):
         """
@@ -760,22 +523,8 @@ class KBaseFeatureValues(object):
            of Double, parameter "maxs" of list of Double, parameter "stds" of
            list of Double, parameter "missing_values" of list of Long
         """
-        job_id = self._get_matrix_column_sets_stat_submit(GetMatrixSetsStatParams, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _get_matrix_stat_submit(self, GetMatrixStatParams, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.get_matrix_stat', [GetMatrixStatParams],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.get_matrix_column_sets_stat',
+                                        [GetMatrixSetsStatParams], self._service_ver, context)
 
     def get_matrix_stat(self, GetMatrixStatParams, context=None):
         """
@@ -874,22 +623,8 @@ class KBaseFeatureValues(object):
            parameter "min" of Double, parameter "max" of Double, parameter
            "std" of Double, parameter "missing_values" of Long
         """
-        job_id = self._get_matrix_stat_submit(GetMatrixStatParams, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _get_submatrix_stat_submit(self, GetSubmatrixStatParams, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.get_submatrix_stat', [GetSubmatrixStatParams],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.get_matrix_stat',
+                                        [GetMatrixStatParams], self._service_ver, context)
 
     def get_submatrix_stat(self, GetSubmatrixStatParams, context=None):
         """
@@ -1113,22 +848,8 @@ class KBaseFeatureValues(object):
            Double, parameter "stds" of list of Double, parameter "values" of
            list of list of Double
         """
-        job_id = self._get_submatrix_stat_submit(GetSubmatrixStatParams, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _tsv_file_to_matrix_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.tsv_file_to_matrix', [params],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.get_submatrix_stat',
+                                        [GetSubmatrixStatParams], self._service_ver, context)
 
     def tsv_file_to_matrix(self, params, context=None):
         """
@@ -1155,22 +876,8 @@ class KBaseFeatureValues(object):
            KBaseFeatureValues.ExpressionMatrix
            KBaseFeatureValues.SingleKnockoutFitnessMatrix)
         """
-        job_id = self._tsv_file_to_matrix_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _matrix_to_tsv_file_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.matrix_to_tsv_file', [params],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.tsv_file_to_matrix',
+                                        [params], self._service_ver, context)
 
     def matrix_to_tsv_file(self, params, context=None):
         """
@@ -1184,22 +891,8 @@ class KBaseFeatureValues(object):
         :returns: instance of type "MatrixToTsvFileOutput" -> structure:
            parameter "file_path" of String, parameter "shock_id" of String
         """
-        job_id = self._matrix_to_tsv_file_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_matrix_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.export_matrix', [params],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.matrix_to_tsv_file',
+                                        [params], self._service_ver, context)
 
     def export_matrix(self, params, context=None):
         """
@@ -1211,22 +904,8 @@ class KBaseFeatureValues(object):
         :returns: instance of type "ExportMatrixOutput" -> structure:
            parameter "shock_id" of String
         """
-        job_id = self._export_matrix_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _clusters_to_file_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.clusters_to_file', [params],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.export_matrix',
+                                        [params], self._service_ver, context)
 
     def clusters_to_file(self, params, context=None):
         """
@@ -1241,22 +920,8 @@ class KBaseFeatureValues(object):
         :returns: instance of type "ClustersToFileOutput" -> structure:
            parameter "file_path" of String, parameter "shock_id" of String
         """
-        job_id = self._clusters_to_file_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_clusters_tsv_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.export_clusters_tsv', [params],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.clusters_to_file',
+                                        [params], self._service_ver, context)
 
     def export_clusters_tsv(self, params, context=None):
         """
@@ -1267,22 +932,8 @@ class KBaseFeatureValues(object):
         :returns: instance of type "ExportClustersTsvOutput" -> structure:
            parameter "shock_id" of String
         """
-        job_id = self._export_clusters_tsv_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_clusters_sif_submit(self, params, context=None):
-        return self._client._submit_job(
-             'KBaseFeatureValues.export_clusters_sif', [params],
-             self._service_ver, context)
+        return self._client.call_method('KBaseFeatureValues.export_clusters_tsv',
+                                        [params], self._service_ver, context)
 
     def export_clusters_sif(self, params, context=None):
         """
@@ -1293,28 +944,9 @@ class KBaseFeatureValues(object):
         :returns: instance of type "ExportClustersSifOutput" -> structure:
            parameter "shock_id" of String
         """
-        job_id = self._export_clusters_sif_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
+        return self._client.call_method('KBaseFeatureValues.export_clusters_sif',
+                                        [params], self._service_ver, context)
 
     def status(self, context=None):
-        job_id = self._client._submit_job('KBaseFeatureValues.status', 
-            [], self._service_ver, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
+        return self._client.call_method('KBaseFeatureValues.status',
+                                        [], self._service_ver, context)

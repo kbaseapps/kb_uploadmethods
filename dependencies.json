@@ -3,11 +3,23 @@
   "type" : "sdk",
   "version_tag" : "release"
 }, {
+  "module_name" : "ConditionUtils",
+  "type" : "sdk",
+  "version_tag" : "release"
+}, {
   "module_name" : "DataFileUtil",
   "type" : "sdk",
   "version_tag" : "release"
 }, {
   "module_name" : "fba_tools",
+  "type" : "sdk",
+  "version_tag" : "release"
+}, {
+  "module_name" : "ftp_service",
+  "type" : "sdk",
+  "version_tag" : "release"
+}, {
+  "module_name" : "GenericsApi",
   "type" : "sdk",
   "version_tag" : "release"
 }, {
@@ -24,10 +36,6 @@
   "version_tag" : "release"
 }, {
   "module_name" : "ReadsUtils",
-  "type" : "sdk",
-  "version_tag" : "release"
-}, {
-  "module_name" : "GenericsApi",
   "type" : "sdk",
   "version_tag" : "release"
 } ]

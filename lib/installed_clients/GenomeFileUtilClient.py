@@ -12,10 +12,9 @@ from __future__ import print_function
 try:
     # baseclient and this client are in a package
     from .baseclient import BaseClient as _BaseClient  # @UnusedImport
-except:
+except ImportError:
     # no they aren't
     from baseclient import BaseClient as _BaseClient  # @Reimport
-import time
 
 
 class GenomeFileUtil(object):
@@ -24,7 +23,7 @@ class GenomeFileUtil(object):
             self, url=None, timeout=30 * 60, user_id=None,
             password=None, token=None, ignore_authrc=False,
             trust_all_ssl_certificates=False,
-            auth_svc='https://kbase.us/services/authorization/Sessions/Login',
+            auth_svc='https://ci.kbase.us/services/auth/api/legacy/KBase/Sessions/Login',
             service_ver='release',
             async_job_check_time_ms=100, async_job_check_time_scale_percent=150, 
             async_job_check_max_time_ms=300000):
@@ -39,14 +38,6 @@ class GenomeFileUtil(object):
             async_job_check_time_ms=async_job_check_time_ms,
             async_job_check_time_scale_percent=async_job_check_time_scale_percent,
             async_job_check_max_time_ms=async_job_check_max_time_ms)
-
-    def _check_job(self, job_id):
-        return self._client._check_job('GenomeFileUtil', job_id)
-
-    def _genbank_to_genome_submit(self, params, context=None):
-        return self._client._submit_job(
-             'GenomeFileUtil.genbank_to_genome', [params],
-             self._service_ver, context)
 
     def genbank_to_genome(self, params, context=None):
         """
@@ -79,22 +70,8 @@ class GenomeFileUtil(object):
         :returns: instance of type "GenomeSaveResult" -> structure: parameter
            "genome_ref" of String
         """
-        job_id = self._genbank_to_genome_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _genome_to_gff_submit(self, params, context=None):
-        return self._client._submit_job(
-             'GenomeFileUtil.genome_to_gff', [params],
-             self._service_ver, context)
+        return self._client.run_job('GenomeFileUtil.genbank_to_genome',
+                                    [params], self._service_ver, context)
 
     def genome_to_gff(self, params, context=None):
         """
@@ -114,22 +91,8 @@ class GenomeFileUtil(object):
            "from_cache" of type "boolean" (A boolean - 0 for false, 1 for
            true. @range (0, 1))
         """
-        job_id = self._genome_to_gff_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _genome_to_genbank_submit(self, params, context=None):
-        return self._client._submit_job(
-             'GenomeFileUtil.genome_to_genbank', [params],
-             self._service_ver, context)
+        return self._client.run_job('GenomeFileUtil.genome_to_gff',
+                                    [params], self._service_ver, context)
 
     def genome_to_genbank(self, params, context=None):
         """
@@ -144,22 +107,8 @@ class GenomeFileUtil(object):
            String, parameter "from_cache" of type "boolean" (A boolean - 0
            for false, 1 for true. @range (0, 1))
         """
-        job_id = self._genome_to_genbank_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_genome_as_genbank_submit(self, params, context=None):
-        return self._client._submit_job(
-             'GenomeFileUtil.export_genome_as_genbank', [params],
-             self._service_ver, context)
+        return self._client.run_job('GenomeFileUtil.genome_to_genbank',
+                                    [params], self._service_ver, context)
 
     def export_genome_as_genbank(self, params, context=None):
         """
@@ -169,22 +118,8 @@ class GenomeFileUtil(object):
         :returns: instance of type "ExportOutput" -> structure: parameter
            "shock_id" of String
         """
-        job_id = self._export_genome_as_genbank_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_genome_as_gff_submit(self, params, context=None):
-        return self._client._submit_job(
-             'GenomeFileUtil.export_genome_as_gff', [params],
-             self._service_ver, context)
+        return self._client.run_job('GenomeFileUtil.export_genome_as_genbank',
+                                    [params], self._service_ver, context)
 
     def export_genome_as_gff(self, params, context=None):
         """
@@ -194,22 +129,8 @@ class GenomeFileUtil(object):
         :returns: instance of type "ExportOutput" -> structure: parameter
            "shock_id" of String
         """
-        job_id = self._export_genome_as_gff_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _fasta_gff_to_genome_submit(self, params, context=None):
-        return self._client._submit_job(
-             'GenomeFileUtil.fasta_gff_to_genome', [params],
-             self._service_ver, context)
+        return self._client.run_job('GenomeFileUtil.export_genome_as_gff',
+                                    [params], self._service_ver, context)
 
     def fasta_gff_to_genome(self, params, context=None):
         """
@@ -240,22 +161,8 @@ class GenomeFileUtil(object):
         :returns: instance of type "GenomeSaveResult" -> structure: parameter
            "genome_ref" of String
         """
-        job_id = self._fasta_gff_to_genome_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _fasta_gff_to_genome_json_submit(self, params, context=None):
-        return self._client._submit_job(
-             'GenomeFileUtil.fasta_gff_to_genome_json', [params],
-             self._service_ver, context)
+        return self._client.run_job('GenomeFileUtil.fasta_gff_to_genome',
+                                    [params], self._service_ver, context)
 
     def fasta_gff_to_genome_json(self, params, context=None):
         """
@@ -286,22 +193,8 @@ class GenomeFileUtil(object):
            "boolean" (A boolean - 0 for false, 1 for true. @range (0, 1))
         :returns: instance of unspecified object
         """
-        job_id = self._fasta_gff_to_genome_json_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _save_one_genome_submit(self, params, context=None):
-        return self._client._submit_job(
-             'GenomeFileUtil.save_one_genome', [params],
-             self._service_ver, context)
+        return self._client.run_job('GenomeFileUtil.fasta_gff_to_genome_json',
+                                    [params], self._service_ver, context)
 
     def save_one_genome(self, params, context=None):
         """
@@ -366,7 +259,7 @@ class GenomeFileUtil(object):
            String, parameter "timestamp" of String, parameter "eco" of
            String, parameter "ontologies_present" of mapping from String to
            mapping from String to String, parameter "features" of list of
-           type "Feature" (Structure for a single CDS encoding “gene” of a
+           type "Feature" (Structure for a single CDS encoding ?gene? of a
            genome ONLY PUT GENES THAT HAVE A CORRESPONDING CDS IN THIS ARRAY
            NOTE: Sequence is optional. Ideally we can keep it in here, but
            Recognize due to space constraints another solution may be needed.
@@ -553,28 +446,9 @@ class GenomeFileUtil(object):
            metadata about an object. Arbitrary key-value pairs provided by
            the user.) -> mapping from String to String
         """
-        job_id = self._save_one_genome_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
+        return self._client.run_job('GenomeFileUtil.save_one_genome',
+                                    [params], self._service_ver, context)
 
     def status(self, context=None):
-        job_id = self._client._submit_job('GenomeFileUtil.status', 
-            [], self._service_ver, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
+        return self._client.run_job('GenomeFileUtil.status',
+                                    [], self._service_ver, context)

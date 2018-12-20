@@ -12,10 +12,9 @@ from __future__ import print_function
 try:
     # baseclient and this client are in a package
     from .baseclient import BaseClient as _BaseClient  # @UnusedImport
-except:
+except ImportError:
     # no they aren't
     from baseclient import BaseClient as _BaseClient  # @Reimport
-import time
 
 
 class AssemblyUtil(object):
@@ -24,7 +23,7 @@ class AssemblyUtil(object):
             self, url=None, timeout=30 * 60, user_id=None,
             password=None, token=None, ignore_authrc=False,
             trust_all_ssl_certificates=False,
-            auth_svc='https://kbase.us/services/authorization/Sessions/Login',
+            auth_svc='https://ci.kbase.us/services/auth/api/legacy/KBase/Sessions/Login',
             service_ver='release',
             async_job_check_time_ms=100, async_job_check_time_scale_percent=150, 
             async_job_check_max_time_ms=300000):
@@ -40,14 +39,6 @@ class AssemblyUtil(object):
             async_job_check_time_scale_percent=async_job_check_time_scale_percent,
             async_job_check_max_time_ms=async_job_check_max_time_ms)
 
-    def _check_job(self, job_id):
-        return self._client._check_job('AssemblyUtil', job_id)
-
-    def _get_assembly_as_fasta_submit(self, params, context=None):
-        return self._client._submit_job(
-             'AssemblyUtil.get_assembly_as_fasta', [params],
-             self._service_ver, context)
-
     def get_assembly_as_fasta(self, params, context=None):
         """
         Given a reference to an Assembly (or legacy ContigSet data object), along with a set of options,
@@ -59,22 +50,8 @@ class AssemblyUtil(object):
         :returns: instance of type "FastaAssemblyFile" -> structure:
            parameter "path" of String, parameter "assembly_name" of String
         """
-        job_id = self._get_assembly_as_fasta_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_assembly_as_fasta_submit(self, params, context=None):
-        return self._client._submit_job(
-             'AssemblyUtil.export_assembly_as_fasta', [params],
-             self._service_ver, context)
+        return self._client.run_job('AssemblyUtil.get_assembly_as_fasta',
+                                    [params], self._service_ver, context)
 
     def export_assembly_as_fasta(self, params, context=None):
         """
@@ -86,22 +63,8 @@ class AssemblyUtil(object):
         :returns: instance of type "ExportOutput" -> structure: parameter
            "shock_id" of String
         """
-        job_id = self._export_assembly_as_fasta_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _save_assembly_from_fasta_submit(self, params, context=None):
-        return self._client._submit_job(
-             'AssemblyUtil.save_assembly_from_fasta', [params],
-             self._service_ver, context)
+        return self._client.run_job('AssemblyUtil.export_assembly_as_fasta',
+                                    [params], self._service_ver, context)
 
     def save_assembly_from_fasta(self, params, context=None):
         """
@@ -141,28 +104,9 @@ class AssemblyUtil(object):
            of String
         :returns: instance of String
         """
-        job_id = self._save_assembly_from_fasta_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
+        return self._client.run_job('AssemblyUtil.save_assembly_from_fasta',
+                                    [params], self._service_ver, context)
 
     def status(self, context=None):
-        job_id = self._client._submit_job('AssemblyUtil.status', 
-            [], self._service_ver, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
+        return self._client.run_job('AssemblyUtil.status',
+                                    [], self._service_ver, context)
