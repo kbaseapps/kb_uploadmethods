@@ -86,7 +86,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def getContext(self):
         return self.__class__.ctx
 
-    async def mock_file_to_staging(file_path_list, subdir_folder=None):
+    def mock_file_to_staging(file_path_list, subdir_folder=None):
         print('Mocking _file_to_staging')
         print("Mocking uploaded files to staging area:\n{}".format('\n'.join(file_path_list)))
 

@@ -4,8 +4,7 @@ import shutil
 import time
 import uuid
 from configparser import SafeConfigParser
-import aiohttp
-import asyncio
+import requests as _requests
 
 import magic
 
@@ -32,7 +31,7 @@ class UnpackFileUtil:
 
         return staging_service_host
 
-    async def _file_to_staging(self, file_path_list, subdir_folder=None):
+    def _file_to_staging(self, file_path_list, subdir_folder=None):
         """
         _file_to_staging: upload file(s) to staging area
         """
@@ -40,19 +39,19 @@ class UnpackFileUtil:
         staging_service_host = self._staging_service_host()
         end_point = staging_service_host + '/upload'
         headers = {'Authorization': self.token}
-        data = {'destPath': subdir_folder_str}
+
+        files = {'destPath': subdir_folder_str}
 
         for file_path in file_path_list:
-            data.update({'uploads': open(file_path, 'rb')})
+            files.update({'uploads': (os.path.basename(file_path), open(file_path, 'rb'))})
 
-            async with aiohttp.ClientSession() as session:
-                async with session.post(end_point, data=data, headers=headers) as resp:
-                    if resp.status != 200:
-                        raise ValueError('Upload file {} failed.\nError Code: {}\n{}\n'
-                                         .format(file_path, resp.status,
-                                                 await resp.text()))
-                    else:
-                        log("return message from server:\n{}\n".format(await resp.text()))
+            resp = _requests.post(end_point, headers=headers, files=files)
+
+            if resp.status_code != 200:
+                raise ValueError('Upload file {} failed.\nError Code: {}\n{}\n'
+                                 .format(file_path, resp.status_code, resp.text))
+            else:
+                log("return message from server:\n{}\n".format(resp.text))
 
     def _remove_irrelevant_files(self, file_path):
         """
@@ -147,9 +146,8 @@ class UnpackFileUtil:
         log("Unpacked files:\n  {}".format(
                           '\n  '.join(unpacked_file_path_list)))
 
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(self._file_to_staging(unpacked_file_path_list, os.path.dirname(
-                                      params.get('staging_file_subdir_path'))))
+        self._file_to_staging(unpacked_file_path_list, os.path.dirname(
+                                                params.get('staging_file_subdir_path')))
 
         unpacked_file_path = ','.join(unpacked_file_path_list)
         returnVal = {'unpacked_file_path': unpacked_file_path}
@@ -186,8 +184,7 @@ class UnpackFileUtil:
         log("Unpacked files:\n  {}".format(
                           '\n  '.join(unpacked_file_path_list)))
 
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(self._file_to_staging(unpacked_file_path_list))
+        self._file_to_staging(unpacked_file_path_list)
         unpacked_file_path = ','.join(unpacked_file_path_list)
         returnVal = {'unpacked_file_path': unpacked_file_path}
 
