@@ -35,7 +35,7 @@ class UnpackFileUtil:
         """
         _file_to_staging: upload file(s) to staging area
         """
-        subdir_folder_str = '' if not subdir_folder else '/{}'.format(subdir_folder)
+        subdir_folder_str = '/' if not subdir_folder else '/{}'.format(subdir_folder)
         staging_service_host = self._staging_service_host()
         end_point = staging_service_host + '/upload'
         headers = {'Authorization': self.token}
