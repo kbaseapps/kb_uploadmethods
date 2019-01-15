@@ -6,7 +6,7 @@ from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
 
 
 class ImportReadsUtil:
@@ -26,16 +26,23 @@ class ImportReadsUtil:
 
             returnVal = self.uploader_utils.upload_fastq_file(fastq_importer_params)
 
+            uploaded_file = params.get('fastq_fwd_staging_file_name')
+            if params.get('fastq_rev_staging_file_name') is not None:
+                uploaded_file += '\n' + params.get('fastq_rev_staging_file_name')
+            fastq_importer_params['uploaded_files'] = [uploaded_file]
+
             """
             Update the workspace object related meta-data for staged file
             """
             self.uploader_utils.update_staging_service(params.get('fastq_fwd_staging_file_name'),
                                                        returnVal['obj_ref'])
-            self.uploader_utils.update_staging_service(params.get('fastq_rev_staging_file_name'),
-                                                       returnVal['obj_ref'])
 
-            reportVal = self.sra_importer.generate_report(returnVal['obj_ref'],
-                                                            fastq_importer_params)
+            if params.get('fastq_rev_staging_file_name') is not None:
+                self.uploader_utils.update_staging_service(params.get('fastq_rev_staging_file_name'),
+                                                           returnVal['obj_ref'])
+
+            reportVal = self.sra_importer.generate_report([returnVal['obj_ref']],
+                                                          fastq_importer_params)
             returnVal.update(reportVal)
 
         elif params.get('import_type') == 'SRA':
@@ -45,13 +52,15 @@ class ImportReadsUtil:
 
             returnVal = self.sra_importer.import_sra_from_staging(sra_importer_params)
 
+            sra_importer_params['uploaded_files'] = [params.get('sra_staging_file_name')]
+
             """
             Update the workspace object related meta-data for staged file
             """
             self.uploader_utils.update_staging_service(params.get('sra_staging_file_name'),
                                                        returnVal['obj_ref'])
 
-            reportVal = self.sra_importer.generate_report(returnVal['obj_ref'],
+            reportVal = self.sra_importer.generate_report([returnVal['obj_ref']],
                                                           sra_importer_params)
             returnVal.update(reportVal)
 

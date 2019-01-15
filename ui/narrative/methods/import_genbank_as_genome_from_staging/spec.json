@@ -15,8 +15,10 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
+      "field_type" : "dynamic_dropdown",
+      "dynamic_dropdown_options" : {
+        "data_source": "ftp_staging"
+      }
     }, 
     {
       "id" : "genome_name",
@@ -35,16 +37,16 @@
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
-      "default_values" : [ "RefSeq" ],
+      "default_values" : [ "RefSeq user" ],
       "field_type" : "dropdown",
       "dropdown_options":{
       "options": [
         {
-          "value": "RefSeq",
+          "value": "RefSeq user",
           "display": "RefSeq"
         },
         {
-          "value": "Ensembl",
+          "value": "Ensembl user",
           "display": "Ensembl"
         },
         {
@@ -85,11 +87,11 @@
       }
     },
     {
-      "id": "exclude_ontologies",
+      "id": "generate_missing_genes",
       "optional":true,
       "advanced":true,
       "allow_multiple":false,
-      "default_values":[""],
+      "default_values":["0"],
       "field_type" : "checkbox",
       "checkbox_options":{
         "checked_value": 1,
@@ -132,8 +134,8 @@
           "target_property": "generate_ids_if_needed"
         },
         {
-          "input_parameter": "exclude_ontologies",
-          "target_property": "exclude_ontologies"
+          "input_parameter": "generate_missing_genes",
+          "target_property": "generate_missing_genes"
         }
       ],
       "output_mapping" : [
@@ -152,6 +154,14 @@
         {
             "constant_value": "16",
             "target_property": "report_window_line_height"
+        },
+        {
+            "service_method_output_path": [0, "report_name"],
+            "target_property": "report_name"
+        },
+        {
+            "service_method_output_path": [0, "report_ref"],
+            "target_property": "report_ref"
         }
       ]
     }

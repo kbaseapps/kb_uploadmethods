@@ -1,0 +1,47 @@
+name     : Import TSV/Excel File as Attribute Mapping from Staging Area
+subtitle : Import a TSV or Excel file from your staging area into your Narrative as an Attribute Mapping data object
+tooltip  : Import a TSV or Excel file from your staging area into your Narrative as an Attribute Mapping data object
+
+icon: data-blue.png
+
+screenshots :
+    []
+
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+parameters :
+    staging_file_subdir_path :
+        ui-name : |
+            File path
+        short-hint : |
+            File with tabular Attribute Mapping data.
+        long-hint  : |
+            Recognized extensions for the input file are .tsv or .xlsx
+
+    attribute_mapping_name :
+        ui-name : |
+            Attribute Mapping object name
+        short-hint : |
+            Provide a name for the Attribute Mapping that will be created by this importer
+        long-hint : |
+            Provide a name for the Attribute Mapping that will be created by this importer
+
+description : |
+    <p> Import a TSV or Excel file from your staging area into your Narrative as an Attribute Mapping data object.
+    Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
+
+publications :
+    -
+        display-text: |
+            Arkin AP, Cottingham RW, Henry CS, Harris NL, Stevens RL, Maslov S, et al. KBase: The United States Department of Energy Systems Biology Knowledgebase. Nature Biotechnology. 2018;36: 566. doi: 10.1038/nbt.4163
+        link: https://www.nature.com/articles/nbt.4163

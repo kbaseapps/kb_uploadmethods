@@ -1,4 +1,4 @@
-name     : Unpack Staging File - v1.0.7
+name     : Unpack Staging File - v1.0.12
 subtitle : Unpack A Staging Compressed File
 tooltip  : Unpack A Staging Compressed File
 
@@ -26,6 +26,12 @@ parameters :
         long-hint  : Staging file subdirectory file path
 
 description : |
-    <p> Unpack a staging compressed file. </p>
+    <p> Unpack a staging compressed file. The app recognizes compressed files in these formats: .zip, .gz, .bz2, .tar, .tar.gz, .tar.bz2.</p>
 
 technical-description : none
+
+publications :
+    -
+        display-text: |
+            Arkin AP, Cottingham RW, Henry CS, Harris NL, Stevens RL, Maslov S, et al. KBase: The United States Department of Energy Systems Biology Knowledgebase. Nature Biotechnology. 2018;36: 566. doi: 10.1038/nbt.4163
+        link: https://www.nature.com/articles/nbt.4163

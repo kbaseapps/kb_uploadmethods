@@ -1,23 +1,19 @@
-import unittest
 import os
-import time
-import shutil
-from mock import patch
 import re
-
+import shutil
+import time
+import unittest
+from configparser import ConfigParser
 from os import environ
-try:
-    from ConfigParser import ConfigParser  # py2
-except:
-    from configparser import ConfigParser  # py3
-
-from pprint import pprint  # noqa: F401
 
 from biokbase.workspace.client import Workspace as workspaceService
+from mock import patch
+
+from DataFileUtil.DataFileUtilClient import DataFileUtil
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
+from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
-from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
-from DataFileUtil.DataFileUtilClient import DataFileUtil
 
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -78,8 +74,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         return self.__class__.ctx
 
     def mock_download_staging_file(params):
-        print 'Mocking DataFileUtilClient.download_staging_file'
-        print params
+        print('Mocking DataFileUtilClient.download_staging_file')
+        print(params)
 
         fq_filename = params.get('staging_file_subdir_path')
         fq_path = os.path.join('/kb/module/work/tmp', fq_filename)
@@ -95,7 +91,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
             'workspace_name': 'workspace_name',
             'genome_name': 'genome_name'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                     ValueError,
                     '"fasta_file" parameter is required, but missing'):
             self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
@@ -106,7 +102,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
             'workspace_name': 'workspace_name',
             'genome_name': 'genome_name'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 '"gff_file" parameter is required, but missing'):
             self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
@@ -117,7 +113,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
             'missing_workspace_name': 'workspace_name',
             'genome_name': 'genome_name'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 '"workspace_name" parameter is required, but missing'):
             self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
@@ -128,13 +124,14 @@ class kb_uploadmethodsTest(unittest.TestCase):
             'workspace_name': 'workspace_name',
             'missing_genome_name': 'genome_name'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 '"genome_name" parameter is required, but missing'):
             self.getImpl().upload_fasta_gff_file(self.getContext(), invalidate_input_params)
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    def test_upload_fasta_gff_file(self, download_staging_file):
+    @patch.object(UploaderUtil, "update_staging_service", return_value=None)
+    def test_upload_fasta_gff_file(self, download_staging_file, update_staging_service):
 
         fasta_file = "Test_v1.0.fa.gz"
         gff_file = "Test_v1.0.gene.gff3.gz"
@@ -163,18 +160,15 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertTrue('report_name' in ref[0])
 
         genome_info = ref[0]['genome_info']
-        self.assertEquals(genome_info[10]['Number features'], '1028')
-        self.assertEquals(genome_info[10]['Domain'], 'Eukaryota')
-        self.assertEquals(genome_info[10]['Genetic code'], '1')
-        self.assertEquals(genome_info[10]['Name'], 'Populus trichocarpa')
-        self.assertEquals(genome_info[10]['Source'], 'User')
+        self.assertEqual(genome_info[10]['Domain'], 'Eukaryota')
+        self.assertEqual(genome_info[10]['Genetic code'], '11')
+        self.assertEqual(genome_info[10]['Name'], 'Populus trichocarpa')
+        self.assertEqual(genome_info[10]['Source'], 'User')
         self.assertTrue('GC content' in genome_info[10])
         self.assertTrue(re.match("^\d+?\.\d+?$", genome_info[10]['GC content']) is not None)
-        self.assertTrue('Number features' in genome_info[10])
-        self.assertTrue(genome_info[10]['Number features'].isdigit())
         self.assertTrue('Size' in genome_info[10])
         self.assertTrue(genome_info[10]['Size'].isdigit())
-        self.assertEquals(genome_info[10]['Taxonomy'],
+        self.assertEqual(genome_info[10]['Taxonomy'],
                           'cellular organisms; Eukaryota; Viridiplantae; Streptophyta; ' +
                           'Streptophytina; Embryophyta; Tracheophyta; Euphyllophyta; ' +
                           'Spermatophyta; Magnoliophyta; Mesangiospermae; eudicotyledons; ' +

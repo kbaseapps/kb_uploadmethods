@@ -1,25 +1,24 @@
 
-import json
-import uuid
-import time
-import os
-import fnmatch
-import errno
-import glob
-import subprocess
-from pprint import pprint
 import collections
+import fnmatch
+import json
+import os
+import shutil
+import subprocess
+import time
+import uuid
+from pprint import pprint
 
-import handler_utils
 from DataFileUtil.DataFileUtilClient import DataFileUtil
-from ReadsUtils.ReadsUtilsClient import ReadsUtils
-from ftp_service.ftp_serviceClient import ftp_service
 from KBaseReport.KBaseReportClient import KBaseReport
+from ReadsUtils.ReadsUtilsClient import ReadsUtils
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
+from . import handler_utils
+
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
 
 
 class ImportSRAUtil:
@@ -37,10 +36,10 @@ class ImportSRAUtil:
         exitCode = pipe.returncode
 
         if (exitCode == 0):
-            log('Executed commend:\n{}\n'.format(command) +
+            log('Executed command:\n{}\n'.format(command) +
                 'Exit Code: {}\nOutput:\n{}'.format(exitCode, output))
         else:
-            error_msg = 'Error running commend:\n{}\n'.format(command)
+            error_msg = 'Error running command:\n{}\n'.format(command)
             error_msg += 'Exit Code: {}\nOutput:\n{}'.format(exitCode, output)
             raise ValueError(error_msg)
 
@@ -197,7 +196,6 @@ class ImportSRAUtil:
                                                    returnVal['obj_ref'])
         return returnVal
 
-
     def import_sra_from_web(self, params):
         '''
         import_sra_from_web: wrapper method for GenomeFileUtil.genbank_to_genome
@@ -230,7 +228,9 @@ class ImportSRAUtil:
 
         download_type = params.get('download_type')
         workspace_name = params.get('workspace_name')
+
         obj_refs = []
+        uploaded_files = []
 
         for sra_url_to_add in params.get('sra_urls_to_add'):
             download_web_file_params = {
@@ -257,8 +257,9 @@ class ImportSRAUtil:
 
             obj_ref = self.ru.upload_reads(import_sra_reads_params).get('obj_ref')
             obj_refs.append(obj_ref)
+            uploaded_files.append(sra_url_to_add.get('file_url'))
 
-        return {'obj_refs': obj_refs}
+        return {'obj_refs': obj_refs, 'uploaded_files': uploaded_files}
 
     def validate_import_sra_from_staging_params(self, params):
         """
@@ -290,41 +291,93 @@ class ImportSRAUtil:
                 if p not in sra_url_to_add:
                     raise ValueError('"{}" parameter is required, but missing'.format(p))
 
+    def generate_report(self, obj_refs_list, params):
+        """
+        generate_report: generate summary report
+
+        obj_refs: generated workspace object references. (return of import_sra_from_staging/web)
+        params:
+        staging_file_subdir_path: subdirectory file path
+          e.g.
+            for file: /data/bulk/user_name/file_name
+            staging_file_subdir_path is file_name
+            for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+            staging_file_subdir_path is subdir_1/subdir_2/file_name
+        workspace_name: workspace name/ID that reads will be stored to
+
+        """
+        uuid_string = str(uuid.uuid4())
+
+        objects_created = list()
+        objects_data = list()
+
+        for obj_ref in obj_refs_list:
+            get_objects_params = {
+                'object_refs': [obj_ref],
+                'ignore_errors': False
+            }
+            objects_data.append(self.dfu.get_objects(get_objects_params))
+
+            objects_created.append({'ref': obj_ref,
+                                    'description': 'Imported Reads'})
+
+        output_html_files = self.generate_html_report(objects_data, params, uuid_string)
+
+        report_params = {
+            'message': '',
+            'workspace_name': params.get('workspace_name'),
+            'objects_created': objects_created,
+            'html_links': output_html_files,
+            'direct_html_link_index': 0,
+            'html_window_height': 460,
+            'report_object_name': 'kb_sra_upload_report_' + uuid_string}
+
+        kbase_report_client = KBaseReport(self.callback_url, token=self.token)
+        output = kbase_report_client.create_extended_report(report_params)
+
+        report_output = {'report_name': output['name'], 'report_ref': output['ref']}
+
+        return report_output
+
     def generate_html_report(self, reads_objs, params, uuid_string):
         """
         _generate_html_report: generate html summary report
         """
-        log('start generating html report')
+        log('Start generating html report')
+        pprint(params)
 
-        result_file_path = os.path.join(self.scratch, 'report.html')
+        tmp_dir = os.path.join(self.scratch, uuid_string)
+        handler_utils._mkdir_p(tmp_dir)
+        result_file_path = os.path.join(tmp_dir, 'report.html')
         html_report = list()
         objects_content = ''
 
         for index, reads_obj in enumerate(reads_objs):
-            idx = str(index)
 
+            idx = str(index)
             reads_data = reads_obj.get('data')[0].get('data')
             reads_info = reads_obj.get('data')[0].get('info')
             reads_ref = str(reads_info[6]) + '/' + str(reads_info[0]) + '/' + str(reads_info[4])
             reads_obj_name = str(reads_info[1])
 
-            objects_content += '<div data-tabpanel="object' + idx + '" class="tabpanel">'
-            objects_content += '<div class="tabtoggle" title="Click for more info" href="#" '
-            objects_content += 'onclick="toggleTabpanel(\'object' + idx + '\')">' + reads_obj_name + '</div>'
-            objects_content += '<div data-tabset="object' + idx + '" class="tabset">'
-            objects_content += '<div class="tabs">'
-            objects_content += '<button class="tab" data-tab="overview" onclick="openTab(\'object' + idx + \
-                               '\',\'overview\')">Overview</button>'
-            objects_content += '<button class="tab" data-tab="stats" onclick="openTab(\'object' + idx + \
-                               '\', \'stats\')">Stats</button></div>'
+            with open(os.path.join(os.path.dirname(__file__), 'report_template_sra/table_panel.html'),
+                      'r') as object_content_file:
+                report_template = object_content_file.read()
+                report_template = report_template.replace('_NUM', str(idx))
+                report_template = report_template.replace('OBJECT_NAME', reads_obj_name)
+                if index == 0:
+                    report_template = report_template.replace('panel-collapse collapse', 'panel-collapse collapse in')
 
+            objects_content += report_template
             base_percentages = ''
-            for key, val in reads_data.get('base_percentages').iteritems():
+            for key, val in reads_data.get('base_percentages').items():
                 base_percentages += '{}({}%) '.format(key, val)
 
             reads_overview_data = collections.OrderedDict()
 
-            reads_overview_data['Reads Object'] = '{} ({})'.format(reads_obj_name, reads_ref)
+            reads_overview_data['Name'] = '{} ({})'.format(reads_obj_name, reads_ref)
+            reads_overview_data['Uploaded File'] = params.get('uploaded_files')[index]
+            reads_overview_data['Date Uploaded'] = time.strftime("%c")
             reads_overview_data['Number of Reads'] = '{:,}'.format(reads_data.get('read_count'))
 
             reads_type = reads_info[2].lower()
@@ -377,105 +430,54 @@ class ImportSRAUtil:
                 .format(str(reads_data.get('number_of_duplicates')),
                         dup_reads_percent)
             reads_stats_data['Phred Type'] = str(reads_data.get('phred_type'))
-            reads_stats_data['Quality Score Mean'] = str(reads_data.get('qual_mean'))
+            reads_stats_data['Quality Score Mean'] = '{0:.2f}'.format(reads_data.get('qual_mean'))
             reads_stats_data['Quality Score (Min/Max)'] = '{}/{}'.format(str(reads_data.get('qual_min')),
                                                                          str(reads_data.get('qual_max')))
             reads_stats_data['GC Percentage'] = str(round(reads_data.get('gc_content') * 100, 2)) + '%'
             reads_stats_data['Base Percentages'] = base_percentages
 
-            objects_content += '<div data-tabpane="overview" class="tabcontent"><br/><table>'
+            overview_content = ''
+            for key, val in reads_overview_data.items():
+                overview_content += '<tr><td><b>{}</b></td>'.format(key)
+                overview_content += '<td>{}</td>'.format(val)
+                overview_content += '</tr>'
 
-            for key, val in reads_overview_data.iteritems():
-                objects_content += '<tr><td><b>{}</b></td>'.format(key)
-                objects_content += '<td>{}</td>'.format(val)
-                objects_content += '</tr>'
+            stats_content = ''
+            for key, val in reads_stats_data.items():
+                stats_content += '<tr><td><b>{}</b></td>'.format(key)
+                stats_content += '<td>{}</td>'.format(val)
+                stats_content += '</tr>'
 
-            objects_content += '</table></div>'
-            objects_content += '<div data-tabpane="stats" class="tabcontent"><br/><table><br/><table>'
-
-            for key, val in reads_stats_data.iteritems():
-                objects_content += '<tr><td><b>{}</b></td>'.format(key)
-                objects_content += '<td>{}</td>'.format(val)
-                objects_content += '</tr>'
-
-            objects_content += '</table></div></div></div>'
+            objects_content = objects_content.replace('###OVERVIEW_CONTENT###', overview_content)
+            objects_content = objects_content.replace('###STATS_CONTENT###', stats_content)
 
         with open(result_file_path, 'w') as result_file:
-            with open(os.path.join(os.path.dirname(__file__), 'multi_obj_template.html'),
+            with open(os.path.join(os.path.dirname(__file__), 'report_template_sra/report_head.html'),
                       'r') as report_template_file:
                 report_template = report_template_file.read()
-                report_template = report_template.replace('<p>OBJECTS_DATA_TO_FILL</p>',
+                report_template = report_template.replace('###TABLE_PANELS_CONTENT###',
                                                           objects_content)
                 result_file.write(report_template)
         result_file.close()
 
+        shutil.copytree(os.path.join(os.path.dirname(__file__), 'report_template_sra/bootstrap-3.3.7'),
+                        os.path.join(tmp_dir, 'bootstrap-3.3.7'))
+        shutil.copy(os.path.join(os.path.dirname(__file__), 'report_template_sra/jquery-3.2.1.min.js'),
+                    os.path.join(tmp_dir, 'jquery-3.2.1.min.js'))
+
         matched_files = []
-        for root, dirnames, filenames in os.walk(self.scratch):
+        for root, dirnames, filenames in os.walk(tmp_dir):
             for filename in fnmatch.filter(filenames, '*.gz'):
                 matched_files.append(os.path.join(root, filename))
 
         for gz_file in matched_files:
-            print('Removing ' + gz_file)
+            print(('Removing ' + gz_file))
             os.remove(gz_file)
 
-        report_shock_id = self.dfu.file_to_shock({'file_path': self.scratch,
+        report_shock_id = self.dfu.file_to_shock({'file_path': tmp_dir,
                                                   'pack': 'zip'})['shock_id']
         html_report.append({'shock_id': report_shock_id,
                             'name': os.path.basename(result_file_path),
                             'label': os.path.basename(result_file_path),
                             'description': 'HTML summary report for Imported Assembly'})
         return html_report
-
-
-    def generate_report(self, obj_refs_list, params):
-        """
-        generate_report: generate summary report
-
-        obj_refs: generated workspace object references. (return of import_sra_from_staging/web)
-        params:
-        staging_file_subdir_path: subdirectory file path
-          e.g.
-            for file: /data/bulk/user_name/file_name
-            staging_file_subdir_path is file_name
-            for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
-            staging_file_subdir_path is subdir_1/subdir_2/file_name
-        workspace_name: workspace name/ID that reads will be stored to
-
-        """
-        uuid_string = str(uuid.uuid4())
-
-        if isinstance(obj_refs_list, list):
-            obj_refs = obj_refs_list
-        else:
-            obj_refs = [obj_refs_list]
-
-        objects_created = list()
-        objects_data = list()
-
-        for obj_ref in obj_refs:
-            get_objects_params = {
-                'object_refs': [obj_ref],
-                'ignore_errors': False
-            }
-            objects_data.append(self.dfu.get_objects(get_objects_params))
-
-            objects_created.append({'ref': obj_ref,
-                                    'description': 'Imported Reads'})
-
-        output_html_files = self.generate_html_report(objects_data, params, uuid_string)
-
-        report_params = {
-            'message': '',
-            'workspace_name': params.get('workspace_name'),
-            'objects_created': objects_created,
-            'html_links': output_html_files,
-            'direct_html_link_index': 0,
-            'html_window_height': 460,
-            'report_object_name': 'kb_upload_mothods_report_' + uuid_string}
-
-        kbase_report_client = KBaseReport(self.callback_url, token=self.token)
-        output = kbase_report_client.create_extended_report(report_params)
-
-        report_output = {'report_name': output['name'], 'report_ref': output['ref']}
-
-        return report_output

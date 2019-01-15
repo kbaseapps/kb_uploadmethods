@@ -91,7 +91,7 @@ class kb_uploadmethods(object):
            file containing predicted gene models and corresponding features
            Optional params: scientific_name: proper name for species, key for
            taxonomy lookup. Default to 'unknown_taxon' source: Source Of The
-           GenBank File. Default to 'User' taxon_wsname - where the reference
+           GFF File. Default to 'User' taxon_wsname - where the reference
            taxons are. Default to 'ReferenceTaxons' taxon_reference - if
            defined, will try to link the Genome to the specified taxonomy
            object release: Release Or Version Of The Source Data
@@ -103,7 +103,8 @@ class kb_uploadmethods(object):
            "scientific_name" of String, parameter "source" of String,
            parameter "taxon_wsname" of String, parameter "taxon_reference" of
            String, parameter "release" of String, parameter "genetic_code" of
-           Long, parameter "type" of String
+           Long, parameter "type" of String, parameter
+           "generate_missing_genes" of String
         :returns: instance of type "UploadFastaGFFMethodResult" -> structure:
            parameter "genome_ref" of String, parameter "genome_info" of
            String, parameter "report_name" of type "report_name", parameter
@@ -176,14 +177,16 @@ class kb_uploadmethods(object):
            Ensembl has numbered releases of all their data: Release 31
            generate_ids_if_needed - If field used for feature id is not
            there, generate ids (default behavior is raising an exception)
-           genetic_code - Genetic code of organism. Overwrites determined GC
-           from taxon object type - Reference, Representative or User upload)
-           -> structure: parameter "staging_file_subdir_path" of String,
-           parameter "genome_name" of String, parameter "workspace_name" of
-           String, parameter "source" of String, parameter "release" of
-           String, parameter "genetic_code" of Long, parameter "type" of
-           String, parameter "generate_ids_if_needed" of String, parameter
-           "exclude_ontologies" of String
+           generate_missing_genes - Generate gene feature for CDSs that do
+           not have a parent in file genetic_code - Genetic code of organism.
+           Overwrites determined GC from taxon object type - Reference,
+           Representative or User upload) -> structure: parameter
+           "staging_file_subdir_path" of String, parameter "genome_name" of
+           String, parameter "workspace_name" of String, parameter "source"
+           of String, parameter "release" of String, parameter "genetic_code"
+           of Long, parameter "type" of String, parameter
+           "generate_ids_if_needed" of String, parameter
+           "generate_missing_genes" of String
         :returns: instance of type "GenomeSaveResult" -> structure: parameter
            "genome_ref" of String
         """
@@ -451,6 +454,27 @@ class kb_uploadmethods(object):
         """
         return self._client.call_method(
             'kb_uploadmethods.import_tsv_as_phenotype_set_from_staging',
+            [params], self._service_ver, context)
+
+    def import_attribute_mapping_from_staging(self, params, context=None):
+        """
+        :param params: instance of type "FileToConditionSetParams" (required
+           params: staging_file_subdir_path: subdirectory file path e.g. for
+           file: /data/bulk/user_name/file_name staging_file_subdir_path is
+           file_name for file:
+           /data/bulk/user_name/subdir_1/subdir_2/file_name
+           staging_file_subdir_path is subdir_1/subdir_2/file_name
+           attribute_mapping_name: output ConditionSet object name
+           workspace_id: workspace name/ID of the object) -> structure:
+           parameter "staging_file_subdir_path" of String, parameter
+           "workspace_name" of type "workspace_name" (workspace name of the
+           object), parameter "attribute_mapping_name" of String
+        :returns: instance of type "UploadMethodResult" -> structure:
+           parameter "obj_ref" of type "obj_ref", parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
+        """
+        return self._client.call_method(
+            'kb_uploadmethods.import_attribute_mapping_from_staging',
             [params], self._service_ver, context)
 
     def status(self, context=None):

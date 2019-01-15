@@ -30,6 +30,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  *       per example Ensembl has numbered releases of all their data: Release 31
  *   generate_ids_if_needed - If field used for feature id is not there, 
  *       generate ids (default behavior is raising an exception)
+ *   generate_missing_genes - Generate gene feature for CDSs that do not have
+ *       a parent in file
  *   genetic_code - Genetic code of organism. Overwrites determined GC from 
  *       taxon object
  *   type - Reference, Representative or User upload
@@ -47,7 +49,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "genetic_code",
     "type",
     "generate_ids_if_needed",
-    "exclude_ontologies"
+    "generate_missing_genes"
 })
 public class GenbankToGenomeParams {
 
@@ -67,8 +69,8 @@ public class GenbankToGenomeParams {
     private String type;
     @JsonProperty("generate_ids_if_needed")
     private String generateIdsIfNeeded;
-    @JsonProperty("exclude_ontologies")
-    private String excludeOntologies;
+    @JsonProperty("generate_missing_genes")
+    private String generateMissingGenes;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("staging_file_subdir_path")
@@ -191,18 +193,18 @@ public class GenbankToGenomeParams {
         return this;
     }
 
-    @JsonProperty("exclude_ontologies")
-    public String getExcludeOntologies() {
-        return excludeOntologies;
+    @JsonProperty("generate_missing_genes")
+    public String getGenerateMissingGenes() {
+        return generateMissingGenes;
     }
 
-    @JsonProperty("exclude_ontologies")
-    public void setExcludeOntologies(String excludeOntologies) {
-        this.excludeOntologies = excludeOntologies;
+    @JsonProperty("generate_missing_genes")
+    public void setGenerateMissingGenes(String generateMissingGenes) {
+        this.generateMissingGenes = generateMissingGenes;
     }
 
-    public GenbankToGenomeParams withExcludeOntologies(String excludeOntologies) {
-        this.excludeOntologies = excludeOntologies;
+    public GenbankToGenomeParams withGenerateMissingGenes(String generateMissingGenes) {
+        this.generateMissingGenes = generateMissingGenes;
         return this;
     }
 
@@ -218,7 +220,7 @@ public class GenbankToGenomeParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((("GenbankToGenomeParams"+" [stagingFileSubdirPath=")+ stagingFileSubdirPath)+", genomeName=")+ genomeName)+", workspaceName=")+ workspaceName)+", source=")+ source)+", release=")+ release)+", geneticCode=")+ geneticCode)+", type=")+ type)+", generateIdsIfNeeded=")+ generateIdsIfNeeded)+", excludeOntologies=")+ excludeOntologies)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((("GenbankToGenomeParams"+" [stagingFileSubdirPath=")+ stagingFileSubdirPath)+", genomeName=")+ genomeName)+", workspaceName=")+ workspaceName)+", source=")+ source)+", release=")+ release)+", geneticCode=")+ geneticCode)+", type=")+ type)+", generateIdsIfNeeded=")+ generateIdsIfNeeded)+", generateMissingGenes=")+ generateMissingGenes)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

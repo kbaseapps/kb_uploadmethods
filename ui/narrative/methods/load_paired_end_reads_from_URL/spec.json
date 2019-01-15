@@ -1,7 +1,7 @@
 {
   "ver" : "1.0.0",
   "authors" : ["tgu2"],
-  "contact" : "help@kbase.us",
+  "contact" : "http://kbase.us/contact-us/",
   "visible" : true,
   "categories" : [ "active","reads","upload" ],
   "widgets" : 

@@ -25,7 +25,7 @@ class fba_tools(object):
             password=None, token=None, ignore_authrc=False,
             trust_all_ssl_certificates=False,
             auth_svc='https://kbase.us/services/authorization/Sessions/Login',
-            service_ver='dev',
+            service_ver='release',
             async_job_check_time_ms=100, async_job_check_time_scale_percent=150, 
             async_job_check_max_time_ms=300000):
         if url is None:
@@ -262,7 +262,9 @@ class fba_tools(object):
         :returns: instance of type "RunFluxBalanceAnalysisResults" ->
            structure: parameter "new_fba_ref" of type "ws_fba_id" (The
            workspace ID for a FBA data object. @id ws KBaseFBA.FBA),
-           parameter "objective" of Long
+           parameter "objective" of Long, parameter "report_name" of String,
+           parameter "report_ref" of type "ws_report_id" (The workspace ID
+           for a Report object @id ws KBaseReport.Report)
         """
         job_id = self._run_flux_balance_analysis_submit(params, context)
         async_job_check_time = self._client.async_job_check_time
@@ -339,6 +341,7 @@ class fba_tools(object):
            expression matrix id.), parameter "expseries_workspace" of type
            "workspace_name" (A string representing a workspace name.),
            parameter "expression_condition" of String, parameter
+           "translation_policy" of String, parameter
            "exp_threshold_percentile" of Double, parameter
            "exp_threshold_margin" of Double, parameter
            "activation_coefficient" of Double, parameter "omega" of Double,
@@ -385,7 +388,14 @@ class fba_tools(object):
            representing a phenotype simulation id.), parameter "workspace" of
            type "workspace_name" (A string representing a workspace name.),
            parameter "all_reversible" of type "bool" (A binary boolean),
-           parameter "feature_ko_list" of list of type "feature_id" (A string
+           parameter "gapfill_phenotypes" of type "bool" (A binary boolean),
+           parameter "fit_phenotype_data" of type "bool" (A binary boolean),
+           parameter "save_fluxes" of type "bool" (A binary boolean),
+           parameter "add_all_transporters" of type "bool" (A binary
+           boolean), parameter "add_positive_transporters" of type "bool" (A
+           binary boolean), parameter "target_reaction" of type "reaction_id"
+           (A string representing a reaction id.), parameter
+           "feature_ko_list" of list of type "feature_id" (A string
            representing a feature id.), parameter "reaction_ko_list" of list
            of type "reaction_id" (A string representing a reaction id.),
            parameter "custom_bound_list" of list of String, parameter
@@ -432,6 +442,35 @@ class fba_tools(object):
            workspace ID for a FBAModel data object. @id ws KBaseFBA.FBAModel)
         """
         job_id = self._merge_metabolic_models_into_community_model_submit(params, context)
+        async_job_check_time = self._client.async_job_check_time
+        while True:
+            time.sleep(async_job_check_time)
+            async_job_check_time = (async_job_check_time *
+                self._client.async_job_check_time_scale_percent / 100.0)
+            if async_job_check_time > self._client.async_job_check_max_time:
+                async_job_check_time = self._client.async_job_check_max_time
+            job_state = self._check_job(job_id)
+            if job_state['finished']:
+                return job_state['result'][0]
+
+    def _view_flux_network_submit(self, params, context=None):
+        return self._client._submit_job(
+             'fba_tools.view_flux_network', [params],
+             self._service_ver, context)
+
+    def view_flux_network(self, params, context=None):
+        """
+        Merge two or more metabolic models into a compartmentalized community model
+        :param params: instance of type "ViewFluxNetworkParams" -> structure:
+           parameter "fba_id" of type "fba_id" (A string representing a FBA
+           id.), parameter "fba_workspace" of type "workspace_name" (A string
+           representing a workspace name.), parameter "workspace" of type
+           "workspace_name" (A string representing a workspace name.)
+        :returns: instance of type "ViewFluxNetworkResults" -> structure:
+           parameter "new_report_ref" of type "ws_report_id" (The workspace
+           ID for a Report object @id ws KBaseReport.Report)
+        """
+        job_id = self._view_flux_network_submit(params, context)
         async_job_check_time = self._client.async_job_check_time
         while True:
             time.sleep(async_job_check_time)
@@ -513,6 +552,36 @@ class fba_tools(object):
             if job_state['finished']:
                 return job_state['result'][0]
 
+    def _predict_auxotrophy_submit(self, params, context=None):
+        return self._client._submit_job(
+             'fba_tools.predict_auxotrophy', [params],
+             self._service_ver, context)
+
+    def predict_auxotrophy(self, params, context=None):
+        """
+        Identifies reactions in the model that are not mass balanced
+        :param params: instance of type "PredictAuxotrophyParams" ->
+           structure: parameter "genome_ids" of list of type "genome_id" (A
+           string representing a Genome id.), parameter "genome_workspace" of
+           type "workspace_name" (A string representing a workspace name.),
+           parameter "workspace" of type "workspace_name" (A string
+           representing a workspace name.)
+        :returns: instance of type "PredictAuxotrophyResults" -> structure:
+           parameter "new_report_ref" of type "ws_report_id" (The workspace
+           ID for a Report object @id ws KBaseReport.Report)
+        """
+        job_id = self._predict_auxotrophy_submit(params, context)
+        async_job_check_time = self._client.async_job_check_time
+        while True:
+            time.sleep(async_job_check_time)
+            async_job_check_time = (async_job_check_time *
+                self._client.async_job_check_time_scale_percent / 100.0)
+            if async_job_check_time > self._client.async_job_check_max_time:
+                async_job_check_time = self._client.async_job_check_max_time
+            job_state = self._check_job(job_id)
+            if job_state['finished']:
+                return job_state['result'][0]
+
     def _compare_models_submit(self, params, context=None):
         return self._client._submit_job(
              'fba_tools.compare_models', [params],
@@ -569,8 +638,17 @@ class fba_tools(object):
            "ws_fbamodel_id" (The workspace ID for a FBAModel data object. @id
            ws KBaseFBA.FBAModel), parameter "fbamodel_output_id" of type
            "ws_fbamodel_id" (The workspace ID for a FBAModel data object. @id
-           ws KBaseFBA.FBAModel), parameter "data" of mapping from String to
-           list of list of String
+           ws KBaseFBA.FBAModel), parameter "compounds_to_add" of list of
+           mapping from String to String, parameter "compounds_to_change" of
+           list of mapping from String to String, parameter
+           "biomasses_to_add" of list of mapping from String to String,
+           parameter "biomass_compounds_to_change" of list of mapping from
+           String to String, parameter "reactions_to_remove" of list of
+           mapping from String to String, parameter "reactions_to_change" of
+           list of mapping from String to String, parameter
+           "reactions_to_add" of list of mapping from String to String,
+           parameter "edit_compound_stoichiometry" of list of mapping from
+           String to String
         :returns: instance of type "EditMetabolicModelResult" -> structure:
            parameter "report_name" of String, parameter "report_ref" of type
            "ws_report_id" (The workspace ID for a Report object @id ws
@@ -613,8 +691,10 @@ class fba_tools(object):
            list of tuple of size 4: type "compound_id" (A string representing
            a compound id.), parameter "concentration" of Double, parameter
            "min_flux" of Double, parameter "max_flux" of Double, parameter
-           "media_output_id" of type "media_id" (A string representing a
-           Media id.)
+           "pH_data" of String, parameter "temperature" of Double, parameter
+           "isDefined" of type "bool" (A binary boolean), parameter "type" of
+           String, parameter "media_output_id" of type "media_id" (A string
+           representing a Media id.)
         :returns: instance of type "EditMediaResult" -> structure: parameter
            "report_name" of String, parameter "report_ref" of type
            "ws_report_id" (The workspace ID for a Report object @id ws
@@ -733,7 +813,8 @@ class fba_tools(object):
         :param model: instance of type "ModelObjectSelectionParams" ->
            structure: parameter "workspace_name" of String, parameter
            "model_name" of String, parameter "save_to_shock" of type
-           "boolean" (A boolean - 0 for false, 1 for true. @range (0, 1))
+           "boolean" (A boolean - 0 for false, 1 for true. @range (0, 1)),
+           parameter "fulldb" of type "bool" (A binary boolean)
         :returns: instance of type "File" -> structure: parameter "path" of
            String, parameter "shock_id" of String
         """
@@ -759,7 +840,8 @@ class fba_tools(object):
         :param model: instance of type "ModelObjectSelectionParams" ->
            structure: parameter "workspace_name" of String, parameter
            "model_name" of String, parameter "save_to_shock" of type
-           "boolean" (A boolean - 0 for false, 1 for true. @range (0, 1))
+           "boolean" (A boolean - 0 for false, 1 for true. @range (0, 1)),
+           parameter "fulldb" of type "bool" (A binary boolean)
         :returns: instance of type "File" -> structure: parameter "path" of
            String, parameter "shock_id" of String
         """
@@ -785,7 +867,8 @@ class fba_tools(object):
         :param model: instance of type "ModelObjectSelectionParams" ->
            structure: parameter "workspace_name" of String, parameter
            "model_name" of String, parameter "save_to_shock" of type
-           "boolean" (A boolean - 0 for false, 1 for true. @range (0, 1))
+           "boolean" (A boolean - 0 for false, 1 for true. @range (0, 1)),
+           parameter "fulldb" of type "bool" (A binary boolean)
         :returns: instance of type "ModelTsvFiles" -> structure: parameter
            "compounds_file" of type "File" -> structure: parameter "path" of
            String, parameter "shock_id" of String, parameter "reactions_file"
@@ -1344,7 +1427,7 @@ class fba_tools(object):
            "bool" (A binary boolean), parameter "model_format" of String,
            parameter "fba_format" of String, parameter "media_format" of
            String, parameter "phenotype_format" of String, parameter
-           "phenosim_format" of String
+           "phenosim_format" of String, parameter "workspace" of String
         :returns: instance of type "BulkExportObjectsResult" -> structure:
            parameter "report_name" of String, parameter "report_ref" of type
            "ws_report_id" (The workspace ID for a Report object @id ws

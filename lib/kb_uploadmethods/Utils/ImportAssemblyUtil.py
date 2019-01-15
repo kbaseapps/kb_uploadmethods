@@ -1,19 +1,21 @@
 
-import time
+import collections
 import json
-import uuid
 import os
-from pprint import pprint
+import time
+import uuid
 
-import handler_utils
 from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from KBaseReport.KBaseReportClient import KBaseReport
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
+from . import handler_utils
+
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
+
 
 class ImportAssemblyUtil:
 
@@ -80,60 +82,57 @@ class ImportAssemblyUtil:
             if p not in params:
                 raise ValueError('"' + p + '" parameter is required, but missing')
 
-    def generate_html_report(self, assembly_ref, assembly_data, params):
+    def generate_html_report(self, assembly_ref, assembly_object, params):
         """
         _generate_html_report: generate html summary report
         """
         log('start generating html report')
         html_report = list()
 
-        result_file_path = os.path.join(self.scratch, 'report.html')
+        assembly_data = assembly_object.get('data')[0].get('data')
+        assembly_info = assembly_object.get('data')[0].get('info')
 
-        assembly_name = str(assembly_data.get('data')[0].get('info')[1])
+        tmp_dir = os.path.join(self.scratch, str(uuid.uuid4()))
+        handler_utils._mkdir_p(tmp_dir)
+        result_file_path = os.path.join(tmp_dir, 'report.html')
+
+        assembly_name = str(assembly_info[1])
         assembly_file = params.get('staging_file_subdir_path')
 
-        base_count = assembly_data.get('data')[0].get('data').get('base_counts')
-        base_count_str = ''
-        for base, count in base_count.iteritems():
-            base_count_str += '{}({:,}) '.format(base, count)
+        dna_size = assembly_data.get('dna_size')
+        num_contigs = assembly_data.get('num_contigs')
 
-        dna_size = assembly_data.get('data')[0].get('data').get('dna_size')
+        assembly_overview_data = collections.OrderedDict()
+
+        assembly_overview_data['Name'] = '{} ({})'.format(assembly_name, assembly_ref)
+        assembly_overview_data['Uploaded File'] = assembly_file
+        assembly_overview_data['Date Uploaded'] = time.strftime("%c")
+        assembly_overview_data['DNA Size'] = dna_size
+        assembly_overview_data['Number of Contigs'] = num_contigs
 
         overview_content = ''
-
-        overview_content += '<br/><table><tr><th>Imported Assembly'
-        overview_content += '</th><th></th><th></th><th></th></tr>'
-
-        overview_content += '<br/><table><tr><td><b>Assembly Object:</b></td>'
-        overview_content += '<td>{} ({})'.format(assembly_name,
-                                                 assembly_ref)
-        overview_content += '</td>'
-        overview_content += '</tr>'
-
-        overview_content += '<tr><td><b>{}</b></td>'.format('Fasta File:')
-        overview_content += '<td>{}</td>'.format(assembly_file)
-        overview_content += '</tr>'
-
-        overview_content += '<tr><td><b>{}</b></td>'.format('DNA Size:')
-        overview_content += '<td>{:,}</td>'.format(dna_size)
-        overview_content += '</tr>'
-
-        overview_content += '<tr><td><b>{}</b></td>'.format('Base Counts:')
-        overview_content += '<td>{}</td>'.format(base_count_str)
-        overview_content += '</tr>'
-
+        overview_content += '<br/><table>\n'
+        for key, val in assembly_overview_data.items():
+            overview_content += '<tr><td><b>{}</b></td>'.format(key)
+            overview_content += '<td>{}</td>'.format(val)
+            overview_content += '</tr>\n'
         overview_content += '</table>'
 
+        contig_data = list(assembly_data.get('contigs').values())
+        contig_content = str([[str(e['contig_id']), e['length']] for e in contig_data])
+
         with open(result_file_path, 'w') as result_file:
-            with open(os.path.join(os.path.dirname(__file__), 'report_template.html'),
+            with open(os.path.join(os.path.dirname(__file__), 'report_template_assembly.html'),
                       'r') as report_template_file:
                 report_template = report_template_file.read()
-                report_template = report_template.replace('<p>Overview_Content</p>',
+                report_template = report_template.replace('<p>*Overview_Content*</p>',
                                                           overview_content)
+                report_template = report_template.replace('*CONTIG_DATA*',
+                                                          contig_content)
                 result_file.write(report_template)
         result_file.close()
 
-        report_shock_id = self.dfu.file_to_shock({'file_path': self.scratch,
+        report_shock_id = self.dfu.file_to_shock({'file_path': tmp_dir,
                                                   'pack': 'zip'})['shock_id']
 
         html_report.append({'shock_id': report_shock_id,
@@ -177,7 +176,7 @@ class ImportAssemblyUtil:
                 'html_links': output_html_files,
                 'direct_html_link_index': 0,
                 'html_window_height': 270,
-                'report_object_name': 'kb_upload_mothods_report_' + uuid_string}
+                'report_object_name': 'kb_upload_assembly_report_' + uuid_string}
 
         kbase_report_client = KBaseReport(self.callback_url, token=self.token)
         output = kbase_report_client.create_extended_report(report_params)

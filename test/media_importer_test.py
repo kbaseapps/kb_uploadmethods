@@ -1,25 +1,20 @@
 # -*- coding: utf-8 -*-
-import unittest
 import os  # noqa: F401
-import json  # noqa: F401
-import time
-import requests
 import shutil
+import time
+import unittest
+from configparser import ConfigParser
+from os import environ
+
+import requests
+from biokbase.workspace.client import Workspace as workspaceService
 from mock import patch
 
-from os import environ
-try:
-    from ConfigParser import ConfigParser  # py2
-except:
-    from configparser import ConfigParser  # py3
-
-from pprint import pprint  # noqa: F401
-
-from biokbase.workspace.client import Workspace as workspaceService
+from DataFileUtil.DataFileUtilClient import DataFileUtil
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
+from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
-from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
-from DataFileUtil.DataFileUtilClient import DataFileUtil
 
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -66,7 +61,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         header = {'Authorization': 'Oauth {0}'.format(cls.token)}
         requests.delete(cls.shockURL + '/node/' + node_id, headers=header,
                         allow_redirects=True)
-        print('Deleted shock node ' + node_id)
+        print(('Deleted shock node ' + node_id))
 
     def getWsClient(self):
         return self.__class__.wsClient
@@ -87,8 +82,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         return self.__class__.ctx
 
     def mock_download_staging_file(params):
-        print 'Mocking DataFileUtilClient.download_staging_file'
-        print params
+        print('Mocking DataFileUtilClient.download_staging_file')
+        print(params)
 
         fq_filename = params.get('staging_file_subdir_path')
         fq_path = os.path.join('/kb/module/work/tmp', fq_filename)
@@ -102,12 +97,12 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'workspace_name': 'workspace_name',
           'media_name': 'media_name'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                     ValueError,
                     '"staging_file_subdir_path" parameter is required, but missing'):
             self.getImpl().import_tsv_as_media_from_staging(self.getContext(),
                                                             invalidate_input_params)
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                     ValueError,
                     '"staging_file_subdir_path" parameter is required, but missing'):
             self.getImpl().import_excel_as_media_from_staging(self.getContext(),
@@ -118,12 +113,12 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'missing_workspace_name': 'workspace_name',
           'media_name': 'media_name'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                     ValueError,
                     '"workspace_name" parameter is required, but missing'):
             self.getImpl().import_tsv_as_media_from_staging(self.getContext(),
                                                             invalidate_input_params)
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                     ValueError,
                     '"workspace_name" parameter is required, but missing'):
             self.getImpl().import_excel_as_media_from_staging(self.getContext(),
@@ -134,19 +129,20 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'workspace_name': 'workspace_name',
           'missing_media_name': 'media_name'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 '"media_name" parameter is required, but missing'):
             self.getImpl().import_tsv_as_media_from_staging(self.getContext(),
                                                             invalidate_input_params)
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 '"media_name" parameter is required, but missing'):
             self.getImpl().import_excel_as_media_from_staging(self.getContext(),
                                                               invalidate_input_params)
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    def test_import_excel_as_media_from_staging(self, download_staging_file):
+    @patch.object(UploaderUtil, "update_staging_service", return_value=None)
+    def test_import_excel_as_media_from_staging(self, download_staging_file, update_staging_service):
 
         excel_file = 'media_example.xlsx'
         ws_obj_name = 'MyMedia'
@@ -163,7 +159,9 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertTrue('report_name' in ref[0])
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    def test_import_tsv_as_media_from_staging(self, download_staging_file):
+    @patch.object(UploaderUtil, "update_staging_service", return_value=None)
+    def test_import_tsv_as_media_from_staging(self, download_staging_file,
+                                              update_staging_service):
 
         tsv_file = 'media_example.txt'
         ws_obj_name = 'MyMedia'
@@ -180,7 +178,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertTrue('report_name' in ref[0])
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    def test_import_as_media_from_staging(self, download_staging_file):
+    @patch.object(UploaderUtil, "update_staging_service", return_value=None)
+    def test_import_as_media_from_staging(self, download_staging_file, update_staging_service):
 
         tsv_file = 'media_example.txt'
         ws_obj_name = 'MyMedia'
@@ -219,7 +218,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'media_name': ws_obj_name
         }
 
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 '"Sample1.fastq" is not a valid EXCEL nor TSV file'):
             self.getImpl().import_tsv_or_excel_as_media_from_staging(self.getContext(), params)

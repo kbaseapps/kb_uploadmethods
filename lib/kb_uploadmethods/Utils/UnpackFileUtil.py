@@ -1,9 +1,12 @@
+import json
 import os
+import shutil
 import time
 import uuid
-import json
+from configparser import SafeConfigParser
+import requests as _requests
+
 import magic
-import shutil
 
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from KBaseReport.KBaseReportClient import KBaseReport
@@ -11,25 +14,44 @@ from KBaseReport.KBaseReportClient import KBaseReport
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
 
 
 class UnpackFileUtil:
+
+    def _staging_service_host(self):
+
+        deployment_path = os.environ["KB_DEPLOYMENT_CONFIG"]
+
+        parser = SafeConfigParser()
+        parser.read(deployment_path)
+
+        endpoint = parser.get('kb_uploadmethods', 'kbase-endpoint')
+        staging_service_host = endpoint + '/staging_service'
+
+        return staging_service_host
 
     def _file_to_staging(self, file_path_list, subdir_folder=None):
         """
         _file_to_staging: upload file(s) to staging area
         """
-        subdir_folder_str = '' if not subdir_folder else '/{}'.format(subdir_folder)
+        subdir_folder_str = '/' if not subdir_folder else '/{}'.format(subdir_folder)
+        staging_service_host = self._staging_service_host()
+        end_point = staging_service_host + '/upload'
+        headers = {'Authorization': self.token}
+
+        files = {'destPath': subdir_folder_str}
+
         for file_path in file_path_list:
-            log("uploading [{}] to staging area".format(file_path))
-            post_cmd = 'curl -H "Authorization: {}"\\\n'.format(self.token)
-            post_cmd += ' -X POST\\\n'
-            post_cmd += ' -F "destPath=/{}{}"\\\n'.format(self.user_id, subdir_folder_str)
-            post_cmd += ' -F "uploads=@{}"\\\n'.format(file_path)
-            post_cmd += ' https://ci.kbase.us/services/kb-ftp-api/v0/upload'
-            return_code = os.popen(post_cmd).read()
-            log("return message from server:\n{}".format(return_code))
+            files.update({'uploads': (os.path.basename(file_path), open(file_path, 'rb'))})
+
+            resp = _requests.post(end_point, headers=headers, files=files)
+
+            if resp.status_code != 200:
+                raise ValueError('Upload file {} failed.\nError Code: {}\n{}\n'
+                                 .format(file_path, resp.status_code, resp.text))
+            else:
+                log("return message from server:\n{}\n".format(resp.text))
 
     def _remove_irrelevant_files(self, file_path):
         """
@@ -60,8 +82,8 @@ class UnpackFileUtil:
                 os.remove(file_path)
                 log('removing file:   {}{}'.format('-' * count, file_path))
             elif t in ['application/' + x for x in
-                        'x-gzip', 'gzip', 'x-bzip', 'x-bzip2', 'bzip', 'bzip2',
-                        'x-tar', 'tar', 'x-gtar', 'zip', 'x-zip-compressed']:
+                        ('x-gzip', 'gzip', 'x-bzip', 'x-bzip2', 'bzip', 'bzip2',
+                        'x-tar', 'tar', 'x-gtar', 'zip', 'x-zip-compressed')]:
                 file_dir = os.path.dirname(file_path)
                 files_before_unpack = os.listdir(file_dir)
                 self.dfu.unpack_file({'file_path': file_path}).get('file_path')
@@ -125,7 +147,8 @@ class UnpackFileUtil:
                           '\n  '.join(unpacked_file_path_list)))
 
         self._file_to_staging(unpacked_file_path_list, os.path.dirname(
-                                      params.get('staging_file_subdir_path')))
+                                                params.get('staging_file_subdir_path')))
+
         unpacked_file_path = ','.join(unpacked_file_path_list)
         returnVal = {'unpacked_file_path': unpacked_file_path}
 

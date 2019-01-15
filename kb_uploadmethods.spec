@@ -101,7 +101,7 @@ module kb_uploadmethods {
 
     Optional params:
     scientific_name: proper name for species, key for taxonomy lookup. Default to 'unknown_taxon'
-    source: Source Of The GenBank File. Default to 'User'
+    source: Source Of The GFF File. Default to 'User'
     taxon_wsname - where the reference taxons are. Default to 'ReferenceTaxons'
     taxon_reference - if defined, will try to link the Genome to the specified taxonomy object
     release: Release Or Version Of The Source Data
@@ -121,6 +121,7 @@ module kb_uploadmethods {
     string release;
     int    genetic_code;
     string type;
+    string generate_missing_genes;
   } UploadFastaGFFMethodParams;
 
   typedef structure {
@@ -214,6 +215,8 @@ module kb_uploadmethods {
         per example Ensembl has numbered releases of all their data: Release 31
     generate_ids_if_needed - If field used for feature id is not there, 
         generate ids (default behavior is raising an exception)
+    generate_missing_genes - Generate gene feature for CDSs that do not have
+        a parent in file
     genetic_code - Genetic code of organism. Overwrites determined GC from 
         taxon object
     type - Reference, Representative or User upload
@@ -228,7 +231,7 @@ module kb_uploadmethods {
     int    genetic_code;
     string type;
     string generate_ids_if_needed;
-    string exclude_ontologies;
+    string generate_missing_genes;
   } GenbankToGenomeParams;
 
   typedef structure {
@@ -487,4 +490,23 @@ module kb_uploadmethods {
   funcdef import_tsv_as_phenotype_set_from_staging(FileToPhenotypeSetParams params)
           returns (UploadMethodResult returnVal) authentication required;
 
+  /*
+    required params:
+    staging_file_subdir_path: subdirectory file path
+    e.g.
+      for file: /data/bulk/user_name/file_name
+      staging_file_subdir_path is file_name
+      for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+      staging_file_subdir_path is subdir_1/subdir_2/file_name
+    attribute_mapping_name: output ConditionSet object name
+    workspace_id: workspace name/ID of the object
+  */
+  typedef structure {
+    string staging_file_subdir_path;
+    workspace_name workspace_name;
+    string attribute_mapping_name;
+  } FileToConditionSetParams;
+
+  funcdef import_attribute_mapping_from_staging(FileToConditionSetParams params)
+          returns (UploadMethodResult returnVal) authentication required;
 };

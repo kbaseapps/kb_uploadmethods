@@ -16,8 +16,10 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
+      "field_type" : "dynamic_dropdown",
+      "dynamic_dropdown_options" : {
+        "data_source": "ftp_staging"
+      }
     },    
     {
       "id" : "gff_file",
@@ -25,8 +27,10 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
+      "field_type" : "dynamic_dropdown",
+      "dynamic_dropdown_options" : {
+        "data_source": "ftp_staging"
+      }
     },
     {
       "id" : "genome_name",
@@ -44,7 +48,7 @@
     {
       "id" : "scientific_name",
       "optional" : true,
-      "advanced" : true,
+      "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "unknown_taxon" ],
       "field_type" : "text",
@@ -52,12 +56,26 @@
     },
     {
       "id" : "source",
-      "optional" : true,
-      "advanced" : true,
+      "optional" : false,
+      "advanced" : false,
       "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
+      "default_values" : [ "Other" ],
+      "field_type" : "dropdown",
+      "dropdown_options":{
+      "options": [
+        {
+          "value": "RefSeq user",
+          "display": "RefSeq"
+        },
+        {
+          "value": "Ensembl user",
+          "display": "Ensembl"
+        },
+        {
+          "value": "Other",
+          "display": "Other"
+        }
+      ]}
     },
     {
       "id" : "taxon_wsname",
@@ -97,29 +115,15 @@
       }
     },
     {
-      "id" : "type",
-      "optional" : true,
-      "advanced" : true,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "dropdown",
-      "dropdown_options": 
-      {
-        "options": 
-        [
-          {
-              "display": "User upload",
-              "value": "User upload"
-          },
-          {
-              "display": "Reference",
-              "value": "Reference"
-          },
-          {
-              "display": "Representative",
-              "value": "Representative"
-          }
-        ]
+      "id": "generate_missing_genes",
+      "optional":true,
+      "advanced":true,
+      "allow_multiple":false,
+      "default_values":["1"],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
       }
     }
   ],
@@ -173,8 +177,8 @@
           "target_property": "genetic_code"
         },
         {
-          "input_parameter": "type",
-          "target_property": "type"
+          "input_parameter": "generate_missing_genes",
+          "target_property": "generate_missing_genes"
         }
       ],
       "output_mapping" : 

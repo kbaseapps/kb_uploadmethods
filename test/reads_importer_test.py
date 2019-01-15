@@ -1,27 +1,22 @@
 # -*- coding: utf-8 -*-
-import unittest
-import os  # noqa: F401
-import json  # noqa: F401
-import time
-import requests
-import shutil
-from mock import patch
 import hashlib
-
+import os  # noqa: F401
+import shutil
+import time
+import unittest
+from configparser import ConfigParser
 from os import environ
-try:
-    from ConfigParser import ConfigParser  # py2
-except:
-    from configparser import ConfigParser  # py3
 
-from pprint import pprint  # noqa: F401
-
+import requests
 from biokbase.workspace.client import Workspace as workspaceService
-from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
-from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
-from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
+from mock import patch
+
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from kb_uploadmethods.Utils.ImportSRAUtil import ImportSRAUtil
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
+from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
+from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
+from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
 
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -68,7 +63,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         header = {'Authorization': 'Oauth {0}'.format(cls.token)}
         requests.delete(cls.shockURL + '/node/' + node_id, headers=header,
                         allow_redirects=True)
-        print('Deleted shock node ' + node_id)
+        print(('Deleted shock node ' + node_id))
 
     @classmethod
     def make_ref(self, objinfo):
@@ -94,13 +89,13 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
     def check_lib(self, lib, size, filename, md5):
         shock_id = lib["file"]["id"]
-        print "LIB: {}".format(str(lib))
-        print "Shock ID: {}".format(str(shock_id))
+        print("LIB: {}".format(str(lib)))
+        print("Shock ID: {}".format(str(shock_id)))
         fileinput = [{
                     'shock_id': shock_id,
                     'file_path': self.scratch + '/temp',
                     'unpack': 'uncompress'}]
-        print "File Input: {}".format(str(fileinput))
+        print("File Input: {}".format(str(fileinput)))
         files = self.dfu.shock_to_file_mass(fileinput)
         path = files[0]["file_path"]
         file_md5 = hashlib.md5(open(path, 'rb').read()).hexdigest()
@@ -117,8 +112,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertEqual(libfile['url'], self.shockURL)
 
     def mock_download_staging_file(params):
-        print 'Mocking DataFileUtilClient.download_staging_file'
-        print params
+        print('Mocking DataFileUtilClient.download_staging_file')
+        print(params)
 
         fq_filename = params.get('staging_file_subdir_path')
         fq_path = os.path.join('/kb/module/work/tmp', fq_filename)
@@ -127,11 +122,11 @@ class kb_uploadmethodsTest(unittest.TestCase):
         return {'copy_file_path': fq_path}
 
     def mock_validate_upload_staging_file_availability(staging_file_subdir_path):
-        print 'Mocking ImportSRAUtil._validate_upload_staging_file_availability'
-        print staging_file_subdir_path
+        print('Mocking ImportSRAUtil._validate_upload_staging_file_availability')
+        print(staging_file_subdir_path)
 
     def mock_run_command_pe(command):
-        print 'Mocking ImportSRAUtil._run_command'
+        print('Mocking ImportSRAUtil._run_command')
 
         tmp_dir = command.split(' ')[-2]
         scratch_sra_file_path = command.split(' ')[-1]
@@ -152,7 +147,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         os.rename(os.path.join(rev_file_path, rev_filename), os.path.join(rev_file_path, 'fastq'))
 
     def mock_run_command_se(command):
-        print 'Mocking ImportSRAUtil._run_command'
+        print('Mocking ImportSRAUtil._run_command')
 
         tmp_dir = command.split(' ')[-2]
         scratch_sra_file_path = command.split(' ')[-1]
@@ -173,7 +168,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'workspace_name': 'workspace_name',
           'name': 'name'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                     ValueError,
                     '"import_type" parameter is required, but missing'):
             self.getImpl().import_reads_from_staging(self.getContext(),
@@ -185,7 +180,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'workspace_name': 'workspace_name',
           'name': 'name'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                     ValueError,
                     '"sequencing_tech" parameter is required, but missing'):
             self.getImpl().import_reads_from_staging(self.getContext(),
@@ -196,7 +191,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'missing_workspace_name': 'workspace_name',
           'name': 'name'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 '"workspace_name" parameter is required, but missing'):
             self.getImpl().import_reads_from_staging(self.getContext(),
@@ -208,7 +203,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'workspace_name': 'workspace_name',
           'missing_name': 'name'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 '"name" parameter is required, but missing'):
             self.getImpl().import_reads_from_staging(self.getContext(),
@@ -222,7 +217,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         }
         error_msg = "Import file type \[invalide_import_type\] is not supported. "
         error_msg += "Please selet one of \['FASTQ/FASTA', 'SRA'\]"
-        with self.assertRaisesRegexp(ValueError, error_msg):
+        with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().import_reads_from_staging(self.getContext(),
                                                      invalidate_input_params)
 
@@ -233,7 +228,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'workspace_name': 'workspace_name',
           'name': 'name'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 'FASTQ/FASTA input file type selected. But missing FASTQ/FASTA file.'):
             self.getImpl().import_reads_from_staging(self.getContext(),
@@ -246,7 +241,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'workspace_name': 'workspace_name',
           'name': 'name'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 'SRA input file type selected. But missing SRA file.'):
             self.getImpl().import_reads_from_staging(self.getContext(),
@@ -260,7 +255,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'workspace_name': 'workspace_name',
           'name': 'name'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 'Both SRA and FASTQ/FASTA file given. Please provide one file type only.'):
             self.getImpl().import_reads_from_staging(self.getContext(),
@@ -274,7 +269,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'workspace_name': 'workspace_name',
           'name': 'name'
         }
-        with self.assertRaisesRegexp(
+        with self.assertRaisesRegex(
                 ValueError,
                 'Both SRA and FASTQ/FASTA file given. Please provide one file type only.'):
             self.getImpl().import_reads_from_staging(self.getContext(),
@@ -318,9 +313,10 @@ class kb_uploadmethodsTest(unittest.TestCase):
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_pe)
+    @patch.object(UploaderUtil, "update_staging_service", return_value=None)
     def test_import_sra_reads_paired_end(self, download_staging_file,
                                          _validate_upload_staging_file_availability,
-                                         _run_command):
+                                         _run_command, update_staging_service):
 
         sra_path = 'empty.sra'
         ws_obj_name = 'MyReads'
@@ -368,9 +364,10 @@ class kb_uploadmethodsTest(unittest.TestCase):
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_se)
+    @patch.object(UploaderUtil, "update_staging_service", return_value=None)
     def test_import_sra_reads_single_end(self, download_staging_file,
                                          _validate_upload_staging_file_availability,
-                                         _run_command):
+                                         _run_command, update_staging_service):
 
         sra_path = 'empty.sra'
         ws_obj_name = 'MyReads'

@@ -1,4 +1,4 @@
-name     : Upload File to Staging from Web - v1.0.7
+name     : Upload File to Staging from Web - v1.0.12
 subtitle : Upload a data file (which may be compressed) from a web URL to your staging area
 tooltip  : Upload a data file (which may be compressed) from a web URL to your staging area
 
@@ -21,10 +21,10 @@ suggestions :
 
 parameters :
     download_type :
-        ui-name : Download Type
-        short-hint : Download type ('Direct Download Link', 'FTP Link', 'Dropbox Public Shared Link',  'Google Drive Public Shared Link')
-        long-hint  : Download type ('Direct Download Link', 'FTP Link', 'Dropbox Public Shared Link',  'Google Drive Public Shared Link')
- 
+        ui-name : URL Type
+        short-hint : URL type ('Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox Public Shared Link',  'Google Drive Public Shared Link')
+        long-hint  : URL type ('Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox Public Shared Link',  'Google Drive Public Shared Link')
+
     file_url :
         ui-name : URL
         short-hint : URL for data file (must be publicly readable)
@@ -37,6 +37,21 @@ parameter-groups :
         long-hint  : URL(s) for data file (must be publicly readable)
 
 description : |
-    <p> Upload a data file (which may be compressed) from a web URL to your staging area. If the file is compressed (.gz or .zip), it will automatically be uncompressed.</p> 
-
+    <p> Upload a data file (which may be compressed) from a web URL to your staging area. If the file is compressed (.gz or .zip), it will automatically be uncompressed.</p>
+    <p> </p>
+    <p> How to get 'Google Drive Public Shared Link'</p>
+    <p> 1. Left click on the file and select 'Get shareable link'.</p>
+    <p> 2. Make sure file setting is set to 'Anyone with the link can view'. Otherwise go to 'Sharing settings'.</p>
+    <p> 3. Copy the public file sharing link. e.g. 'https://drive.google.com/open?id=0B0exSa7ebQ0qX01mZ3FaRzhuMDQ'</p>
+    <p> </p>
+    <p> How to get 'Dropbox Public Shared Link'</p>
+    <p> 1. Click on 'Share' on the file</p>
+    <p> 2. Make sure file setting is set to 'Anyone with the link can view this file'. Otherwise go to 'Link settings'.</p>
+    <p> 3. Click on 'Copy link' button. e.g. 'https://www.dropbox.com/s/w5ct52rp95cukwq/file1.txt?dl=0'</p>
 technical-description : none
+
+publications :
+    -
+        display-text: |
+            Arkin AP, Cottingham RW, Henry CS, Harris NL, Stevens RL, Maslov S, et al. KBase: The United States Department of Energy Systems Biology Knowledgebase. Nature Biotechnology. 2018;36: 566. doi: 10.1038/nbt.4163
+        link: https://www.nature.com/articles/nbt.4163

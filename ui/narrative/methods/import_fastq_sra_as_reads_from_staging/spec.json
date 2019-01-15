@@ -1,7 +1,7 @@
 {
   "ver" : "1.0.0",
   "authors" : ["tgu2"],
-  "contact" : "help@kbase.us",
+  "contact" : "http://kbase.us/contact-us/",
   "visible" : true,
   "categories" : [ "inactive","reads","upload" ],
   "widgets" : 
@@ -39,8 +39,10 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
+      "field_type" : "dynamic_dropdown",
+      "dynamic_dropdown_options" : {
+        "data_source": "ftp_staging"
+      }
     },    
     {
       "id" : "fastq_rev_staging_file_name",
@@ -48,8 +50,10 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
+      "field_type" : "dynamic_dropdown",
+      "dynamic_dropdown_options" : {
+        "data_source": "ftp_staging"
+      }
     },
     {
       "id" : "sra_staging_file_name",
@@ -57,8 +61,10 @@
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
+      "field_type" : "dynamic_dropdown",
+      "dynamic_dropdown_options" : {
+        "data_source": "ftp_staging"
+      }
     },
     {
       "id" : "sequencing_tech",

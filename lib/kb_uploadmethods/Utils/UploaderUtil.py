@@ -1,17 +1,20 @@
 import json
-import uuid
+import os
+import re
 import time
+import uuid
+from configparser import SafeConfigParser
+
 import requests as _requests
 
-from ReadsUtils.ReadsUtilsClient import ReadsUtils
-from ftp_service.ftp_serviceClient import ftp_service
-from KBaseReport.KBaseReportClient import KBaseReport
 from DataFileUtil.DataFileUtilClient import DataFileUtil
+from KBaseReport.KBaseReportClient import KBaseReport
+from ReadsUtils.ReadsUtilsClient import ReadsUtils
 
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
 
 
 class UploaderUtil:
@@ -102,7 +105,7 @@ class UploaderUtil:
                 else:
                     upload_message += 'Imported Reads File: {}\n'.format(
                                   params.get('fwd_staging_file_name'))
-                if isinstance(number_of_reads, (int, long)):
+                if isinstance(number_of_reads, int):
                     upload_message += 'Number of Reads: {:,}\n'.format(number_of_reads)
             else:
                 reads_info = object_data.get('data')[0].get('info')[-1]
@@ -331,26 +334,45 @@ class UploaderUtil:
 
         return result
 
+    def _staging_service_host(self):
+
+        deployment_path = os.environ["KB_DEPLOYMENT_CONFIG"]
+
+        parser = SafeConfigParser()
+        parser.read(deployment_path)
+
+        endpoint = parser.get('kb_uploadmethods', 'kbase-endpoint')
+        staging_service_host = endpoint + '/staging_service'
+
+        return staging_service_host
+
     def update_staging_service(self, staged_file, obj_ref):
+
+        log('In Update Staging Service: File: {}, Obj_ref: {}'.format(staged_file, obj_ref))
 
         if staged_file is None:
             raise ValueError('Error: A valid staged file name is required')
         if obj_ref is None:
             raise ValueError('Error: A valid object reference is required')
 
-        url = 'https://ci.kbase.us/services/staging_service/define-upa/' + staged_file
+        staging_service_host = self._staging_service_host()
 
-        log('Updating staging service meta-data: URL: {}  Obj_ref: {}'.format(url, obj_ref))
-        headers = {'Authorization': self.token}
-        body = {'UPA': obj_ref}
+        reg_expr = 'https://(ci\.|appdev\.|'')kbase'
+        if re.search(reg_expr, staging_service_host):
 
-        ret = _requests.post(url, headers=headers, data=body)
+            url = staging_service_host + '/define-upa/' + staged_file
 
-        if not ret.ok:
-            try:
-                err = ret.json()
-            except:
-                ret.raise_for_status()
-            raise ValueError('Error connecting to staging service: {} {}\n{}'
-                             .format(ret.status_code, ret.reason,
-                                     err['error_msg']))
+            log('Updating staging service meta-data: URL: {}  Obj_ref: {}'.format(url, obj_ref))
+            headers = {'Authorization': self.token}
+            body = {'UPA': obj_ref}
+
+            ret = _requests.post(url, headers=headers, data=body)
+
+            if not ret.ok:
+                try:
+                    err = ret.json()
+                except:
+                    ret.raise_for_status()
+                raise ValueError('Error connecting to staging service: {} {}\n{}'
+                                 .format(ret.status_code, ret.reason,
+                                         err['error_msg']))

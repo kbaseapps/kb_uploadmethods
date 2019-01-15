@@ -303,6 +303,7 @@ UploadFastaGFFMethodParams is a reference to a hash where the following keys are
 	release has a value which is a string
 	genetic_code has a value which is an int
 	type has a value which is a string
+	generate_missing_genes has a value which is a string
 workspace_name is a string
 UploadFastaGFFMethodResult is a reference to a hash where the following keys are defined:
 	genome_ref has a value which is a string
@@ -332,6 +333,7 @@ UploadFastaGFFMethodParams is a reference to a hash where the following keys are
 	release has a value which is a string
 	genetic_code has a value which is an int
 	type has a value which is a string
+	generate_missing_genes has a value which is a string
 workspace_name is a string
 UploadFastaGFFMethodResult is a reference to a hash where the following keys are defined:
 	genome_ref has a value which is a string
@@ -618,7 +620,7 @@ GenbankToGenomeParams is a reference to a hash where the following keys are defi
 	genetic_code has a value which is an int
 	type has a value which is a string
 	generate_ids_if_needed has a value which is a string
-	exclude_ontologies has a value which is a string
+	generate_missing_genes has a value which is a string
 GenomeSaveResult is a reference to a hash where the following keys are defined:
 	genome_ref has a value which is a string
 
@@ -639,7 +641,7 @@ GenbankToGenomeParams is a reference to a hash where the following keys are defi
 	genetic_code has a value which is an int
 	type has a value which is a string
 	generate_ids_if_needed has a value which is a string
-	exclude_ontologies has a value which is a string
+	generate_missing_genes has a value which is a string
 GenomeSaveResult is a reference to a hash where the following keys are defined:
 	genome_ref has a value which is a string
 
@@ -1860,6 +1862,112 @@ report_ref is a string
     }
 }
  
+
+
+=head2 import_attribute_mapping_from_staging
+
+  $returnVal = $obj->import_attribute_mapping_from_staging($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a kb_uploadmethods.FileToConditionSetParams
+$returnVal is a kb_uploadmethods.UploadMethodResult
+FileToConditionSetParams is a reference to a hash where the following keys are defined:
+	staging_file_subdir_path has a value which is a string
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	attribute_mapping_name has a value which is a string
+workspace_name is a string
+UploadMethodResult is a reference to a hash where the following keys are defined:
+	obj_ref has a value which is a kb_uploadmethods.obj_ref
+	report_name has a value which is a kb_uploadmethods.report_name
+	report_ref has a value which is a kb_uploadmethods.report_ref
+obj_ref is a string
+report_name is a string
+report_ref is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a kb_uploadmethods.FileToConditionSetParams
+$returnVal is a kb_uploadmethods.UploadMethodResult
+FileToConditionSetParams is a reference to a hash where the following keys are defined:
+	staging_file_subdir_path has a value which is a string
+	workspace_name has a value which is a kb_uploadmethods.workspace_name
+	attribute_mapping_name has a value which is a string
+workspace_name is a string
+UploadMethodResult is a reference to a hash where the following keys are defined:
+	obj_ref has a value which is a kb_uploadmethods.obj_ref
+	report_name has a value which is a kb_uploadmethods.report_name
+	report_ref has a value which is a kb_uploadmethods.report_ref
+obj_ref is a string
+report_name is a string
+report_ref is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub import_attribute_mapping_from_staging
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function import_attribute_mapping_from_staging (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to import_attribute_mapping_from_staging:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'import_attribute_mapping_from_staging');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "kb_uploadmethods.import_attribute_mapping_from_staging",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'import_attribute_mapping_from_staging',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method import_attribute_mapping_from_staging",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'import_attribute_mapping_from_staging',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -1903,16 +2011,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'import_tsv_as_phenotype_set_from_staging',
+                method_name => 'import_attribute_mapping_from_staging',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method import_tsv_as_phenotype_set_from_staging",
+            error => "Error invoking method import_attribute_mapping_from_staging",
             status_line => $self->{client}->status_line,
-            method_name => 'import_tsv_as_phenotype_set_from_staging',
+            method_name => 'import_attribute_mapping_from_staging',
         );
     }
 }
@@ -2584,7 +2692,7 @@ gff_file: gff file containing predicted gene models and corresponding features
 
 Optional params:
 scientific_name: proper name for species, key for taxonomy lookup. Default to 'unknown_taxon'
-source: Source Of The GenBank File. Default to 'User'
+source: Source Of The GFF File. Default to 'User'
 taxon_wsname - where the reference taxons are. Default to 'ReferenceTaxons'
 taxon_reference - if defined, will try to link the Genome to the specified taxonomy object
 release: Release Or Version Of The Source Data
@@ -2609,6 +2717,7 @@ taxon_reference has a value which is a string
 release has a value which is a string
 genetic_code has a value which is an int
 type has a value which is a string
+generate_missing_genes has a value which is a string
 
 </pre>
 
@@ -2628,6 +2737,7 @@ taxon_reference has a value which is a string
 release has a value which is a string
 genetic_code has a value which is an int
 type has a value which is a string
+generate_missing_genes has a value which is a string
 
 
 =end text
@@ -2897,6 +3007,8 @@ import_genbank_from_staging: wrapper method for GenomeFileUtil.genbank_to_genome
       per example Ensembl has numbered releases of all their data: Release 31
   generate_ids_if_needed - If field used for feature id is not there, 
       generate ids (default behavior is raising an exception)
+  generate_missing_genes - Generate gene feature for CDSs that do not have
+      a parent in file
   genetic_code - Genetic code of organism. Overwrites determined GC from 
       taxon object
   type - Reference, Representative or User upload
@@ -2916,7 +3028,7 @@ release has a value which is a string
 genetic_code has a value which is an int
 type has a value which is a string
 generate_ids_if_needed has a value which is a string
-exclude_ontologies has a value which is a string
+generate_missing_genes has a value which is a string
 
 </pre>
 
@@ -2933,7 +3045,7 @@ release has a value which is a string
 genetic_code has a value which is an int
 type has a value which is a string
 generate_ids_if_needed has a value which is a string
-exclude_ontologies has a value which is a string
+generate_missing_genes has a value which is a string
 
 
 =end text
@@ -3504,6 +3616,53 @@ staging_file_subdir_path has a value which is a string
 workspace_name has a value which is a kb_uploadmethods.workspace_name
 phenotype_set_name has a value which is a string
 genome has a value which is a kb_uploadmethods.obj_ref
+
+
+=end text
+
+=back
+
+
+
+=head2 FileToConditionSetParams
+
+=over 4
+
+
+
+=item Description
+
+required params:
+staging_file_subdir_path: subdirectory file path
+e.g.
+  for file: /data/bulk/user_name/file_name
+  staging_file_subdir_path is file_name
+  for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
+  staging_file_subdir_path is subdir_1/subdir_2/file_name
+attribute_mapping_name: output ConditionSet object name
+workspace_id: workspace name/ID of the object
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+staging_file_subdir_path has a value which is a string
+workspace_name has a value which is a kb_uploadmethods.workspace_name
+attribute_mapping_name has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+staging_file_subdir_path has a value which is a string
+workspace_name has a value which is a kb_uploadmethods.workspace_name
+attribute_mapping_name has a value which is a string
 
 
 =end text

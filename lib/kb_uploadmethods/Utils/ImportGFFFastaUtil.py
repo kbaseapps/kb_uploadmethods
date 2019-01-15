@@ -1,22 +1,22 @@
 
-import time
 import json
-from pprint import pprint
+import time
 
-from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
 from DataFileUtil.DataFileUtilClient import DataFileUtil
+from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
+
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
 
 
 class ImportGFFFastaUtil:
     def __init__(self, config):
         self.callback_url = config['SDK_CALLBACK_URL']
         self.dfu = DataFileUtil(self.callback_url)
-        self.gfu = GenomeFileUtil(self.callback_url)
+        self.gfu = GenomeFileUtil(self.callback_url, service_ver='beta')
         self.uploader_utils = UploaderUtil(config)
 
     def import_gff_fasta_from_staging(self, params):
