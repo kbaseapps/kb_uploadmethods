@@ -36,6 +36,14 @@ parameters :
         long-hint  : |
             Provide a name for the Genome that will be created by this importer
 
+    genome_type:
+        ui-name : |
+            Genome Type
+        short-hint : |
+            The type or source of this genome
+        long-hint  : |
+            The type or source of this genome
+
     source :
         ui-name : |
             Source of the GenBank File

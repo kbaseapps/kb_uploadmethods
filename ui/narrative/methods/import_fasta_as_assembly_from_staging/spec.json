@@ -19,7 +19,42 @@
       "dynamic_dropdown_options" : {
         "data_source": "ftp_staging"
       }
-    }, 
+    },
+    {
+      "id" : "type",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "isolate" ],
+      "field_type" : "dropdown",
+      "dropdown_options":{
+      "options": [
+        {
+          "value": "isolate",
+          "display": "Isolate"
+        },
+        {
+          "value": "mag",
+          "display": "Metagenome-assembled genome"
+        },
+        {
+          "value": "sag",
+          "display": "Single amplified genome"
+        },
+        {
+          "value": "virus",
+          "display": "Virus"
+        },
+        {
+          "value": "plasmid",
+          "display": "Plasmid"
+        },
+        {
+          "value": "construct",
+          "display": "Construct"
+        }
+      ]}
+    },
     {
       "id" : "min_contig_length",
       "optional" : false,
@@ -53,6 +88,10 @@
         {
           "narrative_system_variable": "workspace",
           "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "type",
+          "target_property": "type"
         },
         {
           "input_parameter": "min_contig_length",

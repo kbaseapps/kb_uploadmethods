@@ -46,6 +46,41 @@
       }
     },
     {
+      "id" : "genome_type",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "isolate" ],
+      "field_type" : "dropdown",
+      "dropdown_options":{
+      "options": [
+        {
+          "value": "isolate",
+          "display": "Isolate"
+        },
+        {
+          "value": "mag",
+          "display": "Metagenome-assembled genome"
+        },
+        {
+          "value": "sag",
+          "display": "Single amplified genome"
+        },
+        {
+          "value": "virus",
+          "display": "Virus"
+        },
+        {
+          "value": "plasmid",
+          "display": "Plasmid"
+        },
+        {
+          "value": "construct",
+          "display": "Construct"
+        }
+      ]}
+    },
+    {
       "id" : "scientific_name",
       "optional" : true,
       "advanced" : false,
@@ -151,6 +186,10 @@
         {
           "input_parameter": "genome_name",
           "target_property": "genome_name"
+        },
+        {
+          "input_parameter": "genome_type",
+          "target_property": "genome_type"
         },
         {
           "input_parameter": "scientific_name",
