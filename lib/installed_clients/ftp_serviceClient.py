@@ -12,10 +12,9 @@ from __future__ import print_function
 try:
     # baseclient and this client are in a package
     from .baseclient import BaseClient as _BaseClient  # @UnusedImport
-except:
+except ImportError:
     # no they aren't
     from baseclient import BaseClient as _BaseClient  # @Reimport
-import time
 
 
 class ftp_service(object):
@@ -24,7 +23,7 @@ class ftp_service(object):
             self, url=None, timeout=30 * 60, user_id=None,
             password=None, token=None, ignore_authrc=False,
             trust_all_ssl_certificates=False,
-            auth_svc='https://kbase.us/services/authorization/Sessions/Login',
+            auth_svc='https://ci.kbase.us/services/auth/api/legacy/KBase/Sessions/Login',
             service_ver='release',
             async_job_check_time_ms=100, async_job_check_time_scale_percent=150, 
             async_job_check_max_time_ms=300000):
@@ -40,14 +39,6 @@ class ftp_service(object):
             async_job_check_time_scale_percent=async_job_check_time_scale_percent,
             async_job_check_max_time_ms=async_job_check_max_time_ms)
 
-    def _check_job(self, job_id):
-        return self._client._check_job('ftp_service', job_id)
-
-    def _search_list_files_submit(self, params, context=None):
-        return self._client._submit_job(
-             'ftp_service.search_list_files', [params],
-             self._service_ver, context)
-
     def search_list_files(self, params, context=None):
         """
         :param params: instance of type "listFilesInputParams" -> structure:
@@ -60,49 +51,16 @@ class ftp_service(object):
            of String, parameter "isFolder" of String, parameter "date" of
            String, parameter "username" of String
         """
-        job_id = self._search_list_files_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _list_files_submit(self, context=None):
-        return self._client._submit_job(
-             'ftp_service.list_files', [],
-             self._service_ver, context)
+        return self._client.run_job('ftp_service.search_list_files',
+                                    [params], self._service_ver, context)
 
     def list_files(self, context=None):
         """
         :returns: instance of type "filepathList" -> list of String
         """
-        job_id = self._list_files_submit(context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
+        return self._client.run_job('ftp_service.list_files',
+                                    [], self._service_ver, context)
 
     def status(self, context=None):
-        job_id = self._client._submit_job('ftp_service.status', 
-            [], self._service_ver, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
+        return self._client.run_job('ftp_service.status',
+                                    [], self._service_ver, context)

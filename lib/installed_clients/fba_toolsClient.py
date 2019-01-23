@@ -12,10 +12,9 @@ from __future__ import print_function
 try:
     # baseclient and this client are in a package
     from .baseclient import BaseClient as _BaseClient  # @UnusedImport
-except:
+except ImportError:
     # no they aren't
     from baseclient import BaseClient as _BaseClient  # @Reimport
-import time
 
 
 class fba_tools(object):
@@ -24,7 +23,7 @@ class fba_tools(object):
             self, url=None, timeout=30 * 60, user_id=None,
             password=None, token=None, ignore_authrc=False,
             trust_all_ssl_certificates=False,
-            auth_svc='https://kbase.us/services/authorization/Sessions/Login',
+            auth_svc='https://ci.kbase.us/services/auth/api/legacy/KBase/Sessions/Login',
             service_ver='release',
             async_job_check_time_ms=100, async_job_check_time_scale_percent=150, 
             async_job_check_max_time_ms=300000):
@@ -39,14 +38,6 @@ class fba_tools(object):
             async_job_check_time_ms=async_job_check_time_ms,
             async_job_check_time_scale_percent=async_job_check_time_scale_percent,
             async_job_check_max_time_ms=async_job_check_max_time_ms)
-
-    def _check_job(self, job_id):
-        return self._client._check_job('fba_tools', job_id)
-
-    def _build_metabolic_model_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.build_metabolic_model', [params],
-             self._service_ver, context)
 
     def build_metabolic_model(self, params, context=None):
         """
@@ -88,22 +79,8 @@ class fba_tools(object):
            parameter "number_gapfilled_reactions" of Long, parameter
            "number_removed_biomass_compounds" of Long
         """
-        job_id = self._build_metabolic_model_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _build_multiple_metabolic_models_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.build_multiple_metabolic_models', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.build_metabolic_model',
+                                    [params], self._service_ver, context)
 
     def build_multiple_metabolic_models(self, params, context=None):
         """
@@ -144,22 +121,8 @@ class fba_tools(object):
            KBaseFBA.FBAModel), parameter "new_fba_ref" of type "ws_fba_id"
            (The workspace ID for a FBA data object. @id ws KBaseFBA.FBA)
         """
-        job_id = self._build_multiple_metabolic_models_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _gapfill_metabolic_model_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.gapfill_metabolic_model', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.build_multiple_metabolic_models',
+                                    [params], self._service_ver, context)
 
     def gapfill_metabolic_model(self, params, context=None):
         """
@@ -204,22 +167,8 @@ class fba_tools(object):
            parameter "number_gapfilled_reactions" of Long, parameter
            "number_removed_biomass_compounds" of Long
         """
-        job_id = self._gapfill_metabolic_model_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _run_flux_balance_analysis_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.run_flux_balance_analysis', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.gapfill_metabolic_model',
+                                    [params], self._service_ver, context)
 
     def run_flux_balance_analysis(self, params, context=None):
         """
@@ -266,22 +215,8 @@ class fba_tools(object):
            parameter "report_ref" of type "ws_report_id" (The workspace ID
            for a Report object @id ws KBaseReport.Report)
         """
-        job_id = self._run_flux_balance_analysis_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _compare_fba_solutions_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.compare_fba_solutions', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.run_flux_balance_analysis',
+                                    [params], self._service_ver, context)
 
     def compare_fba_solutions(self, params, context=None):
         """
@@ -297,22 +232,8 @@ class fba_tools(object):
            parameter "new_fbacomparison_ref" of type "ws_fbacomparison_id"
            (The workspace ID for a FBA data object. @id ws KBaseFBA.FBA)
         """
-        job_id = self._compare_fba_solutions_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _propagate_model_to_new_genome_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.propagate_model_to_new_genome', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.compare_fba_solutions',
+                                    [params], self._service_ver, context)
 
     def propagate_model_to_new_genome(self, params, context=None):
         """
@@ -356,22 +277,8 @@ class fba_tools(object):
            parameter "number_gapfilled_reactions" of Long, parameter
            "number_removed_biomass_compounds" of Long
         """
-        job_id = self._propagate_model_to_new_genome_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _simulate_growth_on_phenotype_data_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.simulate_growth_on_phenotype_data', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.propagate_model_to_new_genome',
+                                    [params], self._service_ver, context)
 
     def simulate_growth_on_phenotype_data(self, params, context=None):
         """
@@ -406,22 +313,8 @@ class fba_tools(object):
            "ws_phenotypesim_id" (The workspace ID for a phenotype set
            simulation object. @id ws KBasePhenotypes.PhenotypeSimulationSet)
         """
-        job_id = self._simulate_growth_on_phenotype_data_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _merge_metabolic_models_into_community_model_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.merge_metabolic_models_into_community_model', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.simulate_growth_on_phenotype_data',
+                                    [params], self._service_ver, context)
 
     def merge_metabolic_models_into_community_model(self, params, context=None):
         """
@@ -441,22 +334,8 @@ class fba_tools(object):
            parameter "new_fbamodel_ref" of type "ws_fbamodel_id" (The
            workspace ID for a FBAModel data object. @id ws KBaseFBA.FBAModel)
         """
-        job_id = self._merge_metabolic_models_into_community_model_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _view_flux_network_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.view_flux_network', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.merge_metabolic_models_into_community_model',
+                                    [params], self._service_ver, context)
 
     def view_flux_network(self, params, context=None):
         """
@@ -470,22 +349,8 @@ class fba_tools(object):
            parameter "new_report_ref" of type "ws_report_id" (The workspace
            ID for a Report object @id ws KBaseReport.Report)
         """
-        job_id = self._view_flux_network_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _compare_flux_with_expression_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.compare_flux_with_expression', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.view_flux_network',
+                                    [params], self._service_ver, context)
 
     def compare_flux_with_expression(self, params, context=None):
         """
@@ -510,22 +375,8 @@ class fba_tools(object):
            "ws_fbapathwayanalysis_id" (The workspace ID for a FBA pathway
            analysis object @id ws KBaseFBA.FBAPathwayAnalysis)
         """
-        job_id = self._compare_flux_with_expression_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _check_model_mass_balance_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.check_model_mass_balance', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.compare_flux_with_expression',
+                                    [params], self._service_ver, context)
 
     def check_model_mass_balance(self, params, context=None):
         """
@@ -540,22 +391,8 @@ class fba_tools(object):
            structure: parameter "new_report_ref" of type "ws_report_id" (The
            workspace ID for a Report object @id ws KBaseReport.Report)
         """
-        job_id = self._check_model_mass_balance_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _predict_auxotrophy_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.predict_auxotrophy', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.check_model_mass_balance',
+                                    [params], self._service_ver, context)
 
     def predict_auxotrophy(self, params, context=None):
         """
@@ -570,22 +407,8 @@ class fba_tools(object):
            parameter "new_report_ref" of type "ws_report_id" (The workspace
            ID for a Report object @id ws KBaseReport.Report)
         """
-        job_id = self._predict_auxotrophy_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _compare_models_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.compare_models', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.predict_auxotrophy',
+                                    [params], self._service_ver, context)
 
     def compare_models(self, params, context=None):
         """
@@ -609,22 +432,8 @@ class fba_tools(object):
            "ws_report_id" (The workspace ID for a Report object @id ws
            KBaseReport.Report), parameter "mc_ref" of String
         """
-        job_id = self._compare_models_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _edit_metabolic_model_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.edit_metabolic_model', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.compare_models',
+                                    [params], self._service_ver, context)
 
     def edit_metabolic_model(self, params, context=None):
         """
@@ -656,22 +465,8 @@ class fba_tools(object):
            "ws_fbamodel_id" (The workspace ID for a FBAModel data object. @id
            ws KBaseFBA.FBAModel)
         """
-        job_id = self._edit_metabolic_model_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _edit_media_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.edit_media', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.edit_metabolic_model',
+                                    [params], self._service_ver, context)
 
     def edit_media(self, params, context=None):
         """
@@ -701,22 +496,8 @@ class fba_tools(object):
            KBaseReport.Report), parameter "new_media_id" of type "media_id"
            (A string representing a Media id.)
         """
-        job_id = self._edit_media_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _excel_file_to_model_submit(self, p, context=None):
-        return self._client._submit_job(
-             'fba_tools.excel_file_to_model', [p],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.edit_media',
+                                    [params], self._service_ver, context)
 
     def excel_file_to_model(self, p, context=None):
         """
@@ -731,22 +512,8 @@ class fba_tools(object):
         :returns: instance of type "WorkspaceRef" -> structure: parameter
            "ref" of String
         """
-        job_id = self._excel_file_to_model_submit(p, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _sbml_file_to_model_submit(self, p, context=None):
-        return self._client._submit_job(
-             'fba_tools.sbml_file_to_model', [p],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.excel_file_to_model',
+                                    [p], self._service_ver, context)
 
     def sbml_file_to_model(self, p, context=None):
         """
@@ -761,22 +528,8 @@ class fba_tools(object):
         :returns: instance of type "WorkspaceRef" -> structure: parameter
            "ref" of String
         """
-        job_id = self._sbml_file_to_model_submit(p, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _tsv_file_to_model_submit(self, p, context=None):
-        return self._client._submit_job(
-             'fba_tools.tsv_file_to_model', [p],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.sbml_file_to_model',
+                                    [p], self._service_ver, context)
 
     def tsv_file_to_model(self, p, context=None):
         """
@@ -791,22 +544,8 @@ class fba_tools(object):
         :returns: instance of type "WorkspaceRef" -> structure: parameter
            "ref" of String
         """
-        job_id = self._tsv_file_to_model_submit(p, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _model_to_excel_file_submit(self, model, context=None):
-        return self._client._submit_job(
-             'fba_tools.model_to_excel_file', [model],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.tsv_file_to_model',
+                                    [p], self._service_ver, context)
 
     def model_to_excel_file(self, model, context=None):
         """
@@ -818,22 +557,8 @@ class fba_tools(object):
         :returns: instance of type "File" -> structure: parameter "path" of
            String, parameter "shock_id" of String
         """
-        job_id = self._model_to_excel_file_submit(model, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _model_to_sbml_file_submit(self, model, context=None):
-        return self._client._submit_job(
-             'fba_tools.model_to_sbml_file', [model],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.model_to_excel_file',
+                                    [model], self._service_ver, context)
 
     def model_to_sbml_file(self, model, context=None):
         """
@@ -845,22 +570,8 @@ class fba_tools(object):
         :returns: instance of type "File" -> structure: parameter "path" of
            String, parameter "shock_id" of String
         """
-        job_id = self._model_to_sbml_file_submit(model, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _model_to_tsv_file_submit(self, model, context=None):
-        return self._client._submit_job(
-             'fba_tools.model_to_tsv_file', [model],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.model_to_sbml_file',
+                                    [model], self._service_ver, context)
 
     def model_to_tsv_file(self, model, context=None):
         """
@@ -875,22 +586,8 @@ class fba_tools(object):
            of type "File" -> structure: parameter "path" of String, parameter
            "shock_id" of String
         """
-        job_id = self._model_to_tsv_file_submit(model, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_model_as_excel_file_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.export_model_as_excel_file', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.model_to_tsv_file',
+                                    [model], self._service_ver, context)
 
     def export_model_as_excel_file(self, params, context=None):
         """
@@ -900,22 +597,8 @@ class fba_tools(object):
         :returns: instance of type "ExportOutput" -> structure: parameter
            "shock_id" of String
         """
-        job_id = self._export_model_as_excel_file_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_model_as_tsv_file_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.export_model_as_tsv_file', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.export_model_as_excel_file',
+                                    [params], self._service_ver, context)
 
     def export_model_as_tsv_file(self, params, context=None):
         """
@@ -925,22 +608,8 @@ class fba_tools(object):
         :returns: instance of type "ExportOutput" -> structure: parameter
            "shock_id" of String
         """
-        job_id = self._export_model_as_tsv_file_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_model_as_sbml_file_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.export_model_as_sbml_file', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.export_model_as_tsv_file',
+                                    [params], self._service_ver, context)
 
     def export_model_as_sbml_file(self, params, context=None):
         """
@@ -950,22 +619,8 @@ class fba_tools(object):
         :returns: instance of type "ExportOutput" -> structure: parameter
            "shock_id" of String
         """
-        job_id = self._export_model_as_sbml_file_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _fba_to_excel_file_submit(self, fba, context=None):
-        return self._client._submit_job(
-             'fba_tools.fba_to_excel_file', [fba],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.export_model_as_sbml_file',
+                                    [params], self._service_ver, context)
 
     def fba_to_excel_file(self, fba, context=None):
         """
@@ -977,22 +632,8 @@ class fba_tools(object):
         :returns: instance of type "File" -> structure: parameter "path" of
            String, parameter "shock_id" of String
         """
-        job_id = self._fba_to_excel_file_submit(fba, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _fba_to_tsv_file_submit(self, fba, context=None):
-        return self._client._submit_job(
-             'fba_tools.fba_to_tsv_file', [fba],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.fba_to_excel_file',
+                                    [fba], self._service_ver, context)
 
     def fba_to_tsv_file(self, fba, context=None):
         """
@@ -1007,22 +648,8 @@ class fba_tools(object):
            of type "File" -> structure: parameter "path" of String, parameter
            "shock_id" of String
         """
-        job_id = self._fba_to_tsv_file_submit(fba, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_fba_as_excel_file_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.export_fba_as_excel_file', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.fba_to_tsv_file',
+                                    [fba], self._service_ver, context)
 
     def export_fba_as_excel_file(self, params, context=None):
         """
@@ -1032,22 +659,8 @@ class fba_tools(object):
         :returns: instance of type "ExportOutput" -> structure: parameter
            "shock_id" of String
         """
-        job_id = self._export_fba_as_excel_file_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_fba_as_tsv_file_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.export_fba_as_tsv_file', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.export_fba_as_excel_file',
+                                    [params], self._service_ver, context)
 
     def export_fba_as_tsv_file(self, params, context=None):
         """
@@ -1057,22 +670,8 @@ class fba_tools(object):
         :returns: instance of type "ExportOutput" -> structure: parameter
            "shock_id" of String
         """
-        job_id = self._export_fba_as_tsv_file_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _tsv_file_to_media_submit(self, p, context=None):
-        return self._client._submit_job(
-             'fba_tools.tsv_file_to_media', [p],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.export_fba_as_tsv_file',
+                                    [params], self._service_ver, context)
 
     def tsv_file_to_media(self, p, context=None):
         """
@@ -1084,22 +683,8 @@ class fba_tools(object):
         :returns: instance of type "WorkspaceRef" -> structure: parameter
            "ref" of String
         """
-        job_id = self._tsv_file_to_media_submit(p, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _excel_file_to_media_submit(self, p, context=None):
-        return self._client._submit_job(
-             'fba_tools.excel_file_to_media', [p],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.tsv_file_to_media',
+                                    [p], self._service_ver, context)
 
     def excel_file_to_media(self, p, context=None):
         """
@@ -1111,22 +696,8 @@ class fba_tools(object):
         :returns: instance of type "WorkspaceRef" -> structure: parameter
            "ref" of String
         """
-        job_id = self._excel_file_to_media_submit(p, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _media_to_tsv_file_submit(self, media, context=None):
-        return self._client._submit_job(
-             'fba_tools.media_to_tsv_file', [media],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.excel_file_to_media',
+                                    [p], self._service_ver, context)
 
     def media_to_tsv_file(self, media, context=None):
         """
@@ -1137,22 +708,8 @@ class fba_tools(object):
         :returns: instance of type "File" -> structure: parameter "path" of
            String, parameter "shock_id" of String
         """
-        job_id = self._media_to_tsv_file_submit(media, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _media_to_excel_file_submit(self, media, context=None):
-        return self._client._submit_job(
-             'fba_tools.media_to_excel_file', [media],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.media_to_tsv_file',
+                                    [media], self._service_ver, context)
 
     def media_to_excel_file(self, media, context=None):
         """
@@ -1163,22 +720,8 @@ class fba_tools(object):
         :returns: instance of type "File" -> structure: parameter "path" of
            String, parameter "shock_id" of String
         """
-        job_id = self._media_to_excel_file_submit(media, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_media_as_excel_file_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.export_media_as_excel_file', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.media_to_excel_file',
+                                    [media], self._service_ver, context)
 
     def export_media_as_excel_file(self, params, context=None):
         """
@@ -1188,22 +731,8 @@ class fba_tools(object):
         :returns: instance of type "ExportOutput" -> structure: parameter
            "shock_id" of String
         """
-        job_id = self._export_media_as_excel_file_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_media_as_tsv_file_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.export_media_as_tsv_file', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.export_media_as_excel_file',
+                                    [params], self._service_ver, context)
 
     def export_media_as_tsv_file(self, params, context=None):
         """
@@ -1213,22 +742,8 @@ class fba_tools(object):
         :returns: instance of type "ExportOutput" -> structure: parameter
            "shock_id" of String
         """
-        job_id = self._export_media_as_tsv_file_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _tsv_file_to_phenotype_set_submit(self, p, context=None):
-        return self._client._submit_job(
-             'fba_tools.tsv_file_to_phenotype_set', [p],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.export_media_as_tsv_file',
+                                    [params], self._service_ver, context)
 
     def tsv_file_to_phenotype_set(self, p, context=None):
         """
@@ -1241,22 +756,8 @@ class fba_tools(object):
         :returns: instance of type "WorkspaceRef" -> structure: parameter
            "ref" of String
         """
-        job_id = self._tsv_file_to_phenotype_set_submit(p, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _phenotype_set_to_tsv_file_submit(self, phenotype_set, context=None):
-        return self._client._submit_job(
-             'fba_tools.phenotype_set_to_tsv_file', [phenotype_set],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.tsv_file_to_phenotype_set',
+                                    [p], self._service_ver, context)
 
     def phenotype_set_to_tsv_file(self, phenotype_set, context=None):
         """
@@ -1268,22 +769,8 @@ class fba_tools(object):
         :returns: instance of type "File" -> structure: parameter "path" of
            String, parameter "shock_id" of String
         """
-        job_id = self._phenotype_set_to_tsv_file_submit(phenotype_set, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_phenotype_set_as_tsv_file_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.export_phenotype_set_as_tsv_file', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.phenotype_set_to_tsv_file',
+                                    [phenotype_set], self._service_ver, context)
 
     def export_phenotype_set_as_tsv_file(self, params, context=None):
         """
@@ -1293,22 +780,8 @@ class fba_tools(object):
         :returns: instance of type "ExportOutput" -> structure: parameter
            "shock_id" of String
         """
-        job_id = self._export_phenotype_set_as_tsv_file_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _phenotype_simulation_set_to_excel_file_submit(self, pss, context=None):
-        return self._client._submit_job(
-             'fba_tools.phenotype_simulation_set_to_excel_file', [pss],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.export_phenotype_set_as_tsv_file',
+                                    [params], self._service_ver, context)
 
     def phenotype_simulation_set_to_excel_file(self, pss, context=None):
         """
@@ -1321,22 +794,8 @@ class fba_tools(object):
         :returns: instance of type "File" -> structure: parameter "path" of
            String, parameter "shock_id" of String
         """
-        job_id = self._phenotype_simulation_set_to_excel_file_submit(pss, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _phenotype_simulation_set_to_tsv_file_submit(self, pss, context=None):
-        return self._client._submit_job(
-             'fba_tools.phenotype_simulation_set_to_tsv_file', [pss],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.phenotype_simulation_set_to_excel_file',
+                                    [pss], self._service_ver, context)
 
     def phenotype_simulation_set_to_tsv_file(self, pss, context=None):
         """
@@ -1349,22 +808,8 @@ class fba_tools(object):
         :returns: instance of type "File" -> structure: parameter "path" of
            String, parameter "shock_id" of String
         """
-        job_id = self._phenotype_simulation_set_to_tsv_file_submit(pss, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_phenotype_simulation_set_as_excel_file_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.export_phenotype_simulation_set_as_excel_file', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.phenotype_simulation_set_to_tsv_file',
+                                    [pss], self._service_ver, context)
 
     def export_phenotype_simulation_set_as_excel_file(self, params, context=None):
         """
@@ -1374,22 +819,8 @@ class fba_tools(object):
         :returns: instance of type "ExportOutput" -> structure: parameter
            "shock_id" of String
         """
-        job_id = self._export_phenotype_simulation_set_as_excel_file_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _export_phenotype_simulation_set_as_tsv_file_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.export_phenotype_simulation_set_as_tsv_file', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.export_phenotype_simulation_set_as_excel_file',
+                                    [params], self._service_ver, context)
 
     def export_phenotype_simulation_set_as_tsv_file(self, params, context=None):
         """
@@ -1399,22 +830,8 @@ class fba_tools(object):
         :returns: instance of type "ExportOutput" -> structure: parameter
            "shock_id" of String
         """
-        job_id = self._export_phenotype_simulation_set_as_tsv_file_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
-
-    def _bulk_export_objects_submit(self, params, context=None):
-        return self._client._submit_job(
-             'fba_tools.bulk_export_objects', [params],
-             self._service_ver, context)
+        return self._client.run_job('fba_tools.export_phenotype_simulation_set_as_tsv_file',
+                                    [params], self._service_ver, context)
 
     def bulk_export_objects(self, params, context=None):
         """
@@ -1433,28 +850,9 @@ class fba_tools(object):
            "ws_report_id" (The workspace ID for a Report object @id ws
            KBaseReport.Report), parameter "ref" of String
         """
-        job_id = self._bulk_export_objects_submit(params, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
+        return self._client.run_job('fba_tools.bulk_export_objects',
+                                    [params], self._service_ver, context)
 
     def status(self, context=None):
-        job_id = self._client._submit_job('fba_tools.status', 
-            [], self._service_ver, context)
-        async_job_check_time = self._client.async_job_check_time
-        while True:
-            time.sleep(async_job_check_time)
-            async_job_check_time = (async_job_check_time *
-                self._client.async_job_check_time_scale_percent / 100.0)
-            if async_job_check_time > self._client.async_job_check_max_time:
-                async_job_check_time = self._client.async_job_check_max_time
-            job_state = self._check_job(job_id)
-            if job_state['finished']:
-                return job_state['result'][0]
+        return self._client.run_job('fba_tools.status',
+                                    [], self._service_ver, context)

@@ -3,9 +3,9 @@ import time
 import json
 import uuid
 
-from KBaseFeatureValues.KBaseFeatureValuesClient import KBaseFeatureValues
-from DataFileUtil.DataFileUtilClient import DataFileUtil
-from KBaseReport.KBaseReportClient import KBaseReport
+from installed_clients.KBaseFeatureValuesClient import KBaseFeatureValues
+from installed_clients.DataFileUtilClient import DataFileUtil
+from installed_clients.KBaseReportClient import KBaseReport
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
 def log(message, prefix_newline=False):
