@@ -46,7 +46,7 @@
       }
     },
     {
-      "id" : "type",
+      "id" : "genome_type",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
