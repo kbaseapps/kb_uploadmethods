@@ -2,9 +2,9 @@ import json
 import time
 import uuid
 
-from DataFileUtil.DataFileUtilClient import DataFileUtil
-from GenericsApi.GenericsApiClient import GenericsAPI
-from KBaseReport.KBaseReportClient import KBaseReport
+from installed_clients.DataFileUtilClient import DataFileUtil
+from installed_clients.GenericsApiClient import GenericsAPI
+from installed_clients.KBaseReportClient import KBaseReport
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
 

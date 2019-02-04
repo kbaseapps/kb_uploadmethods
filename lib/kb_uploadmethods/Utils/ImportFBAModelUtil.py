@@ -4,9 +4,9 @@ import json
 import sys
 import uuid
 
-from fba_tools.fba_toolsClient import fba_tools
-from DataFileUtil.DataFileUtilClient import DataFileUtil
-from KBaseReport.KBaseReportClient import KBaseReport
+from installed_clients.fba_toolsClient import fba_tools
+from installed_clients.DataFileUtilClient import DataFileUtil
+from installed_clients.KBaseReportClient import KBaseReport
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
 

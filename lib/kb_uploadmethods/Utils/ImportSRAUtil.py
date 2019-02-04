@@ -9,9 +9,9 @@ import time
 import uuid
 from pprint import pprint
 
-from DataFileUtil.DataFileUtilClient import DataFileUtil
-from KBaseReport.KBaseReportClient import KBaseReport
-from ReadsUtils.ReadsUtilsClient import ReadsUtils
+from installed_clients.DataFileUtilClient import DataFileUtil
+from installed_clients.KBaseReportClient import KBaseReport
+from installed_clients.ReadsUtilsClient import ReadsUtils
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from . import handler_utils
 
