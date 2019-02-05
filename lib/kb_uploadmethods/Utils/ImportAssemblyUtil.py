@@ -122,7 +122,8 @@ class ImportAssemblyUtil:
         contig_content = str([[str(e['contig_id']), e['length']] for e in contig_data])
 
         with open(result_file_path, 'w') as result_file:
-            with open(os.path.join(os.path.dirname(__file__), 'report_template_assembly.html'),
+            with open(os.path.join(os.path.dirname(__file__), 'report_template',
+                                   'report_template_assembly.html'),
                       'r') as report_template_file:
                 report_template = report_template_file.read()
                 report_template = report_template.replace('<p>*Overview_Content*</p>',
@@ -155,7 +156,7 @@ class ImportAssemblyUtil:
             for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
             staging_file_subdir_path is subdir_1/subdir_2/file_name
         workspace_name: workspace name/ID that reads will be stored to
-        
+
         """
         uuid_string = str(uuid.uuid4())
 

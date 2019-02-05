@@ -142,7 +142,8 @@ class ImportGenbankUtil:
                               zip(genome_data.get('contig_ids', []),
                                   genome_data.get('contig_lengths', []))])
         with open(result_file_path, 'w') as result_file:
-            with open(os.path.join(os.path.dirname(__file__), 'report_template_genome.html'),
+            with open(os.path.join(os.path.dirname(__file__), 'report_template',
+                                   'report_template_genome.html'),
                       'r') as report_template_file:
                 report_template = report_template_file.read()
                 report_template = report_template.replace('<p>Overview_Content</p>',
@@ -167,7 +168,7 @@ class ImportGenbankUtil:
         """
         :param genome_ref:  Return Val from GenomeFileUtil for Uploaded genome
                             Need to get report warnings and message from it.
-        :return: 
+        :return:
         """
         uuid_string = str(uuid.uuid4())
 
