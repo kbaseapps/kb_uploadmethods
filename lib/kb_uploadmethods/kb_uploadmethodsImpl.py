@@ -36,7 +36,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "1.0.25"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "bc514122b0ec13f510f996de518995693f8b376e"
+    GIT_COMMIT_HASH = "2f21fdb4ce631405258cd96304f454b87a3a7c05"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -201,16 +201,15 @@ class kb_uploadmethods:
         """
         :param params: instance of type "BatchGenomeImporterParams" ->
            structure: parameter "staging_subdir" of String, parameter
-           "genome_name" of String, parameter "workspace_name" of type
+           "genome_set_name" of String, parameter "workspace_name" of type
            "workspace_name" (workspace name of the object), parameter
            "genome_type" of String, parameter "source" of String, parameter
            "taxon_wsname" of String, parameter "taxon_reference" of String,
            parameter "release" of String, parameter "genetic_code" of Long,
            parameter "generate_missing_genes" of String
         :returns: instance of type "BatchGenomeImporterResult" -> structure:
-           parameter "genome_ref" of String, parameter "genome_info" of
-           String, parameter "report_name" of type "report_name", parameter
-           "report_ref" of type "report_ref"
+           parameter "genome_set_ref" of String, parameter "report_name" of
+           type "report_name", parameter "report_ref" of type "report_ref"
         """
         # ctx is the context object
         # return variables are: returnVal

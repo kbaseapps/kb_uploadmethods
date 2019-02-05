@@ -151,8 +151,7 @@ module kb_uploadmethods {
   } BatchGenomeImporterParams;
 
   typedef structure {
-    string genome_ref;
-    string genome_info;
+    string genome_set_ref;
     report_name report_name;
     report_ref report_ref;
   } BatchGenomeImporterResult;
