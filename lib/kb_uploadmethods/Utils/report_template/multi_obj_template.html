@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px 10px 10px 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* tabpanel is the container for the tabset */
+        .tabpanel {
+        }
+
+        /* tabtoggle is the title and toggle control for the tabset */
+        .tabtoggle {
+            /* display: inline-block;
+            width: 20em; */
+            cursor: pointer;
+            padding: 6px;
+        }
+        .tabtoggle:hover {
+            background-color: #CCC;
+        }
+        .tabtoggle::before {
+            content: "\25B6";
+            display: inline-block;
+            width: 1em;
+        }
+        .tabpanel.active .tabtoggle::before {
+            content: "\25BC";
+            display: inline-block;
+            width: 1em;
+        }
+
+        /* tabset is the entire tab set container */
+        .tabset {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .tabpanel.active .tabset {
+            display: block;
+        }
+
+        /* tabs is the container for tabs */
+        .tabs {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        /* tab is the actual tab control */
+        .tab {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+
+        .tab:hover {
+            background-color: #ddd;
+        }
+
+        .tab.active {
+            background-color: #ccc;
+        }
+
+
+        /* tabcontent is the tab panel container */
+        .tabpanel.active .tabcontent.active {
+            display: block;
+        }
+
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            -webkit-animation: fadeEffect 1s;
+            animation: fadeEffect 1s;
+            border-top: none;
+        }
+
+        /* Fade in tabs */
+        @-webkit-keyframes fadeEffect {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeEffect {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css">
+</head>
+
+<body>
+<p>OBJECTS_DATA_TO_FILL</p>
+    <script>
+        // getNode
+        // A helper function to return a dom node which contains a special data- attribute.
+        // The attribute should look like "data-TYPE=NAME", where TYPE is, in this case, "tabset" or "tab",
+        // and NAME is some unique value within that type. 
+        // The context for this dom query is a given root dom node, which defaults to document if not provided.
+        // This means that the scope for TYPE.NAME is the root, which is global for document, otherwise it is 
+        // limited to the dom node provided in root. This allows one name tabs and tab panes locally by using 
+        // the tabset as the root.
+        function getNode(type, name, root) {
+            if (!root) {
+                root = document;
+            }
+            var selector = '[data-' + type + '="' + name + '"]';
+            return root.querySelector(selector);
+        }
+
+        // toggleTabset
+        // Hide or show a tabset via the "active" class.
+        // If the resulting state is "active" then open the default tab.
+        // function toggleTabset(tabsetName) {
+        //     // hide tabset via container.
+        //     var tabSet = getNode('tabset', tabsetName);
+        //     tabSet.classList.toggle('active');
+        //     if (tabSet.classList.contains('active')) {
+        //         console.log('opening tab', tabsetName);
+        //         openTab(tabsetName, defaultTab);
+        //     }
+        // }
+
+        function toggleTabpanel(tabpanelName) {
+            // hide tabset via container.
+            var tabPanel = getNode('tabpanel', tabpanelName);
+            tabPanel.classList.toggle('active');
+            if (tabPanel.classList.contains('active')) {
+                openFirstTab(tabpanelName);
+            }
+        }
+
+        function openFirstTab(tabsetName) {
+            // Get the tabset based on the data-tabset attribute.
+            var tabSet = getNode('tabset', tabsetName);
+            var firstTab = tabSet.querySelector('.tab')
+            openTab(tabsetName, firstTab.getAttribute('data-tab'));
+        }
+
+        function openTab(tabSetName, tabName) {
+            var i, tabcontent;
+
+            // Get the tabset based on the data-tabset attribute.
+            var tabSet = getNode('tabset', tabSetName);
+
+            // Hide all tab panes
+            tabcontent = tabSet.querySelectorAll('.tabcontent.active'); 
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove('active');
+            }
+
+            // Deactivate any active tabs
+            var activeTabs = tabSet.querySelectorAll('.tab.active');            
+            for (i = 0; i < activeTabs.length; i++) {
+                activeTabs[i].classList.remove('active');
+            }
+
+            // Show the requested tab pane.
+            getNode('tabpane', tabName, tabSet).classList.add('active');
+
+            // Show the requested tab.
+            getNode('tab', tabName, tabSet).classList.add('active');
+        }
+        // Get the element with id="defaultOpen" and click on it
+        toggleTabpanel('object1');
+    </script>
+</body>
+</html>

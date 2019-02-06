@@ -67,8 +67,8 @@ class ImportGFFFastaUtil:
         """
         Update the workspace object related meta-data for staged file
         """
-        self.uploader_utils.update_staging_service(download_staging_file_params.get('staging_file_subdir_path'),
-                                                   returnVal['genome_ref'])
+        # self.uploader_utils.update_staging_service(download_staging_file_params.get('staging_file_subdir_path'),
+        #                                            returnVal['genome_ref'])
         return returnVal
 
     def validate_import_gff_fasta_from_staging_params(self, params):
