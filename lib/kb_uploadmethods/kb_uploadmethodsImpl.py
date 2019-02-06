@@ -218,6 +218,17 @@ class kb_uploadmethods:
         print('--->\nRunning uploadmethods.batch_import_genomes_from_staging\nparams:')
         print((json.dumps(params, indent=1)))
 
+        for key in list(params.keys()):
+            value = params[key]
+            if value is None:
+                del params[key]
+            else:
+                if isinstance(value, str):
+                    if value.strip() == '':
+                        params[key] = None
+                    else:
+                        params[key] = value.strip()
+
         self.config['USER_ID'] = ctx['user_id']
 
         batch_util = BatchUtil(self.config)
