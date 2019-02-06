@@ -36,7 +36,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "1.0.25"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "2f21fdb4ce631405258cd96304f454b87a3a7c05"
+    GIT_COMMIT_HASH = "218bad9b7848e014764dc95bfed4a758847439c2"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
