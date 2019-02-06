@@ -85,14 +85,14 @@ class BatchUtil:
             for file in files:
                 file_name, file_extension = os.path.splitext(file)
                 if file_extension[1:].lower() in file_exts:
-                    matching_files = [os.path.join(root, file)]
+                    matching_files = [os.path.join(root, file).split('/', 4)[-1]]
                     if associate_file_exts:
                         for associate_file in os.listdir(root):
                             associate_file_name, associate_file_extension = os.path.splitext(
                                                                                 associate_file)
                             if (file_name == associate_file_name and
                                     associate_file_extension[1:].lower() in associate_file_exts):
-                                matching_files.append(os.path.join(root, associate_file))
+                                matching_files.append(os.path.join(root, associate_file).split('/', 4)[-1])
                     current_dir = root.split('/', 4)[-1].replace('/', '_')
                     found_files.update({file_name + '_' + current_dir: matching_files})
 
