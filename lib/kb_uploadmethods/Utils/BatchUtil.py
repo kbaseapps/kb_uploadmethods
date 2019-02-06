@@ -18,7 +18,7 @@ class BatchUtil:
 
     # staging file prefix
     STAGING_FILE_PREFIX = '/data/bulk/'
-    GENBANK_FILE_EXT = ['gbk', 'genbank', 'gbff']
+    GENBANK_FILE_EXT = ['gbk', 'genbank', 'gbff', 'gb', 'gbf', 'dat']
     GFF_FILE_EXT = ['gff', 'gff3']
     FASTA_FILE_EXT = ['fna', 'fasta', 'fa']
 
