@@ -67,7 +67,7 @@ class ImportAssemblyUtil:
         """
         Update the workspace object related meta-data for staged file
         """
-        self.uploader_utils.update_staging_service(params.get('staging_file_subdir_path'), ref)
+        # self.uploader_utils.update_staging_service(params.get('staging_file_subdir_path'), ref)
 
         returnVal = {'obj_ref': ref}
         return returnVal

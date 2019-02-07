@@ -350,6 +350,10 @@ class Application(object):
                              name='kb_uploadmethods.batch_import_genomes_from_staging',
                              types=[dict])
         self.method_authentication['kb_uploadmethods.batch_import_genomes_from_staging'] = 'required'  # noqa
+        self.rpc_service.add(impl_kb_uploadmethods.batch_import_assemblies_from_staging,
+                             name='kb_uploadmethods.batch_import_assemblies_from_staging',
+                             types=[dict])
+        self.method_authentication['kb_uploadmethods.batch_import_assemblies_from_staging'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_uploadmethods.unpack_staging_file,
                              name='kb_uploadmethods.unpack_staging_file',
                              types=[dict])

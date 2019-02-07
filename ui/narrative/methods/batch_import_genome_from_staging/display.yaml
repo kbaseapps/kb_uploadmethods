@@ -1,4 +1,4 @@
-name     : Batch Import Genomes from Staging Area
+name     : Batch Import Genome from Staging Area
 subtitle : Import files (Genbank or GFF + FASTA) from your staging area into your Narrative as a Genome data object
 tooltip  : Import files (Genbank or GFF + FASTA) from your staging area into your Narrative as a Genome data object
 
