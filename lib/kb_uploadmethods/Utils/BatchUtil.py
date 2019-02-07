@@ -33,6 +33,8 @@ class BatchUtil:
 
         objects_created = list()
 
+        message = ''
+
         if set_object:
             objects_created.append({'ref': set_object,
                                     'description': 'Imported {}Set'.format(object_type)})
@@ -41,10 +43,11 @@ class BatchUtil:
             objects_created.extend([{
                 'ref': generated_object,
                 'description': 'Imported {}Object'.format(object_type)} for generated_object in sub_objects])
+        else:
+            message += 'No object generated. Please double check your directory has required files.\n'
 
-        message = ''
         if failed_files:
-            message = 'Failed files:\n{}'.format('\n'.join(list(itertools.chain.from_iterable(failed_files))))
+            message += 'Failed files:\n{}'.format('\n'.join(list(itertools.chain.from_iterable(failed_files))))
 
         report_params = {'message': message,
                          'objects_created': objects_created,
