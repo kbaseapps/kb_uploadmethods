@@ -34,9 +34,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.0.25"
+    VERSION = "1.0.26"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "218bad9b7848e014764dc95bfed4a758847439c2"
+    GIT_COMMIT_HASH = "ac50f7b135074ea5e4f97c50313e164a8c1198bb"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -207,9 +207,9 @@ class kb_uploadmethods:
            "taxon_wsname" of String, parameter "taxon_reference" of String,
            parameter "release" of String, parameter "genetic_code" of Long,
            parameter "generate_missing_genes" of String
-        :returns: instance of type "BatchGenomeImporterResult" -> structure:
-           parameter "genome_set_ref" of String, parameter "report_name" of
-           type "report_name", parameter "report_ref" of type "report_ref"
+        :returns: instance of type "BatchImporterResult" -> structure:
+           parameter "set_ref" of String, parameter "report_name" of type
+           "report_name", parameter "report_ref" of type "report_ref"
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -238,6 +238,47 @@ class kb_uploadmethods:
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method batch_import_genomes_from_staging return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def batch_import_assemblies_from_staging(self, ctx, params):
+        """
+        :param params: instance of type "BatchAssemblyImporterParams" ->
+           structure: parameter "staging_subdir" of String, parameter
+           "assembly_set_name" of String, parameter "workspace_name" of type
+           "workspace_name" (workspace name of the object), parameter
+           "min_contig_length" of Long, parameter "type" of String
+        :returns: instance of type "BatchImporterResult" -> structure:
+           parameter "set_ref" of String, parameter "report_name" of type
+           "report_name", parameter "report_ref" of type "report_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN batch_import_assemblies_from_staging
+        print('--->\nRunning uploadmethods.batch_import_assemblies_from_staging\nparams:')
+        print((json.dumps(params, indent=1)))
+
+        for key in list(params.keys()):
+            value = params[key]
+            if value is None:
+                del params[key]
+            else:
+                if isinstance(value, str):
+                    if value.strip() == '':
+                        params[key] = None
+                    else:
+                        params[key] = value.strip()
+
+        self.config['USER_ID'] = ctx['user_id']
+
+        batch_util = BatchUtil(self.config)
+        returnVal = batch_util.batch_import_assemblies_from_staging(params)
+        #END batch_import_assemblies_from_staging
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method batch_import_assemblies_from_staging return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]

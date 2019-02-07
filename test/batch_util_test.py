@@ -133,7 +133,24 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         returnVal = self.getImpl().batch_import_genomes_from_staging(self.getContext(), input_params)[0]
 
-        set_ref = returnVal.get('genome_set_ref')
+        set_ref = returnVal.get('set_ref')
+
+        set_data = self.dfu.get_objects({'object_refs': [set_ref]})['data'][0]['data']
+
+        self.assertEqual(len(set_data['items']), 4)
+
+    @patch.object(BatchUtil, "_get_staging_file_path", side_effect=mock_get_staging_file_path)
+    @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
+    def test_batch_import_assemblies_from_staging(self, _get_staging_file_path, download_staging_file):
+        input_params = {
+            'staging_subdir': 'test_batch',
+            'workspace_name': self.getWsName(),
+            'assembly_set_name': 'test_assembly_set_name'
+        }
+
+        returnVal = self.getImpl().batch_import_assemblies_from_staging(self.getContext(), input_params)[0]
+
+        set_ref = returnVal.get('set_ref')
 
         set_data = self.dfu.get_objects({'object_refs': [set_ref]})['data'][0]['data']
 

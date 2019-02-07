@@ -151,13 +151,25 @@ module kb_uploadmethods {
   } BatchGenomeImporterParams;
 
   typedef structure {
-    string genome_set_ref;
+    string set_ref;
     report_name report_name;
     report_ref report_ref;
-  } BatchGenomeImporterResult;
+  } BatchImporterResult;
 
   funcdef batch_import_genomes_from_staging(BatchGenomeImporterParams params)
-    returns (BatchGenomeImporterResult returnVal) authentication required;
+    returns (BatchImporterResult returnVal) authentication required;
+
+  typedef structure {
+    string staging_subdir;
+    string assembly_set_name;
+    workspace_name workspace_name;
+
+    int min_contig_length;
+    string type;
+  } BatchAssemblyImporterParams;
+
+  funcdef batch_import_assemblies_from_staging(BatchAssemblyImporterParams params)
+    returns (BatchImporterResult returnVal) authentication required;
 
   /* Input parameters for the "unpack_staging_file" function.
 

@@ -12,6 +12,7 @@ from installed_clients.KBaseReportClient import KBaseReport
 from installed_clients.SetAPIServiceClient import SetAPI
 from kb_uploadmethods.Utils.ImportGenbankUtil import ImportGenbankUtil
 from kb_uploadmethods.Utils.ImportGFFFastaUtil import ImportGFFFastaUtil
+from kb_uploadmethods.Utils.ImportAssemblyUtil import ImportAssemblyUtil
 
 
 class BatchUtil:
@@ -32,6 +33,8 @@ class BatchUtil:
 
         objects_created = list()
 
+        message = ''
+
         if set_object:
             objects_created.append({'ref': set_object,
                                     'description': 'Imported {}Set'.format(object_type)})
@@ -40,10 +43,11 @@ class BatchUtil:
             objects_created.extend([{
                 'ref': generated_object,
                 'description': 'Imported {}Object'.format(object_type)} for generated_object in sub_objects])
+        else:
+            message += 'No object generated. Please double check your directory has required files.\n'
 
-        message = ''
         if failed_files:
-            message = 'Failed files:\n{}'.format('\n'.join(list(itertools.chain.from_iterable(failed_files))))
+            message += 'Failed files:\n{}'.format('\n'.join(list(itertools.chain.from_iterable(failed_files))))
 
         report_params = {'message': message,
                          'objects_created': objects_created,
@@ -98,6 +102,17 @@ class BatchUtil:
 
         return found_files
 
+    def _fetch_assembly_files(self, staging_subdir):
+        logging.info('start fetching assembly files')
+        assembly_files = dict()
+
+        sub_dir = self._get_staging_file_path(self.user_id, staging_subdir)
+
+        fasta_files = self._find_files_end_with(sub_dir, self.FASTA_FILE_EXT)
+        assembly_files.update({'fasta': fasta_files})
+
+        return assembly_files
+
     def _fetch_genome_files(self, staging_subdir):
         logging.info('start fetching genome files')
         genome_files = dict()
@@ -151,6 +166,8 @@ class BatchUtil:
                 obj_ref = self.genbank_import.import_genbank_from_staging(params)['genome_ref']
             elif importer_type == 'gff_fasta':
                 obj_ref = self.gff_fasta_import.import_gff_fasta_from_staging(params)['genome_ref']
+            elif importer_type == 'assembly':
+                obj_ref = self.fasta_import.import_fasta_as_assembly_from_staging(params)['obj_ref']
             else:
                 return obj_ref
         except Exception as e:
@@ -171,6 +188,7 @@ class BatchUtil:
         self.dfu = DataFileUtil(self.callback_url)
         self.genbank_import = ImportGenbankUtil(config)
         self.gff_fasta_import = ImportGFFFastaUtil(config)
+        self.fasta_import = ImportAssemblyUtil(config)
         self.set_client = SetAPI(config['srv-wiz-url'])
 
     def batch_import_genomes_from_staging(self, params):
@@ -231,7 +249,47 @@ class BatchUtil:
         report_output = self._generate_report(genome_set_ref, genome_objects, workspace_name,
                                               failed_files=failed_files, object_type='Genome ')
 
-        returnVal = {'genome_set_ref': genome_set_ref}
+        returnVal = {'set_ref': genome_set_ref}
+
+        returnVal.update(report_output)
+
+        return returnVal
+
+    def batch_import_assemblies_from_staging(self, params):
+        logging.info('--->\nstart importing assembly\n' +
+                     'params:\n{}'.format(json.dumps(params, indent=1)))
+
+        staging_subdir = params.get('staging_subdir')
+        workspace_name = params.get('workspace_name')
+        assembly_set_name = params.get('assembly_set_name')
+
+        assembly_files = self._fetch_assembly_files(staging_subdir)
+
+        assembly_objects = list()
+        failed_files = list()
+
+        # import fasta assembly
+        fasta_files = assembly_files.get('fasta')
+        if fasta_files:
+            for assembly_name, fasta_file in fasta_files.items():
+                fasta_params = deepcopy(params)
+                fasta_params['staging_file_subdir_path'] = fasta_file[0]
+                fasta_params['assembly_name'] = assembly_name
+
+                assembly_ref = self._call_importer(fasta_params, 'assembly')
+
+                if assembly_ref:
+                    assembly_objects.append(assembly_ref)
+                else:
+                    failed_files.append(fasta_file)
+
+        assembly_set_ref = self._generate_set_object(workspace_name, assembly_objects,
+                                                     assembly_set_name, 'assembly')
+
+        report_output = self._generate_report(assembly_set_ref, assembly_objects, workspace_name,
+                                              failed_files=failed_files, object_type='Assembly ')
+
+        returnVal = {'set_ref': assembly_set_ref}
 
         returnVal.update(report_output)
 
