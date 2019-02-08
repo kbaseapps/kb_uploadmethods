@@ -72,7 +72,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def getContext(self):
         return self.__class__.ctx
 
-    def mock_get_staging_file_path(token_user, staging_file_subdir_path):
+    def mock_get_staging_file_path(staging_file_subdir_path):
         print('Mocking _get_staging_file_path')
 
         return os.path.join('/kb/module/test/data', staging_file_subdir_path)
