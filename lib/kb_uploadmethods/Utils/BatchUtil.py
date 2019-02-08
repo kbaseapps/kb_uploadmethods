@@ -18,6 +18,7 @@ from kb_uploadmethods.Utils.ImportAssemblyUtil import ImportAssemblyUtil
 class BatchUtil:
 
     # staging file prefix
+    STAGING_GLOBAL_FILE_PREFIX = '/data/bulk/'
     STAGING_USER_FILE_PREFIX = '/staging/'
     GENBANK_FILE_EXT = ['gbk', 'genbank', 'gbff', 'gb', 'gbf', 'dat']
     GFF_FILE_EXT = ['gff', 'gff3']
@@ -61,15 +62,22 @@ class BatchUtil:
 
         return report_output
 
-    def _get_staging_file_path(self, staging_file_subdir_path):
+    def _get_staging_file_path(self, token_user, staging_file_subdir_path):
         """
         _get_staging_file_path: return staging area file path
 
-        directory pattern: /staging/sub_dir/file_name
-
+        directory pattern:
+            perfered to return user specific path: /staging/sub_dir/file_name
+            if this path is not visible to user, use global bulk path: /data/bulk/user_name/sub_dir/file_name
         """
 
-        return os.path.join(self.STAGING_USER_FILE_PREFIX, staging_file_subdir_path.strip('/'))
+        user_path = os.path.join(self.STAGING_USER_FILE_PREFIX, staging_file_subdir_path.strip('/'))
+
+        if os.path.exists(user_path):
+            return user_path
+        else:
+            return os.path.join(self.STAGING_GLOBAL_FILE_PREFIX, token_user,
+                                staging_file_subdir_path.strip('/'))
 
     def _validate_batch_import_genomes_from_staging_params(self, params):
         """
