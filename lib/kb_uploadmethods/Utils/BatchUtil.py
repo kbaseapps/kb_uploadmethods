@@ -18,7 +18,7 @@ from kb_uploadmethods.Utils.ImportAssemblyUtil import ImportAssemblyUtil
 class BatchUtil:
 
     # staging file prefix
-    STAGING_FILE_PREFIX = '/data/bulk/'
+    STAGING_USER_FILE_PREFIX = '/staging/'
     GENBANK_FILE_EXT = ['gbk', 'genbank', 'gbff', 'gb', 'gbf', 'dat']
     GFF_FILE_EXT = ['gff', 'gff3']
     FASTA_FILE_EXT = ['fna', 'fasta', 'fa']
@@ -61,16 +61,15 @@ class BatchUtil:
 
         return report_output
 
-    def _get_staging_file_path(self, token_user, staging_file_subdir_path):
+    def _get_staging_file_path(self, staging_file_subdir_path):
         """
         _get_staging_file_path: return staging area file path
 
-        directory pattern: /data/bulk/user_name/file_name
+        directory pattern: /staging/sub_dir/file_name
 
         """
 
-        return os.path.join(self.STAGING_FILE_PREFIX, token_user,
-                            staging_file_subdir_path.strip('/'))
+        return os.path.join(self.STAGING_USER_FILE_PREFIX, staging_file_subdir_path.strip('/'))
 
     def _validate_batch_import_genomes_from_staging_params(self, params):
         """
@@ -106,7 +105,7 @@ class BatchUtil:
         logging.info('start fetching assembly files')
         assembly_files = dict()
 
-        sub_dir = self._get_staging_file_path(self.user_id, staging_subdir)
+        sub_dir = self._get_staging_file_path(staging_subdir)
 
         fasta_files = self._find_files_end_with(sub_dir, self.FASTA_FILE_EXT)
         assembly_files.update({'fasta': fasta_files})
@@ -117,7 +116,7 @@ class BatchUtil:
         logging.info('start fetching genome files')
         genome_files = dict()
 
-        sub_dir = self._get_staging_file_path(self.user_id, staging_subdir)
+        sub_dir = self._get_staging_file_path(staging_subdir)
 
         genbank_files = self._find_files_end_with(sub_dir, self.GENBANK_FILE_EXT)
         genome_files.update({'genbank': genbank_files})
