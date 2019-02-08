@@ -74,8 +74,10 @@ class BatchUtil:
         user_path = os.path.join(self.STAGING_USER_FILE_PREFIX, staging_file_subdir_path.strip('/'))
 
         if os.path.exists(user_path):
+            self.staging_path_prefix = self.STAGING_USER_FILE_PREFIX
             return user_path
         else:
+            self.staging_path_prefix = self.STAGING_GLOBAL_FILE_PREFIX
             return os.path.join(self.STAGING_GLOBAL_FILE_PREFIX, token_user,
                                 staging_file_subdir_path.strip('/'))
 
@@ -96,15 +98,16 @@ class BatchUtil:
             for file in files:
                 file_name, file_extension = os.path.splitext(file)
                 if file_extension[1:].lower() in file_exts:
-                    matching_files = [os.path.join(root, file).split('/', 4)[-1]]
+                    matching_files = [os.path.join(root, file).split(self.staging_path_prefix)[-1]]
                     if associate_file_exts:
                         for associate_file in os.listdir(root):
                             associate_file_name, associate_file_extension = os.path.splitext(
                                                                                 associate_file)
                             if (file_name == associate_file_name and
                                     associate_file_extension[1:].lower() in associate_file_exts):
-                                matching_files.append(os.path.join(root, associate_file).split('/', 4)[-1])
-                    current_dir = root.split('/', 4)[-1].replace('/', '_')
+                                matching_files.append(
+                                    os.path.join(root, associate_file).split(self.staging_path_prefix)[-1])
+                    current_dir = root.split(self.staging_path_prefix)[-1].replace('/', '_')
                     found_files.update({file_name + '_' + current_dir: matching_files})
 
         return found_files
