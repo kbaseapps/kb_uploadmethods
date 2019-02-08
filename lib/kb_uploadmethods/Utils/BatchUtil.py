@@ -113,7 +113,7 @@ class BatchUtil:
         logging.info('start fetching assembly files')
         assembly_files = dict()
 
-        sub_dir = self._get_staging_file_path(staging_subdir)
+        sub_dir = self._get_staging_file_path(self.user_id, staging_subdir)
 
         fasta_files = self._find_files_end_with(sub_dir, self.FASTA_FILE_EXT)
         assembly_files.update({'fasta': fasta_files})
@@ -124,7 +124,7 @@ class BatchUtil:
         logging.info('start fetching genome files')
         genome_files = dict()
 
-        sub_dir = self._get_staging_file_path(staging_subdir)
+        sub_dir = self._get_staging_file_path(self.user_id, staging_subdir)
 
         genbank_files = self._find_files_end_with(sub_dir, self.GENBANK_FILE_EXT)
         genome_files.update({'genbank': genbank_files})
