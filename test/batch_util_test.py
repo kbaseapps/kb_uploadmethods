@@ -72,16 +72,17 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def getContext(self):
         return self.__class__.ctx
 
-    def mock_get_staging_file_path(token_user, staging_file_subdir_path):
-        print('Mocking _get_staging_file_path')
+    # def mock_get_staging_file_path(token_user, staging_file_subdir_path):
+    #     print('Mocking _get_staging_file_path')
 
-        return os.path.join('/kb/module/test/data', staging_file_subdir_path)
+    #     return os.path.join('/kb/module/test/data', staging_file_subdir_path)
 
     def mock_download_staging_file(params):
         print('Mocking DataFileUtilClient.download_staging_file')
         print(params)
 
-        staging_file_subdir_path = params.get('staging_file_subdir_path')
+        staging_file_subdir_path = os.path.join('/kb/module/test/data',
+                                                params.get('staging_file_subdir_path'))
         file_name = os.path.basename(staging_file_subdir_path)
         file_path = os.path.join('/kb/module/work/tmp', file_name)
         shutil.copy(staging_file_subdir_path, file_path)
@@ -120,9 +121,9 @@ class kb_uploadmethodsTest(unittest.TestCase):
                 '"genome_set_name" parameter is required, but missing'):
             self.getImpl().batch_import_genomes_from_staging(self.getContext(), invalidate_input_params)
 
-    @patch.object(BatchUtil, "_get_staging_file_path", side_effect=mock_get_staging_file_path)
+    @patch.object(BatchUtil, "STAGING_USER_FILE_PREFIX", new='/kb/module/test/data/')
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    def test_batch_import_genomes_from_staging(self, _get_staging_file_path, download_staging_file):
+    def test_batch_import_genomes_from_staging(self, download_staging_file):
         input_params = {
             'staging_subdir': 'test_batch',
             'workspace_name': self.getWsName(),
@@ -139,15 +140,14 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         self.assertEqual(len(set_data['items']), 4)
 
-    @patch.object(BatchUtil, "_get_staging_file_path", side_effect=mock_get_staging_file_path)
+    @patch.object(BatchUtil, "STAGING_USER_FILE_PREFIX", new='/kb/module/test/data/')
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    def test_batch_import_assemblies_from_staging(self, _get_staging_file_path, download_staging_file):
+    def test_batch_import_assemblies_from_staging(self, download_staging_file):
         input_params = {
             'staging_subdir': 'test_batch',
             'workspace_name': self.getWsName(),
             'assembly_set_name': 'test_assembly_set_name'
         }
-
         returnVal = self.getImpl().batch_import_assemblies_from_staging(self.getContext(), input_params)[0]
 
         set_ref = returnVal.get('set_ref')
