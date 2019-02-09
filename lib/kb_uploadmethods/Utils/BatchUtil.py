@@ -77,7 +77,7 @@ class BatchUtil:
             self.staging_path_prefix = self.STAGING_USER_FILE_PREFIX
             return user_path
         else:
-            self.staging_path_prefix = self.STAGING_GLOBAL_FILE_PREFIX
+            self.staging_path_prefix = os.path.join(self.STAGING_GLOBAL_FILE_PREFIX, token_user)
             return os.path.join(self.STAGING_GLOBAL_FILE_PREFIX, token_user,
                                 staging_file_subdir_path.strip('/'))
 
