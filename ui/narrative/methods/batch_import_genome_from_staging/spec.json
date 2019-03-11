@@ -1,0 +1,220 @@
+{
+  "ver" : "1.0.0",
+  "authors" : ["tgu2"],
+  "contact" : "help@kbase.us",
+  "visble" : true,
+  "categories" : [ "active","assembly","upload" ],
+  "widgets" : {
+    "input" : null,
+    "output" : "no-display"
+  },
+  "parameters" :
+  [
+    {
+      "id" : "staging_subdir",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "/" ],
+      "field_type" : "text",
+      "text_options" : {
+      }
+    },
+    {
+      "id" : "genome_set_name",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" :
+      {
+        "valid_ws_types" : [ "KBaseSets.GenomeSet" ],
+        "is_output_name" : true
+      }
+    },
+    {
+      "id" : "genome_type",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "draft isolate" ],
+      "field_type" : "dropdown",
+      "dropdown_options":{
+      "options": [
+        {
+          "value": "draft isolate",
+          "display": "Draft Isolate"
+        },
+        {
+          "value": "finished isolate",
+          "display": "Finished Isolate"
+        },
+        {
+          "value": "mag",
+          "display": "Metagenome-assembled genome (MAG)"
+        },
+        {
+          "value": "sag",
+          "display": "Single amplified genome (SAG)"
+        },
+        {
+          "value": "virus",
+          "display": "Virus"
+        },
+        {
+          "value": "plasmid",
+          "display": "Plasmid"
+        },
+        {
+          "value": "construct",
+          "display": "Construct"
+        }
+      ]}
+    },
+    {
+      "id" : "source",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "Other" ],
+      "field_type" : "dropdown",
+      "dropdown_options":{
+      "options": [
+        {
+          "value": "RefSeq user",
+          "display": "RefSeq"
+        },
+        {
+          "value": "Ensembl user",
+          "display": "Ensembl"
+        },
+        {
+          "value": "Other",
+          "display": "Other"
+        }
+      ]}
+    },
+    {
+      "id" : "taxon_wsname",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {
+      "id" : "taxon_reference",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {
+      "id": "release",
+      "optional": true,
+      "advanced": true,
+      "allow_multiple": false,
+      "default_values": [ "" ],
+      "field_type" : "text"
+    },
+    {
+      "id": "genetic_code",
+      "optional": true,
+      "advanced": true,
+      "allow_multiple": false,
+      "default_values": [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "validate_as": "int"
+      }
+    },
+    {
+      "id": "generate_missing_genes",
+      "optional":true,
+      "advanced":true,
+      "allow_multiple":false,
+      "default_values":["1"],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
+      }
+    }
+  ],
+  "behavior" :
+  {
+    "service-mapping" :
+    {
+      "url" : "",
+      "name" : "kb_uploadmethods",
+      "method" : "batch_import_genomes_from_staging",
+      "input_mapping" :
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "staging_subdir",
+          "target_property": "staging_subdir"
+        },
+        {
+          "input_parameter": "genome_set_name",
+          "target_property": "genome_set_name"
+        },
+        {
+          "input_parameter": "genome_type",
+          "target_property": "genome_type"
+        },
+        {
+          "input_parameter": "source",
+          "target_property": "source"
+        },
+        {
+          "input_parameter": "taxon_wsname",
+          "target_property": "taxon_wsname"
+        },
+        {
+          "input_parameter": "taxon_reference",
+          "target_property": "taxon_reference"
+        },
+        {
+          "input_parameter": "release",
+          "target_property": "release"
+        },
+        {
+          "input_parameter": "genetic_code",
+          "target_property": "genetic_code"
+        },
+        {
+          "input_parameter": "generate_missing_genes",
+          "target_property": "generate_missing_genes"
+        }
+      ],
+      "output_mapping" :
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "ws"
+        },
+        {
+            "service_method_output_path": [0, "report_name"],
+            "target_property": "report_name"
+        },
+        {
+            "service_method_output_path": [0, "report_ref"],
+            "target_property": "report_ref"
+        },
+        {
+            "constant_value": "16",
+            "target_property": "report_window_line_height"
+        }
+      ]
+    }
+  },
+  "job_id_output_field": "docker"
+}

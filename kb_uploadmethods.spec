@@ -45,16 +45,16 @@ module kb_uploadmethods {
     sequencing_tech: sequencing technology
     name: output reads file name
     workspace_name: workspace name/ID of the object
-    
+
     For files in user's staging area:
     fwd_staging_file_name: single-end fastq file name or forward/left paired-end fastq file name from user's staging area
     rev_staging_file_name: reverse/right paired-end fastq file name user's staging area
-    
+
     For files from web:
     download_type: download type for web source fastq file ('Direct Download', 'FTP', 'DropBox', 'Google Drive')
     fwd_file_url: single-end fastq file URL or forward/left paired-end fastq file URL
     rev_file_url: reverse/right paired-end fastq file URL
-     
+
     urls_to_add: used for parameter-groups. dict of {fwd_file_url, rev_file_url, name,
           single_genome, interleaved, insert_size_mean and read_orientation_outward}
 
@@ -114,6 +114,7 @@ module kb_uploadmethods {
     string genome_name;
     workspace_name workspace_name;
 
+    string genome_type;
     string scientific_name;
     string source;
     string taxon_wsname;
@@ -134,11 +135,47 @@ module kb_uploadmethods {
   funcdef upload_fasta_gff_file(UploadFastaGFFMethodParams params)
     returns (UploadFastaGFFMethodResult returnVal) authentication required;
 
+
+  typedef structure {
+    string staging_subdir;
+    string genome_set_name;
+    workspace_name workspace_name;
+
+    string genome_type;
+    string source;
+    string taxon_wsname;
+    string taxon_reference;
+    string release;
+    int    genetic_code;
+    string generate_missing_genes;
+  } BatchGenomeImporterParams;
+
+  typedef structure {
+    string set_ref;
+    report_name report_name;
+    report_ref report_ref;
+  } BatchImporterResult;
+
+  funcdef batch_import_genomes_from_staging(BatchGenomeImporterParams params)
+    returns (BatchImporterResult returnVal) authentication required;
+
+  typedef structure {
+    string staging_subdir;
+    string assembly_set_name;
+    workspace_name workspace_name;
+
+    int min_contig_length;
+    string type;
+  } BatchAssemblyImporterParams;
+
+  funcdef batch_import_assemblies_from_staging(BatchAssemblyImporterParams params)
+    returns (BatchImporterResult returnVal) authentication required;
+
   /* Input parameters for the "unpack_staging_file" function.
 
       Required parameters:
       staging_file_subdir_path: subdirectory file path
-      e.g. 
+      e.g.
         for file: /data/bulk/user_name/file_name
         staging_file_subdir_path is file_name
         for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
@@ -196,12 +233,12 @@ module kb_uploadmethods {
   funcdef unpack_web_file(UnpackWebFileParams params)
       returns(UnpackWebFileOutput returnVal) authentication required;
 
-  /* 
+  /*
   import_genbank_from_staging: wrapper method for GenomeFileUtil.genbank_to_genome
-  
+
     required params:
     staging_file_subdir_path - subdirectory file path
-    e.g. 
+    e.g.
       for file: /data/bulk/user_name/file_name
       staging_file_subdir_path is file_name
       for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
@@ -211,13 +248,13 @@ module kb_uploadmethods {
     source - Source of the file typically something like RefSeq or Ensembl
 
     optional params:
-    release - Release or version number of the data 
+    release - Release or version number of the data
         per example Ensembl has numbered releases of all their data: Release 31
-    generate_ids_if_needed - If field used for feature id is not there, 
+    generate_ids_if_needed - If field used for feature id is not there,
         generate ids (default behavior is raising an exception)
     generate_missing_genes - Generate gene feature for CDSs that do not have
         a parent in file
-    genetic_code - Genetic code of organism. Overwrites determined GC from 
+    genetic_code - Genetic code of organism. Overwrites determined GC from
         taxon object
     type - Reference, Representative or User upload
   */
@@ -226,6 +263,7 @@ module kb_uploadmethods {
     string genome_name;
     string workspace_name;
     string source;
+    string genome_type;
 
     string release;
     int    genetic_code;
@@ -244,7 +282,7 @@ module kb_uploadmethods {
   /*
     required params:
     staging_file_subdir_path: subdirectory file path
-    e.g. 
+    e.g.
       for file: /data/bulk/user_name/file_name
       staging_file_subdir_path is file_name
       for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
@@ -252,7 +290,7 @@ module kb_uploadmethods {
     sequencing_tech: sequencing technology
     name: output reads file name
     workspace_name: workspace name/ID of the object
-    
+
     Optional Params:
     single_genome: whether the reads are from a single genome or a metagenome.
     insert_size_mean: mean (average) insert length
@@ -320,7 +358,7 @@ module kb_uploadmethods {
   /*
     required params:
     staging_file_subdir_path: subdirectory file path
-    e.g. 
+    e.g.
       for file: /data/bulk/user_name/file_name
       staging_file_subdir_path is file_name
       for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
@@ -333,6 +371,7 @@ module kb_uploadmethods {
     string assembly_name;
     workspace_name workspace_name;
     int min_contig_length;
+    string type;
   } FastaToAssemblyParams;
 
   funcdef import_fasta_as_assembly_from_staging(FastaToAssemblyParams params)
@@ -341,7 +380,7 @@ module kb_uploadmethods {
   /*
     required params:
     staging_file_subdir_path: subdirectory file path
-    e.g. 
+    e.g.
       for file: /data/bulk/user_name/file_name
       staging_file_subdir_path is file_name
       for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
@@ -431,11 +470,11 @@ module kb_uploadmethods {
     name: output reads file name
     workspace_name: workspace name/ID of the object
     import_type: either FASTQ or SRA
-    
+
     For files in user's staging area:
-    fastq_fwd_or_sra_staging_file_name: single-end fastq file name Or forward/left paired-end fastq file name from user's staging area Or SRA staging file 
+    fastq_fwd_or_sra_staging_file_name: single-end fastq file name Or forward/left paired-end fastq file name from user's staging area Or SRA staging file
     fastq_rev_staging_file_name: reverse/right paired-end fastq file name user's staging area
-    e.g. 
+    e.g.
       for file: /data/bulk/user_name/file_name
       staging_file_subdir_path is file_name
       for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
