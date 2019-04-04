@@ -68,6 +68,16 @@ parameters :
         long-hint : |
             Valid genetic code integer for translation purposes (see http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi)
 
+    scientific_name :
+        ui-name : Scientific Name
+        short-hint : Provide the scientific name of the species
+        long-hint  : Provide the scientific name of the species, e.g., "Escherichia coli". This is important for taxonomy lookup.
+
+    taxon_id:
+        ui-name: Taxonomy Object Reference
+        short-hint: Will try to link the Genome to the specified taxonomy id
+        long-hint: If defined, will try to link the Genome to the specified taxonomy id in lieu of performing the lookup during upload
+
     generate_ids_if_needed :
         ui-name : |
             Generate Feature IDs if Needed

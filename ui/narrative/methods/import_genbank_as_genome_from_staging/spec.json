@@ -114,6 +114,24 @@
       }
     },
     {
+      "id" : "scientific_name",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {
+      "id" : "taxon_id",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {
       "id": "generate_ids_if_needed",
       "optional":true,
       "advanced":true,
@@ -130,7 +148,7 @@
       "optional":true,
       "advanced":true,
       "allow_multiple":false,
-      "default_values":["0"],
+      "default_values":["1"],
       "field_type" : "checkbox",
       "checkbox_options":{
         "checked_value": 1,
@@ -171,6 +189,14 @@
         {
           "input_parameter": "genetic_code",
           "target_property": "genetic_code"
+        },
+        {
+          "input_parameter": "scientific_name",
+          "target_property": "scientific_name"
+        },
+        {
+          "input_parameter": "taxon_id",
+          "target_property": "taxon_id"
         },
         {
           "input_parameter": "generate_ids_if_needed",
