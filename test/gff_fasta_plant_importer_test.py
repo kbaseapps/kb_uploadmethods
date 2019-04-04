@@ -144,7 +144,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
             "workspace_name": self.getWsName(),
             "genome_name": ws_obj_name,
             "scientific_name": scientific_name,
-            "taxon_reference": None,
             "genetic_code": None,
             "source": None,
             "taxon_wsname": None,
