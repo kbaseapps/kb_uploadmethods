@@ -48,7 +48,7 @@ parameters :
         long-hint: Where the reference taxons are. Defaults to ReferenceTaxons
 
     taxon_id:
-        ui-name: Taxonomy Object Reference
+        ui-name: Taxonomy ID
         short-hint: Link the Genome to the specified taxonomy object
         long-hint: Link the Genome to the specified taxonomy object
 

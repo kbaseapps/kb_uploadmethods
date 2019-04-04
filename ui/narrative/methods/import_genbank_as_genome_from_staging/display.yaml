@@ -74,7 +74,7 @@ parameters :
         long-hint  : Provide the scientific name of the species, e.g., "Escherichia coli". This is important for taxonomy lookup.
 
     taxon_id:
-        ui-name: Taxonomy Object Reference
+        ui-name: Taxonomy ID
         short-hint: Will try to link the Genome to the specified taxonomy id
         long-hint: If defined, will try to link the Genome to the specified taxonomy id in lieu of performing the lookup during upload
 
