@@ -1,6 +1,7 @@
 
 import collections
 import json
+import logging
 import os
 import time
 import uuid
@@ -10,11 +11,6 @@ from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.KBaseReportClient import KBaseReport
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from . import handler_utils
-
-
-def log(message, prefix_newline=False):
-    """Logging function, provides a hook to suppress or redirect log messages."""
-    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
 
 
 class ImportAssemblyUtil:
@@ -27,9 +23,10 @@ class ImportAssemblyUtil:
         self.dfu = DataFileUtil(self.callback_url)
         self.au = AssemblyUtil(self.callback_url)
         self.uploader_utils = UploaderUtil(config)
+        self.max_contigs_for_report = 200
 
     def import_fasta_as_assembly_from_staging(self, params):
-        '''
+        """
           import_fasta_as_assembly_from_staging: wrapper method for
                                     AssemblyUtil.save_assembly_from_fasta
 
@@ -45,9 +42,9 @@ class ImportAssemblyUtil:
 
           return:
           obj_ref: return object reference
-        '''
-        log('--->\nrunning ImportAssemblyUtil.import_fasta_as_assembly_from_staging\n' +
-            'params:\n{}'.format(json.dumps(params, indent=1)))
+        """
+        logging.info('--->\nrunning ImportAssemblyUtil.import_fasta_as_assembly_from_staging\n'
+                     f'params:\n{json.dumps(params, indent=1)}')
 
         self.validate_import_fasta_as_assembly_from_staging(params)
 
@@ -80,13 +77,13 @@ class ImportAssemblyUtil:
         # check for required parameters
         for p in ['staging_file_subdir_path', 'workspace_name', 'assembly_name']:
             if p not in params:
-                raise ValueError('"' + p + '" parameter is required, but missing')
+                raise ValueError(f'"{p}" parameter is required, but missing')
 
     def generate_html_report(self, assembly_ref, assembly_object, params):
         """
         _generate_html_report: generate html summary report
         """
-        log('start generating html report')
+        logging.info('start generating html report')
         html_report = list()
 
         assembly_data = assembly_object.get('data')[0].get('data')
@@ -110,16 +107,14 @@ class ImportAssemblyUtil:
         assembly_overview_data['DNA Size'] = dna_size
         assembly_overview_data['Number of Contigs'] = num_contigs
 
-        overview_content = ''
-        overview_content += '<br/><table>\n'
+        overview_content = ['<br/><table>\n']
         for key, val in assembly_overview_data.items():
-            overview_content += '<tr><td><b>{}</b></td>'.format(key)
-            overview_content += '<td>{}</td>'.format(val)
-            overview_content += '</tr>\n'
-        overview_content += '</table>'
+            overview_content.append(f'<tr><td><b>{key}</b></td>')
+            overview_content.append(f'<td>{val}</td></tr>\n')
+        overview_content.append('</table>')
 
-        contig_data = list(assembly_data.get('contigs').values())
-        contig_content = str([[str(e['contig_id']), e['length']] for e in contig_data])
+        contig_data = assembly_data.get('contigs').values()
+        contig_content = str([str(e['contig_id']), e['length']] for e in contig_data)
 
         with open(result_file_path, 'w') as result_file:
             with open(os.path.join(os.path.dirname(__file__), 'report_template',
@@ -127,7 +122,7 @@ class ImportAssemblyUtil:
                       'r') as report_template_file:
                 report_template = report_template_file.read()
                 report_template = report_template.replace('<p>*Overview_Content*</p>',
-                                                          overview_content)
+                                                          ''.join(overview_content))
                 report_template = report_template.replace('*CONTIG_DATA*',
                                                           contig_content)
                 result_file.write(report_template)
@@ -158,26 +153,25 @@ class ImportAssemblyUtil:
         workspace_name: workspace name/ID that reads will be stored to
 
         """
-        uuid_string = str(uuid.uuid4())
-
-        get_objects_params = {
-            'object_refs': [obj_ref],
-            'ignore_errors': False
-        }
-        object_data = self.dfu.get_objects(get_objects_params)
-        objects_created = [{'ref': obj_ref,
-                            'description': 'Imported Assembly'}]
-
-        output_html_files = self.generate_html_report(obj_ref, object_data, params)
+        object_data = self.dfu.get_objects({'object_refs': [obj_ref]})
 
         report_params = {
-                'message': '',
-                'workspace_name': params.get('workspace_name'),
-                'objects_created': objects_created,
+            'workspace_name': params.get('workspace_name'),
+            'objects_created': [{'ref': obj_ref,
+                                 'description': 'Imported Assembly'}],
+            'report_object_name': f'kb_upload_assembly_report_{uuid.uuid4()}'}
+
+        num_contigs = object_data['data'][0]['data']['num_contigs']
+        if num_contigs > self.max_contigs_for_report:
+            report_params['message'] = ("The uploaded assembly has too many contigs to display "
+                                        "here. Click on the object for a dedicated viewer")
+        else:
+            output_html_files = self.generate_html_report(obj_ref, object_data, params)
+            report_params.update({
                 'html_links': output_html_files,
                 'direct_html_link_index': 0,
-                'html_window_height': 270,
-                'report_object_name': 'kb_upload_assembly_report_' + uuid_string}
+                'html_window_height': 375,
+            })
 
         kbase_report_client = KBaseReport(self.callback_url, token=self.token)
         output = kbase_report_client.create_extended_report(report_params)
