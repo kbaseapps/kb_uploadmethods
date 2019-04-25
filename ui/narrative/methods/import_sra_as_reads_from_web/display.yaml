@@ -1,6 +1,6 @@
 name     : Import SRA File as Reads From Web - v1.0.7
-subtitle : Import an SRA file from a web URL into your Narrative as a Reads data object
-tooltip  : Import an SRA file from a web URL into your Narrative as a Reads data object
+
+tooltip  : Import an SRA file from a web URL into your Narrative as a Reads data object.
 
 icon: data-pink.png
 
@@ -22,63 +22,70 @@ suggestions :
 parameters :
     download_type :
         ui-name : URL Type
-        short-hint : URL type ('Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox/Box Public Shared Link',  'Google Drive Public Shared Link')
-        long-hint  : URL type ('Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox/Box Public Shared Link',  'Google Drive Public Shared Link')
+        short-hint : URL type: 'Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox/Box Public Shared Link', or 'Google Drive Public Shared Link.'
 
     file_url:
         ui-name : SRA URL
-        short-hint : URL for source of SRA reads
-        long-hint  : URL for source of SRA reads
+        short-hint : URL for source of SRA reads.
 
     sequencing_tech :
         ui-name : Sequencing Technology
-        short-hint : The name of the sequencing technology used to create the reads file
-        long-hint  : The name of the sequencing technology used to create the reads file
+        short-hint : The name of the sequencing technology used to create the reads file.
 
     name :
         ui-name : Reads Object Name
-        short-hint : Provide a name for the Reads that will be created by this importer
-        long-hint  : Provide a name for the Reads that will be created by this importer
+        short-hint : Provide a name for the Reads that will be created by this importer.
 
     single_genome :
         ui-name: Single Genome
-        short-hint: Select if the reads are from a single genome, leave blank if from a metagenome
-        long-hint: Select if the reads are from a single genome, leave blank if from a metagenome
+        short-hint: Select if the reads are from a single genome, and leave blank if the reads are from a metagenome.
 
     insert_size_mean :
         ui-name : Mean Insert Size
-        short-hint : The mean (average) insert length
-        long-hint  : The mean (average) insert length
+        short-hint : The mean (average) insert length.
 
     insert_size_std_dev :
         ui-name : St. Dev. of Insert Size
-        short-hint : The standard deviation of insert lengths
-        long-hint  : The standard deviation of insert lengths
+        short-hint : The standard deviation of insert lengths.
 
     read_orientation_outward :
         ui-name : Reads Orientation Outward
-        short-hint : Select if reads in a pair point outward
-        long-hint  : Select if reads in a pair point outward
+        short-hint : Select if reads in a pair point outward.
 
 parameter-groups :
     sra_urls_to_add :
         ui-name : SRA URL(s)
-        short-hint : SRA file URL and output Reads file name
-        long-hint  : SRA file URL and output Reads file name
+        short-hint : SRA file URL and output Reads file name.
 
 description : |
-    <p> Import SRA File as Reads From Web
-        Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
-    <p> </p>
-    <p> How to get 'Google Drive Public Shared Link'</p>
-    <p> 1. Left click on the file and select 'Get shareable link'.</p>
-    <p> 2. Make sure file setting is set to 'Anyone with the link can view'. Otherwise go to 'Sharing settings'.</p>
-    <p> 3. Copy the public file sharing link. e.g. 'https://drive.google.com/open?id=0B0exSa7ebQ0qX01mZ3FaRzhuMDQ'</p>
-    <p> </p>
-    <p> How to get 'Dropbox Public Shared Link'</p>
-    <p> 1. Click on 'Share' on the file</p>
-    <p> 2. Make sure file setting is set to 'Anyone with the link can view this file'. Otherwise go to 'Link settings'.</p>
-    <p> 3. Click on 'Copy link' button. e.g. 'https://www.dropbox.com/s/w5ct52rp95cukwq/file1.txt?dl=0'</p>
+    <p>This App allows the user to load SRA format read libraries directly into the workspace from sources on the web. In addition to standard HTTP and anonymous FTP links, the user may also obtain files from Google drive and Dropbox links. Please see the <a href="http://kbase.us/data-upload-download-guide/short-reads//">FASTQ/SRA Reads Data Upload/Download Guide</a> for more information about SRA reads libraries.</p>
+
+    <p><strong>Using the app</strong><br>The user must inform KBase about the nature of the URL link by selecting one of the choices in the “URL Type” pulldown menu.  “Direct” means the link is a standard WWW URL, “FTP link” means anonymous FTP, and “Dropbox” and “Google Drive” Public Shared Links are for shared files in those two sources (see below for more instructions in those two cases).</p>
+
+    <p> Once the link type is selected, the user can enter one or more URL links of that type. For each link, hit the “+” button to open a new sub-panel for the link. In each sub-panel, mandatory or required entries are indicated by a red vertical bar on the right. The first entry field takes the actual web link URL (by typing or pasting). The second is the object name you want to give to the reads object once it is loaded into KBase. The third mandatory field is a checkbox indicating whether or not the reads belong to a single genome. The remaining optional information are metadata describing the reads. More detail can be found under the hints for each field.</p>
+
+    <p>If your reads are in a publicly accessible URL, you can directly import the reads into your Narrative using either this App, the <a href=”https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/load_paired_end_reads_from_URL/release”>Import Paired-End Reads from Web</a> App, or the <a href=”https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/load_single_end_reads_from_URL/release”>Import Single-End Reads from Web</a> Apps.</p>
+
+    <p><u>How to Use a ‘Google Drive Public Shared Link’</u><br>In the source location in Google Drive:
+      <ol>
+        <li>Left click on the file and select ‘Get shareable link.’</li>
+        <li>Make sure the file setting is set to ‘Anyone with the link can view.’ Otherwise go to ‘Sharing settings.’</li>
+        <li>Copy the public file sharing link.</li>
+        <li>Paste the link into the “SRA URL” entry field.</li>
+      </ol>
+    </p>
+
+    <p><u>How to use a ‘Dropbox Public Shared Link’</u>
+      <ol>
+        <li>Click on ‘Share’ on the file.</li>
+        <li>Make sure the file setting is set to ‘Anyone with the link can view this file.’ Otherwise go to ‘Link settings.’</li>
+        <li>Click on the ‘Copy link’ button.</li>
+        <li>Paste the link into the “SRA URL” entry field.</li>
+      </ol>
+    </p>
+
+    <p>As the files are loaded, the new objects appear in the data pane at the top left.</p>
+
 technical-description : none
 
 publications :

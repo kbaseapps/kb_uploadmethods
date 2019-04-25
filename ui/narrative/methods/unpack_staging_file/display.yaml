@@ -1,6 +1,6 @@
-name     : Unpack Staging File - v1.0.12
-subtitle : Unpack A Staging Compressed File
-tooltip  : Unpack A Staging Compressed File
+name     : Unpack a Compressed File in Staging Area - v1.0.12
+
+tooltip  : Unpack a compressed file in the staging area.
 
 icon: data-orange.png
 
@@ -22,11 +22,12 @@ suggestions :
 parameters :
     staging_file_subdir_path :
         ui-name : File Path
-        short-hint : Staging file subdirectory file path
-        long-hint  : Staging file subdirectory file path
+        short-hint : The staging file subdirectory file path.
 
 description : |
-    <p> Unpack a staging compressed file. The app recognizes compressed files in these formats: .zip, .gz, .bz2, .tar, .tar.gz, .tar.bz2.</p>
+    <p>This App allows users to unpack a compressed file in the staging area. Recognizable compressed files include .zip, .gz, .bz2, .tar, .tar.gz, and .tar.bz2.<p>
+
+    <p><b>Note:</b> we recommend using the expand icon found within the staging area rather than this App.</p>
 
 technical-description : none
 
