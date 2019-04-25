@@ -46,6 +46,45 @@
       }
     },
     {
+      "id" : "genome_type",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "draft isolate" ],
+      "field_type" : "dropdown",
+      "dropdown_options":{
+      "options": [
+        {
+          "value": "draft isolate",
+          "display": "Draft Isolate"
+        },
+        {
+          "value": "finished isolate",
+          "display": "Finished Isolate"
+        },
+        {
+          "value": "mag",
+          "display": "Metagenome-assembled genome (MAG)"
+        },
+        {
+          "value": "sag",
+          "display": "Single amplified genome (SAG)"
+        },
+        {
+          "value": "virus",
+          "display": "Virus"
+        },
+        {
+          "value": "plasmid",
+          "display": "Plasmid"
+        },
+        {
+          "value": "construct",
+          "display": "Construct"
+        }
+      ]}
+    },
+    {
       "id" : "scientific_name",
       "optional" : true,
       "advanced" : false,
@@ -87,7 +126,7 @@
       "text_options" : {}
     },
     {
-      "id" : "taxon_reference",
+      "id" : "taxon_id",
       "optional" : true,
       "advanced" : true,
       "allow_multiple" : false,
@@ -153,6 +192,10 @@
           "target_property": "genome_name"
         },
         {
+          "input_parameter": "genome_type",
+          "target_property": "genome_type"
+        },
+        {
           "input_parameter": "scientific_name",
           "target_property": "scientific_name"
         },
@@ -165,8 +208,8 @@
           "target_property": "taxon_wsname"
         },
         {
-          "input_parameter": "taxon_reference",
-          "target_property": "taxon_reference"
+          "input_parameter": "taxon_id",
+          "target_property": "taxon_id"
         },
         {
           "input_parameter": "release",

@@ -1,0 +1,53 @@
+name     : Batch Import Assembly from Staging Area
+subtitle : Import FASTA files from your staging area into your Narrative as Assembly data object
+tooltip  : Import FASTA files from your staging area into your Narrative as Assembly data object
+
+icon: data-blue.png
+
+screenshots :
+    []
+
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+parameters :
+    staging_subdir :
+        ui-name : Staging Directory
+        short-hint : Staging Subfolder
+        long-hint  : Staging Subfolder
+
+    assembly_set_name :
+        ui-name : AssemblySet Object Name
+        short-hint : Provide a name for the output object that will be created by this upload
+        long-hint  : Provide a name for the output object that will be created by this upload
+
+    type:
+        ui-name : |
+            Assembly Type
+        short-hint : |
+            The type or source of this assembly
+        long-hint  : |
+            The type or source of this assembly
+
+    min_contig_length :
+        ui-name : |
+            Minimum Contig Length
+        short-hint : |
+            Contigs shorter than this length will be filtered out
+        long-hint  : |
+            Contigs shorter than this value will be filtered out. Try larger value if upload fails.
+
+description : |
+    <p> Import files (FASTA) from your staging area into your Narrative as an Assembly data object.
+    Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
+
+technical-description : none

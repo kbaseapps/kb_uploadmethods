@@ -4,11 +4,12 @@ import shutil
 import time
 import uuid
 from configparser import SafeConfigParser
+import requests as _requests
 
 import magic
 
-from DataFileUtil.DataFileUtilClient import DataFileUtil
-from KBaseReport.KBaseReportClient import KBaseReport
+from installed_clients.DataFileUtilClient import DataFileUtil
+from installed_clients.KBaseReportClient import KBaseReport
 
 
 def log(message, prefix_newline=False):
@@ -34,17 +35,23 @@ class UnpackFileUtil:
         """
         _file_to_staging: upload file(s) to staging area
         """
-        subdir_folder_str = '' if not subdir_folder else '/{}'.format(subdir_folder)
+        subdir_folder_str = '/' if not subdir_folder else '/{}'.format(subdir_folder)
         staging_service_host = self._staging_service_host()
+        end_point = staging_service_host + '/upload'
+        headers = {'Authorization': self.token}
+
+        files = {'destPath': subdir_folder_str}
+
         for file_path in file_path_list:
-            log("uploading [{}] to staging area".format(file_path))
-            post_cmd = 'curl -H "Authorization: {}"\\\n'.format(self.token)
-            post_cmd += ' -X POST\\\n'
-            post_cmd += ' -F "destPath={}"\\\n'.format(subdir_folder_str)
-            post_cmd += ' -F "uploads=@{}"\\\n'.format(file_path)
-            post_cmd += ' {}/upload'.format(staging_service_host)
-            return_code = os.popen(post_cmd).read()
-            log("return message from server:\n{}".format(return_code))
+            files.update({'uploads': (os.path.basename(file_path), open(file_path, 'rb'))})
+
+            resp = _requests.post(end_point, headers=headers, files=files)
+
+            if resp.status_code != 200:
+                raise ValueError('Upload file {} failed.\nError Code: {}\n{}\n'
+                                 .format(file_path, resp.status_code, resp.text))
+            else:
+                log("return message from server:\n{}\n".format(resp.text))
 
     def _remove_irrelevant_files(self, file_path):
         """
@@ -140,7 +147,8 @@ class UnpackFileUtil:
                           '\n  '.join(unpacked_file_path_list)))
 
         self._file_to_staging(unpacked_file_path_list, os.path.dirname(
-                                      params.get('staging_file_subdir_path')))
+                                                params.get('staging_file_subdir_path')))
+
         unpacked_file_path = ','.join(unpacked_file_path_list)
         returnVal = {'unpacked_file_path': unpacked_file_path}
 

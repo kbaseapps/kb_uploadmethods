@@ -36,6 +36,14 @@ parameters :
         long-hint  : |
             Provide a name for the Genome that will be created by this importer
 
+    genome_type:
+        ui-name : |
+            Genome Type
+        short-hint : |
+            The type or source of this genome
+        long-hint  : |
+            The type or source of this genome
+
     source :
         ui-name : |
             Source of the GenBank File
@@ -59,6 +67,16 @@ parameters :
             Valid genetic code (see http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi)
         long-hint : |
             Valid genetic code integer for translation purposes (see http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi)
+
+    scientific_name :
+        ui-name : Scientific Name
+        short-hint : Provide the scientific name of the species
+        long-hint  : Provide the scientific name of the species, e.g., "Escherichia coli". This is important for taxonomy lookup.
+
+    taxon_id:
+        ui-name: Taxonomy ID
+        short-hint: Will try to link the Genome to the specified taxonomy id
+        long-hint: If defined, will try to link the Genome to the specified taxonomy id in lieu of performing the lookup during upload
 
     generate_ids_if_needed :
         ui-name : |

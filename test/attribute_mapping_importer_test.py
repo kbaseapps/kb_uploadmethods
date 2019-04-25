@@ -10,7 +10,7 @@ import requests
 from biokbase.workspace.client import Workspace as workspaceService
 from mock import patch
 
-from DataFileUtil.DataFileUtilClient import DataFileUtil
+from installed_clients.DataFileUtilClient import DataFileUtil
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
@@ -131,7 +131,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         ws_obj_name = 'MyAttributeMapping'
 
-        params = {'staging_file_subdir_path': "AM1.tsv",
+        params = {'staging_file_subdir_path': "AM2.tsv",
                   'workspace_name': self.wsName,
                   'attribute_mapping_name': ws_obj_name,
                   }

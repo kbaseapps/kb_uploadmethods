@@ -1,20 +1,16 @@
 
 import collections
 import json
+import logging
 import os
 import time
 import uuid
 
-from DataFileUtil.DataFileUtilClient import DataFileUtil
-from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
-from KBaseReport.KBaseReportClient import KBaseReport
+from installed_clients.DataFileUtilClient import DataFileUtil
+from installed_clients.GenomeFileUtilClient import GenomeFileUtil
+from installed_clients.KBaseReportClient import KBaseReport
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from . import handler_utils
-
-
-def log(message, prefix_newline=False):
-    """Logging function, provides a hook to suppress or redirect log messages."""
-    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
 
 
 class ImportGenbankUtil:
@@ -55,8 +51,8 @@ class ImportGenbankUtil:
           genome_ref: return object reference
         '''
 
-        log('--->\nrunning ImportGenbankUtil.import_genbank_from_staging\n' +
-            'params:\n{}'.format(json.dumps(params, indent=1)))
+        logging.info('--->\nrunning ImportGenbankUtil.import_genbank_from_staging\n' +
+                     f'params:\n{json.dumps(params, indent=1)}')
 
         self.validate_import_genbank_from_staging_params(params)
 
@@ -96,10 +92,12 @@ class ImportGenbankUtil:
         """
         _generate_html_report: generate html summary report
         """
-        log('start generating html report')
+        logging.info('start generating html report')
         genome_obj = self.dfu.get_objects({'object_refs': [genome_ref]})
         html_report = list()
-        result_file_path = os.path.join(self.scratch, 'report.html')
+        tmp_dir = os.path.join(self.scratch, str(uuid.uuid4()))
+        handler_utils._mkdir_p(tmp_dir)
+        result_file_path = os.path.join(tmp_dir, 'report.html')
 
         genome_name = str(genome_obj.get('data')[0].get('info')[1])
         genome_file = params.get('staging_file_subdir_path')
@@ -140,7 +138,8 @@ class ImportGenbankUtil:
                               zip(genome_data.get('contig_ids', []),
                                   genome_data.get('contig_lengths', []))])
         with open(result_file_path, 'w') as result_file:
-            with open(os.path.join(os.path.dirname(__file__), 'report_template_genome.html'),
+            with open(os.path.join(os.path.dirname(__file__), 'report_template',
+                                   'report_template_genome.html'),
                       'r') as report_template_file:
                 report_template = report_template_file.read()
                 report_template = report_template.replace('<p>Overview_Content</p>',
@@ -152,7 +151,7 @@ class ImportGenbankUtil:
                 result_file.write(report_template)
         result_file.close()
 
-        report_shock_id = self.dfu.file_to_shock({'file_path': self.scratch,
+        report_shock_id = self.dfu.file_to_shock({'file_path': tmp_dir,
                                                   'pack': 'zip'})['shock_id']
 
         html_report.append({'shock_id': report_shock_id,
@@ -165,7 +164,7 @@ class ImportGenbankUtil:
         """
         :param genome_ref:  Return Val from GenomeFileUtil for Uploaded genome
                             Need to get report warnings and message from it.
-        :return: 
+        :return:
         """
         uuid_string = str(uuid.uuid4())
 

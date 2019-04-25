@@ -8,7 +8,7 @@ from os import environ
 import requests
 from biokbase.workspace.client import Workspace as workspaceService
 
-from DataFileUtil.DataFileUtilClient import DataFileUtil
+from installed_clients.DataFileUtilClient import DataFileUtil
 from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext

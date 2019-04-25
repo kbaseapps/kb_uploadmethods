@@ -3,7 +3,7 @@
   "authors" : ["jjeffryes"],
   "contact" : "http://kbase.us/contact-us/",
   "visible" : true,
-  "categories" : ["upload" ],
+  "categories" : ["upload"],
   "widgets": {
     "input": "kbaseNarrativeMethodInput",
     "output" : "no-display"
@@ -28,7 +28,7 @@
       "default_values" : [ "" ],
       "field_type" : "text",
       "text_options" : {
-        "valid_ws_types" : [ "KBaseExperiments.ConditionSet" ],
+        "valid_ws_types" : [ "KBaseExperiments.AttributeMapping" ],
         "is_output_name" : true
       }
     }

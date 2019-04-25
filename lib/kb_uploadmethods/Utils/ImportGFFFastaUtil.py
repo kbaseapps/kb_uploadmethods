@@ -1,15 +1,10 @@
 
 import json
-import time
+import logging
 
-from DataFileUtil.DataFileUtilClient import DataFileUtil
-from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
+from installed_clients.DataFileUtilClient import DataFileUtil
+from installed_clients.GenomeFileUtilClient import GenomeFileUtil
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
-
-
-def log(message, prefix_newline=False):
-    """Logging function, provides a hook to suppress or redirect log messages."""
-    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
 
 
 class ImportGFFFastaUtil:
@@ -51,8 +46,8 @@ class ImportGFFFastaUtil:
         report_ref: report reference (if any)
         """
 
-        log('--->\nrunning ImportGFFFastaUtil.import_gff_fasta_from_staging\n' +
-            'params:\n{}'.format(json.dumps(params, indent=1)))
+        logging.info('--->\nrunning ImportGFFFastaUtil.import_gff_fasta_from_staging\n' +
+                     f'params:\n{json.dumps(params, indent=1)}')
 
         self.validate_import_gff_fasta_from_staging_params(params)
 
@@ -67,8 +62,8 @@ class ImportGFFFastaUtil:
         """
         Update the workspace object related meta-data for staged file
         """
-        self.uploader_utils.update_staging_service(download_staging_file_params.get('staging_file_subdir_path'),
-                                                   returnVal['genome_ref'])
+        # self.uploader_utils.update_staging_service(download_staging_file_params.get('staging_file_subdir_path'),
+        #                                            returnVal['genome_ref'])
         return returnVal
 
     def validate_import_gff_fasta_from_staging_params(self, params):

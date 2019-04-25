@@ -11,6 +11,14 @@
   "type" : "sdk",
   "version_tag" : "release"
 }, {
+  "module_name" : "ftp_service",
+  "type" : "sdk",
+  "version_tag" : "release"
+}, {
+  "module_name" : "GenericsApi",
+  "type" : "sdk",
+  "version_tag" : "release"
+}, {
   "module_name" : "GenomeFileUtil",
   "type" : "sdk",
   "version_tag" : "release"
@@ -27,7 +35,7 @@
   "type" : "sdk",
   "version_tag" : "release"
 }, {
-  "module_name" : "GenericsApi",
+  "module_name" : "SetAPI",
   "type" : "sdk",
   "version_tag" : "release"
 } ]
