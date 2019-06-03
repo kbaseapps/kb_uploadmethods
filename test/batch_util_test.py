@@ -131,9 +131,13 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         set_ref = returnVal.get('set_ref')
 
-        set_data = self.dfu.get_objects({'object_refs': [set_ref]})['data'][0]['data']
+        set_obj = self.dfu.get_objects({'object_refs': [set_ref]})['data'][0]
 
-        self.assertEqual(len(set_data['items']), 4)
+        set_data = set_obj['data']
+        set_info = set_obj['info']
+
+        self.assertTrue('KBaseSearch.GenomeSet' in set_info[2])
+        self.assertEqual(len(set_data['elements']), 4)
 
     @patch.object(BatchUtil, "STAGING_USER_FILE_PREFIX", new='/kb/module/test/data/')
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
