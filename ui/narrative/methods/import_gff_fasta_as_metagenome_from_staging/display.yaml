@@ -1,4 +1,4 @@
-name     : Import GFF3/FASTA file as Genome from Staging Area
+name     : Import GFF3/FASTA file as Annotated Metagenome Assembly from Staging Area
 subtitle : Import a GFF3 and FASTA file from your staging area into your Narrative as an Annotated Metagenome Assembly data object
 tooltip  : Import a GFF3 and FASTA file from your staging area into your Narrative as an Annotated Metagenome Assembly data object
 
