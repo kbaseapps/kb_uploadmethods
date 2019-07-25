@@ -136,6 +136,49 @@ module kb_uploadmethods {
   funcdef upload_fasta_gff_file(UploadFastaGFFMethodParams params)
     returns (UploadFastaGFFMethodResult returnVal) authentication required;
 
+  /*
+    Required:
+    genome_name: output genome object name
+    workspace_name: workspace name/ID of the object
+    For staging area:
+    fasta_file: fasta file containing assembled contigs/chromosomes
+    gff_file: gff file containing predicted gene models and corresponding features
+
+    Optional params:
+    scientific_name: proper name for species, key for taxonomy lookup. Default to 'unknown_taxon'
+    source: Source Of The GFF File. Default to 'User'
+    taxon_wsname - where the reference taxons are. Default to 'ReferenceTaxons'
+    taxon_id - if defined, will try to link the Genome to the specified
+        taxonomy id in lieu of performing the lookup during upload
+    release: Release Or Version Of The Source Data
+    genetic_code: Genetic Code For The Organism
+    type: 'Reference', 'User upload', 'Representative'
+  */
+  typedef structure {
+    string fasta_file;
+    string gff_file;
+    string metagenome_name;
+    workspace_name workspace_name;
+
+    string source;
+    string taxon_wsname;
+    string taxon_id;
+    string release;
+    int    genetic_code;
+    string type;
+    string generate_missing_genes;
+  } UploadMetagenomeFastaGFFMethodParams;
+
+  typedef structure {
+    string genome_ref;
+    string genome_info;
+    report_name report_name;
+    report_ref report_ref;
+  } UploadMetagenomeFastaGFFMethodResult;
+
+  funcdef upload_metagenome_fasta_gff_file(UploadMetagenomeFastaGFFMethodParams params)
+    returns (UploadMetagenomeFastaGFFMethodResult returnVal) authentication required;
+
 
   typedef structure {
     string staging_subdir;

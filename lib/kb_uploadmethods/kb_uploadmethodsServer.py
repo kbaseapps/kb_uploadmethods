@@ -346,6 +346,10 @@ class Application(object):
                              name='kb_uploadmethods.upload_fasta_gff_file',
                              types=[dict])
         self.method_authentication['kb_uploadmethods.upload_fasta_gff_file'] = 'required'  # noqa
+        self.rpc_service.add(impl_kb_uploadmethods.upload_metagenome_fasta_gff_file,
+                             name='kb_uploadmethods.upload_metagenome_fasta_gff_file',
+                             types=[dict])
+        self.method_authentication['kb_uploadmethods.upload_metagenome_fasta_gff_file'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_uploadmethods.batch_import_genomes_from_staging,
                              name='kb_uploadmethods.batch_import_genomes_from_staging',
                              types=[dict])
