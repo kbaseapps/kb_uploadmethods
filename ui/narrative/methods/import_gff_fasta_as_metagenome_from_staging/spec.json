@@ -179,7 +179,7 @@
           "target_property": "type"
         },
         {
-          "input_parameter": "metagenome_name",
+          "input_parameter": "genome_name",
           "target_property": "id"
         },
         {
