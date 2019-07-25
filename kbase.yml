@@ -8,7 +8,7 @@ service-language:
     python
 
 module-version:
-    1.0.30
+    1.0.31
 
 owners:
     [tgu2, slebras]

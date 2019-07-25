@@ -1,6 +1,6 @@
 ###Release Notes
 
-**1.0.30**
+**1.0.31**
 Adding AnnotatedMetagenomeAssembly uploader
 
 **1.0.22**:
