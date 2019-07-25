@@ -33,7 +33,7 @@
       }
     },
     {
-      "id" : "metagenome_name",
+      "id" : "genome_name",
       "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
@@ -140,8 +140,8 @@
           "target_property": "gff_file"
         },
         {
-          "input_parameter": "metagenome_name",
-          "target_property": "metagenome_name"
+          "input_parameter": "genome_name",
+          "target_property": "genome_name"
         },
         {
           "input_parameter": "source",

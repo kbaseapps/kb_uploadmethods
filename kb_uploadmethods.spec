@@ -138,14 +138,13 @@ module kb_uploadmethods {
 
   /*
     Required:
-    genome_name: output genome object name
+    genome_name: output metagenome object name
     workspace_name: workspace name/ID of the object
     For staging area:
     fasta_file: fasta file containing assembled contigs/chromosomes
     gff_file: gff file containing predicted gene models and corresponding features
 
     Optional params:
-    scientific_name: proper name for species, key for taxonomy lookup. Default to 'unknown_taxon'
     source: Source Of The GFF File. Default to 'User'
     taxon_wsname - where the reference taxons are. Default to 'ReferenceTaxons'
     taxon_id - if defined, will try to link the Genome to the specified
@@ -157,7 +156,7 @@ module kb_uploadmethods {
   typedef structure {
     string fasta_file;
     string gff_file;
-    string metagenome_name;
+    string genome_name;
     workspace_name workspace_name;
 
     string source;
