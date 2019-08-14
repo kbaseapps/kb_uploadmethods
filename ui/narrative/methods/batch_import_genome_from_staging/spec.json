@@ -1,9 +1,9 @@
 {
-  "ver" : "1.0.32",
+  "ver" : "1.0.33",
   "authors" : ["tgu2"],
-  "contact" : "help@kbase.us",
+  "contact" : "http://kbase.us/contact-us/",
   "visble" : true,
-  "categories" : [ "inactive","assembly","upload" ],
+  "categories" : [ "active","annotation","upload" ],
   "widgets" : {
     "input" : null,
     "output" : "no-display"
@@ -29,7 +29,7 @@
       "field_type" : "text",
       "text_options" :
       {
-        "valid_ws_types" : [ "KBaseSets.GenomeSet" ],
+        "valid_ws_types" : [ "KBaseSearch.GenomeSet" ],
         "is_output_name" : true
       }
     },
