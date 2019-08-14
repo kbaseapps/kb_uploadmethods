@@ -1,21 +1,24 @@
 # -*- coding: utf-8 -*-
 #BEGIN_HEADER
-import os
 import json
+import logging
+import os
 import sys
-from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
-from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
-from kb_uploadmethods.Utils.ImportGenbankUtil import ImportGenbankUtil
-from kb_uploadmethods.Utils.ImportGFFFastaUtil import ImportGFFFastaUtil
-from kb_uploadmethods.Utils.ImportSRAUtil import ImportSRAUtil
-from kb_uploadmethods.Utils.ImportAssemblyUtil import ImportAssemblyUtil
-from kb_uploadmethods.Utils.ImportMediaUtil import ImportMediaUtil
-from kb_uploadmethods.Utils.ImportFBAModelUtil import ImportFBAModelUtil
-from kb_uploadmethods.Utils.ImportExpressionMatrixUtil import ImportExpressionMatrixUtil
-from kb_uploadmethods.Utils.ImportReadsUtil import ImportReadsUtil
-from kb_uploadmethods.Utils.ImportPhenotypeSetUtil import ImportPhenotypeSetUtil
-from kb_uploadmethods.Utils.ImportAttributeMappingUtil import ImportAttributeMappingUtil
+
 from kb_uploadmethods.Utils.BatchUtil import BatchUtil
+from kb_uploadmethods.Utils.ImportAssemblyUtil import ImportAssemblyUtil
+from kb_uploadmethods.Utils.ImportAttributeMappingUtil import ImportAttributeMappingUtil
+from kb_uploadmethods.Utils.ImportExpressionMatrixUtil import ImportExpressionMatrixUtil
+from kb_uploadmethods.Utils.ImportFBAModelUtil import ImportFBAModelUtil
+from kb_uploadmethods.Utils.ImportGFFFastaUtil import ImportGFFFastaUtil
+from kb_uploadmethods.Utils.ImportMetagenomeGFFFastaUtil import ImportMetagenomeGFFFastaUtil
+from kb_uploadmethods.Utils.ImportGenbankUtil import ImportGenbankUtil
+from kb_uploadmethods.Utils.ImportMediaUtil import ImportMediaUtil
+from kb_uploadmethods.Utils.ImportPhenotypeSetUtil import ImportPhenotypeSetUtil
+from kb_uploadmethods.Utils.ImportReadsUtil import ImportReadsUtil
+from kb_uploadmethods.Utils.ImportSRAUtil import ImportSRAUtil
+from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
+from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 #END_HEADER
 
 
@@ -34,9 +37,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.0.26"
-    GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "ac50f7b135074ea5e4f97c50313e164a8c1198bb"
+    VERSION = "1.0.29"
+    GIT_URL = "https://github.com/slebras/kb_uploadmethods.git"
+    GIT_COMMIT_HASH = "4c0579bec5aa606f5e42cf29d920872d34ea5b52"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -48,6 +51,8 @@ class kb_uploadmethods:
         self.config = config
         self.config['SDK_CALLBACK_URL'] = os.environ['SDK_CALLBACK_URL']
         self.config['KB_AUTH_TOKEN'] = os.environ['KB_AUTH_TOKEN']
+        logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
+                            level=logging.INFO)
         #END_CONSTRUCTOR
         pass
 
@@ -145,19 +150,19 @@ class kb_uploadmethods:
            Optional params: scientific_name: proper name for species, key for
            taxonomy lookup. Default to 'unknown_taxon' source: Source Of The
            GFF File. Default to 'User' taxon_wsname - where the reference
-           taxons are. Default to 'ReferenceTaxons' taxon_reference - if
-           defined, will try to link the Genome to the specified taxonomy
-           object release: Release Or Version Of The Source Data
-           genetic_code: Genetic Code For The Organism type: 'Reference',
-           'User upload', 'Representative') -> structure: parameter
-           "fasta_file" of String, parameter "gff_file" of String, parameter
-           "genome_name" of String, parameter "workspace_name" of type
-           "workspace_name" (workspace name of the object), parameter
+           taxons are. Default to 'ReferenceTaxons' taxon_id - if defined,
+           will try to link the Genome to the specified taxonomy id in lieu
+           of performing the lookup during upload release: Release Or Version
+           Of The Source Data genetic_code: Genetic Code For The Organism
+           type: 'Reference', 'User upload', 'Representative') -> structure:
+           parameter "fasta_file" of String, parameter "gff_file" of String,
+           parameter "genome_name" of String, parameter "workspace_name" of
+           type "workspace_name" (workspace name of the object), parameter
            "genome_type" of String, parameter "scientific_name" of String,
            parameter "source" of String, parameter "taxon_wsname" of String,
-           parameter "taxon_reference" of String, parameter "release" of
-           String, parameter "genetic_code" of Long, parameter "type" of
-           String, parameter "generate_missing_genes" of String
+           parameter "taxon_id" of String, parameter "release" of String,
+           parameter "genetic_code" of Long, parameter "type" of String,
+           parameter "generate_missing_genes" of String
         :returns: instance of type "UploadFastaGFFMethodResult" -> structure:
            parameter "genome_ref" of String, parameter "genome_info" of
            String, parameter "report_name" of type "report_name", parameter
@@ -197,6 +202,67 @@ class kb_uploadmethods:
         # return the results
         return [returnVal]
 
+    def upload_metagenome_fasta_gff_file(self, ctx, params):
+        """
+        :param params: instance of type
+           "UploadMetagenomeFastaGFFMethodParams" (Required: genome_name:
+           output genome object name workspace_name: workspace name/ID of the
+           object For staging area: fasta_file: fasta file containing
+           assembled contigs/chromosomes gff_file: gff file containing
+           predicted gene models and corresponding features Optional params:
+           scientific_name: proper name for species, key for taxonomy lookup.
+           Default to 'unknown_taxon' source: Source Of The GFF File. Default
+           to 'User' taxon_wsname - where the reference taxons are. Default
+           to 'ReferenceTaxons' taxon_id - if defined, will try to link the
+           Genome to the specified taxonomy id in lieu of performing the
+           lookup during upload release: Release Or Version Of The Source
+           Data genetic_code: Genetic Code For The Organism type:
+           'Reference', 'User upload', 'Representative') -> structure:
+           parameter "fasta_file" of String, parameter "gff_file" of String,
+           parameter "genome_name" of String, parameter "workspace_name" of
+           type "workspace_name" (workspace name of the object), parameter
+           "genome_type" of String, parameter "scientific_name" of String,
+           parameter "source" of String, parameter "taxon_wsname" of String,
+           parameter "taxon_id" of String, parameter "release" of String,
+           parameter "genetic_code" of Long, parameter "type" of String,
+           parameter "generate_missing_genes" of String
+        :returns: instance of type "UploadMetagenomeFastaGFFMethodResult" ->
+           structure: parameter "genome_ref" of String, parameter
+           "genome_info" of String, parameter "report_name" of type
+           "report_name", parameter "report_ref" of type "report_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN upload_metagenome_fasta_gff_file
+
+        print('--->\nRunning uploadmethods.upload_metagenome_fasta_gff_file\nparams:')
+        print((json.dumps(params, indent=1)))
+
+        for key in list(params.keys()):
+            value = params[key]
+            if value is None:
+                del params[key]
+            else:
+                if isinstance(value, str):
+                    if value.strip() == '':
+                        params[key] = None
+                    else:
+                        params[key] = value.strip()
+
+        uploader = ImportMetagenomeGFFFastaUtil(self.config)
+        returnVal = uploader.import_metagenome_gff_fasta_from_staging(params)
+        reportVal = uploader.generate_report(returnVal['genome_ref'],
+                                                   params)
+        returnVal.update(reportVal)
+        #END upload_metagenome_fasta_gff_file
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method upload_metagenome_fasta_gff_file return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
     def batch_import_genomes_from_staging(self, ctx, params):
         """
         :param params: instance of type "BatchGenomeImporterParams" ->
@@ -204,7 +270,7 @@ class kb_uploadmethods:
            "genome_set_name" of String, parameter "workspace_name" of type
            "workspace_name" (workspace name of the object), parameter
            "genome_type" of String, parameter "source" of String, parameter
-           "taxon_wsname" of String, parameter "taxon_reference" of String,
+           "taxon_wsname" of String, parameter "taxon_id" of String,
            parameter "release" of String, parameter "genetic_code" of Long,
            parameter "generate_missing_genes" of String
         :returns: instance of type "BatchImporterResult" -> structure:
@@ -403,18 +469,22 @@ class kb_uploadmethods:
            file typically something like RefSeq or Ensembl optional params:
            release - Release or version number of the data per example
            Ensembl has numbered releases of all their data: Release 31
-           generate_ids_if_needed - If field used for feature id is not
-           there, generate ids (default behavior is raising an exception)
-           generate_missing_genes - Generate gene feature for CDSs that do
-           not have a parent in file genetic_code - Genetic code of organism.
-           Overwrites determined GC from taxon object type - Reference,
-           Representative or User upload) -> structure: parameter
+           scientific_name - will be used to set the scientific name of the
+           genome and link to a taxon taxon_id - if defined, will try to link
+           the Genome to the specified taxonomy id in lieu of performing the
+           lookup during upload generate_ids_if_needed - If field used for
+           feature id is not there, generate ids (default behavior is raising
+           an exception) generate_missing_genes - Generate gene feature for
+           CDSs that do not have a parent in file genetic_code - Genetic code
+           of organism. Overwrites determined GC from taxon object type -
+           Reference, Representative or User upload) -> structure: parameter
            "staging_file_subdir_path" of String, parameter "genome_name" of
            String, parameter "workspace_name" of String, parameter "source"
            of String, parameter "genome_type" of String, parameter "release"
            of String, parameter "genetic_code" of Long, parameter "type" of
-           String, parameter "generate_ids_if_needed" of String, parameter
-           "generate_missing_genes" of String
+           String, parameter "scientific_name" of String, parameter
+           "taxon_id" of String, parameter "generate_ids_if_needed" of
+           String, parameter "generate_missing_genes" of String
         :returns: instance of type "GenomeSaveResult" -> structure: parameter
            "genome_ref" of String
         """

@@ -1,6 +1,6 @@
 name     : Upload File to Staging from Web - v1.0.12
-subtitle : Upload a data file (which may be compressed) from a web URL to your staging area
-tooltip  : Upload a data file (which may be compressed) from a web URL to your staging area
+
+tooltip  : Upload a data file (which may be compressed) from a web URL to your staging area.
 
 icon: data-orange.png
 
@@ -22,32 +22,38 @@ suggestions :
 parameters :
     download_type :
         ui-name : URL Type
-        short-hint : URL type ('Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox Public Shared Link',  'Google Drive Public Shared Link')
-        long-hint  : URL type ('Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox Public Shared Link',  'Google Drive Public Shared Link')
+        short-hint : URL type - 'Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox Public Shared Link', or 'Google Drive Public Shared Link'.
 
     file_url :
         ui-name : URL
-        short-hint : URL for data file (must be publicly readable)
-        long-hint  : URL for data file (must be publicly readable)
+        short-hint : URL for the data file to be uploaded. Note that it must be publicly readable and cannot be password protected.
 
 parameter-groups :
     urls_to_add_web_unpack :
         ui-name : URL(s)
-        short-hint : URL(s) for data file (must be publicly readable)
-        long-hint  : URL(s) for data file (must be publicly readable)
+        short-hint : URL(s) for the data file(s) to be uploaded. Note that it must be publicly readable and cannot be password protected.
 
 description : |
-    <p> Upload a data file (which may be compressed) from a web URL to your staging area. If the file is compressed (.gz or .zip), it will automatically be uncompressed.</p>
-    <p> </p>
-    <p> How to get 'Google Drive Public Shared Link'</p>
-    <p> 1. Left click on the file and select 'Get shareable link'.</p>
-    <p> 2. Make sure file setting is set to 'Anyone with the link can view'. Otherwise go to 'Sharing settings'.</p>
-    <p> 3. Copy the public file sharing link. e.g. 'https://drive.google.com/open?id=0B0exSa7ebQ0qX01mZ3FaRzhuMDQ'</p>
-    <p> </p>
-    <p> How to get 'Dropbox Public Shared Link'</p>
-    <p> 1. Click on 'Share' on the file</p>
-    <p> 2. Make sure file setting is set to 'Anyone with the link can view this file'. Otherwise go to 'Link settings'.</p>
-    <p> 3. Click on 'Copy link' button. e.g. 'https://www.dropbox.com/s/w5ct52rp95cukwq/file1.txt?dl=0'</p>
+    <p>This App allows users to upload a data file (which may be compressed) from a web URL to the staging area. If the file is compressed (.gz or .zip), it will automatically be uncompressed. It is possible, and indeed encouraged to make use of folders when uploading compressed archives of files. These folders are leveraged by downstream batch processing Apps and enable users to run tools on every file in the folder. We strongly recommend using this method to move large amounts of data easily into KBase because the transfer mechanism is less likely to be interrupted (versus uploading directly from your laptop). Note that both Box and DropBox offer a mechanism to share private files temporarily using links that are only accessible to someone who know what the link address is. This is a great mechanism to make a file accessible to KBase without completely exposing the file to the public.</p>
+
+    <p><u>How to Use a ‘Google Drive Public Shared Link’</u><br>In the source location in Google Drive:
+      <ol>
+        <li>Left click on the file and select ‘Get shareable link.’</li>
+        <li>Make sure the file setting is set to ‘Anyone with the link can view.’ Otherwise go to ‘Sharing settings.’</li>
+        <li>Copy the public file sharing link.</li>
+        <li>Paste the link into the “SRA URL” entry field.</li>
+      </ol>
+    </p>
+
+    <p><u>How to use a ‘Dropbox Public Shared Link’</u>
+      <ol>
+        <li>Click on ‘Share’ on the file.</li>
+        <li>Make sure the file setting is set to ‘Anyone with the link can view this file.’ Otherwise go to ‘Link settings.’</li>
+        <li>Click on the ‘Copy link’ button.</li>
+        <li>Paste the link into the “URL” entry field.</li>
+      </ol>
+    </p>
+
 technical-description : none
 
 publications :

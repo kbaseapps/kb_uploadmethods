@@ -69,6 +69,10 @@
         {
           "value": "construct",
           "display": "Construct"
+        },
+        {
+          "value": "metagenome",
+          "display": "Metagenome"
         }
       ]}
     },

@@ -66,10 +66,10 @@ parameters :
         short-hint: Where the reference taxons are. Defaults to ReferenceTaxons
         long-hint: Where the reference taxons are. Defaults to ReferenceTaxons
 
-    taxon_reference:
-        ui-name: Taxonomy Object Reference
-        short-hint: Link the Genome to the specified taxonomy object
-        long-hint: Link the Genome to the specified taxonomy object
+    taxon_id:
+        ui-name: Taxonomy ID
+        short-hint: Will try to link the Genome to the specified taxonomy id
+        long-hint: If defined, will try to link the Genome to the specified taxonomy id in lieu of performing the lookup during upload
 
     genetic_code :
         ui-name : |

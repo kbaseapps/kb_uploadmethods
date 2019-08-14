@@ -1,6 +1,7 @@
 
 import collections
 import json
+import logging
 import os
 import time
 import uuid
@@ -10,11 +11,6 @@ from installed_clients.GenomeFileUtilClient import GenomeFileUtil
 from installed_clients.KBaseReportClient import KBaseReport
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from . import handler_utils
-
-
-def log(message, prefix_newline=False):
-    """Logging function, provides a hook to suppress or redirect log messages."""
-    print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
 
 
 class ImportGenbankUtil:
@@ -55,8 +51,8 @@ class ImportGenbankUtil:
           genome_ref: return object reference
         '''
 
-        log('--->\nrunning ImportGenbankUtil.import_genbank_from_staging\n' +
-            'params:\n{}'.format(json.dumps(params, indent=1)))
+        logging.info('--->\nrunning ImportGenbankUtil.import_genbank_from_staging\n' +
+                     f'params:\n{json.dumps(params, indent=1)}')
 
         self.validate_import_genbank_from_staging_params(params)
 
@@ -96,7 +92,7 @@ class ImportGenbankUtil:
         """
         _generate_html_report: generate html summary report
         """
-        log('start generating html report')
+        logging.info('start generating html report')
         genome_obj = self.dfu.get_objects({'object_refs': [genome_ref]})
         html_report = list()
         tmp_dir = os.path.join(self.scratch, str(uuid.uuid4()))

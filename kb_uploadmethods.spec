@@ -103,7 +103,8 @@ module kb_uploadmethods {
     scientific_name: proper name for species, key for taxonomy lookup. Default to 'unknown_taxon'
     source: Source Of The GFF File. Default to 'User'
     taxon_wsname - where the reference taxons are. Default to 'ReferenceTaxons'
-    taxon_reference - if defined, will try to link the Genome to the specified taxonomy object
+    taxon_id - if defined, will try to link the Genome to the specified
+        taxonomy id in lieu of performing the lookup during upload
     release: Release Or Version Of The Source Data
     genetic_code: Genetic Code For The Organism
     type: 'Reference', 'User upload', 'Representative'
@@ -118,7 +119,7 @@ module kb_uploadmethods {
     string scientific_name;
     string source;
     string taxon_wsname;
-    string taxon_reference;
+    string taxon_id;
     string release;
     int    genetic_code;
     string type;
@@ -135,6 +136,48 @@ module kb_uploadmethods {
   funcdef upload_fasta_gff_file(UploadFastaGFFMethodParams params)
     returns (UploadFastaGFFMethodResult returnVal) authentication required;
 
+  /*
+    Required:
+    genome_name: output metagenome object name
+    workspace_name: workspace name/ID of the object
+    For staging area:
+    fasta_file: fasta file containing assembled contigs/chromosomes
+    gff_file: gff file containing predicted gene models and corresponding features
+
+    Optional params:
+    source: Source Of The GFF File. Default to 'User'
+    taxon_wsname - where the reference taxons are. Default to 'ReferenceTaxons'
+    taxon_id - if defined, will try to link the Genome to the specified
+        taxonomy id in lieu of performing the lookup during upload
+    release: Release Or Version Of The Source Data
+    genetic_code: Genetic Code For The Organism
+    type: 'Reference', 'User upload', 'Representative'
+  */
+  typedef structure {
+    string fasta_file;
+    string gff_file;
+    string genome_name;
+    workspace_name workspace_name;
+
+    string source;
+    string taxon_wsname;
+    string taxon_id;
+    string release;
+    int    genetic_code;
+    string type;
+    string generate_missing_genes;
+  } UploadMetagenomeFastaGFFMethodParams;
+
+  typedef structure {
+    string genome_ref;
+    string genome_info;
+    report_name report_name;
+    report_ref report_ref;
+  } UploadMetagenomeFastaGFFMethodResult;
+
+  funcdef upload_metagenome_fasta_gff_file(UploadMetagenomeFastaGFFMethodParams params)
+    returns (UploadMetagenomeFastaGFFMethodResult returnVal) authentication required;
+
 
   typedef structure {
     string staging_subdir;
@@ -144,7 +187,7 @@ module kb_uploadmethods {
     string genome_type;
     string source;
     string taxon_wsname;
-    string taxon_reference;
+    string taxon_id;
     string release;
     int    genetic_code;
     string generate_missing_genes;
@@ -250,6 +293,10 @@ module kb_uploadmethods {
     optional params:
     release - Release or version number of the data
         per example Ensembl has numbered releases of all their data: Release 31
+    scientific_name - will be used to set the scientific name of the genome
+        and link to a taxon
+    taxon_id - if defined, will try to link the Genome to the specified
+        taxonomy id in lieu of performing the lookup during upload
     generate_ids_if_needed - If field used for feature id is not there,
         generate ids (default behavior is raising an exception)
     generate_missing_genes - Generate gene feature for CDSs that do not have
@@ -268,6 +315,8 @@ module kb_uploadmethods {
     string release;
     int    genetic_code;
     string type;
+    string scientific_name;
+    string taxon_id;
     string generate_ids_if_needed;
     string generate_missing_genes;
   } GenbankToGenomeParams;

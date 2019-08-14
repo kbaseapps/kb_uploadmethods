@@ -126,7 +126,7 @@
       "text_options" : {}
     },
     {
-      "id" : "taxon_reference",
+      "id" : "taxon_id",
       "optional" : true,
       "advanced" : true,
       "allow_multiple" : false,
@@ -208,8 +208,8 @@
           "target_property": "taxon_wsname"
         },
         {
-          "input_parameter": "taxon_reference",
-          "target_property": "taxon_reference"
+          "input_parameter": "taxon_id",
+          "target_property": "taxon_id"
         },
         {
           "input_parameter": "release",

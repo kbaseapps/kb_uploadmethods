@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.31**
+Adding AnnotatedMetagenomeAssembly uploader
+
 **1.0.22**:
 Added KBase paper citation in PLOS format
 

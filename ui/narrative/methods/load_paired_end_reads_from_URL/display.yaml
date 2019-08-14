@@ -1,6 +1,6 @@
 name     : Import Paired-End Reads from Web - v1.0.12
-subtitle : Import a Paired-End Library into your Narrative
-tooltip  : Import a Paired-End Library into your Narrative
+
+tooltip  : Import a Paired-End Library into your Narrative as a Reads object.
 
 icon: data-pink.png
 
@@ -23,70 +23,70 @@ parameters :
 
     download_type :
         ui-name : URL Type
-        short-hint : URL type ('Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox/Box Public Shared Link',  'Google Drive Public Shared Link')
-        long-hint  : URL type ('Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox/Box Public Shared Link',  'Google Drive Public Shared Link')
+        short-hint : URL type - 'Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox/Box Public Shared Link', or 'Google Drive Public Shared Link'.
 
     sequencing_tech :
         ui-name : Sequencing Technology
-        short-hint : The name of the sequencing technology used to create the reads file
-        long-hint  : The name of the sequencing technology used to create the reads file
+        short-hint : The name of the sequencing technology used to create the reads file.
 
     fwd_file_url :
         ui-name : URL for Forward/Left Reads (FASTA/FASTQ)
-        short-hint : Download link containing a single end library in FASTA/FASTQ format
-        long-hint  : |
-                Valid file extensions for FASTA: .fasta, .fna, .fa   Valid file extensions for FASTQ: .fastq, .fnq, .fq; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2
+        short-hint : The first download link containing a single end library in FASTA/FASTQ format. Valid file extensions for FASTA include .fasta, .fna, and .fa. Valid file extensions for FASTQ include .fastq, .fnq, and .fq. Compressed files (containing files with valid extensions) include .zip, .gz, .bz2, .tar.gz, and .tar.bz2.
 
     rev_file_url :
         ui-name : URL for Reverse/Right Reads (FASTA/FASTQ)
-        short-hint : Second download link containing a single end library in FASTA/FASTQ format
-        long-hint  : |
-                Valid file extensions for FASTA: .fasta, .fna, .fa   Valid file extensions for FASTQ: .fastq, .fnq, .fq; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2
+        short-hint : The second download link containing a single end library in FASTA/FASTQ format. Valid file extensions for FASTA include .fasta, .fna, and .fa. Valid file extensions for FASTQ include .fastq, .fnq, and .fq. Compressed files (containing files with valid extensions) include .zip, .gz, .bz2, .tar.gz, and .tar.bz2.
 
     name :
         ui-name : Reads Object Name
-        short-hint : Provide a name for the output object that will be created by this upload
-        long-hint  : Provide a name for the output object that will be created by this upload
+        short-hint : Provide a name for the output object that will be created by this importer.
 
     single_genome :
         ui-name: Single Genome
-        short-hint: Select if the reads are from a single genome, leave blank if from a metagenome
-        long-hint: Select if the reads are from a single genome, leave blank if from a metagenome
+        short-hint: Select if the reads are from a single genome, and leave blank if they are from a metagenome.
 
     insert_size_mean :
         ui-name : Mean Insert Size
-        short-hint : The mean (average) insert length
-        long-hint  : The mean (average) insert length
+        short-hint : The mean (average) insert length.
 
     insert_size_std_dev :
         ui-name : St. Dev. of Insert Size
-        short-hint : The standard deviation of insert lengths
-        long-hint  : The standard deviation of insert lengths
+        short-hint : The standard deviation of insert lengths.
 
     read_orientation_outward :
         ui-name : Reads Orientation Outward
-        short-hint : Select if reads in a pair point outward
-        long-hint  : Select if reads in a pair point outward
+        short-hint : Select if the reads in a pair point outward.
 
 parameter-groups :
     urls_to_add :
         ui-name : URL(s)
-        short-hint : FASTQ file URL and output reads filename
-        long-hint  : FASTQ file URL and output reads filename
+        short-hint : FASTQ file URL and output reads filename.
 
 description : |
-    <p> Import a Paired-End Library from a publicly accessible URL into your Narrative.
-        Please see the <a href="http://kbase.us/data-upload-download-guide/">FASTQ/SRA Reads</a> for more information. </p>
-    <p> </p>
-    <p> How to get 'Google Drive Public Shared Link'</p>
-    <p> 1. Left click on the file and select 'Get shareable link'.</p>
-    <p> 2. Make sure file setting is set to 'Anyone with the link can view'. Otherwise go to 'Sharing settings'.</p>
-    <p> 3. Copy the public file sharing link. e.g. 'https://drive.google.com/open?id=0B0exSa7ebQ0qX01mZ3FaRzhuMDQ'</p>
-    <p> </p>
-    <p> How to get 'Dropbox Public Shared Link'</p>
-    <p> 1. Click on 'Share' on the file</p>
-    <p> 2. Make sure file setting is set to 'Anyone with the link can view this file'. Otherwise go to 'Link settings'.</p>
-    <p> 3. Click on 'Copy link' button. e.g. 'https://www.dropbox.com/s/w5ct52rp95cukwq/file1.txt?dl=0'</p>
+    <p>This App allows users to load FASTQ format paired-end read libraries directly into the workspace from sources on the web. In addition to standard HTTP and anonymous FTP links, the user may also obtain files from Google drive and Dropbox links. Please see the <a href="http://kbase.us/data-upload-download-guide/short-reads//">FASTQ/SRA Reads Data Upload/Download Guide</a> for more information.</p>
+
+    <p>If your reads are in a publicly accessible URL, you can directly import the reads into your Narrative using either this App, the <a href=”https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/load_single_end_reads_from_URL/release”>Import Single-End Reads from Web</a> App, or <a href=”https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/import_sra_as_reads_from_web/release”>Import SRA File as Reads from Web</a>the App.</p>
+
+    <p><u>How to Use a ‘Google Drive Public Shared Link’</u><br>In the source location in Google Drive:
+      <ol>
+        <li>Left click on the file and select ‘Get shareable link.’</li>
+        <li>Make sure the file setting is set to ‘Anyone with the link can view.’ Otherwise go to ‘Sharing settings.’</li>
+        <li>Copy the public file sharing link.</li>
+        <li>Paste the link into the “SRA URL” entry field.</li>
+      </ol>
+    </p>
+
+    <p><u>How to use a ‘Dropbox Public Shared Link’</u>
+      <ol>
+        <li>Click on ‘Share’ on the file.</li>
+        <li>Make sure the file setting is set to ‘Anyone with the link can view this file.’ Otherwise go to ‘Link settings.’</li>
+        <li>Click on the ‘Copy link’ button.</li>
+        <li>Paste the link into the “SRA URL” entry field.</li>
+      </ol>
+    </p>
+
+    <p>As the files are loaded, the new objects appear in the data pane at the top left.</p>
+
 technical-description : none
 
 publications :
