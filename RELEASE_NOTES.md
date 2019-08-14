@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.33**
+restore visibility of Batch Import Apps up to beta
+
 **1.0.32**
 hiding Batch Import Apps so they can be backtracked to beta where they belong
 
