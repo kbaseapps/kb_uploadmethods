@@ -6,7 +6,7 @@
   "categories" : [ "inactive","assembly","upload" ],
   "widgets" : {
     "input" : null,
-    "output" : "kbaseGenomeView"
+    "output" : "kbaseAnnotatedMetagenomeAssemblyView"
   },
   "parameters" : 
   [ 
