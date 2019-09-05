@@ -161,7 +161,7 @@ class ImportMetagenomeGFFFastaUtil:
         html_report.append({'shock_id': report_shock_id,
                             'name': os.path.basename(result_file_path),
                             'label': os.path.basename(result_file_path),
-                            'description': 'HTML summary report for imported Genome'})
+                            'description': 'HTML summary report for imported Annotated Metagenome Assembly'})
         return html_report
 
     def generate_report(self, genome_ref, params):
@@ -183,7 +183,7 @@ class ImportMetagenomeGFFFastaUtil:
             'html_links': output_html_files,
             'direct_html_link_index': 0,
             'html_window_height': 300,
-            'report_object_name': 'kb_genome_upload_report_' + uuid_string}
+            'report_object_name': 'kb_metagenome_upload_report_' + uuid_string}
 
         kbase_report_client = KBaseReport(self.callback_url, token=self.token)
         output = kbase_report_client.create_extended_report(report_params)
