@@ -221,6 +221,10 @@ class BatchUtil:
         workspace_name = params.get('workspace_name')
         genome_set_name = params.get('genome_set_name')
 
+        if staging_subdir.startswith(self.user_id + '/' ):
+            temp = len(self.user_id) + 1
+            staging_subdir = staging_subdir[temp:]
+            
         genome_files = self._fetch_genome_files(staging_subdir)
 
         genome_objects = list()
@@ -283,6 +287,10 @@ class BatchUtil:
         workspace_name = params.get('workspace_name')
         assembly_set_name = params.get('assembly_set_name')
 
+        if staging_subdir.startswith(self.user_id + '/' ):
+            temp = len(self.user_id) + 1
+            staging_subdir = staging_subdir[temp:]
+        
         assembly_files = self._fetch_assembly_files(staging_subdir)
 
         assembly_objects = list()

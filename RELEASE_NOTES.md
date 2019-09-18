@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.34**
+In the Batch Import apps, accept both /user_id and / as valid names of the root directory
+
 **1.0.33**
 restore visibility of Batch Import Apps up to beta
 

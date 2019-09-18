@@ -143,7 +143,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     def test_batch_import_assemblies_from_staging(self, download_staging_file):
         input_params = {
-            'staging_subdir': 'test_batch',
+            'staging_subdir': self.user_id + '/test_batch',
             'workspace_name': self.getWsName(),
             'assembly_set_name': 'test_assembly_set_name'
         }
