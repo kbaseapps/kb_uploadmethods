@@ -286,11 +286,14 @@ class BatchUtil:
         staging_subdir = params.get('staging_subdir')
         workspace_name = params.get('workspace_name')
         assembly_set_name = params.get('assembly_set_name')
+        print ("STAGING BEFORE=", staging_subdir)
 
-        if staging_subdir.startswith(self.user_id + '/' ):
-            temp = len(self.user_id) + 1
-            staging_subdir = staging_subdir[temp:]
-        
+        if staging_subdir.startswith('/' + self.user_id + '/' ):
+            staging_subdir = staging_subdir.replace('/' + self.user_id + '/' , '/',1) 
+        elif staging_subdir.startswith('/' + self.user_id ):
+            staging_subdir = staging_subdir.replace('/' + self.user_id , '/',1)
+        print ("STAGING AFTER=", staging_subdir)
+            
         assembly_files = self._fetch_assembly_files(staging_subdir)
 
         assembly_objects = list()
