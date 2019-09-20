@@ -84,7 +84,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         return {'copy_file_path': file_path}
 
-    def mytest_bad_batch_import_genomes_from_staging_params(self):
+    def test_bad_batch_import_genomes_from_staging_params(self):
 
         invalidate_input_params = {
             'missing_staging_subdir': 'staging_subdir',
@@ -118,7 +118,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
     @patch.object(BatchUtil, "STAGING_USER_FILE_PREFIX", new='/kb/module/test/data/')
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    def mytest_batch_import_genomes_from_staging(self, download_staging_file):
+    def test_batch_import_genomes_from_staging(self, download_staging_file):
         input_params = {
             'staging_subdir': 'test_batch',
             'workspace_name': self.getWsName(),
