@@ -55,12 +55,20 @@
       "dropdown_options":{
       "options": [
         {
-          "value": "RefSeq user",
-          "display": "RefSeq"
+          "value": "EBI user",
+          "display": "EBI"
         },
         {
-          "value": "Ensembl user",
-          "display": "Ensembl"
+          "value": "IMG user",
+          "display": "IMG"
+        },
+        {
+          "value": "JGI user",
+          "display": "JGI"
+        },
+        {
+          "value": "BGI user",
+          "display": "BGI (Beijing Genomics)"
         },
         {
           "value": "Other",
