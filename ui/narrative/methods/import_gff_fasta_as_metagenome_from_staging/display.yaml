@@ -37,22 +37,12 @@ parameters :
         short-hint : Provide a name for the output object that will be created by this upload
         long-hint  : Provide a name for the output object that will be created by this upload
 
-    # metagenome_type:
-    #     ui-name: Metagenome Type
-    #     short-hint : The type or source of this metagenome
-    #     long-hint  : The type or source of this metagenome
-
-    # scientific_name :
-    #     ui-name : Scientific Name
-    #     short-hint : Provide the scientific name of the species
-    #     long-hint  : Provide the scientific name of the species, e.g., "Escherichia coli". This is important for taxonomy lookup.
-
     source:
         ui-name: Source of metagenome
         short-hint: |
-            Source of the metagenome data (i.e. EBI etc.)
+            Source of the metagenome data
         long-hint: |
-            Source of the metagenome data (i.e. EBI etc.)
+            Source of the metagenome data, (JGI, EBI, etc.)
 
     release :
         ui-name : Release or Version of the Source Data
@@ -60,16 +50,6 @@ parameters :
             Release or version of the source data (for example: Release31, V4)
         long-hint : |
             Release or version of the source data (for example: Release31, V4)
-
-    taxon_wsname:
-        ui-name: Taxon Workspace Name
-        short-hint: Where the reference taxons are. Defaults to ReferenceTaxons
-        long-hint: Where the reference taxons are. Defaults to ReferenceTaxons
-
-    taxon_id:
-        ui-name: Taxonomy ID
-        short-hint: Will try to link the Genome to the specified taxonomy id
-        long-hint: If defined, will try to link the Genome to the specified taxonomy id in lieu of performing the lookup during upload
 
     genetic_code :
         ui-name : |
