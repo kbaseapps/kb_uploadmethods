@@ -46,7 +46,7 @@
               "value": "Direct Download"
           },
           {
-              "display": "FTP Link",
+              "display": "FTP Link (Note: NCBI SRA FTP no longer supported)",
               "value": "FTP"
           },
           {
