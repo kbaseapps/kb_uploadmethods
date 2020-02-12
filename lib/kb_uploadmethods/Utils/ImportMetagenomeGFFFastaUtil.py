@@ -40,10 +40,6 @@ class ImportMetagenomeGFFFastaUtil:
         staging_file_subdir_path is subdir_1/subdir_2/file_name
 
         optional params:
-        scientific_name: proper name for species, key for taxonomy lookup.Default to 'unknown_taxon'
-        source: Source Of The GenBank File. Default to 'User'
-        taxon_wsname - where the reference taxons are. Default to 'ReferenceTaxons'
-        taxon_reference - if defined, will try to link the Genome to the specified taxonomy object
         release: Release Or Version Of The Source Data
         genetic_code: Genetic Code For The Organism
         type: 'Reference', 'User upload', 'Representative'

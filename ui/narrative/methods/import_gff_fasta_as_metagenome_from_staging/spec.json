@@ -156,14 +156,6 @@
           "target_property": "source"
         },
         {
-          "input_parameter": "taxon_wsname",
-          "target_property": "taxon_wsname"
-        },
-        {
-          "input_parameter": "taxon_id",
-          "target_property": "taxon_id"
-        },
-        {
           "input_parameter": "release",
           "target_property": "release"
         },
