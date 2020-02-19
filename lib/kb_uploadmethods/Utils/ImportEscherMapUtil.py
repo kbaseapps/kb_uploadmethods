@@ -54,7 +54,32 @@ class ImportEscherMapUtil:
         """
         logging.info('start refactoring escher data')
         refactored_escher_data = copy.deepcopy(escher_data)
+        
+        refactored_escher_data[0]['map_name'] = "custom map"
+        if not 'authors' in refactored_escher_data[0]:
+            refactored_escher_data[0]['authors'] = []
 
+        for rxn_uid in refactored_escher_data[1]['reactions']:
+            rxn_node = refactored_escher_data[1]['reactions'][rxn_uid]
+            rxn_node['reversibility'] = 1 if rxn_node['reversibility'] else 0
+
+            for seg_uid in rxn_node['segments']:
+                seg = rxn_node['segments'][seg_uid]
+                if seg['b1'] == None:
+                    del seg['b1']
+                if seg['b2'] == None:
+                    del seg['b2']
+
+        for node_uid in refactored_escher_data[1]['nodes']:
+            node = refactored_escher_data[1]['nodes'][node_uid]
+            if 'node_is_primary' in node:
+                node['node_is_primary'] = 1 if node['node_is_primary'] else 0
+
+        refactored_escher_data = {
+            "metadata" : refactored_escher_data[0],
+            "layout" : refactored_escher_data[1]
+        }
+            
         if refactored_escher_data == escher_data:
             logging.warning('No changes in escher data')
 
