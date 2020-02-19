@@ -1,0 +1,41 @@
+name     : Import JSON File as EscherMap from Staging Area
+subtitle : Import a JSON file from your staging area into your Narrative as an KBaseFBA.EscherMap data object
+tooltip  : Import a JSON file from your staging area into your Narrative as an KBaseFBA.EscherMap data object
+
+icon: data-teal.png
+
+screenshots :
+    []
+
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+parameters :
+    staging_file_subdir_path :
+        ui-name : |
+            JSON File Path
+        short-hint : |
+            File with EscherMap data in JSON format.
+        long-hint  : |
+            File with EscherMap data in JSON format.
+
+    escher_map_name :
+        ui-name : |
+            EscherMap Object Name
+        short-hint : |
+            Provide a name for the EscherMap that will be created by this importer
+        long-hint : |
+            Provide a name for the EscherMap that will be created by this importer
+
+description : |
+    <p> Import a JSON file from your staging area into your Narrative as an KBaseFBA.EscherMap data object.
+    Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
