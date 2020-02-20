@@ -38,9 +38,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.0.35"
+    VERSION = "1.0.36"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "fc951cdfe39540f3d35022fe018c208d78110ea9"
+    GIT_COMMIT_HASH = "a4d813748b11f6c006b6d05edbadafc28f12b345"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -1008,8 +1008,7 @@ class kb_uploadmethods:
         """
         :param params: instance of type "EscherMapParams" -> structure:
            parameter "staging_file_subdir_path" of String, parameter
-           "workspace_name" of type "workspace_name" (workspace name of the
-           object), parameter "escher_map_name" of String
+           "workspace_id" of Long, parameter "escher_map_name" of String
         :returns: instance of type "UploadMethodResult" -> structure:
            parameter "obj_ref" of type "obj_ref", parameter "report_name" of
            type "report_name", parameter "report_ref" of type "report_ref"

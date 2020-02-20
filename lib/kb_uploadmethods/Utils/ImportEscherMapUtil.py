@@ -54,7 +54,7 @@ class ImportEscherMapUtil:
         """
         logging.info('start refactoring escher data')
         refactored_escher_data = copy.deepcopy(escher_data)
-        
+
         refactored_escher_data[0]['map_name'] = "custom map"
         if not 'authors' in refactored_escher_data[0]:
             refactored_escher_data[0]['authors'] = []
@@ -79,7 +79,7 @@ class ImportEscherMapUtil:
             "metadata" : refactored_escher_data[0],
             "layout" : refactored_escher_data[1]
         }
-            
+
         if refactored_escher_data == escher_data:
             logging.warning('No changes in escher data')
 
