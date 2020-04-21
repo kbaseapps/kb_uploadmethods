@@ -162,15 +162,6 @@ class kb_metagenome_uploadmethodsTest(unittest.TestCase):
         metagenome_info = ref[0]['genome_info']
         metagenome_metadata = metagenome_info[10]
 
-        print('='*80)
-        print('='*80)
-        print('='*80)
-        print(ref)
-        print(metagenome_metadata)
-        print('='*80)
-        print('='*80)
-        print('='*80)
-
         self.assertEqual(metagenome_metadata['Source'], 'User')
         self.assertTrue('GC content' in metagenome_metadata)
         self.assertEqual(metagenome_info[2], 'KBaseMetagenomes.AnnotatedMetagenomeAssembly-1.0')

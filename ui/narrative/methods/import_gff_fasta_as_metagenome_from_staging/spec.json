@@ -76,24 +76,6 @@
         }
       ]}
     },
-    {
-      "id" : "taxon_wsname",
-      "optional" : true,
-      "advanced" : true,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
-    },
-    {
-      "id" : "taxon_id",
-      "optional" : true,
-      "advanced" : true,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
-    },
     {  
       "id": "release",
       "optional": true,
