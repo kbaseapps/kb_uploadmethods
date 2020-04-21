@@ -597,4 +597,13 @@ module kb_uploadmethods {
 
   funcdef import_attribute_mapping_from_staging(FileToConditionSetParams params)
           returns (UploadMethodResult returnVal) authentication required;
+
+  typedef structure {
+    string staging_file_subdir_path;
+    int workspace_id;
+    string escher_map_name;
+  } EscherMapParams;
+
+  funcdef import_eschermap_from_staging(EscherMapParams params)
+          returns (UploadMethodResult returnVal) authentication required;
 };

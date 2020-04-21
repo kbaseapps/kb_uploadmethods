@@ -8,8 +8,8 @@
     "input" : null,
     "output" : "kbaseAnnotatedMetagenomeAssemblyView"
   },
-  "parameters" : 
-  [ 
+  "parameters" :
+  [
     {
       "id" : "fasta_file",
       "optional" : false,
@@ -20,7 +20,7 @@
       "dynamic_dropdown_options" : {
         "data_source": "ftp_staging"
       }
-    },    
+    },
     {
       "id" : "gff_file",
       "optional" : false,
@@ -39,7 +39,7 @@
       "allow_multiple" : false,
       "default_values" : [ "" ],
       "field_type" : "text",
-      "text_options" : 
+      "text_options" :
       {
         "valid_ws_types" : [ "KBaseMetagenomes.AnnotatedMetagenomeAssembly" ],
         "is_output_name" : true
@@ -76,15 +76,15 @@
         }
       ]}
     },
-    {  
+    {
       "id": "release",
       "optional": true,
       "advanced": true,
       "allow_multiple": false,
       "default_values": [ "" ],
-      "field_type" : "text" 
+      "field_type" : "text"
     },
-    {  
+    {
       "id": "genetic_code",
       "optional": true,
       "advanced": true,
@@ -108,14 +108,14 @@
       }
     }
   ],
-  "behavior" : 
+  "behavior" :
   {
-    "service-mapping" : 
+    "service-mapping" :
     {
       "url" : "",
       "name" : "kb_uploadmethods",
       "method" : "upload_metagenome_fasta_gff_file",
-      "input_mapping" : 
+      "input_mapping" :
       [
         {
           "narrative_system_variable": "workspace",
@@ -150,7 +150,7 @@
           "target_property": "generate_missing_genes"
         }
       ],
-      "output_mapping" : 
+      "output_mapping" :
       [
         {
           "narrative_system_variable": "workspace",

@@ -22,7 +22,7 @@ suggestions :
 parameters :
     download_type :
         ui-name : URL Type
-        short-hint : URL type - 'Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox/Box Public Shared Link', or 'Google Drive Public Shared Link.'
+        short-hint : URL type - 'Regular URL (Direct Download Link)', 'FTP Link (Note NCBI SRA FTP no longer supported)', 'Dropbox/Box Public Shared Link', or 'Google Drive Public Shared Link.'
 
     file_url:
         ui-name : SRA URL
