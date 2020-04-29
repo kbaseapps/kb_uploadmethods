@@ -250,7 +250,7 @@ class kb_uploadmethods:
 
         uploader = ImportMetagenomeGFFFastaUtil(self.config)
         returnVal = uploader.import_metagenome_gff_fasta_from_staging(params)
-        reportVal = uploader.generate_report(returnVal['genome_ref'],
+        reportVal = uploader.generate_report(returnVal['metagenome_ref'],
                                                    params)
         returnVal.update(reportVal)
         #END upload_metagenome_fasta_gff_file

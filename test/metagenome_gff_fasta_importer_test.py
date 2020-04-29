@@ -154,22 +154,13 @@ class kb_metagenome_uploadmethodsTest(unittest.TestCase):
 
         ref = self.getImpl().upload_metagenome_fasta_gff_file(self.getContext(), params)
 
-        self.assertTrue('genome_ref' in ref[0])
-        self.assertTrue('genome_info' in ref[0])
+        self.assertTrue('metagenome_ref' in ref[0])
+        self.assertTrue('metagenome_info' in ref[0])
         self.assertTrue('report_ref' in ref[0])
         self.assertTrue('report_name' in ref[0])
 
-        metagenome_info = ref[0]['genome_info']
+        metagenome_info = ref[0]['metagenome_info']
         metagenome_metadata = metagenome_info[10]
-
-        print('='*80)
-        print('='*80)
-        print('='*80)
-        print(ref)
-        print(metagenome_metadata)
-        print('='*80)
-        print('='*80)
-        print('='*80)
 
         self.assertEqual(metagenome_metadata['Source'], 'User')
         self.assertTrue('GC content' in metagenome_metadata)
