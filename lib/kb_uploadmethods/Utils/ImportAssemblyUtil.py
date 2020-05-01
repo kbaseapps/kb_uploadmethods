@@ -58,7 +58,7 @@ class ImportAssemblyUtil:
             first_line = fasta_file.readline()
 
         if not first_line.startswith('>'):
-            raise ValueError("Expected FASTA record starting with '>' character.")
+            raise ValueError("Expected FASTA record with a '>' as the first character on the first line.")
 
         file = {
             'path': scratch_file_path
