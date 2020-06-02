@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.37**
+Fixing metagenome gff fasta importer outputs and variable names
+
 **1.0.34**
 In the Batch Import apps, accept both /user_id and / as valid names of the root directory
 
