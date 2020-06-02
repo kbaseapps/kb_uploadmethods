@@ -1,6 +1,6 @@
 ###Release Notes
 
-**1.0.37**
+**1.0.39**
 Fixing metagenome gff fasta importer outputs and variable names
 
 **1.0.34**

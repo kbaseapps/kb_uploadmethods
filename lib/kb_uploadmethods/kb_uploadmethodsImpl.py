@@ -38,9 +38,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.0.36"
-    GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "a4d813748b11f6c006b6d05edbadafc28f12b345"
+    VERSION = "1.0.39"
+    GIT_URL = "https://github.com/kbaseapps/kb_uploadmethods.git"
+    GIT_COMMIT_HASH = "9e4228ba79e6ffdc835c5c57cdeb2a17348ca6b6"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -226,8 +226,8 @@ class kb_uploadmethods:
            "genetic_code" of Long, parameter "type" of String, parameter
            "generate_missing_genes" of String
         :returns: instance of type "UploadMetagenomeFastaGFFMethodResult" ->
-           structure: parameter "genome_ref" of String, parameter
-           "genome_info" of String, parameter "report_name" of type
+           structure: parameter "metagenome_ref" of String, parameter
+           "metagenome_info" of String, parameter "report_name" of type
            "report_name", parameter "report_ref" of type "report_ref"
         """
         # ctx is the context object
