@@ -173,7 +173,7 @@
             "target_property": "report_ref"
         },
         {
-          "service_method_output_path": [0,"obj_ref"],
+          "service_method_output_path": [0,"metagenome_ref"],
           "target_property": "obj_ref"
         },
         {

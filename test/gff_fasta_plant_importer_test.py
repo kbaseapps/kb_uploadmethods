@@ -159,8 +159,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertTrue('report_name' in ref[0])
 
         genome_info = ref[0]['genome_info']
-        self.assertEqual(genome_info[10]['Domain'], 'Eukaryota')
-        self.assertEqual(genome_info[10]['Genetic code'], '1')
+        self.assertEqual(genome_info[10]['Domain'], 'Unknown')
+        self.assertEqual(genome_info[10]['Genetic code'], '11')
         self.assertEqual(genome_info[10]['Name'], 'Populus trichocarpa')
         self.assertEqual(genome_info[10]['Source'], 'User')
         self.assertTrue('GC content' in genome_info[10])
