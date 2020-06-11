@@ -6,7 +6,7 @@
   "categories" : [ "inactive","assembly","upload" ],
   "widgets" : {
     "input" : null,
-    "output" : "kbaseAnnotatedMetagenomeAssemblyView"
+    "output" : "no-display"
   },
   "parameters" :
   [
@@ -153,32 +153,12 @@
       "output_mapping" :
       [
         {
-          "narrative_system_variable": "workspace",
-          "target_property": "ws"
-        },
-        {
-          "constant_value": "KBaseMetagenomes.AnnotatedMetagenomeAssembly",
-          "target_property": "type"
-        },
-        {
-          "input_parameter": "genome_name",
-          "target_property": "id"
-        },
-        {
             "service_method_output_path": [0, "report_name"],
             "target_property": "report_name"
         },
         {
             "service_method_output_path": [0, "report_ref"],
             "target_property": "report_ref"
-        },
-        {
-          "service_method_output_path": [0,"metagenome_ref"],
-          "target_property": "obj_ref"
-        },
-        {
-            "constant_value": "16",
-            "target_property": "report_window_line_height"
         }
       ]
     }
