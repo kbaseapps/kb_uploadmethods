@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import time
 import uuid
+from pprint import pprint
 
 from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.KBaseReportClient import KBaseReport
@@ -63,11 +64,7 @@ class ImportSRAUtil:
         # force an .sra extension if there isn't one already:
 
         if not re.match( ".*\.sra$", scratch_sra_file_path, re.IGNORECASE ):
-            new_scratch_sra_file_path = scratch_sra_file_path + ".sra"
-            os.symlink( scratch_sra_file_path, new_scratch_sra_file_path );
-            log( "**** after symlink contents of . ****" )
-            log( os.listdir() )
-            scratch_sra_file_path = new_scratch_sra_file_path
+            scratch_sra_file_path += ".sra"
 
         command = self.SRA_TOOLKIT_PATH + ' --split-3 -T -O '
         command += tmp_dir + ' ' + scratch_sra_file_path
@@ -358,6 +355,7 @@ class ImportSRAUtil:
         _generate_html_report: generate html summary report
         """
         log('Start generating html report')
+        pprint(params)
 
         tmp_dir = os.path.join(self.scratch, uuid_string)
         handler_utils._mkdir_p(tmp_dir)
