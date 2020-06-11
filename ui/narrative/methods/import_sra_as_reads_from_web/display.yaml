@@ -86,6 +86,19 @@ description : |
 
     <p>As the files are loaded, the new objects appear in the data pane at the top left.</p>
 
+    <p><b>Warning:</b></p>  NCBI has <b>discontinued</b> FTP distribution of SRA files.  Do not attempt to retrieve SRA files from NCBI via the 'FTP link' URL type/p>
+
+     <p>Instead, chose "Regular URL (Direct Download Link" URL type, and compose a URL of this form  (example for SRR10971381)
+     https://sra-download.ncbi.nlm.nih.gov/traces/sra46/SRR/010714/SRR10971381
+     </p>
+
+     <p>One can also obtain the URL from NCBI by going to the Run Browser
+     https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=run_browser
+     and entering the SRA accession number into the search field and then
+     selecting the "Data access" tab on the resultant search result page.
+     A valid URL can be copied from the NCBI location for the resultant run.</p>
+
+
 technical-description : none
 
 publications :

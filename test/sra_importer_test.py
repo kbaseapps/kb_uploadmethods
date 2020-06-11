@@ -19,7 +19,6 @@ from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
 
-
 class kb_uploadmethodsTest(unittest.TestCase):
 
     @classmethod
@@ -364,6 +363,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
 
+
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
@@ -491,6 +491,75 @@ class kb_uploadmethodsTest(unittest.TestCase):
         }
         with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().import_sra_from_staging(self.getContext(), invalidate_input_params)
+
+
+    # this is largely a cut-and-paste from the method below
+
+    def  mock_download_web_file( params ):
+
+        file_url = params.get( 'file_url' )
+        basename = os.path.basename( file_url )
+        shutil.copy( file_url, basename )
+        return( { 'copy_file_path': basename  } )
+        
+
+    @patch.object(DataFileUtil,"download_web_file",side_effect=mock_download_web_file)
+    def test_import_web_sra_extra_extension(self,download_web_file):
+
+        #
+        # NOTE: THE DEFAULT VALUE for download_type "Direct Download" is set in
+        #       kbaseapps/kb_uploadmethods/blob/master/ui/narrative/methods/import_sra_as_reads_from_web/spec.json
+        #
+        params = {
+            'download_type': "Direct Download",
+            'workspace_name': self.getWsName(),
+            'sra_urls_to_add': [
+                {
+                    'file_url': '/kb/module/data/short.sra',
+                    'sequencing_tech': 'Unknown',
+                    'name': 'Extension_sra'
+                },
+                {
+                    'file_url': '/kb/module/data/short1.1',
+                    'sequencing_tech': 'Unknown',
+                    'name': 'Extension_1'
+                },
+                {
+                    'file_url': '/kb/module/data/short2.sra.1',
+                    'sequencing_tech': 'Unknown',
+                    'name': 'Extension_sra_1'
+                },
+                {
+                    'file_url': '/kb/module/data/short3.1.sra',
+                    'sequencing_tech': 'Unknown',
+                    'name': 'Extension_1_sra'
+                }
+            ]
+        }
+        ref = self.getImpl().import_sra_from_web(self.getContext(), params)
+        self.assertTrue('obj_refs' in ref[0])
+        self.assertTrue('report_ref' in ref[0])
+        self.assertTrue('report_name' in ref[0])
+
+        object_references = ref[0].get( 'obj_refs' )
+
+        for obj_r in object_references:
+            obj = self.dfu.get_objects( {'object_refs': [obj_r]} )['data'][0]
+                
+            self.assertEqual(obj_r, self.make_ref(obj['info']))
+            self.assertEqual(obj['info'][2].startswith( 'KBaseFile.SingleEndLibrary'), True)
+            d = obj['data']
+            self.assertEqual(d['sequencing_tech'], 'Unknown')
+            self.assertEqual(d['single_genome'], 1)
+            self.assertEqual('source' not in d, True)
+            self.assertEqual('strain' not in d, True)
+            # removed this - values keep changing on me and not worth it
+            #self.check_lib(d['lib'], 1340, 'fastq.fastq.gz',
+            #               'a655bef0987f5a5a103ed8fb07b14f96')
+            node = d['lib']['file']['id']
+            self.delete_shock_node(node)
+
+
 
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_se)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)

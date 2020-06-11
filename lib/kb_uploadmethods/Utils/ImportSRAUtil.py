@@ -3,11 +3,11 @@ import collections
 import fnmatch
 import json
 import os
+import re
 import shutil
 import subprocess
 import time
 import uuid
-from pprint import pprint
 
 from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.KBaseReportClient import KBaseReport
@@ -57,12 +57,26 @@ class ImportSRAUtil:
         tmp_dir = os.path.join(self.scratch, str(uuid.uuid4()))
         handler_utils._mkdir_p(tmp_dir)
 
+        # PTV-1356 fix:  to try to make handing of output files from fastq-dump
+        # more uniform for cases where there is an SRA extension or not
+
+        # force an .sra extension if there isn't one already:
+
+        if not re.match( ".*\.sra$", scratch_sra_file_path, re.IGNORECASE ):
+            new_scratch_sra_file_path = scratch_sra_file_path + ".sra"
+            os.symlink( scratch_sra_file_path, new_scratch_sra_file_path );
+            log( "**** after symlink contents of . ****" )
+            log( os.listdir() )
+            scratch_sra_file_path = new_scratch_sra_file_path
+
         command = self.SRA_TOOLKIT_PATH + ' --split-3 -T -O '
         command += tmp_dir + ' ' + scratch_sra_file_path
 
         self._run_command(command)
 
-        sra_name = os.path.basename(scratch_sra_file_path).partition('.')[0]
+        # next, remove the .sra extention to mimic what fastq-dump does
+
+        sra_name = os.path.splitext( os.path.basename( scratch_sra_file_path ) )[0]
         paired_end = self._check_fastq_dump_result(tmp_dir, sra_name)
 
         if paired_end:
@@ -344,7 +358,6 @@ class ImportSRAUtil:
         _generate_html_report: generate html summary report
         """
         log('Start generating html report')
-        pprint(params)
 
         tmp_dir = os.path.join(self.scratch, uuid_string)
         handler_utils._mkdir_p(tmp_dir)
