@@ -71,9 +71,17 @@ class ImportSRAUtil:
 
         self._run_command(command)
 
-        # next, remove the .sra extention to mimic what fastq-dump does
+        new_dirs = [x for x in os.listdir(tmp_dir) if os.path.isdir(os.path.join(tmp_dir, x))]
 
-        sra_name = os.path.splitext( os.path.basename( scratch_sra_file_path ) )[0]
+        if len(new_dirs) == 1:
+            sra_name = new_dirs[0]
+        else:
+            log('created multiple sra dirs: {}'.format(os.listdir(tmp_dir)))
+            # use sra file name as dir name
+            sra_name = os.path.basename(scratch_sra_file_path)
+            if sra_name.lower().endswith('sra'):
+                sra_name = sra_name.partition('.SRA')[0].partition('.sra')[0]
+
         paired_end = self._check_fastq_dump_result(tmp_dir, sra_name)
 
         if paired_end:

@@ -169,8 +169,8 @@ module kb_uploadmethods {
   } UploadMetagenomeFastaGFFMethodParams;
 
   typedef structure {
-    string genome_ref;
-    string genome_info;
+    string metagenome_ref;
+    string metagenome_info;
     report_name report_name;
     report_ref report_ref;
   } UploadMetagenomeFastaGFFMethodResult;

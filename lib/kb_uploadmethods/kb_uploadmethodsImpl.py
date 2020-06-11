@@ -38,9 +38,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.0.36"
+    VERSION = "1.0.40"
     GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "a4d813748b11f6c006b6d05edbadafc28f12b345"
+    GIT_COMMIT_HASH = "41f7d1b28e0f997d4338780a0e96a6cc1fa06635"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -226,8 +226,8 @@ class kb_uploadmethods:
            "genetic_code" of Long, parameter "type" of String, parameter
            "generate_missing_genes" of String
         :returns: instance of type "UploadMetagenomeFastaGFFMethodResult" ->
-           structure: parameter "genome_ref" of String, parameter
-           "genome_info" of String, parameter "report_name" of type
+           structure: parameter "metagenome_ref" of String, parameter
+           "metagenome_info" of String, parameter "report_name" of type
            "report_name", parameter "report_ref" of type "report_ref"
         """
         # ctx is the context object
@@ -250,7 +250,7 @@ class kb_uploadmethods:
 
         uploader = ImportMetagenomeGFFFastaUtil(self.config)
         returnVal = uploader.import_metagenome_gff_fasta_from_staging(params)
-        reportVal = uploader.generate_report(returnVal['genome_ref'],
+        reportVal = uploader.generate_report(returnVal['metagenome_ref'],
                                                    params)
         returnVal.update(reportVal)
         #END upload_metagenome_fasta_gff_file

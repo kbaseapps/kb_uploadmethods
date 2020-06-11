@@ -53,6 +53,13 @@ class ImportAssemblyUtil:
         }
         scratch_file_path = self.dfu.download_staging_file(
                             download_staging_file_params).get('copy_file_path')
+
+        with open(scratch_file_path, 'r') as fasta_file:
+            first_line = fasta_file.readline()
+
+        if not first_line.startswith('>'):
+            raise ValueError("Expected FASTA record with a '>' as the first character on the first line.")
+
         file = {
             'path': scratch_file_path
         }
