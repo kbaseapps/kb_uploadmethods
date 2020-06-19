@@ -1,7 +1,7 @@
 {
   "ver" : "",
   "authors" : ["tgu2"],
-  "contact" : "help@kbase.us",
+  "contact" : "http://kbase.us/contact-us/",
   "visible" : true,
   "categories" : [ "inactive","metabolic_modeling","upload" ],
   "widgets": {

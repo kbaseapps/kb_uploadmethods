@@ -1,7 +1,7 @@
 {
   "ver" : "1.0.0",
   "authors" : ["seaver","tgu2"],
-  "contact" : "help@kbase.us",
+  "contact" : "http://kbase.us/contact-us/",
   "visble" : true,
   "categories" : [ "inactive","assembly","upload" ],
   "widgets" : {
