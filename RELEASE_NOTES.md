@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.41**
+Updated the contact information for the apps
+
 **1.0.39**
 Fixing metagenome gff fasta importer outputs and variable names
 
