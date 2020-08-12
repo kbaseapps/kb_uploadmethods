@@ -47,6 +47,7 @@ class ImportFBAModelUtil:
             integrate_model_params['template_id'] = 'gramneg'
             integrate_model_params['translate_database'] = 'modelseed'
 
+            integrate_model_params['workspace_name'] = params.get('workspace_name')
             integrate_model_params['model_name'] = params.get('model_name')
             integrate_model_params['output_model_name'] = params.get('model_name')
             integrate_model_params['output_media_name'] = params.get('model_name') + '.media'
