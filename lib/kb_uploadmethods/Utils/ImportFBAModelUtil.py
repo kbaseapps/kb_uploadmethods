@@ -37,8 +37,8 @@ class ImportFBAModelUtil:
         try:
             # calling SBMLTools.integrate_model
             integrate_model_params = dict()
-            integrate_model_params['biomass_reactions'] = list()
-            integrate_model_params['compartment_translation'] = list()
+            integrate_model_params['biomass_reactions'] = ''
+            integrate_model_params['compartment_translation'] = ''
             integrate_model_params['compound_mappings'] = ''
             integrate_model_params['create_extracellular'] = 0
             integrate_model_params['fill_metadata'] = 1
