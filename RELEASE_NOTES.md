@@ -1,6 +1,9 @@
 ###Release Notes
 
 **1.0.41**
+replace SBML model importer from fba_tools.sbml_file_to_model to SBMLTools.sbml_importer/integrate_model
+
+**1.0.41**
 Updated the contact information for the apps
 
 **1.0.40**
