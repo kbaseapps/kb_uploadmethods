@@ -797,14 +797,15 @@ class kb_uploadmethods:
         # return variables are: returnVal
         #BEGIN import_file_as_fba_model_from_staging
         print(('--->\nrunning {}.{}\n params:\n{}'
-            .format(self.__class__.__name__, sys._getframe().f_code.co_name,
-                    json.dumps(params, indent=1))))
+              .format(self.__class__.__name__, sys._getframe().f_code.co_name,
+                      json.dumps(params, indent=1))))
 
         importer = ImportFBAModelUtil(self.config)
         returnVal = importer.import_fbamodel_from_staging(params)
 
-        reportVal = importer.generate_report(returnVal['obj_ref'], params)
-        returnVal.update(reportVal)
+        if not returnVal.get('report_name'):
+            reportVal = importer.generate_report(returnVal['obj_ref'], params)
+            returnVal.update(reportVal)
         #END import_file_as_fba_model_from_staging
 
         # At some point might do deeper type checking...

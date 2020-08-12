@@ -35,6 +35,10 @@
   "type" : "sdk",
   "version_tag" : "release"
 }, {
+  "module_name" : "SBMLTools",
+  "type" : "sdk",
+  "version_tag" : "dev"
+}, {
   "module_name" : "SetAPI",
   "type" : "sdk",
   "version_tag" : "release"
