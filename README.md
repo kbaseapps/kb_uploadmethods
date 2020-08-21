@@ -35,7 +35,7 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 ## Apps and Usage
 
 ### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
+**app_id**: batch_import_assembly_from_staging
 **entrypoint**: batch_import_assemblies_from_staging
 **inputs**
 * input 1
@@ -45,9 +45,9 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 * output 1
 * output 2
 
-### Batch Import Assembly from Staging Area
+### Batch Import Genome from Staging Area
 **app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+**entrypoint**: batch_import_genomes_from_staging
 **inputs**
 * input 1
 * input 2
@@ -55,9 +55,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import TSV/Excel File as Attribute Mapping from Staging Area
+**app_id**: import_attribute_mapping_from_staging
+**entrypoint**: import_attribute_mapping_from_staging
 **inputs**
 * input 1
 * input 2
@@ -65,9 +66,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import JSON File as EscherMap from Staging Area
+**app_id**: import_eschermap_from_staging
+**entrypoint**: import_eschermap_from_staging
 **inputs**
 * input 1
 * input 2
@@ -75,9 +77,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import FASTA File as Assembly from Staging Area
+**app_id**: import_fasta_as_assembly_from_staging
+**entrypoint**: import_fasta_as_assembly_from_staging
 **inputs**
 * input 1
 * input 2
@@ -85,9 +88,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import FASTQ/SRA File as Reads from Staging Area
+**app_id**: import_fastq_sra_as_reads_from_staging
+**entrypoint**: import_reads_from_staging
 **inputs**
 * input 1
 * input 2
@@ -95,9 +99,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import TSV/XLS/SBML File as an FBAModel from Staging Area
+**app_id**: import_file_as_fba_model_from_staging
+**entrypoint**: import_file_as_fba_model_from_staging
 **inputs**
 * input 1
 * input 2
@@ -105,9 +110,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import GenBank File as Genome from Staging Area
+**app_id**: import_genbank_as_genome_from_staging
+**entrypoint**: import_genbank_from_staging
 **inputs**
 * input 1
 * input 2
@@ -115,9 +121,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import GFF3/FASTA file as Genome from Staging Area
+**app_id**: import_gff_fasta_as_genome_from_staging
+**entrypoint**: upload_fasta_gff_file
 **inputs**
 * input 1
 * input 2
@@ -125,9 +132,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import GFF3/FASTA file as Annotated Metagenome Assembly from Staging Area
+**app_id**: import_gff_fasta_as_metagenome_from_staging
+**entrypoint**: upload_metagenome_fasta_gff_file
 **inputs**
 * input 1
 * input 2
@@ -135,9 +143,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import SRA File as Reads from Staging Area
+**app_id**: import_sra_as_reads_from_staging
+**entrypoint**: import_sra_from_staging
 **inputs**
 * input 1
 * input 2
@@ -145,9 +154,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import SRA File as Reads From Web - v1.0.7
+**app_id**: import_sra_as_reads_from_web
+**entrypoint**: import_sra_from_web
 **inputs**
 * input 1
 * input 2
@@ -155,9 +165,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import TSV File as Expression Matrix From Staging Area
+**app_id**: import_tsv_as_expression_matrix_from_staging
+**entrypoint**: import_tsv_as_expression_matrix_from_staging
 **inputs**
 * input 1
 * input 2
@@ -165,9 +176,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import TSV File as Phenotype Set from Staging Area
+**app_id**: import_tsv_as_phenotype_set_from_staging
+**entrypoint**: import_tsv_as_phenotype_set_from_staging
 **inputs**
 * input 1
 * input 2
@@ -175,9 +187,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import Media file (TSV/Excel) from Staging Area
+**app_id**: import_tsv_excel_as_media_from_staging
+**entrypoint**: import_tsv_or_excel_as_media_from_staging
 **inputs**
 * input 1
 * input 2
@@ -185,9 +198,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import Paired-End Reads from Staging Area
+**app_id**: load_paired_end_reads_from_file
+**entrypoint**: upload_fastq_file
 **inputs**
 * input 1
 * input 2
@@ -195,9 +209,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import Paired-End Reads from Web - v1.0.12
+**app_id**: load_paired_end_reads_from_URL
+**entrypoint**: upload_fastq_file
 **inputs**
 * input 1
 * input 2
@@ -205,9 +220,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Load Single-End Reads From Staging Area
+**app_id**: load_single_end_reads_from_file
+**entrypoint**: upload_fastq_file
 **inputs**
 * input 1
 * input 2
@@ -215,9 +231,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Import Single-End Reads from Web - v1.0.12
+**app_id**: load_single_end_reads_from_URL
+**entrypoint**: upload_fastq_file
 **inputs**
 * input 1
 * input 2
@@ -225,9 +242,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Unpack a Compressed File in Staging Area - v1.0.12
+**app_id**: unpack_staging_file
+**entrypoint**: unpack_staging_file
 **inputs**
 * input 1
 * input 2
@@ -235,9 +253,10 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
+
+### Upload File to Staging from Web - v1.0.12
+**app_id**: upload_web_file
+**entrypoint**: unpack_web_file
 **inputs**
 * input 1
 * input 2
@@ -245,3 +264,4 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 **outputs**
 * output 1
 * output 2
+
