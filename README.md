@@ -4,23 +4,14 @@
 [Release Notes](RELEASE_NOTES.md)
 
 ## Description
-This module implements [KBase](https://www.kbase.us) apps that are used to transform data files into KBase data objects for use in analysis.
+This module implements [KBase](https://www.kbase.us) apps that are used to transform data files into KBase data objects for use in analysis. This also includes a few apps for adding external files to the user's [staging area](https://docs.kbase.us/getting-started/narrative/add-data#uploading-data-from-external-sources), and manipulating them there.
 
 See [here](https://docs.kbase.us/data/upload-download-guide/uploads) for more information on uploading data to KBase.
 
-There are three types of apps described here:
-* Staging - these apps take files from the user's staging area - the filesystem where users can upload raw data files before transforming them. 
-* URL - these apps take a URL as a parameter and will automatically download the files hosted there. These URLs must be publically accessible.
-
-Each app is listed below with the following format:
-### Display name - what the user sees
-**app_id**: id - how the app is identified to the system, including the directory under ui/narrative/methods  
-**entrypoint**: function - name of the function that gets run in this module (for developer use)  
-**inputs** - bulleted list of input parameters  
-**outputs** - generated data type and report (if created)
-
 ## Development
-This module was created using the [KBase SDK](https://kbase.github.io/kb_sdk_docs/)
+This module was created using the KBase SDK. See the [documentation](https://kbase.github.io/kb_sdk_docs/) for more detail. Apps are mostly broken down into submodules.
+
+The main entrypoint is in `lib/kb_uploadmethods/kb_uploadmethodsImpl.py`. Individual apps in that module use one or more utility module to handle different file types. These are all under `lib/kb_uploadmethods/Utils`. Add a new Util module if you're adding an uploader for a new data type.
 
 ## Testing
 This module can be tested with the following steps, common to all KBase SDK modules.
@@ -32,236 +23,139 @@ This module can be tested with the following steps, common to all KBase SDK modu
 
 Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the test suite any time.
 
-## Apps and Usage
+## Apps
 
-### Batch Import Assembly from Staging Area
-**app_id**: batch_import_assembly_from_staging
-**entrypoint**: batch_import_assemblies_from_staging
-**inputs**
-* input 1
-* input 2
+Each app is listed below with the following format:
+**Display name** - what the user sees - links to module doc page, if available
+**app id**: id - how the app is identified to the system, including the directory under ui/narrative/methods  
+**entrypoint**: function - name of the function that gets run in this module, as described in `kb_uploadmethods.spec`  
+**output type**: typed object(s) created  
 
-**outputs**
-* output 1
-* output 2
+### [Batch Import Assembly from Staging Area](https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/batch_import_assembly_from_staging)
+**app id**: batch_import_assembly_from_staging  
+**entrypoint**: batch_import_assemblies_from_staging  
+**description**: Import FASTA files from your staging area into your Narrative as an Assembly data object.  
+**output type**: KBaseSets.AssemblySet
 
-### Batch Import Genome from Staging Area
-**app_id**: batch_import_genome_from_staging
-**entrypoint**: batch_import_genomes_from_staging
-**inputs**
-* input 1
-* input 2
+### [Batch Import Genome from Staging Area](https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/batch_import_genome_from_staging)
+* **app id**: batch_import_genome_from_staging  
+* **entrypoint**: batch_import_genomes_from_staging  
+* **description:**: Import files (Genbank or GFF + FASTA) from your staging area into your Narrative as a Genome data object  
+* **output type**: KBaseSearch.GenomeSet
 
-**outputs**
-* output 1
-* output 2
+### [Import TSV/Excel File as Attribute Mapping from Staging Area](https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/import_attribute_mapping_from_staging)
+* **app id**: import_attribute_mapping_from_staging  
+* **entrypoint**: import_attribute_mapping_from_staging  
+* **description**: Import a TSV or Excel file from your staging area into your Narrative as an Attribute Mapping data object.
+* **output type**: KBaseExperiments.AttributeMapping
 
-### Import TSV/Excel File as Attribute Mapping from Staging Area
-**app_id**: import_attribute_mapping_from_staging
-**entrypoint**: import_attribute_mapping_from_staging
-**inputs**
-* input 1
-* input 2
+### [Import JSON File as EscherMap from Staging Area](https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/import_eschermap_from_staging)
+* **app id**: import_eschermap_from_staging
+* **entrypoint**: import_eschermap_from_staging
+* **description**: Import a JSON file from your staging area into your Narrative as an KBaseFBA.EscherMap data object.
+* **output type**: KBaseFBA.EscherMap
 
-**outputs**
-* output 1
-* output 2
+### [Import FASTA File as Assembly from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_fasta_as_assembly_from_staging)
+* **app id**: import_fasta_as_assembly_from_staging
+* **entrypoint**: import_fasta_as_assembly_from_staging
+* **description**: Import a FASTA file from your staging area into your Narrative as an Assembly data object.
+* **output type**: KBaseGenomeAnnotations.Assembly
 
-### Import JSON File as EscherMap from Staging Area
-**app_id**: import_eschermap_from_staging
-**entrypoint**: import_eschermap_from_staging
-**inputs**
-* input 1
-* input 2
+### [Import FASTQ/SRA File as Reads from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_fastq_sra_as_reads_from_staging)
+* **app id**: import_fastq_sra_as_reads_from_staging
+* **entrypoint**: import_reads_from_staging
+* **description**: Import a FASTQ or SRA file into your Narrative as a Reads data object.
+* **output type**: KBaseFile.SingleEndLibrary or KBaseFile.PairedEndLibrary
 
-**outputs**
-* output 1
-* output 2
+### [Import TSV/XLS/SBML File as an FBAModel from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_file_as_fba_model_from_staging)
+* **app id**: import_file_as_fba_model_from_staging
+* **entrypoint**: import_file_as_fba_model_from_staging
+* **description**: Import a file in TSV, XLS (Excel) or SBML format from your staging area into your Narrative as an FBAModel.
+* **output type**: KBaseFBA.FBAModel
 
-### Import FASTA File as Assembly from Staging Area
-**app_id**: import_fasta_as_assembly_from_staging
-**entrypoint**: import_fasta_as_assembly_from_staging
-**inputs**
-* input 1
-* input 2
+### [Import GenBank File as Genome from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_genbank_as_genome_from_staging)
+* **app id**: import_genbank_as_genome_from_staging
+* **entrypoint**: import_genbank_from_staging
+* **description**: Import a GenBank file from your staging area into your Narrative as a Genome data object.
+* **output type**: KBaseGenomes.Genome
 
-**outputs**
-* output 1
-* output 2
+### [Import GFF3/FASTA file as Genome from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_gff_fasta_as_genome_from_staging)
+* **app id**: import_gff_fasta_as_genome_from_staging
+* **entrypoint**: upload_fasta_gff_file
+* **description**: Import a GFF or FASTA file from your staging area into your Narrative as a Genome data object. 
+* **output type**: KBaseGenomes.Genome
 
-### Import FASTQ/SRA File as Reads from Staging Area
-**app_id**: import_fastq_sra_as_reads_from_staging
-**entrypoint**: import_reads_from_staging
-**inputs**
-* input 1
-* input 2
+### [Import GFF3/FASTA file as Annotated Metagenome Assembly from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_gff_fasta_as_metagenome_from_staging)
+* **app id**: import_gff_fasta_as_metagenome_from_staging
+* **entrypoint**: upload_metagenome_fasta_gff_file
+* **description**: Import a GFF or FASTA file from your staging area into your Narrative as an annotated metagenome data object.
+* **output type**: KBaseMetagenomes.AnnotatedMetagenomeAssembly
 
-**outputs**
-* output 1
-* output 2
+### [Import SRA File as Reads From Web - v1.0.7](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_sra_as_reads_from_web)
+* **app id**: import_sra_as_reads_from_web
+* **entrypoint**: import_sra_from_web
+* **description**: This App allows the user to load SRA format read libraries directly into the workspace from sources on the web. In addition to standard HTTP and anonymous FTP links, the user may also obtain files from Google drive and Dropbox links.
+* **output type**: KBaseFile.SingleEndLibrary or KBaseFile.PairedEndLibrary
 
-### Import TSV/XLS/SBML File as an FBAModel from Staging Area
-**app_id**: import_file_as_fba_model_from_staging
-**entrypoint**: import_file_as_fba_model_from_staging
-**inputs**
-* input 1
-* input 2
+### [Import TSV File as Expression Matrix From Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_tsv_as_expression_matrix_from_staging)
+* **app id**: import_tsv_as_expression_matrix_from_staging
+* **entrypoint**: import_tsv_as_expression_matrix_from_staging
+* **description**: Import a tab-delimited file from your staging area into your Narrative as an Expression Matrix.
+* **output type**: KBaseFeatureValues.ExpressionMatrix
 
-**outputs**
-* output 1
-* output 2
+### [Import TSV File as Phenotype Set from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_tsv_as_phenotype_set_from_staging)
+* **app id**: import_tsv_as_phenotype_set_from_staging
+* **entrypoint**: import_tsv_as_phenotype_set_from_staging
+* **description**: Import a tab-delimited file in your staging area as a Phenotype Set.
+* **output type**: KBasePhenotypes.PhenotypeSet
 
-### Import GenBank File as Genome from Staging Area
-**app_id**: import_genbank_as_genome_from_staging
-**entrypoint**: import_genbank_from_staging
-**inputs**
-* input 1
-* input 2
+### [Import Media file (TSV/Excel) from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_tsv_excel_as_media_from_staging)
+* **app id**: import_tsv_excel_as_media_from_staging
+* **entrypoint**: import_tsv_or_excel_as_media_from_staging
+* **description**: Import Media file (TSV/Excel) from your staging area.
+* **output type**: KBaseBiochem.Media
 
-**outputs**
-* output 1
-* output 2
+### [Import Paired-End Reads from Web - v1.0.12](https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/load_paired_end_reads_from_URL)
+* **app id**: load_paired_end_reads_from_URL
+* **entrypoint**: upload_fastq_file
+* **description**: This App allows users to load FASTQ format paired-end read libraries directly into the workspace from sources on the web. In addition to standard HTTP and anonymous FTP links, the user may also obtain files from Google drive and Dropbox links.
+* **output type**: KBaseFile.PairedEndLibrary 
 
-### Import GFF3/FASTA file as Genome from Staging Area
-**app_id**: import_gff_fasta_as_genome_from_staging
-**entrypoint**: upload_fasta_gff_file
-**inputs**
-* input 1
-* input 2
+### [Import Single-End Reads from Web - v1.0.12](https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/load_single_end_reads_from_URL)
+* **app id**: load_single_end_reads_from_URL
+* **entrypoint**: upload_fastq_file
+* **description**: This App allows users to load FASTQ format single-end read libraries directly into the workspace from sources on the web. In addition to standard HTTP and anonymous FTP links, the user may also obtain files from Google drive and Dropbox links.
+* **output type**: KBaseFile.SingleEndLibrary
 
-**outputs**
-* output 1
-* output 2
+### [Unpack a Compressed File in Staging Area - v1.0.12](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/unpack_staging_file)
+* **app id**: unpack_staging_file
+* **entrypoint**: unpack_staging_file
+* **description**: This App allows users to unpack a compressed file in the staging area. Recognizable compressed files include .zip, .gz, .bz2, .tar, .tar.gz, and .tar.bz2.
+* **output type**: none, this creates one or more new files in the staging area
 
-### Import GFF3/FASTA file as Annotated Metagenome Assembly from Staging Area
-**app_id**: import_gff_fasta_as_metagenome_from_staging
-**entrypoint**: upload_metagenome_fasta_gff_file
-**inputs**
-* input 1
-* input 2
+### [Upload File to Staging from Web - v1.0.12](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/upload_web_file)
+* **app id**: upload_web_file
+* **entrypoint**: unpack_web_file
+* **description**: This App allows users to upload a data file (which may be compressed) from a web URL to the staging area. If the file is compressed (.gz or .zip), it will automatically be uncompressed. It is possible, and indeed encouraged to make use of folders when uploading compressed archives of files. These folders are leveraged by downstream batch processing Apps and enable users to run tools on every file in the folder. We strongly recommend using this method to move large amounts of data easily into KBase because the transfer mechanism is less likely to be interrupted (versus uploading directly from your laptop). Note that both Box and DropBox offer a mechanism to share private files temporarily using links that are only accessible to someone who know what the link address is.
+* **output type**: none, adds one or more files to the staging area
 
-**outputs**
-* output 1
-* output 2
+### (not in use) [Import SRA File as Reads from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_sra_as_reads_from_staging)
+* replaced by the "Import FASTQ/SRA File as Reads from Staging Area" app
+* **app id**: import_sra_as_reads_from_staging
+* **entrypoint**: import_sra_from_staging
+* **description**: Import an SRA file from your staging area into your Narrative as a Reads object.
+* **output type**: KBaseFile.SingleEndLibrary or KBaseFile.PairedEndLibrary
 
-### Import SRA File as Reads from Staging Area
-**app_id**: import_sra_as_reads_from_staging
-**entrypoint**: import_sra_from_staging
-**inputs**
-* input 1
-* input 2
+### (not in use) [Import Paired-End Reads from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/load_paired_end_reads_from_file)
+* replaced by the "Import FASTQ/SRA File as Reads from Staging Area" app
+* **app id**: load_paired_end_reads_from_file
+* **entrypoint**: upload_fastq_file
+* **description**: Import FASTA or FASTQ files as paired-end reads from your staging area.
+* **output type**: KBaseFile.PairedEndLibrary
 
-**outputs**
-* output 1
-* output 2
-
-### Import SRA File as Reads From Web - v1.0.7
-**app_id**: import_sra_as_reads_from_web
-**entrypoint**: import_sra_from_web
-**inputs**
-* input 1
-* input 2
-
-**outputs**
-* output 1
-* output 2
-
-### Import TSV File as Expression Matrix From Staging Area
-**app_id**: import_tsv_as_expression_matrix_from_staging
-**entrypoint**: import_tsv_as_expression_matrix_from_staging
-**inputs**
-* input 1
-* input 2
-
-**outputs**
-* output 1
-* output 2
-
-### Import TSV File as Phenotype Set from Staging Area
-**app_id**: import_tsv_as_phenotype_set_from_staging
-**entrypoint**: import_tsv_as_phenotype_set_from_staging
-**inputs**
-* input 1
-* input 2
-
-**outputs**
-* output 1
-* output 2
-
-### Import Media file (TSV/Excel) from Staging Area
-**app_id**: import_tsv_excel_as_media_from_staging
-**entrypoint**: import_tsv_or_excel_as_media_from_staging
-**inputs**
-* input 1
-* input 2
-
-**outputs**
-* output 1
-* output 2
-
-### Import Paired-End Reads from Staging Area
-**app_id**: load_paired_end_reads_from_file
-**entrypoint**: upload_fastq_file
-**inputs**
-* input 1
-* input 2
-
-**outputs**
-* output 1
-* output 2
-
-### Import Paired-End Reads from Web - v1.0.12
-**app_id**: load_paired_end_reads_from_URL
-**entrypoint**: upload_fastq_file
-**inputs**
-* input 1
-* input 2
-
-**outputs**
-* output 1
-* output 2
-
-### Load Single-End Reads From Staging Area
-**app_id**: load_single_end_reads_from_file
-**entrypoint**: upload_fastq_file
-**inputs**
-* input 1
-* input 2
-
-**outputs**
-* output 1
-* output 2
-
-### Import Single-End Reads from Web - v1.0.12
-**app_id**: load_single_end_reads_from_URL
-**entrypoint**: upload_fastq_file
-**inputs**
-* input 1
-* input 2
-
-**outputs**
-* output 1
-* output 2
-
-### Unpack a Compressed File in Staging Area - v1.0.12
-**app_id**: unpack_staging_file
-**entrypoint**: unpack_staging_file
-**inputs**
-* input 1
-* input 2
-
-**outputs**
-* output 1
-* output 2
-
-### Upload File to Staging from Web - v1.0.12
-**app_id**: upload_web_file
-**entrypoint**: unpack_web_file
-**inputs**
-* input 1
-* input 2
-
-**outputs**
-* output 1
-* output 2
-
+### (not in use) [Load Single-End Reads From Staging Area](https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/load_single_end_reads_from_file)
+* replaced by the "Import FASTQ/SRA File as Reads from Staging Area" app
+* **app id**: load_single_end_reads_from_file
+* **entrypoint**: upload_fastq_file
+* **description**: Upload a single-end reads library from a FASTQ or FASTA file in your staging area.
+* **output type**: KBaseFile.SingleEndLibrary
