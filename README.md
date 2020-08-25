@@ -9,7 +9,7 @@ This module implements [KBase](https://www.kbase.us) apps that are used to trans
 See [here](https://docs.kbase.us/data/upload-download-guide/uploads) for more information on uploading data to KBase.
 
 ## Development
-This module was created using the KBase SDK. See the [documentation](https://kbase.github.io/kb_sdk_docs/) for more detail. Apps are mostly broken down into submodules.
+This module was created using the KBase SDK. See the [documentation](https://kbase.github.io/kb_sdk_docs/) for more detail. Apps are mostly broken down into submodules. Instructions for setting up a local development environment can be found [here](https://kbase.github.io/kb_sdk_docs/tutorial/2_install.html) (note that [Docker](https://www.docker.com) is required).
 
 The main entrypoint is in `lib/kb_uploadmethods/kb_uploadmethodsImpl.py`. Individual apps in that module use one or more utility module to handle different file types. These are all under `lib/kb_uploadmethods/Utils`. Add a new Util module if you're adding an uploader for a new data type.
 
