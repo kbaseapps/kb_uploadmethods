@@ -18,8 +18,8 @@ The main entrypoint is in `lib/kb_uploadmethods/kb_uploadmethodsImpl.py`. Indivi
 ## Testing
 
 This module can be tested with the following steps, common to all KBase SDK modules.
- 1.  Install the [KBase SDK](https://kbase.github.io/kb_sdk_docs/).
- 2.  Fetch this module and navigate to it from the console.
+1. Install the [KBase SDK](https://kbase.github.io/kb_sdk_docs/).
+2.   Fetch this module and navigate to it from the console.
  3.  Run `kb-sdk test` once - this will initialize the `test_local/test.cfg` file.
  4.  Populate the `test_local/test.cfg` file with a KBase authentication token (see [here](https://kbase.github.io/kb_sdk_docs/tutorial/3_initialize.html?highlight=token#set-up-your-developer-credentials) for details). 
  5.  Run `kb-sdk test` again.
