@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.43**
+update wrong description for FASTQ/SRA importer
+
 **1.0.42**
 replace SBML model importer from fba_tools.sbml_file_to_model to SBMLTools.sbml_importer/integrate_model
 

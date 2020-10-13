@@ -56,7 +56,7 @@ parameters :
         ui-name: Single Genome
         short-hint: Select if the reads are from a single genome, leave blank if from a metagenome
         long-hint: Select if the reads are from a single genome, leave blank if from a metagenome
-    
+
     interleaved:
         ui-name: Interleaved
         short-hint: Select if reads file is interleaved
@@ -78,7 +78,7 @@ parameters :
         long-hint  : Select if reads in a pair point outward
 
 description : |
-    <p> Import a FASTA file from your staging area into your Narrative as an Assembly data object.
+    <p> Import a FASTQ/SRA file into your Narrative as a Reads data object
     Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
 
 technical-description : none
