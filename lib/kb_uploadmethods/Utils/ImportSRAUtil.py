@@ -96,7 +96,7 @@ class ImportSRAUtil:
            or params.get('insert_size_std_dev')
            or params.get('read_orientation_outward')):
             error_msg = 'Advanced params "Mean Insert Size", "St. Dev. of Insert Size" or '
-            error_msg += '"Reads Orientation Outward" is Paried End Reads specific'
+            error_msg += '"Reads Orientation Outward" is Paired End Reads specific'
             raise ValueError(error_msg)
 
         if 'interleaved' in params:

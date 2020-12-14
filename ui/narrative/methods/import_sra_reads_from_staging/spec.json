@@ -1,7 +1,7 @@
 {
   "ver" : "1.0.0",
   "authors" : ["tgu2"],
-  "contact" : "help@kbase.us",
+  "contact" : "http://kbase.us/contact-us/",
   "visible" : true,
   "categories" : [ "inactive","reads","upload" ],
   "widgets" : 
@@ -11,9 +11,32 @@
   },
   "parameters" : 
   [ 
+
     {
-      "id" : "staging_file_subdir_path",
-      "optional" : false,
+      "id" : "fastq_fwd_staging_file_name",
+      "optional" : true,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "dynamic_dropdown",
+      "dynamic_dropdown_options" : {
+        "data_source": "ftp_staging"
+      }
+    },    
+    {
+      "id" : "fastq_rev_staging_file_name",
+      "optional" : true,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "dynamic_dropdown",
+      "dynamic_dropdown_options" : {
+        "data_source": "ftp_staging"
+      }
+    },
+    {
+      "id" : "sra_staging_file_name",
+      "optional" : true,
       "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
@@ -71,27 +94,29 @@
       {
         "is_output_name" : true
       }
-    }, 
+    },
     {
-      "id" : "insert_size_mean",
-      "optional" : true,
-      "advanced" : true,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {
-        "validate_as": "float"
-      }
-    }, 
+      "id": "single_genome",
+      "optional":false,
+      "advanced":false,
+      "allow_multiple":false,
+      "default_values":[1],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
+        }
+    },
     {
-      "id" : "insert_size_std_dev",
-      "optional" : true,
-      "advanced" : true,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {
-        "validate_as": "float"
+      "id": "interleaved",
+      "optional":false,
+      "advanced":false,
+      "allow_multiple":false,
+      "default_values":[0],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+        "checked_value": 1,
+        "unchecked_value": 0
         }
     },
     {
@@ -105,18 +130,28 @@
         "checked_value": 1,
         "unchecked_value": 0
         }
+    }, 
+    {
+      "id" : "insert_size_std_dev",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "validate_as": "float"
+        }
     },
     {
-      "id": "single_genome",
-      "optional":false,
-      "advanced":false,
-      "allow_multiple":false,
-      "default_values":[1],
-      "field_type" : "checkbox",
-      "checkbox_options":{
-        "checked_value": 1,
-        "unchecked_value": 0
-        }
+      "id" : "insert_size_mean",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "validate_as": "float"
+      }
     }
   ],
   "behavior" : 
@@ -125,7 +160,7 @@
     {
       "url" : "",
       "name" : "kb_uploadmethods",
-      "method" : "import_sra_from_staging",
+      "method" : "import_reads_from_staging",
       "input_mapping" : 
       [
         {
@@ -133,8 +168,12 @@
           "target_property": "workspace_name"
         },
         {
-          "input_parameter": "staging_file_subdir_path",
-          "target_property": "staging_file_subdir_path"
+          "constant_value": "SRA",
+          "target_property": "import_type"
+        },
+        {
+          "input_parameter": "sra_staging_file_name",
+          "target_property": "sra_staging_file_name"
         },
         {
             "input_parameter": "sequencing_tech",
@@ -147,6 +186,10 @@
         {
           "input_parameter": "single_genome",
           "target_property": "single_genome"
+        },
+        {
+          "constant_value": "1",
+          "target_property": "interleaved"
         },
         {
           "input_parameter": "insert_size_mean",

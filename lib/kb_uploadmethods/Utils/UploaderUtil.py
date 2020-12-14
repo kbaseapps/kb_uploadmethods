@@ -347,6 +347,10 @@ class UploaderUtil:
         return staging_service_host
 
     def update_staging_service(self, staged_file, obj_ref):
+        """
+        Never used, but it was intended to associate an object ref to a file in staging area.
+        but if you import the same file across environment, it overwrite the object ref. so it’s useless.
+        """
 
         log('In Update Staging Service: File: {}, Obj_ref: {}'.format(staged_file, obj_ref))
 
