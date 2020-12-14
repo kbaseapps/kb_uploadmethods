@@ -1,190 +1,210 @@
 {
-  "ver" : "1.0.0",
-  "authors" : ["tgu2"],
-  "contact" : "http://kbase.us/contact-us/",
-  "visible" : true,
-  "categories" : [ "inactive","reads","upload" ],
-  "widgets" : 
-  {
-    "input" : null,
-    "output" : "no-display"
+  "ver": "1.0.0",
+  "authors": [
+    "tgu2"
+  ],
+  "contact": "http://kbase.us/contact-us/",
+  "visible": true,
+  "categories": [
+    "reads",
+    "upload"
+  ],
+  "widgets": {
+    "input": null,
+    "output": "no-display"
   },
-  "parameters" : 
-  [ 
+  "parameters": [
     {
-      "id" : "import_type",
-      "optional" : false,
-      "advanced" : false,
-      "allow_multiple" : false,
-      "default_values" : [ "FASTQ/FASTA" ],
-      "field_type" : "dropdown",
-      "dropdown_options": 
-      {
-        "options": 
-        [
+      "id": "import_type",
+      "optional": false,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": [
+        "FASTQ/FASTA"
+      ],
+      "field_type": "dropdown",
+      "dropdown_options": {
+        "options": [
           {
-              "display": "FASTQ/FASTA",
-              "value": "FASTQ/FASTA"
+            "display": "FASTQ/FASTA",
+            "value": "FASTQ/FASTA"
           },
           {
-              "display": "SRA",
-              "value": "SRA"
+            "display": "SRA",
+            "value": "SRA"
           }
         ]
       }
     },
     {
-      "id" : "fastq_fwd_staging_file_name",
-      "optional" : true,
-      "advanced" : false,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "dynamic_dropdown",
-      "dynamic_dropdown_options" : {
-        "data_source": "ftp_staging"
-      }
-    },    
-    {
-      "id" : "fastq_rev_staging_file_name",
-      "optional" : true,
-      "advanced" : false,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "dynamic_dropdown",
-      "dynamic_dropdown_options" : {
+      "id": "fastq_fwd_staging_file_name",
+      "optional": true,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": [
+        ""
+      ],
+      "field_type": "dynamic_dropdown",
+      "dynamic_dropdown_options": {
         "data_source": "ftp_staging"
       }
     },
     {
-      "id" : "sra_staging_file_name",
-      "optional" : true,
-      "advanced" : false,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "dynamic_dropdown",
-      "dynamic_dropdown_options" : {
+      "id": "fastq_rev_staging_file_name",
+      "optional": true,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": [
+        ""
+      ],
+      "field_type": "dynamic_dropdown",
+      "dynamic_dropdown_options": {
         "data_source": "ftp_staging"
       }
     },
     {
-      "id" : "sequencing_tech",
-      "optional" : false,
-      "advanced" : false,
-      "allow_multiple" : false,
-      "default_values" : [ "Illumina" ],
-      "field_type" : "dropdown",
-      "dropdown_options": 
-      {
-        "options": 
-        [
+      "id": "sra_staging_file_name",
+      "optional": true,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": [
+        ""
+      ],
+      "field_type": "dynamic_dropdown",
+      "dynamic_dropdown_options": {
+        "data_source": "ftp_staging"
+      }
+    },
+    {
+      "id": "sequencing_tech",
+      "optional": false,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": [
+        "Illumina"
+      ],
+      "field_type": "dropdown",
+      "dropdown_options": {
+        "options": [
           {
-              "display": "Illumina",
-              "value": "Illumina"
+            "display": "Illumina",
+            "value": "Illumina"
           },
           {
-              "display": "PacBio CLR",
-              "value": "PacBio CLR"
+            "display": "PacBio CLR",
+            "value": "PacBio CLR"
           },
           {
-              "display": "PacBio CCS",
-              "value": "PacBio CCS"
+            "display": "PacBio CCS",
+            "value": "PacBio CCS"
           },
           {
-              "display": "IonTorrent",
-              "value": "IonTorrent"
+            "display": "IonTorrent",
+            "value": "IonTorrent"
           },
           {
-              "display": "NanoPore",
-              "value": "NanoPore"
+            "display": "NanoPore",
+            "value": "NanoPore"
           },
           {
-              "display": "Unknown",
-              "value": "Unknown"
+            "display": "Unknown",
+            "value": "Unknown"
           }
         ]
       }
     },
     {
-      "id" : "name",
-      "optional" : false,
-      "advanced" : false,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : 
-      {
-        "valid_ws_types": [ "KBaseFile.SingleEndLibrary", "KBaseFile.PairedEndLibrary"],
-        "is_output_name" : true
+      "id": "name",
+      "optional": false,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": [
+        ""
+      ],
+      "field_type": "text",
+      "text_options": {
+        "valid_ws_types": [
+          "KBaseFile.SingleEndLibrary",
+          "KBaseFile.PairedEndLibrary"
+        ],
+        "is_output_name": true
       }
     },
     {
       "id": "single_genome",
-      "optional":false,
-      "advanced":false,
-      "allow_multiple":false,
-      "default_values":[1],
-      "field_type" : "checkbox",
-      "checkbox_options":{
+      "optional": false,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": [
+        1
+      ],
+      "field_type": "checkbox",
+      "checkbox_options": {
         "checked_value": 1,
         "unchecked_value": 0
-        }
+      }
     },
     {
       "id": "interleaved",
-      "optional":false,
-      "advanced":false,
-      "allow_multiple":false,
-      "default_values":[0],
-      "field_type" : "checkbox",
-      "checkbox_options":{
+      "optional": false,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": [
+        0
+      ],
+      "field_type": "checkbox",
+      "checkbox_options": {
         "checked_value": 1,
         "unchecked_value": 0
-        }
+      }
     },
     {
       "id": "read_orientation_outward",
-      "optional":true,
-      "advanced":true,
-      "allow_multiple":false,
-      "default_values":[0],
-      "field_type" : "checkbox",
-      "checkbox_options":{
+      "optional": true,
+      "advanced": true,
+      "allow_multiple": false,
+      "default_values": [
+        0
+      ],
+      "field_type": "checkbox",
+      "checkbox_options": {
         "checked_value": 1,
         "unchecked_value": 0
-        }
-    }, 
-    {
-      "id" : "insert_size_std_dev",
-      "optional" : true,
-      "advanced" : true,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {
-        "validate_as": "float"
-        }
+      }
     },
     {
-      "id" : "insert_size_mean",
-      "optional" : true,
-      "advanced" : true,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {
+      "id": "insert_size_std_dev",
+      "optional": true,
+      "advanced": true,
+      "allow_multiple": false,
+      "default_values": [
+        ""
+      ],
+      "field_type": "text",
+      "text_options": {
+        "validate_as": "float"
+      }
+    },
+    {
+      "id": "insert_size_mean",
+      "optional": true,
+      "advanced": true,
+      "allow_multiple": false,
+      "default_values": [
+        ""
+      ],
+      "field_type": "text",
+      "text_options": {
         "validate_as": "float"
       }
     }
   ],
-  "behavior" : 
-  {
-    "service-mapping" : 
-    {
-      "url" : "",
-      "name" : "kb_uploadmethods",
-      "method" : "import_reads_from_staging",
-      "input_mapping" : 
-      [
+  "behavior": {
+    "service-mapping": {
+      "url": "",
+      "name": "kb_uploadmethods",
+      "method": "import_reads_from_staging",
+      "input_mapping": [
         {
           "narrative_system_variable": "workspace",
           "target_property": "workspace_name"
@@ -206,8 +226,8 @@
           "target_property": "sra_staging_file_name"
         },
         {
-            "input_parameter": "sequencing_tech",
-            "target_property": "sequencing_tech"
+          "input_parameter": "sequencing_tech",
+          "target_property": "sequencing_tech"
         },
         {
           "input_parameter": "name",
@@ -234,28 +254,36 @@
           "target_property": "read_orientation_outward"
         }
       ],
-      "output_mapping" : 
-      [
+      "output_mapping": [
         {
           "narrative_system_variable": "workspace",
           "target_property": "wsName"
         },
         {
-          "service_method_output_path": [0,"obj_ref"],
+          "service_method_output_path": [
+            0,
+            "obj_ref"
+          ],
           "target_property": "obj_ref",
           "target_type_transform": "resolved-ref"
         },
         {
-            "service_method_output_path": [0, "report_name"],
-            "target_property": "report_name"
+          "service_method_output_path": [
+            0,
+            "report_name"
+          ],
+          "target_property": "report_name"
         },
         {
-            "service_method_output_path": [0, "report_ref"],
-            "target_property": "report_ref"
+          "service_method_output_path": [
+            0,
+            "report_ref"
+          ],
+          "target_property": "report_ref"
         },
         {
-            "constant_value": "16",
-            "target_property": "report_window_line_height"
+          "constant_value": "16",
+          "target_property": "report_window_line_height"
         }
       ]
     }
