@@ -1,4 +1,4 @@
-name     : Import interleaved FASTQ file as Reads from Staging Area
+name     : Import Interleaved FASTQ file as Reads from Staging Area
 subtitle : Import a interleaved FASTQ file into your Narrative as a Reads data object
 tooltip  : Import a interleaved FASTQ file into your Narrative as a Reads data object
 

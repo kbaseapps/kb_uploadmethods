@@ -1,6 +1,6 @@
-name     : Import NonInterleaved FASTQ File as Reads from Staging Area
-subtitle : Import a NonInterleaved FASTQ file into your Narrative as a Reads data object
-tooltip  : Import a NonInterleaved FASTQ file into your Narrative as a Reads data object
+name     : Import NonInterleaved FASTQ Files as Reads from Staging Area
+subtitle : Import a NonInterleaved FASTQ files into your Narrative as a Reads data object
+tooltip  : Import a NonInterleaved FASTQ files into your Narrative as a Reads data object
 
 icon: data-pink.png
 
