@@ -23,8 +23,8 @@ parameters :
 
     sra_staging_file_name:
         ui-name: SRA File Path
-        short-hint: SRA staing file path
-        long-hint: SRA staing file path
+        short-hint: SRA staging file path
+        long-hint: SRA staging file path
 
     sequencing_tech :
         ui-name : Sequencing Technology

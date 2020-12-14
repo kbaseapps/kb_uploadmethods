@@ -80,7 +80,6 @@ class ImportReadsUtil:
                     validates params passed to import_reads_from_staging method
 
         """
-
         # check for required parameters
         for p in ['import_type', 'sequencing_tech', 'name', 'workspace_name']:
             if p not in params:
