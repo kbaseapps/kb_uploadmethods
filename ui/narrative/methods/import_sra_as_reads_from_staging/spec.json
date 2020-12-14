@@ -1,4 +1,5 @@
 {
+
   "ver": "1.0.0",
   "authors": [
     "tgu2"
@@ -13,6 +14,7 @@
   "widgets": {
     "input": null,
     "output": "no-display"
+
   },
   "parameters": [
     {

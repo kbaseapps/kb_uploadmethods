@@ -1,0 +1,143 @@
+{
+  "ver" : "1.0.33",
+  "authors" : ["tgu2"],
+  "contact" : "http://kbase.us/contact-us/",
+  "visble" : true,
+  "categories" : [ "active","assembly","upload"],
+  "widgets" : {
+    "input" : null,
+    "output" : "no-display"
+  },
+  "parameters" :
+  [
+    {
+      "id" : "staging_subdir",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "/" ],
+      "field_type" : "text",
+      "text_options" : {
+      }
+    },
+    {
+      "id" : "assembly_set_name",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" :
+      {
+        "valid_ws_types" : [ "KBaseSets.AssemblySet" ],
+        "is_output_name" : true
+      }
+    },
+    {
+      "id" : "type",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "draft isolate" ],
+      "field_type" : "dropdown",
+      "dropdown_options":{
+      "options": [
+        {
+          "value": "draft isolate",
+          "display": "Draft Isolate"
+        },
+        {
+          "value": "finished isolate",
+          "display": "Finished Isolate"
+        },
+        {
+          "value": "mag",
+          "display": "Metagenome-assembled genome (MAG)"
+        },
+        {
+          "value": "sag",
+          "display": "Single amplified genome (SAG)"
+        },
+        {
+          "value": "virus",
+          "display": "Virus"
+        },
+        {
+          "value": "plasmid",
+          "display": "Plasmid"
+        },
+        {
+          "value": "construct",
+          "display": "Construct"
+        },
+        {
+          "value": "metagenome",
+          "display": "Metagenome"
+        }
+      ]}
+    },
+    {
+      "id" : "min_contig_length",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "500" ],
+      "field_type" : "text",
+      "text_options" : {
+        "validate_as": "int"
+      }
+    }
+  ],
+  "behavior" :
+  {
+    "service-mapping" :
+    {
+      "url" : "",
+      "name" : "kb_uploadmethods",
+      "method" : "batch_import_assemblies_from_staging",
+      "input_mapping" :
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "staging_subdir",
+          "target_property": "staging_subdir"
+        },
+        {
+          "input_parameter": "assembly_set_name",
+          "target_property": "assembly_set_name"
+        },
+        {
+          "input_parameter": "type",
+          "target_property": "type"
+        },
+        {
+          "input_parameter": "min_contig_length",
+          "target_property": "min_contig_length"
+        }
+      ],
+      "output_mapping" :
+      [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "ws"
+        },
+        {
+            "service_method_output_path": [0, "report_name"],
+            "target_property": "report_name"
+        },
+        {
+            "service_method_output_path": [0, "report_ref"],
+            "target_property": "report_ref"
+        },
+        {
+            "constant_value": "16",
+            "target_property": "report_window_line_height"
+        }
+      ]
+    }
+  },
+  "job_id_output_field": "docker"
+}

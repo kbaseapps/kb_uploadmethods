@@ -1,0 +1,84 @@
+name     : Batch Import Genome from Staging Area
+subtitle : Import files (Genbank or GFF + FASTA) from your staging area into your Narrative as a Genome data object
+tooltip  : Import files (Genbank or GFF + FASTA) from your staging area into your Narrative as a Genome data object
+
+icon: data-red.png
+
+screenshots :
+    []
+
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+parameters :
+    staging_subdir :
+        ui-name : Staging Directory
+        short-hint : Staging Subfolder
+        long-hint  : Staging Subfolder
+
+    genome_set_name :
+        ui-name : GenomeSet Object Name
+        short-hint : Provide a name for the output object that will be created by this upload
+        long-hint  : Provide a name for the output object that will be created by this upload
+
+    genome_type:
+        ui-name : Genome Type
+        short-hint : The type or source of this genome
+        long-hint  : The type or source of this genome
+
+    source :
+        ui-name : Source Of The GenBank File
+        short-hint : |
+            Identify the source of the GenBank File. (If Ensembl, the "gene" feature types will use the "gene" field as the ID; otherwise the "locus_tag" field is used.)
+        long-hint : |
+            Identify the source of the GenBank File. (If Ensembl, the "gene" feature types will use the "gene" field as the ID; otherwise the "locus_tag" field is used.)
+
+    taxon_wsname:
+        ui-name: Taxon Workspace Name
+        short-hint: Where the reference taxons are. Defaults to ReferenceTaxons
+        long-hint: Where the reference taxons are. Defaults to ReferenceTaxons
+
+    taxon_id:
+        ui-name: Taxonomy ID
+        short-hint: Link the Genome to the specified taxonomy object
+        long-hint: Link the Genome to the specified taxonomy object
+
+    release :
+        ui-name : Release Or Version Of The Source Data
+        short-hint : |
+            Release or version of the source data (for example: Release31, V4)
+        long-hint : |
+            Release or version of the source data (for example: Release31, V4)
+
+    genetic_code :
+        ui-name : |
+            Genetic Code For The Organism
+        short-hint : |
+            Valid genetic code (see http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi)
+        long-hint : |
+            Valid genetic code integer for translation purposes (see http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi)
+
+    generate_missing_genes :
+        ui-name : |
+            Spoof Genes For Parentless CDS
+        short-hint : |
+            Generate gene feature for CDSs that do not have a parent in file
+        long-hint : |
+            Some files may contain only coding sequences but KBase genomes are
+            expected to contain a parent gene for these CDS. This option
+            generates spoof genes based on the CDS location.
+
+description : |
+    <p> Import files (Genbank or GFF + FASTA) from your staging area into your Narrative as a Genome data object.
+    Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
+
+technical-description : none

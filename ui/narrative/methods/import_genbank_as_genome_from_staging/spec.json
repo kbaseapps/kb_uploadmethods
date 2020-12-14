@@ -1,7 +1,7 @@
 {
   "ver" : "",
   "authors" : ["tgu2"],
-  "contact" : "help@kbase.us",
+  "contact" : "http://kbase.us/contact-us/",
   "visible" : true,
   "categories" : [ "inactive","assembly","upload" ],
   "widgets": {
@@ -31,6 +31,45 @@
         "valid_ws_types" : [ "KBaseGenomes.Genome" ],
         "is_output_name" : true
       }
+    },
+    {
+      "id" : "genome_type",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "draft isolate" ],
+      "field_type" : "dropdown",
+      "dropdown_options":{
+      "options": [
+        {
+          "value": "draft isolate",
+          "display": "Draft Isolate"
+        },
+        {
+          "value": "finished isolate",
+          "display": "Finished Isolate"
+        },
+        {
+          "value": "mag",
+          "display": "Metagenome-assembled genome (MAG)"
+        },
+        {
+          "value": "sag",
+          "display": "Single amplified genome (SAG)"
+        },
+        {
+          "value": "virus",
+          "display": "Virus"
+        },
+        {
+          "value": "plasmid",
+          "display": "Plasmid"
+        },
+        {
+          "value": "construct",
+          "display": "Construct"
+        }
+      ]}
     },
     {
       "id" : "source",
@@ -75,6 +114,24 @@
       }
     },
     {
+      "id" : "scientific_name",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {
+      "id" : "taxon_id",
+      "optional" : true,
+      "advanced" : true,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {}
+    },
+    {
       "id": "generate_ids_if_needed",
       "optional":true,
       "advanced":true,
@@ -91,7 +148,7 @@
       "optional":true,
       "advanced":true,
       "allow_multiple":false,
-      "default_values":["0"],
+      "default_values":["1"],
       "field_type" : "checkbox",
       "checkbox_options":{
         "checked_value": 1,
@@ -114,6 +171,10 @@
           "target_property": "genome_name"
         },
         {
+          "input_parameter": "genome_type",
+          "target_property": "genome_type"
+        },
+        {
           "input_parameter": "staging_file_subdir_path",
           "target_property": "staging_file_subdir_path"
         },
@@ -128,6 +189,14 @@
         {
           "input_parameter": "genetic_code",
           "target_property": "genetic_code"
+        },
+        {
+          "input_parameter": "scientific_name",
+          "target_property": "scientific_name"
+        },
+        {
+          "input_parameter": "taxon_id",
+          "target_property": "taxon_id"
         },
         {
           "input_parameter": "generate_ids_if_needed",

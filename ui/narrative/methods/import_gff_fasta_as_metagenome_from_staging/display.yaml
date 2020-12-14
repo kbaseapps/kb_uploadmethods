@@ -1,0 +1,81 @@
+name     : Import GFF3/FASTA file as Annotated Metagenome Assembly from Staging Area
+subtitle : Import a GFF3 and FASTA file from your staging area into your Narrative as an Annotated Metagenome Assembly data object
+tooltip  : Import a GFF3 and FASTA file from your staging area into your Narrative as an Annotated Metagenome Assembly data object
+
+icon: data-red.png
+
+screenshots :
+    []
+
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+parameters :
+    fasta_file :
+        ui-name : FASTA File Path
+        short-hint : FASTA File containing assembled contigs or chromosomes (NOT feature sequences)
+        long-hint  : |
+                Valid file extensions for FASTA: .fasta, .fna, .fa; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2. Note that the FASTA file must contain sequences for contigs which match the seq_id in the gff file not sequences for every individual feature.
+
+    gff_file :
+        ui-name : GFF3 File Path
+        short-hint : GFF3 File containing list of predicted gene models and associated features
+        long-hint  : |
+                Valid file extensions for GFF: .gff, .gff3. Compressed files (containing files with valid extensions): .zip, .gz, .bz2, .tar.gz, .tar.bz2. Note that older versions of GFF files may also have the .gff extension but have a differing schema which could result in incorrect upload. Always use GFF3 where possible
+
+    genome_name :
+        ui-name : Metagenome Object Name
+        short-hint : Provide a name for the output object that will be created by this upload
+        long-hint  : Provide a name for the output object that will be created by this upload
+
+    source:
+        ui-name: Source of metagenome
+        short-hint: |
+            Source of the metagenome data
+        long-hint: |
+            Source of the metagenome data, (JGI, EBI, etc.)
+
+    release :
+        ui-name : Release or Version of the Source Data
+        short-hint : |
+            Release or version of the source data (for example: Release31, V4)
+        long-hint : |
+            Release or version of the source data (for example: Release31, V4)
+
+    genetic_code :
+        ui-name : |
+            Genetic Code for protein translation
+        short-hint : |
+            Valid genetic code (see http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi)
+        long-hint : |
+            Valid genetic code integer for translation purposes (see http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi)
+
+    type:
+        ui-name: Type
+        short-hint: one of 'Reference', 'User upload', 'Representative'
+        long-hint: one of 'Reference', 'User upload', 'Representative'
+
+    generate_missing_genes :
+        ui-name : |
+            Spoof Genes for parentless CDS
+        short-hint : |
+            Generate gene feature for CDSs that do not have a parent in file
+        long-hint : |
+            Some files may contain only coding sequences but KBase genomes are
+            expected to contain a parent gene for these CDS. This option
+            generates spoof genes based on the CDS location.
+
+description : |
+    <p> Import a GFF or FASTA file from your staging area into your Narrative as a Genome data object. 
+    Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
+    
+technical-description : none

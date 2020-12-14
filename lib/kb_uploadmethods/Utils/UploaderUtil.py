@@ -373,10 +373,6 @@ class UploaderUtil:
             ret = _requests.post(url, headers=headers, data=body)
 
             if not ret.ok:
-                try:
-                    err = ret.json()
-                except:
-                    ret.raise_for_status()
-                raise ValueError('Error connecting to staging service: {} {}\n{}'
-                                 .format(ret.status_code, ret.reason,
-                                         err['error_msg']))
+                print('Error connecting to staging service: {} {}\n{}'.format(ret.status_code,
+                                                                              ret.reason,
+                                                                              ret.text))

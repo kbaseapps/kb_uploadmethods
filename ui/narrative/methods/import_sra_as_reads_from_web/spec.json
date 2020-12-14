@@ -1,7 +1,7 @@
 {
   "ver" : "1.0.0",
   "authors" : ["tgu2"],
-  "contact" : "help@kbase.us",
+  "contact" : "http://kbase.us/contact-us/",
   "visible" : true,
   "categories" : [ "active","reads","upload" ],
   "widgets" : 
@@ -46,7 +46,7 @@
               "value": "Direct Download"
           },
           {
-              "display": "FTP Link",
+              "display": "FTP Link (Note: NCBI SRA FTP no longer supported)",
               "value": "FTP"
           },
           {
