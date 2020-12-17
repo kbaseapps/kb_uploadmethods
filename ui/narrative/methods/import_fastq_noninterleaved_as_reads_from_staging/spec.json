@@ -1,5 +1,4 @@
 {
-
   "ver": "1.0.0",
   "authors": [
     "tgu2"
@@ -14,11 +13,23 @@
   "widgets": {
     "input": null,
     "output": "no-display"
-
   },
   "parameters": [
     {
-      "id": "sra_staging_file_name",
+      "id": "fastq_fwd_staging_file_name",
+      "optional": true,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": [
+        ""
+      ],
+      "field_type": "dynamic_dropdown",
+      "dynamic_dropdown_options": {
+        "data_source": "ftp_staging"
+      }
+    },
+    {
+      "id": "fastq_rev_staging_file_name",
       "optional": true,
       "advanced": false,
       "allow_multiple": false,
@@ -78,6 +89,10 @@
       ],
       "field_type": "text",
       "text_options": {
+        "valid_ws_types": [
+          "KBaseFile.SingleEndLibrary",
+          "KBaseFile.PairedEndLibrary"
+        ],
         "is_output_name": true
       }
     },
@@ -147,12 +162,16 @@
           "target_property": "workspace_name"
         },
         {
-          "constant_value": "SRA",
+          "constant_value": "FASTQ/FASTA",
           "target_property": "import_type"
         },
         {
-          "input_parameter": "sra_staging_file_name",
-          "target_property": "sra_staging_file_name"
+          "input_parameter": "fastq_fwd_staging_file_name",
+          "target_property": "fastq_fwd_staging_file_name"
+        },
+        {
+          "input_parameter": "fastq_rev_staging_file_name",
+          "target_property": "fastq_rev_staging_file_name"
         },
         {
           "input_parameter": "sequencing_tech",
@@ -167,7 +186,7 @@
           "target_property": "single_genome"
         },
         {
-          "constant_value": "1",
+          "constant_value": "0",
           "target_property": "interleaved"
         },
         {

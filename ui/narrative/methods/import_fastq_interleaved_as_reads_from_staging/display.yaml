@@ -1,6 +1,6 @@
-name     : Import SRA File as Reads from Staging Area
-subtitle : Import a SRA file into your Narrative as a Reads data object
-tooltip  : Import a SRA file into your Narrative as a Reads data object
+name     : Import Interleaved FASTQ file as Reads from Staging Area
+subtitle : Import a interleaved FASTQ file into your Narrative as a Reads data object
+tooltip  : Import a interleaved FASTQ file into your Narrative as a Reads data object
 
 icon: data-pink.png
 
@@ -21,10 +21,17 @@ suggestions :
 
 parameters :
 
-    sra_staging_file_name:
-        ui-name: SRA File Path
-        short-hint: SRA staging file path
-        long-hint: SRA staging file path
+    fastq_fwd_staging_file_name :
+        ui-name : Forward/Left FASTQ File Path
+        short-hint : Short read file containing a paired end library in FASTQ format
+        long-hint  : |
+                Valid file extensions for FASTQ: .fastq, .fnq, .fq;
+
+    fastq_rev_staging_file_name :
+        ui-name : Reverse/Right FASTQ File Path
+        short-hint : Second short read file containing a paired end library in FASTQ format.
+        long-hint  : |
+                 Valid file extensions for FASTQ: .fastq, .fnq, .fq;
 
     sequencing_tech :
         ui-name : Sequencing Technology
@@ -57,7 +64,7 @@ parameters :
         long-hint  : Select if reads in a pair point outward
 
 description : |
-    <p> Import a SRA file from your staging area into your Narrative as READS data object.
+    <p> Import a Interleaved FASTQ file from your staging area into your Narrative as an Assembly data object.
     Please see the <a href="https://docs.kbase.us/data/upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
 
 technical-description : none
