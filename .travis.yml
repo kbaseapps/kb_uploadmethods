@@ -20,7 +20,6 @@ before_install:
 install:
 - pip install coveralls
 - docker pull kbase/kb-sdk
-- mkdir $HOME/bin/
 - docker run kbase/kb-sdk genscript > $HOME/bin/kb-sdk
 - chmod +x $HOME/bin/kb-sdk
 - export PATH=$PATH:$HOME/bin/
