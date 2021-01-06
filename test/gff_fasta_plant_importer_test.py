@@ -167,9 +167,4 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertTrue(re.match("^\d+?\.\d+?$", genome_info[10]['GC content']) is not None)
         self.assertTrue('Size' in genome_info[10])
         self.assertTrue(genome_info[10]['Size'].isdigit())
-        self.assertEqual(genome_info[10]['Taxonomy'],
-                          'cellular organisms; Eukaryota; Viridiplantae; Streptophyta; ' +
-                          'Streptophytina; Embryophyta; Tracheophyta; Euphyllophyta; ' +
-                          'Spermatophyta; Magnoliophyta; Mesangiospermae; eudicotyledons; ' +
-                          'Gunneridae; Pentapetalae; rosids; fabids; Malpighiales; Salicaceae; ' +
-                          'Saliceae; Populus')
+        self.assertEqual(genome_info[10]['Taxonomy'], 'Unconfirmed Organism')

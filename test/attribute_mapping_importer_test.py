@@ -99,7 +99,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
                     ValueError,
                     '"staging_file_subdir_path" parameter is required, but missing'):
             self.getImpl().import_attribute_mapping_from_staging(self.getContext(),
-                                                                    invalidate_input_params)
+                                                                 invalidate_input_params)
 
         invalidate_input_params = {
           'staging_file_subdir_path': 'staging_file_subdir_path',
@@ -110,7 +110,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
                     ValueError,
                     '"workspace_name" parameter is required, but missing'):
             self.getImpl().import_attribute_mapping_from_staging(self.getContext(),
-                                                                    invalidate_input_params)
+                                                                 invalidate_input_params)
 
         invalidate_input_params = {
           'staging_file_subdir_path': 'staging_file_subdir_path',
@@ -122,12 +122,12 @@ class kb_uploadmethodsTest(unittest.TestCase):
                 ValueError,
                 '"attribute_mapping_name" parameter is required, but missing'):
             self.getImpl().import_attribute_mapping_from_staging(self.getContext(),
-                                                                    invalidate_input_params)
+                                                                 invalidate_input_params)
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
     def test_import_tsv_attribute_mapping_from_staging(self, download_staging_file,
-                                               update_staging_service):
+                                                       update_staging_service):
 
         ws_obj_name = 'MyAttributeMapping'
 
@@ -141,10 +141,11 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertTrue('report_ref' in ref[0])
         self.assertTrue('report_name' in ref[0])
 
+    @unittest.skip("should be tested in the parent module")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
     def test_import_excel_attribute_mapping_from_staging(self, download_staging_file,
-                                               update_staging_service):
+                                                         update_staging_service):
 
         ws_obj_name = 'MyAttributeMapping'
 

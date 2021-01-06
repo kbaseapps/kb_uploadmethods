@@ -8,6 +8,11 @@ from configparser import ConfigParser
 from os import environ
 
 import requests
+from pyftpdlib.authorizers import DummyAuthorizer
+from pyftpdlib.handlers import FTPHandler
+from pyftpdlib.servers import ThreadedFTPServer
+import threading
+import socket
 from biokbase.workspace.client import Workspace as workspaceService
 
 from installed_clients.DataFileUtilClient import DataFileUtil
@@ -48,6 +53,27 @@ class kb_uploadmethodsTest(unittest.TestCase):
         cls.dfu = DataFileUtil(os.environ['SDK_CALLBACK_URL'], token=cls.token)
         cls.scratch = cls.cfg['scratch']
         cls.shockURL = cls.cfg['shock-url']
+        cls.ftp_domain = socket.gethostbyname(socket.gethostname())
+        cls.ftp_port = 21
+        thread = threading.Thread(target=cls.start_ftp_service,
+                                  args=(cls.ftp_domain, cls.ftp_port))
+        thread.daemon = True
+        thread.start()
+        time.sleep(5)
+
+    @classmethod
+    def start_ftp_service(cls, domain, port):
+
+        print('starting ftp service')
+        authorizer = DummyAuthorizer()
+        authorizer.add_anonymous(os.getcwd(), perm='elradfmwMT')
+
+        handler = FTPHandler
+        handler.authorizer = authorizer
+
+        address = (domain, port)
+        with ThreadedFTPServer(address, handler) as server:
+            server.serve_forever()
 
     @classmethod
     def tearDownClass(cls):
@@ -300,6 +326,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("should be tested in the parent module")
     def test_upload_fastq_file_url_direct_download_interleaved(self):
         fwd_file_url = 'https://anl.box.com/shared/static/'
         fwd_file_url += 'pf0d0d7torv07qh2nogaay073udmiacr.fastq'
@@ -354,6 +381,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("should be tested in the parent module")
     def test_upload_fastq_file_url_direct_download_paired_end(self):
         fwd_file_url = 'https://anl.box.com/shared/static/'
         fwd_file_url += 'lph9l0ye6yqetnbk04cx33mqgrj4b85j.fq'
@@ -425,6 +453,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("should be tested in the parent module")
     def test_upload_fastq_file_url_dropbox_paired_end(self):
         fwd_file_url = 'https://www.dropbox.com/s/'
         fwd_file_url += 'pgtja4btj62ctkx/small.forward.fq?dl=0'
@@ -496,6 +525,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("should be tested in the parent module")
     def test_upload_fastq_file_url_google_drive_paired_end(self):
         fwd_file_url = 'https://drive.google.com/open?'
         fwd_file_url += 'id=0B0exSa7ebQ0qSGlmVzIwNXV5OWc'
@@ -542,18 +572,16 @@ class kb_uploadmethodsTest(unittest.TestCase):
     def test_upload_fastq_file_url_ftp(self):
         # copy test file to FTP
         fq_filename = "Sample1.fastq"
-        ftp_connection = ftplib.FTP('ftp.uconn.edu')
-        ftp_connection.login('anonymous', 'anonymous@domain.com')
-        ftp_connection.cwd("/48_hour/")
 
-        if fq_filename not in ftp_connection.nlst():
-            fh = open(os.path.join("data", fq_filename), 'rb')
-            ftp_connection.storbinary('STOR Sample1.fastq', fh)
-            fh.close()
+        with ftplib.FTP(self.ftp_domain) as ftp_connection:
+            ftp_connection.login('anonymous', 'anonymous@domain.com')
+            if fq_filename not in ftp_connection.nlst():
+                with open(os.path.join("data", fq_filename), 'rb') as fh:
+                    ftp_connection.storbinary('STOR {}'.format(fq_filename), fh)
 
         params = {
           'download_type': 'FTP',
-          'fwd_file_url': 'ftp://ftp.uconn.edu/48_hour/Sample1.fastq',
+          'fwd_file_url': 'ftp://{}/{}'.format(self.ftp_domain, fq_filename),
           'sequencing_tech': 'Unknown',
           'name': 'test_reads_file_name.reads',
           'workspace_name': self.getWsName()
@@ -576,29 +604,27 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("should be tested in the parent module")
     def test_upload_fastq_file_url_ftp_paired(self):
         # copy test file to FTP
-        fq_filename = "small.forward.fq"
-        ftp_connection = ftplib.FTP('ftp.uconn.edu')
-        ftp_connection.login('anonymous', 'anonymous@domain.com')
-        ftp_connection.cwd("/48_hour/")
+        fw_fq_filename = "small.forward.fq"
+        with ftplib.FTP(self.ftp_domain) as ftp_connection:
+            ftp_connection.login('anonymous', 'anonymous@domain.com')
+            if fw_fq_filename not in ftp_connection.nlst():
+                with open(os.path.join("data", fw_fq_filename), 'rb') as fh:
+                    ftp_connection.storbinary('STOR {}'.format(fw_fq_filename), fh)
 
-        if fq_filename not in ftp_connection.nlst():
-            fh = open(os.path.join("data", fq_filename), 'rb')
-            ftp_connection.storbinary('STOR small.forward.fq', fh)
-            fh.close()
-
-        fq_filename = "small.reverse.fq"
-
-        if fq_filename not in ftp_connection.nlst():
-            fh = open(os.path.join("data", fq_filename), 'rb')
-            ftp_connection.storbinary('STOR small.reverse.fq', fh)
-            fh.close()
+        rev_fq_filename = "small.reverse.fq"
+        with ftplib.FTP(self.ftp_domain) as ftp_connection:
+            ftp_connection.login('anonymous', 'anonymous@domain.com')
+            if rev_fq_filename not in ftp_connection.nlst():
+                with open(os.path.join("data", rev_fq_filename), 'rb') as fh:
+                    ftp_connection.storbinary('STOR {}'.format(rev_fq_filename), fh)
 
         params = {
             'download_type': 'FTP',
-            'fwd_file_url': 'ftp://ftp.uconn.edu/48_hour/small.forward.fq',
-            'rev_file_url': 'ftp://ftp.uconn.edu/48_hour/small.reverse.fq',
+            'fwd_file_url': 'ftp://{}/{}'.format(self.ftp_domain, fw_fq_filename),
+            'rev_file_url': 'ftp://{}/{}'.format(self.ftp_domain, rev_fq_filename),
             'sequencing_tech': 'Unknown',
             'name': 'test_reads_file_name.reads',
             'workspace_name': self.getWsName(),
@@ -632,6 +658,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("redundant test")
     def test_urls_to_add_direct_download(self):
         fwd_file_url = 'https://anl.box.com/shared/static/'
         fwd_file_url += 'qwadp20dxtwnhc8r3sjphen6h0k1hdyo.fastq'
@@ -762,7 +789,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
     def test_urls_to_add_direct_download_leading_space(self):
         fwd_file_url = '      https://anl.box.com/shared/static/'
-        fwd_file_url += 'qwadp20dxtwnhc8r3sjphen6h0k1hdyo.fastq'
+        fwd_file_url += 'qwadp20dxtwnhc8r3sjphen6h0k1hdyo.fastq    '
         params = {
           'download_type': 'Direct Download',
           'workspace_name': self.getWsName(),
@@ -812,21 +839,20 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("redundant test")
     def test_upload_fastq_file_url_ftp_trailing_space(self):
         # copy test file to FTP
         fq_filename = "Sample1.fastq"
-        ftp_connection = ftplib.FTP('ftp.uconn.edu')
-        ftp_connection.login('anonymous', 'anonymous@domain.com')
-        ftp_connection.cwd("/48_hour/")
 
-        if fq_filename not in ftp_connection.nlst():
-            fh = open(os.path.join("data", fq_filename), 'rb')
-            ftp_connection.storbinary('STOR Sample1.fastq', fh)
-            fh.close()
+        with ftplib.FTP(self.ftp_domain) as ftp_connection:
+            ftp_connection.login('anonymous', 'anonymous@domain.com')
+            if fq_filename not in ftp_connection.nlst():
+                with open(os.path.join("data", fq_filename), 'rb') as fh:
+                    ftp_connection.storbinary('STOR {}'.format(fq_filename), fh)
 
         params = {
             'download_type': 'FTP',
-            'fwd_file_url': 'ftp://ftp.uconn.edu/48_hour/Sample1.fastq   ',
+            'fwd_file_url': 'ftp://{}/{}       '.format(self.ftp_domain, fq_filename),
             'sequencing_tech': 'Unknown',
             'name': 'test_reads_file_name.reads',
             'workspace_name': self.getWsName()

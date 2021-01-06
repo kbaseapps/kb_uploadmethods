@@ -5,12 +5,17 @@ MAINTAINER KBase Developer
 # Insert apt-get instructions here to install
 # any required dependencies for your module.
 
-RUN pip install coverage \
-    && pip install dropbox \
+RUN apt-get update --fix-missing
+RUN apt-get install -y gcc
+
+RUN pip install coverage==5.3.1 \
+    && pip install dropbox==11.0.0 \
     && pip install requests --upgrade \
     && ( [ $(pip show filemagic|grep -c filemagic) -eq 0 ] || pip uninstall -y filemagic ) \
-    && pip install python-magic \
-    && pip install mock
+    && pip install python-magic==0.4.18 \
+    && pip install mock==4.0.3 \
+    && pip install aiohttp==3.4.4 \
+    && pip install pyftpdlib==1.5.6
 
 # Get NCBI SRATools (for fastq-dump)
 RUN mkdir NCBI_SRA_tools && cd NCBI_SRA_tools && \
@@ -18,7 +23,6 @@ RUN mkdir NCBI_SRA_tools && cd NCBI_SRA_tools && \
     tar zxf sratoolkit.2.9.2-ubuntu64.tar.gz && \
     cp sratoolkit.2.9.2-ubuntu64/bin/fastq-dump.2.9.2  /kb/deployment/bin/fastq-dump
 
-RUN pip install aiohttp==3.4.4
 # -----------------------------------------
 
 COPY ./ /kb/module

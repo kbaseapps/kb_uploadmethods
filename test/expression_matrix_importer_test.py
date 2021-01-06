@@ -92,6 +92,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         return {'copy_file_path': fq_path}
 
+    @unittest.skip("inactive app")
     def test_bad_import_tsv_as_expression_matrix_from_staging_params(self):
         invalidate_input_params = {
           'missing_staging_file_subdir_path': 'staging_file_subdir_path',
@@ -125,6 +126,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
             self.getImpl().import_tsv_as_expression_matrix_from_staging(self.getContext(),
                                                                         invalidate_input_params)
 
+    @unittest.skip("inactive app")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
     def test_import_tsv_as_expression_matrix_from_staging(self, download_staging_file,

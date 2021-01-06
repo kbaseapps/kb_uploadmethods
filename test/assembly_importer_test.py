@@ -127,7 +127,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
-    def test_genbank_to_genome(self, download_staging_file, update_staging_service):
+    def test_import_fasta_as_assembly_from_staging(self, download_staging_file, update_staging_service):
 
         fasta_file = 'small_fasta.fna'
         ws_obj_name = 'MyAssembly'
