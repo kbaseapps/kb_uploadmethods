@@ -9,6 +9,11 @@ from configparser import ConfigParser
 from os import environ
 
 import requests
+from pyftpdlib.authorizers import DummyAuthorizer
+from pyftpdlib.handlers import FTPHandler
+from pyftpdlib.servers import ThreadedFTPServer
+import threading
+import socket
 from biokbase.workspace.client import Workspace as workspaceService
 from mock import patch
 
@@ -52,6 +57,28 @@ class kb_uploadmethodsTest(unittest.TestCase):
         cls.dfu = DataFileUtil(os.environ['SDK_CALLBACK_URL'], token=cls.token)
         cls.scratch = cls.cfg['scratch']
         cls.shockURL = cls.cfg['shock-url']
+
+        cls.ftp_domain = socket.gethostbyname(socket.gethostname())
+        cls.ftp_port = 21
+        thread = threading.Thread(target=cls.start_ftp_service,
+                                  args=(cls.ftp_domain, cls.ftp_port))
+        thread.daemon = True
+        thread.start()
+        time.sleep(5)
+
+    @classmethod
+    def start_ftp_service(cls, domain, port):
+
+        print('starting ftp service')
+        authorizer = DummyAuthorizer()
+        authorizer.add_anonymous(os.getcwd(), perm='elradfmwMT')
+
+        handler = FTPHandler
+        handler.authorizer = authorizer
+
+        address = (domain, port)
+        with ThreadedFTPServer(address, handler) as server:
+            server.serve_forever()
 
     @classmethod
     def tearDownClass(cls):
@@ -498,14 +525,11 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         # copy test file to FTP
         fq_filename = "empty.sra"
-        ftp_connection = ftplib.FTP('ftp.uconn.edu')
-        ftp_connection.login('anonymous', 'anonymous@domain.com')
-        ftp_connection.cwd("/48_hour/")
-
-        if fq_filename not in ftp_connection.nlst():
-            fh = open(os.path.join("data", fq_filename), 'rb')
-            ftp_connection.storbinary('STOR empty.sra', fh)
-            fh.close()
+        with ftplib.FTP(self.ftp_domain) as ftp_connection:
+            ftp_connection.login('anonymous', 'anonymous@domain.com')
+            if fq_filename not in ftp_connection.nlst():
+                with open(os.path.join("data", fq_filename), 'rb') as fh:
+                    ftp_connection.storbinary('STOR {}'.format(fq_filename), fh)
 
         obj_name = 'MyReads'
 
@@ -514,13 +538,13 @@ class kb_uploadmethodsTest(unittest.TestCase):
             'workspace_name': self.getWsName(),
             'sra_urls_to_add': [
                 {
-                    'file_url': 'ftp://ftp.uconn.edu/48_hour/empty.sra',
+                    'file_url': 'ftp://{}/{}'.format(self.ftp_domain, fq_filename),
                     'name': obj_name + '_11',
                     'sequencing_tech': 'Unknown',
                     'single_genome': 1
                 },
                 {
-                    'file_url': 'ftp://ftp.uconn.edu/48_hour/empty.sra',
+                    'file_url': 'ftp://{}/{}'.format(self.ftp_domain, fq_filename),
                     'name': obj_name + '_22',
                     'sequencing_tech': 'Unknown',
                     'single_genome': 1
