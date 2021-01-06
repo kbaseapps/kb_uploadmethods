@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.44**
+fix Dockerfile for gcc error
+
 **1.0.43**
 update wrong description for FASTQ/SRA importer
 Add file type checking to output of Import FASTQ/SRA file. This will enforce proper file names.
