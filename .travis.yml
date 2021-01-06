@@ -1,44 +1,29 @@
 language: python
-
-python:
-    - "2.7"
-
+python: '2.7'
 sudo: required
-
 services:
-    - docker
-
+- docker
 notifications:
   email:
     recipients:
-      - tgu@anl.gov
-    on_success: never # default: change
-    on_failure: always # default: always
-
-env:
-  global:
-
+    - tgu@anl.gov
+    on_success: never
+    on_failure: always
 branches:
   only:
-    - master
-
+  - master
 before_install:
-    - docker version
-    - python --version
-
+- docker version
+- python --version
+- javac -version
+- java -version
 install:
-    - git clone https://github.com/kbase/jars
-    - git clone https://github.com/kbase/kb_sdk
-    - cd kb_sdk
-    - make
-    - make sdkbase
-    - docker images
-    - export PATH=$(pwd)/bin:$PATH
-    - cd ../
-    - git clone https://github.com/kbaseapps/kb_uploadmethods.git
-    - cd kb_uploadmethods
-
+- pip install coveralls
+- git clone https://github.com/kbase/jars
+- git clone https://github.com/kbase/kb_sdk
+- cd kb_sdk
+- make
+- export PATH=$(pwd)/bin:$PATH
+- cd ../
 script:
-    - kb-sdk validate
-
-after_success:
+- kb-sdk validate

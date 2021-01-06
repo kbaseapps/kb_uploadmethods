@@ -154,7 +154,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         set_data = self.dfu.get_objects({'object_refs': [set_ref]})['data'][0]['data']
 
         self.assertEqual(len(set_data['items']), 4)
- 
+
     @patch.object(BatchUtil, "STAGING_USER_FILE_PREFIX", new='/kb/module/test/data/')
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     def test_batch_import_assemblies_from_staging2(self, download_staging_file):
