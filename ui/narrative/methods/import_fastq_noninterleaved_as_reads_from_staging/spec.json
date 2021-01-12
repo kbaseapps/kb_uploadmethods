@@ -6,7 +6,6 @@
   "contact": "http://kbase.us/contact-us/",
   "visible": true,
   "categories": [
-    "inactive",
     "reads",
     "upload"
   ],
