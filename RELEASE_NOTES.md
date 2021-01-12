@@ -1,5 +1,12 @@
 ###Release Notes
 
+**1.0.46**
+Fix tests from new UIs for FASTQ/SRA Importers 
+
+**1.0.45**
+Add github actions tests
+Add new FASTQ/SRA Importers
+
 **1.0.44**
 fix Dockerfile for gcc error
 
