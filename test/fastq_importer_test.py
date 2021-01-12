@@ -230,7 +230,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
         error_msg = 'Advanced params "Mean Insert Size", "St. Dev. of Insert Size" or '
-        error_msg += '"Reads Orientation Outward" is Paried End Reads specific'
+        error_msg += '"Reads Orientation Outward" is Paired End Reads specific'
 
         invalidate_input_params = self.getDefaultParams()
         invalidate_input_params['insert_size_mean'] = 10
