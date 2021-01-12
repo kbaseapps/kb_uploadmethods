@@ -216,7 +216,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
           'name': 'name'
         }
         error_msg = "Import file type \[invalide_import_type\] is not supported. "
-        error_msg += "Please selet one of \['FASTQ/FASTA', 'SRA'\]"
+        error_msg += "Please select one of \['FASTQ/FASTA', 'SRA'\]"
         with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().import_reads_from_staging(self.getContext(),
                                                      invalidate_input_params)

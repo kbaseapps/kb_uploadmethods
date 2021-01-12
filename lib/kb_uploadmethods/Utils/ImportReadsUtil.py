@@ -41,6 +41,7 @@ class ImportReadsUtil:
         report_val = self.sra_importer.generate_report([return_val['obj_ref']],
                                                        fastq_importer_params)
         return_val.update(report_val)
+        return return_val
 
     def _run_sra_importer(self, params):
         sra_importer_params = params
@@ -60,6 +61,7 @@ class ImportReadsUtil:
         report_val = self.sra_importer.generate_report([return_val['obj_ref']],
                                                        sra_importer_params)
         return_val.update(report_val)
+        return return_val
 
     def import_reads_from_staging(self, params):
         """

@@ -443,7 +443,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         obj_name = 'MyReads'
 
         error_msg = 'Advanced params "Mean Insert Size", "St. Dev. of Insert Size" or '
-        error_msg += '"Reads Orientation Outward" is Paried End Reads specific'
+        error_msg += '"Reads Orientation Outward" is Paired End Reads specific'
 
         invalidate_input_params = {
             'staging_file_subdir_path': sra_path,
