@@ -1,4 +1,4 @@
-# kb_uploadmethods
+# kb_uploadmethods 
 
 [![Build Status](https://travis-ci.org/tgu/kb_uploadmethods.svg?branch=master)](https://travis-ci.org/tgu/kb_uploadmethods)  
 [Release Notes](RELEASE_NOTES.md)
@@ -179,14 +179,34 @@ Each app is listed below with the following format:
 -   **input file types**: any
 -   **output type**: none, adds one or more files to the staging area
 
-### (not in use) [Import SRA File as Reads from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_sra_as_reads_from_staging)
+### [Import SRA File as Reads from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_sra_as_reads_from_staging)
 
--   replaced by the "Import FASTQ/SRA File as Reads from Staging Area" app
+-   Previously "Import FASTQ/SRA File as Reads from Staging Area" app
 -   **app id**: import_sra_as_reads_from_staging
 -   **entrypoint**: import_sra_from_staging
 -   **description**: Import an SRA file from your staging area into your Narrative as a Reads object.
 -   **input file type**: SRA
 -   **output type**: KBaseFile.SingleEndLibrary or KBaseFile.PairedEndLibrary
+
+
+### [Import FASTQ Interleaved Reads from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_fastq_interleaved_as_reads_from_staging)
+
+-   Previously "Import FASTQ/SRA File as Reads from Staging Area" app
+-   **app id**: load_paired_end_reads_from_file
+-   **entrypoint**: import_fastq_interleaved_as_reads_from_staging
+-   **description**: Import a FASTQ file as interleaved reads from your staging area.
+-   **input file types**: FASTQ
+-   **output type**: KBaseFile.PairedEndLibrary
+
+### [Load FASTQ Non Interleaved Reads From Staging Area](https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/import_fastq_noninterleaved_as_reads_from_staging)
+
+-   Previously the "Import FASTQ/SRA File as Reads from Staging Area" app
+-   **app id**: load_single_end_reads_from_file
+-   **entrypoint**: import_fastq_noninterleaved_as_reads_from_staging
+-   **description**: Import a FASTQ file as non interleaved reads from your staging area.
+-   **input file types**: FASTQ
+-   **output type**: KBaseFile.SingleEndLibrary
+
 
 ### (not in use) [Import Paired-End Reads from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/load_paired_end_reads_from_file)
 
