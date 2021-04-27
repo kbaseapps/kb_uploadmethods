@@ -45,7 +45,7 @@ class UnpackFileUtil:
         for file_path in file_path_list:
             files.update({'uploads': (os.path.basename(file_path), open(file_path, 'rb'))})
 
-            multipart_encoded = MultipartEncoder(files)
+            multipart_encoded = MultipartEncoder(files) # Supports files over ~2gb (`requests` lib maximum)
 
             resp = _requests.post(end_point,
                                   data=multipart_encoded,
