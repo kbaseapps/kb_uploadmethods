@@ -44,17 +44,25 @@ class UnpackFileUtil:
 
         for file_path in file_path_list:
             files.update({'uploads': (os.path.basename(file_path), open(file_path, 'rb'))})
-
-            multipart_encoded = MultipartEncoder(files) # Supports files over ~2gb (`requests` lib maximum)
-
-            resp = _requests.post(end_point,
-                                  data=multipart_encoded,
-                                  headers={
-                                      'Authorization':
-                                      self.token,
-                                      'Content-Type':
-                                      multipart_encoded.content_type
-                                  })
+            
+            try:
+                resp = _requests.post(end_point, 
+                                      headers={
+                                          'Authorization': 
+                                          self.token
+                                      }, 
+                                      files=files)
+            except OverflowError:
+                # Support files over ~2gb (`requests` lib maximum)
+                multipart_encoded = MultipartEncoder(files)
+                resp = _requests.post(end_point,
+                                      data=multipart_encoded,
+                                      headers={
+                                          'Authorization':
+                                          self.token,
+                                          'Content-Type':
+                                          multipart_encoded.content_type
+                                      })
 
             if resp.status_code != 200:
                 raise ValueError('Upload file {} failed.\nError Code: {}\n{}\n'
