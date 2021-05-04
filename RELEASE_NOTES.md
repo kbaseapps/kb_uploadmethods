@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.47**
+Add support for uploading files > 2GB to the staging service
+
 **1.0.46**
 Fix tests from new UIs for FASTQ/SRA Importers 
 

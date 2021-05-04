@@ -11,6 +11,7 @@ RUN apt-get install -y gcc
 RUN pip install coverage==5.3.1 \
     && pip install dropbox==11.0.0 \
     && pip install requests --upgrade \
+    && pip install requests_toolbelt==0.9.1 \
     && ( [ $(pip show filemagic|grep -c filemagic) -eq 0 ] || pip uninstall -y filemagic ) \
     && pip install python-magic==0.4.18 \
     && pip install mock==4.0.3 \

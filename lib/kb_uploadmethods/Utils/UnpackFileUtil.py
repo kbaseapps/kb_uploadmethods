@@ -5,6 +5,7 @@ import time
 import uuid
 from configparser import SafeConfigParser
 import requests as _requests
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 import magic
 
@@ -38,14 +39,30 @@ class UnpackFileUtil:
         subdir_folder_str = '/' if not subdir_folder else '/{}'.format(subdir_folder)
         staging_service_host = self._staging_service_host()
         end_point = staging_service_host + '/upload'
-        headers = {'Authorization': self.token}
 
         files = {'destPath': subdir_folder_str}
 
         for file_path in file_path_list:
             files.update({'uploads': (os.path.basename(file_path), open(file_path, 'rb'))})
-
-            resp = _requests.post(end_point, headers=headers, files=files)
+            
+            try:
+                resp = _requests.post(end_point, 
+                                      headers={
+                                          'Authorization': 
+                                          self.token
+                                      }, 
+                                      files=files)
+            except OverflowError:
+                # Support files over ~2gb (`requests` lib maximum)
+                multipart_encoded = MultipartEncoder(files)
+                resp = _requests.post(end_point,
+                                      data=multipart_encoded,
+                                      headers={
+                                          'Authorization':
+                                          self.token,
+                                          'Content-Type':
+                                          multipart_encoded.content_type
+                                      })
 
             if resp.status_code != 200:
                 raise ValueError('Upload file {} failed.\nError Code: {}\n{}\n'
