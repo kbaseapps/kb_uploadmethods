@@ -63,8 +63,20 @@
           "display": "Finished Isolate"
         },
         {
+          "value": "fungi",
+          "display": "Fungi"
+        },
+        {
           "value": "mag",
           "display": "Metagenome-assembled genome (MAG)"
+        },
+        {
+          "value": "other Eukaryote",
+          "display": "Other Eukaryote"
+        },
+        {
+          "value": "plant",
+          "display": "Plant"
         },
         {
           "value": "sag",
@@ -109,6 +121,10 @@
         {
           "value": "Ensembl user",
           "display": "Ensembl"
+        },
+        {
+          "value": "JGI",
+          "display": "JGI"
         },
         {
           "value": "Other",
