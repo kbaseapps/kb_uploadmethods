@@ -48,11 +48,11 @@ parameters :
         long-hint  : Provide the scientific name of the species, e.g., "Escherichia coli". This is important for taxonomy lookup.
 
     source :
-        ui-name : Source of the GenBank File
+        ui-name : Source of the GFF/Fasta File
         short-hint : |
-            Identify the source of the GenBank File. (If Ensembl, the "gene" feature types will use the "gene" field as the ID; otherwise the "locus_tag" field is used.)
+            Identify the source of the GFF/Fasta File. (If not one of the listed options, choose other)
         long-hint : |
-            Identify the source of the GenBank File. (If Ensembl, the "gene" feature types will use the "gene" field as the ID; otherwise the "locus_tag" field is used.)
+            Identify the source of the GFF/Fasta File. (If not one of the listed options, choose other)
 
     release :
         ui-name : Release or Version of the Source Data
