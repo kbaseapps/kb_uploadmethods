@@ -186,7 +186,7 @@
           "target_property": "single_genome"
         },
         {
-          "constant_value": "0",
+          "constant_value": 0,
           "target_property": "interleaved"
         },
         {
