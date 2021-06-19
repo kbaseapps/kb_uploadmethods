@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.48**
+Fix `import_fastq_noninterleaved...` app always specifying `interleaved=true`
+
 **1.0.47**
 Add support for uploading files > 2GB to the staging service
 
