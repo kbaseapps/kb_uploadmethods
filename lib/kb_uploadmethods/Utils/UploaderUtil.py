@@ -6,6 +6,7 @@ import uuid
 from configparser import SafeConfigParser
 
 import requests as _requests
+from requests.exceptions import HTTPError
 
 from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.KBaseReportClient import KBaseReport
@@ -23,6 +24,7 @@ class UploaderUtil:
         self.callback_url = config['SDK_CALLBACK_URL']
         self.token = config['KB_AUTH_TOKEN']
         self.scratch = config['scratch']
+        self.re_url = config['relation-engine-url']
 
     def upload_fastq_file(self, params):
         """
@@ -177,6 +179,42 @@ class UploaderUtil:
         # check for file URL parameters
         if upload_file_URL:
             self._validate_upload_file_URL_availability(params)
+
+    def get_scientific_name_for_NCBI_taxon(self, tax_id, time_stamp):
+        """
+        # Get the scientific name for a NCBI taxon.
+        #   Takes two arguments:
+        #     -The taxon ID
+        #     -The timestamp to send to the RE in milliseconds since the epoch. This will determine
+        #        which version of the NCBI tree is queried.
+        """
+        log(f'In get_scientific_name_for_NCBI_taxon!')
+
+        if tax_id is None:
+            raise ValueError('Error: A valid taxon id is required')
+        if time_stamp is None:
+            raise ValueError('Error: A valid timestamp is required')
+
+        lookup_url = self.re_url + '/api/v1/query_results'
+        params = {'stored_query': 'ncbi_fetch_taxon'}
+        headers = {'Authorization': self.token,
+                   'Content-Type': 'application/json'}
+        payload = json.dumps({'ts': time_stamp, 'id': str(tax_id)})
+
+        try:
+            resp  = _requests.post(lookup_url, headers=headers, params=params, data=payload)
+            resp.raise_for_status()
+            # Fetch the JSON content
+            json_response = resp.json()
+        except HTTPError as http_err:
+            raise ValueError(f'HTTP error occurred: {http_err}')
+        except Exception as err:
+            raise ValueError(f'Other error occurred: {err}')
+
+        if (not json_response['count']):
+            raise ValueError(f'No result from Relation Engine for NCBI taxonomy ID {tax_id}')
+        else:
+            return json_response['results'][0]['scientific_name']
 
     def _validate_single_end_advanced_params(self, params):
         """

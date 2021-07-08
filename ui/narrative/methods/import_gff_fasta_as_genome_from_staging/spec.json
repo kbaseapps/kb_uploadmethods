@@ -1,6 +1,6 @@
 {
   "ver" : "1.0.0",
-  "authors" : ["seaver","tgu2"],
+  "authors" : ["seaver","tgu2","qzhang"],
   "contact" : "http://kbase.us/contact-us/",
   "visble" : true,
   "categories" : [ "inactive","assembly","upload" ],
@@ -98,12 +98,29 @@
     },
     {
       "id" : "scientific_name",
-      "optional" : true,
+      "optional" : false,
       "advanced" : false,
       "allow_multiple" : false,
-      "default_values" : [ "unknown_taxon" ],
-      "field_type" : "text",
-      "text_options" : {}
+      "default_values" : [ "" ],
+      "field_type" : "dynamic_dropdown",
+      "dynamic_dropdown_options": {
+          "data_source": "custom",
+          "service_function": "taxonomy_re_api.search_species",
+          "service_version": "dev",
+          "service_params": [
+              {
+                  "search_text": "prefix:{{dynamic_dropdown_input}}",
+                  "ns": "ncbi_taxonomy",
+                  "limit": 20
+              }
+          ],
+          "query_on_empty_input": 0,
+          "result_array_index": 0,
+          "path_to_selection_items": ["results"],
+          "selection_id": "ncbi_taxon_id",
+          "description_template": "NCBI Tax ID {{ncbi_taxon_id}}:&nbsp<strong>{{scientific_name}}</strong>",
+          "multiselection": false
+      }
     },
     {
       "id" : "source",
@@ -113,24 +130,25 @@
       "default_values" : [ "Other" ],
       "field_type" : "dropdown",
       "dropdown_options":{
-      "options": [
-        {
-          "value": "RefSeq user",
-          "display": "RefSeq"
-        },
-        {
-          "value": "Ensembl user",
-          "display": "Ensembl"
-        },
-        {
-          "value": "JGI",
-          "display": "JGI"
-        },
-        {
-          "value": "Other",
-          "display": "Other"
-        }
-      ]}
+        "options": [
+          {
+            "value": "RefSeq user",
+            "display": "RefSeq"
+          },
+          {
+            "value": "Ensembl user",
+            "display": "Ensembl"
+          },
+          {
+            "value": "JGI",
+            "display": "JGI"
+          },
+          {
+            "value": "Other",
+            "display": "Other"
+          }
+        ]
+      }
     },
     {
       "id" : "taxon_wsname",

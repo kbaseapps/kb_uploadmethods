@@ -187,6 +187,12 @@ class kb_uploadmethods:
                     else:
                         params[key] = value.strip()
 
+        # lookup for scientific_name from the Relational Engine query service
+        uploader_util = UploaderUtil(self.config)
+        if params.get('ncbi_taxon_id') and params.get('relation_engine_timestamp_ms'):
+            params['scientific_name'] = uploader_util.get_scientific_name_for_NCBI_taxon(
+                params['ncbi_taxon_id'], params['relation_engine_timestamp_ms']);
+
         uploader = ImportGFFFastaUtil(self.config)
         returnVal = uploader.import_gff_fasta_from_staging(params)
         # reuse logic from genbank report rather than replicate
