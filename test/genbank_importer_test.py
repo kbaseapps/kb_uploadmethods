@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os  # noqa: F401
+import re
 import shutil
 import time
 import unittest
@@ -144,10 +145,13 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         gbk_path = 'small_genbank.gbff'
         ws_obj_name = 'MyGenome'
+        expected_scientific_name = 'Nitrospirillum amazonense'
 
         params = {
           'staging_file_subdir_path': gbk_path,
           'genome_name': ws_obj_name,
+          'ncbi_taxon_id': '28077',
+          'relation_engine_timestamp_ms': 1625695904755,
           'workspace_name': self.getWsName(),
           'source': 'RefSeq'
         }
@@ -157,3 +161,16 @@ class kb_uploadmethodsTest(unittest.TestCase):
         self.assertTrue('genome_info' in ref[0])
         self.assertTrue('report_ref' in ref[0])
         self.assertTrue('report_name' in ref[0])
+
+        genome_info = ref[0]['genome_info']
+        print(genome_info)
+        self.assertEqual(genome_info[10]['Domain'], 'Unknown')
+        self.assertEqual(genome_info[10]['Genetic code'], '11')
+        self.assertEqual(genome_info[10]['Name'], expected_scientific_name)
+        self.assertEqual(genome_info[10]['Source'], 'RefSeq')
+        self.assertEqual(genome_info[10]['Source ID'], 'NC_000913')
+        self.assertTrue('GC content' in genome_info[10])
+        self.assertTrue(re.match("^\d+?\.\d+?$", genome_info[10]['GC content']) is not None)
+        self.assertTrue('Size' in genome_info[10])
+        self.assertTrue(genome_info[10]['Size'].isdigit())
+        self.assertEqual(genome_info[10]['Taxonomy'], 'Unconfirmed Organism')

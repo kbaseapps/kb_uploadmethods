@@ -159,15 +159,6 @@
       "field_type" : "text",
       "text_options" : {}
     },
-    {
-      "id" : "taxon_id",
-      "optional" : true,
-      "advanced" : true,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
-    },
     {  
       "id": "release",
       "optional": true,
@@ -240,10 +231,6 @@
         {
           "input_parameter": "taxon_wsname",
           "target_property": "taxon_wsname"
-        },
-        {
-          "input_parameter": "taxon_id",
-          "target_property": "taxon_id"
         },
         {
           "input_parameter": "release",

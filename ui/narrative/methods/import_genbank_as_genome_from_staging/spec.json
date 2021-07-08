@@ -115,21 +115,29 @@
     },
     {
       "id" : "scientific_name",
-      "optional" : true,
-      "advanced" : true,
+      "optional" : false,
+      "advanced" : false,
       "allow_multiple" : false,
       "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
-    },
-    {
-      "id" : "taxon_id",
-      "optional" : true,
-      "advanced" : true,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
+      "field_type" : "dynamic_dropdown",
+      "dynamic_dropdown_options": {
+          "data_source": "custom",
+          "service_function": "taxonomy_re_api.search_species",
+          "service_version": "dev",
+          "service_params": [
+              {
+                  "search_text": "prefix:{{dynamic_dropdown_input}}",
+                  "ns": "ncbi_taxonomy",
+                  "limit": 20
+              }
+          ],
+          "query_on_empty_input": 0,
+          "result_array_index": 0,
+          "path_to_selection_items": ["results"],
+          "selection_id": "ncbi_taxon_id",
+          "description_template": "NCBI Tax ID {{ncbi_taxon_id}}:&nbsp<strong>{{scientific_name}}</strong>",
+          "multiselection": false
+      }
     },
     {
       "id": "generate_ids_if_needed",
@@ -193,10 +201,6 @@
         {
           "input_parameter": "scientific_name",
           "target_property": "scientific_name"
-        },
-        {
-          "input_parameter": "taxon_id",
-          "target_property": "taxon_id"
         },
         {
           "input_parameter": "generate_ids_if_needed",

@@ -191,7 +191,7 @@ class kb_uploadmethods:
         uploader_util = UploaderUtil(self.config)
         if params.get('ncbi_taxon_id') and params.get('relation_engine_timestamp_ms'):
             params['scientific_name'] = uploader_util.get_scientific_name_for_NCBI_taxon(
-                params['ncbi_taxon_id'], params['relation_engine_timestamp_ms']);
+                params['ncbi_taxon_id'], params['relation_engine_timestamp_ms'])
 
         uploader = ImportGFFFastaUtil(self.config)
         returnVal = uploader.import_gff_fasta_from_staging(params)
@@ -496,6 +496,13 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_genbank_from_staging
+
+        # lookup for scientific_name from the Relational Engine query service
+        uploader_util = UploaderUtil(self.config)
+        if params.get('ncbi_taxon_id') and params.get('relation_engine_timestamp_ms'):
+            params['scientific_name'] = uploader_util.get_scientific_name_for_NCBI_taxon(
+                params['ncbi_taxon_id'], params['relation_engine_timestamp_ms'])
+
         for key, value in list(params.items()):
             if isinstance(value, str):
                 params[key] = value.strip()
