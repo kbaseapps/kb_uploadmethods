@@ -188,7 +188,7 @@ class UploaderUtil:
         #     -The timestamp to send to the RE in milliseconds since the epoch. This will determine
         #        which version of the NCBI tree is queried.
         """
-        log(f'In get_scientific_name_for_NCBI_taxon!')
+        log(f'{"In get_scientific_name_for_NCBI_taxon!"}')
 
         if tax_id is None:
             raise ValueError('Error: A valid taxon id is required')
