@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os  # noqa: F401
+import re
 import shutil
 import time
 import unittest
@@ -144,16 +145,37 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         gbk_path = 'small_genbank.gbff'
         ws_obj_name = 'MyGenome'
+        expected_scientific_name = 'Escherichia coli str. K-12 substr. MG1655'
 
         params = {
           'staging_file_subdir_path': gbk_path,
           'genome_name': ws_obj_name,
+          'ncbi_taxon_id': '28077',
+          'relation_engine_timestamp_ms': 1625695904755,
           'workspace_name': self.getWsName(),
           'source': 'RefSeq'
         }
 
         ref = self.getImpl().import_genbank_from_staging(self.getContext(), params)
+
+        self.assertEqual(params['taxon_id'], params['ncbi_taxon_id'])
+        self.assertEqual(params['time_stamp'], params['relation_engine_timestamp_ms'])
+
         self.assertTrue('genome_ref' in ref[0])
         self.assertTrue('genome_info' in ref[0])
         self.assertTrue('report_ref' in ref[0])
         self.assertTrue('report_name' in ref[0])
+
+        genome_info = ref[0]['genome_info']
+        self.assertEqual(genome_info[10]['Domain'], 'Bacteria')
+        self.assertEqual(genome_info[10]['Genetic code'], '11')
+        self.assertEqual(genome_info[10]['Name'], expected_scientific_name)
+        self.assertEqual(genome_info[10]['Source'], 'RefSeq')
+        self.assertEqual(genome_info[10]['Source ID'], 'NC_000913')
+        self.assertTrue('GC content' in genome_info[10])
+        self.assertTrue(re.match("^\d+?\.\d+?$", genome_info[10]['GC content']) is not None)
+        self.assertTrue('Size' in genome_info[10])
+        self.assertTrue(genome_info[10]['Size'].isdigit())
+        self.assertIn('Bacteria', genome_info[10]['Taxonomy'])
+        self.assertIn('Nitrospirillum', genome_info[10]['Taxonomy'])
+

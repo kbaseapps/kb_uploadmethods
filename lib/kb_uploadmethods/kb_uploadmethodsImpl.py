@@ -176,6 +176,11 @@ class kb_uploadmethods:
         print('--->\nRunning uploadmethods.upload_fasta_gff_file\nparams:')
         print((json.dumps(params, indent=1)))
 
+        if params.get('ncbi_taxon_id'):
+            params['taxon_id'] = params['ncbi_taxon_id']
+        if params.get('relation_engine_timestamp_ms'):
+            params['time_stamp'] = params['relation_engine_timestamp_ms']
+
         for key in list(params.keys()):
             value = params[key]
             if value is None:
@@ -490,6 +495,12 @@ class kb_uploadmethods:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_genbank_from_staging
+
+        if params.get('ncbi_taxon_id'):
+            params['taxon_id'] = params['ncbi_taxon_id']
+        if params.get('relation_engine_timestamp_ms'):
+            params['time_stamp'] = params['relation_engine_timestamp_ms']
+
         for key, value in list(params.items()):
             if isinstance(value, str):
                 params[key] = value.strip()

@@ -133,10 +133,11 @@ class kb_uploadmethodsTest(unittest.TestCase):
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
     def test_upload_fasta_gff_file(self, download_staging_file, update_staging_service):
 
-        fasta_file = "Test_v1.0.fa.gz"
-        gff_file = "Test_v1.0.gene.gff3.gz"
+        fasta_file = 'Test_v1.0.fa.gz'
+        gff_file = 'Test_v1.0.gene.gff3.gz'
         ws_obj_name = 'MyGenome'
-        scientific_name = "Populus trichocarpa"
+        scientific_name = 'Populus trichocarpa'
+        expected_scientific_name = 'Nitrospirillum amazonense'
 
         params = {
             "fasta_file": fasta_file,
@@ -144,6 +145,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
             "workspace_name": self.getWsName(),
             "genome_name": ws_obj_name,
             "scientific_name": scientific_name,
+            "ncbi_taxon_id": "28077",
+            "relation_engine_timestamp_ms": 1625695904755,
             "genetic_code": None,
             "source": None,
             "taxon_wsname": None,
@@ -153,18 +156,22 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         ref = self.getImpl().upload_fasta_gff_file(self.getContext(), params)
 
+        self.assertEqual(params['taxon_id'], params['ncbi_taxon_id'])
+        self.assertEqual(params['time_stamp'], params['relation_engine_timestamp_ms'])
+
         self.assertTrue('genome_ref' in ref[0])
         self.assertTrue('genome_info' in ref[0])
         self.assertTrue('report_ref' in ref[0])
         self.assertTrue('report_name' in ref[0])
 
         genome_info = ref[0]['genome_info']
-        self.assertEqual(genome_info[10]['Domain'], 'Unknown')
+        self.assertEqual(genome_info[10]['Domain'], 'Bacteria')
         self.assertEqual(genome_info[10]['Genetic code'], '11')
-        self.assertEqual(genome_info[10]['Name'], 'Populus trichocarpa')
+        self.assertEqual(genome_info[10]['Name'], expected_scientific_name)
         self.assertEqual(genome_info[10]['Source'], 'User')
         self.assertTrue('GC content' in genome_info[10])
         self.assertTrue(re.match("^\d+?\.\d+?$", genome_info[10]['GC content']) is not None)
         self.assertTrue('Size' in genome_info[10])
         self.assertTrue(genome_info[10]['Size'].isdigit())
-        self.assertEqual(genome_info[10]['Taxonomy'], 'Unconfirmed Organism')
+        self.assertIn('Bacteria', genome_info[10]['Taxonomy'])
+        self.assertIn('Nitrospirillum', genome_info[10]['Taxonomy'])
