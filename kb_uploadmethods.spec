@@ -301,8 +301,6 @@ module kb_uploadmethods {
 
     release - Release or version number of the data
         per example Ensembl has numbered releases of all their data: Release 31
-    taxon_id - if defined, will try to link the Genome to the specified
-        taxonomy id in lieu of performing the lookup during upload
     generate_ids_if_needed - If field used for feature id is not there,
         generate ids (default behavior is raising an exception)
     generate_missing_genes - Generate gene feature for CDSs that do not have
