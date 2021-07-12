@@ -200,11 +200,7 @@
         },
         {
           "input_parameter": "scientific_name",
-          "target_property": "ncbi_taxon_id"
-        },
-        {
-          "narrative_system_variable": "timestamp_epoch_ms",
-          "target_property": "relation_engine_timestamp_ms"
+          "target_property": "taxon_id"
         },
         {
           "input_parameter": "generate_ids_if_needed",

@@ -38,9 +38,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.0.48"
+    VERSION = "1.0.49"
     GIT_URL = "https://github.com/kbaseapps/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "6b3b13149c785420a98c7e3c196e4528070b24f3"
+    GIT_COMMIT_HASH = "0394ebd89ab7cf02c75db382f8022bb02583031a"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -148,18 +148,15 @@ class kb_uploadmethods:
            workspace name/ID of the object For staging area: fasta_file:
            fasta file containing assembled contigs/chromosomes gff_file: gff
            file containing predicted gene models and corresponding features
-           Optional params: ncbi_taxon_id - the numeric ID of the NCBI taxon
-           to which this genome belongs. If this is included scientific_name
-           is ignored. relation_engine_timestamp_ms - the timestamp to send
-           to the Relation Engine when looking up taxon information in
-           milliseconds since the epoch. scientific_name - the scientific
-           name of the genome. Overridden by ncbi_taxon_id. source: Source Of
-           The GFF File. Default to 'User' taxon_wsname - where the reference
-           taxons are. Default to 'ReferenceTaxons' taxon_id - if defined,
-           will try to link the Genome to the specified taxonomy id in lieu
-           of performing the lookup during upload release: Release Or Version
-           Of The Source Data genetic_code: Genetic Code For The Organism
-           type: 'Reference', 'User upload', 'Representative') -> structure:
+           Optional params: scientific_name - the scientific name of the
+           genome. Overridden by NCBI taxon id. taxon_id - the numeric ID of
+           the NCBI taxon to which this genome belongs. If defined, will try
+           to link the Genome to the specified taxonomy id in lieu of
+           performing the lookup during upload source: Source Of The GFF
+           File. Default to 'User' taxon_wsname - where the reference taxons
+           are. Default to 'ReferenceTaxons' release: Release Or Version Of
+           The Source Data genetic_code: Genetic Code For The Organism type:
+           'Reference', 'User upload', 'Representative') -> structure:
            parameter "fasta_file" of String, parameter "gff_file" of String,
            parameter "genome_name" of String, parameter "workspace_name" of
            type "workspace_name" (workspace name of the object), parameter
@@ -167,9 +164,7 @@ class kb_uploadmethods:
            parameter "source" of String, parameter "taxon_wsname" of String,
            parameter "taxon_id" of String, parameter "release" of String,
            parameter "genetic_code" of Long, parameter "type" of String,
-           parameter "generate_missing_genes" of String, parameter
-           "ncbi_taxon_id" of Long, parameter "relation_engine_timestamp_ms"
-           of Long
+           parameter "generate_missing_genes" of String
         :returns: instance of type "UploadFastaGFFMethodResult" -> structure:
            parameter "genome_ref" of String, parameter "genome_info" of
            String, parameter "report_name" of type "report_name", parameter
@@ -181,11 +176,6 @@ class kb_uploadmethods:
 
         print('--->\nRunning uploadmethods.upload_fasta_gff_file\nparams:')
         print((json.dumps(params, indent=1)))
-
-        if params.get('ncbi_taxon_id'):
-            params['taxon_id'] = params['ncbi_taxon_id']
-        if params.get('relation_engine_timestamp_ms'):
-            params['time_stamp'] = params['relation_engine_timestamp_ms']
 
         for key in list(params.keys()):
             value = params[key]
@@ -477,41 +467,33 @@ class kb_uploadmethods:
            genome_name - becomes the name of the object workspace_name - the
            name of the workspace it gets saved to. source - Source of the
            file typically something like RefSeq or Ensembl optional params:
-           ncbi_taxon_id - the numeric ID of the NCBI taxon to which this
-           genome belongs. If this is included scientific_name is ignored.
-           relation_engine_timestamp_ms - the timestamp to send to the
-           Relation Engine when looking up taxon information in milliseconds
-           since the epoch. scientific_name - the scientific name of the
-           genome. Overridden by ncbi_taxon_id. release - Release or version
-           number of the data per example Ensembl has numbered releases of
-           all their data: Release 31 taxon_id - if defined, will try to link
-           the Genome to the specified taxonomy id in lieu of performing the
-           lookup during upload generate_ids_if_needed - If field used for
-           feature id is not there, generate ids (default behavior is raising
-           an exception) generate_missing_genes - Generate gene feature for
-           CDSs that do not have a parent in file genetic_code - Genetic code
-           of organism. Overwrites determined GC from taxon object type -
-           Reference, Representative or User upload) -> structure: parameter
+           scientific_name - the scientific name of the genome. Overridden by
+           NCBI taxon id. taxon_id - the numeric ID of the NCBI taxon to
+           which this genome belongs. If defined, will try to link the Genome
+           to the specified taxonomy id in lieu of performing the lookup
+           during upload release - Release or version number of the data per
+           example Ensembl has numbered releases of all their data: Release
+           31 taxon_id - if defined, will try to link the Genome to the
+           specified taxonomy id in lieu of performing the lookup during
+           upload generate_ids_if_needed - If field used for feature id is
+           not there, generate ids (default behavior is raising an exception)
+           generate_missing_genes - Generate gene feature for CDSs that do
+           not have a parent in file genetic_code - Genetic code of organism.
+           Overwrites determined GC from taxon object type - Reference,
+           Representative or User upload) -> structure: parameter
            "staging_file_subdir_path" of String, parameter "genome_name" of
            String, parameter "workspace_name" of String, parameter "source"
            of String, parameter "genome_type" of String, parameter "release"
            of String, parameter "genetic_code" of Long, parameter "type" of
            String, parameter "scientific_name" of String, parameter
            "taxon_id" of String, parameter "generate_ids_if_needed" of
-           String, parameter "generate_missing_genes" of String, parameter
-           "ncbi_taxon_id" of Long, parameter "relation_engine_timestamp_ms"
-           of Long
+           String, parameter "generate_missing_genes" of String
         :returns: instance of type "GenomeSaveResult" -> structure: parameter
            "genome_ref" of String
         """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN import_genbank_from_staging
-
-        if params.get('ncbi_taxon_id'):
-            params['taxon_id'] = params['ncbi_taxon_id']
-        if params.get('relation_engine_timestamp_ms'):
-            params['time_stamp'] = params['relation_engine_timestamp_ms']
 
         for key, value in list(params.items()):
             if isinstance(value, str):

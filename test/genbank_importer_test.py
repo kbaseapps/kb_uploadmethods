@@ -150,16 +150,12 @@ class kb_uploadmethodsTest(unittest.TestCase):
         params = {
           'staging_file_subdir_path': gbk_path,
           'genome_name': ws_obj_name,
-          'ncbi_taxon_id': '28077',
-          'relation_engine_timestamp_ms': 1625695904755,
+          'taxon_id': '28077',
           'workspace_name': self.getWsName(),
           'source': 'RefSeq'
         }
 
         ref = self.getImpl().import_genbank_from_staging(self.getContext(), params)
-
-        self.assertEqual(params['taxon_id'], params['ncbi_taxon_id'])
-        self.assertEqual(params['time_stamp'], params['relation_engine_timestamp_ms'])
 
         self.assertTrue('genome_ref' in ref[0])
         self.assertTrue('genome_info' in ref[0])

@@ -145,8 +145,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
             "workspace_name": self.getWsName(),
             "genome_name": ws_obj_name,
             "scientific_name": scientific_name,
-            "ncbi_taxon_id": "28077",
-            "relation_engine_timestamp_ms": 1625695904755,
+            "taxon_id": "28077",
             "genetic_code": None,
             "source": None,
             "taxon_wsname": None,
@@ -155,9 +154,6 @@ class kb_uploadmethodsTest(unittest.TestCase):
         }
 
         ref = self.getImpl().upload_fasta_gff_file(self.getContext(), params)
-
-        self.assertEqual(params['taxon_id'], params['ncbi_taxon_id'])
-        self.assertEqual(params['time_stamp'], params['relation_engine_timestamp_ms'])
 
         self.assertTrue('genome_ref' in ref[0])
         self.assertTrue('genome_info' in ref[0])
