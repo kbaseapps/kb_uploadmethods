@@ -100,7 +100,12 @@ module kb_uploadmethods {
     gff_file: gff file containing predicted gene models and corresponding features
 
     Optional params:
-    scientific_name: proper name for species, key for taxonomy lookup. Default to 'unknown_taxon'
+    ncbi_taxon_id - the numeric ID of the NCBI taxon to which this genome belongs. If this
+		is included scientific_name is ignored.
+    relation_engine_timestamp_ms - the timestamp to send to the Relation Engine when looking
+		up taxon information in milliseconds since the epoch.
+    scientific_name - the scientific name of the genome. Overridden by ncbi_taxon_id.
+
     source: Source Of The GFF File. Default to 'User'
     taxon_wsname - where the reference taxons are. Default to 'ReferenceTaxons'
     taxon_id - if defined, will try to link the Genome to the specified
@@ -123,7 +128,10 @@ module kb_uploadmethods {
     string release;
     int    genetic_code;
     string type;
+
     string generate_missing_genes;
+    int ncbi_taxon_id;
+    int relation_engine_timestamp_ms;
   } UploadFastaGFFMethodParams;
 
   typedef structure {
@@ -291,10 +299,13 @@ module kb_uploadmethods {
     source - Source of the file typically something like RefSeq or Ensembl
 
     optional params:
+    ncbi_taxon_id - the numeric ID of the NCBI taxon to which this genome belongs. If this
+		is included scientific_name is ignored.
+    relation_engine_timestamp_ms - the timestamp to send to the Relation Engine when looking
+		up taxon information in milliseconds since the epoch.
+    scientific_name - the scientific name of the genome. Overridden by ncbi_taxon_id.
     release - Release or version number of the data
         per example Ensembl has numbered releases of all their data: Release 31
-    scientific_name - will be used to set the scientific name of the genome
-        and link to a taxon
     taxon_id - if defined, will try to link the Genome to the specified
         taxonomy id in lieu of performing the lookup during upload
     generate_ids_if_needed - If field used for feature id is not there,
@@ -319,6 +330,8 @@ module kb_uploadmethods {
     string taxon_id;
     string generate_ids_if_needed;
     string generate_missing_genes;
+    int ncbi_taxon_id;
+    int relation_engine_timestamp_ms;
   } GenbankToGenomeParams;
 
   typedef structure {

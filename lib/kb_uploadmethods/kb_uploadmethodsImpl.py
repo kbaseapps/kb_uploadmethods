@@ -38,9 +38,9 @@ class kb_uploadmethods:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.0.44"
-    GIT_URL = "git@github.com:Tianhao-Gu/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "25e7a896377f5ec50bd15a27ade9f279cb16cd0b"
+    VERSION = "1.0.48"
+    GIT_URL = "https://github.com/kbaseapps/kb_uploadmethods.git"
+    GIT_COMMIT_HASH = "6b3b13149c785420a98c7e3c196e4528070b24f3"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -148,9 +148,13 @@ class kb_uploadmethods:
            workspace name/ID of the object For staging area: fasta_file:
            fasta file containing assembled contigs/chromosomes gff_file: gff
            file containing predicted gene models and corresponding features
-           Optional params: scientific_name: proper name for species, key for
-           taxonomy lookup. Default to 'unknown_taxon' source: Source Of The
-           GFF File. Default to 'User' taxon_wsname - where the reference
+           Optional params: ncbi_taxon_id - the numeric ID of the NCBI taxon
+           to which this genome belongs. If this is included scientific_name
+           is ignored. relation_engine_timestamp_ms - the timestamp to send
+           to the Relation Engine when looking up taxon information in
+           milliseconds since the epoch. scientific_name - the scientific
+           name of the genome. Overridden by ncbi_taxon_id. source: Source Of
+           The GFF File. Default to 'User' taxon_wsname - where the reference
            taxons are. Default to 'ReferenceTaxons' taxon_id - if defined,
            will try to link the Genome to the specified taxonomy id in lieu
            of performing the lookup during upload release: Release Or Version
@@ -163,7 +167,9 @@ class kb_uploadmethods:
            parameter "source" of String, parameter "taxon_wsname" of String,
            parameter "taxon_id" of String, parameter "release" of String,
            parameter "genetic_code" of Long, parameter "type" of String,
-           parameter "generate_missing_genes" of String
+           parameter "generate_missing_genes" of String, parameter
+           "ncbi_taxon_id" of Long, parameter "relation_engine_timestamp_ms"
+           of Long
         :returns: instance of type "UploadFastaGFFMethodResult" -> structure:
            parameter "genome_ref" of String, parameter "genome_info" of
            String, parameter "report_name" of type "report_name", parameter
@@ -471,10 +477,14 @@ class kb_uploadmethods:
            genome_name - becomes the name of the object workspace_name - the
            name of the workspace it gets saved to. source - Source of the
            file typically something like RefSeq or Ensembl optional params:
-           release - Release or version number of the data per example
-           Ensembl has numbered releases of all their data: Release 31
-           scientific_name - will be used to set the scientific name of the
-           genome and link to a taxon taxon_id - if defined, will try to link
+           ncbi_taxon_id - the numeric ID of the NCBI taxon to which this
+           genome belongs. If this is included scientific_name is ignored.
+           relation_engine_timestamp_ms - the timestamp to send to the
+           Relation Engine when looking up taxon information in milliseconds
+           since the epoch. scientific_name - the scientific name of the
+           genome. Overridden by ncbi_taxon_id. release - Release or version
+           number of the data per example Ensembl has numbered releases of
+           all their data: Release 31 taxon_id - if defined, will try to link
            the Genome to the specified taxonomy id in lieu of performing the
            lookup during upload generate_ids_if_needed - If field used for
            feature id is not there, generate ids (default behavior is raising
@@ -488,7 +498,9 @@ class kb_uploadmethods:
            of String, parameter "genetic_code" of Long, parameter "type" of
            String, parameter "scientific_name" of String, parameter
            "taxon_id" of String, parameter "generate_ids_if_needed" of
-           String, parameter "generate_missing_genes" of String
+           String, parameter "generate_missing_genes" of String, parameter
+           "ncbi_taxon_id" of Long, parameter "relation_engine_timestamp_ms"
+           of Long
         :returns: instance of type "GenomeSaveResult" -> structure: parameter
            "genome_ref" of String
         """

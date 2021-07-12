@@ -221,7 +221,11 @@
         },
         {
           "input_parameter": "scientific_name",
-          "target_property": "scientific_name"
+          "target_property": "ncbi_taxon_id"
+        },
+        {
+          "narrative_system_variable": "timestamp_epoch_ms",
+          "target_property": "relation_engine_timestamp_ms"
         },
         {
           "input_parameter": "source",
