@@ -100,7 +100,7 @@ module kb_uploadmethods {
     gff_file: gff file containing predicted gene models and corresponding features
 
     Optional params:
-    scientific_name - the scientific name of the genome. Overridden by NCBI taxon id.
+    scientific_name - the scientific name of the genome.
     taxon_id - the numeric ID of the NCBI taxon to which this genome belongs.
                If defined, will try to link the Genome to the specified
                taxonomy id in lieu of performing the lookup during upload
@@ -294,7 +294,7 @@ module kb_uploadmethods {
     source - Source of the file typically something like RefSeq or Ensembl
 
     optional params:
-    scientific_name - the scientific name of the genome. Overridden by NCBI taxon id.
+    scientific_name - the scientific name of the genome.
     taxon_id - the numeric ID of the NCBI taxon to which this genome belongs.
                If defined, will try to link the Genome to the specified
                taxonomy id in lieu of performing the lookup during upload

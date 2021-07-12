@@ -40,7 +40,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "1.0.49"
     GIT_URL = "https://github.com/kbaseapps/kb_uploadmethods.git"
-    GIT_COMMIT_HASH = "0394ebd89ab7cf02c75db382f8022bb02583031a"
+    GIT_COMMIT_HASH = "e5b5773522c0834eeeb99fed3411617d59607c9a"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -149,17 +149,17 @@ class kb_uploadmethods:
            fasta file containing assembled contigs/chromosomes gff_file: gff
            file containing predicted gene models and corresponding features
            Optional params: scientific_name - the scientific name of the
-           genome. Overridden by NCBI taxon id. taxon_id - the numeric ID of
-           the NCBI taxon to which this genome belongs. If defined, will try
-           to link the Genome to the specified taxonomy id in lieu of
-           performing the lookup during upload source: Source Of The GFF
-           File. Default to 'User' taxon_wsname - where the reference taxons
-           are. Default to 'ReferenceTaxons' release: Release Or Version Of
-           The Source Data genetic_code: Genetic Code For The Organism type:
-           'Reference', 'User upload', 'Representative') -> structure:
-           parameter "fasta_file" of String, parameter "gff_file" of String,
-           parameter "genome_name" of String, parameter "workspace_name" of
-           type "workspace_name" (workspace name of the object), parameter
+           genome. taxon_id - the numeric ID of the NCBI taxon to which this
+           genome belongs. If defined, will try to link the Genome to the
+           specified taxonomy id in lieu of performing the lookup during
+           upload source: Source Of The GFF File. Default to 'User'
+           taxon_wsname - where the reference taxons are. Default to
+           'ReferenceTaxons' release: Release Or Version Of The Source Data
+           genetic_code: Genetic Code For The Organism type: 'Reference',
+           'User upload', 'Representative') -> structure: parameter
+           "fasta_file" of String, parameter "gff_file" of String, parameter
+           "genome_name" of String, parameter "workspace_name" of type
+           "workspace_name" (workspace name of the object), parameter
            "genome_type" of String, parameter "scientific_name" of String,
            parameter "source" of String, parameter "taxon_wsname" of String,
            parameter "taxon_id" of String, parameter "release" of String,
@@ -467,27 +467,25 @@ class kb_uploadmethods:
            genome_name - becomes the name of the object workspace_name - the
            name of the workspace it gets saved to. source - Source of the
            file typically something like RefSeq or Ensembl optional params:
-           scientific_name - the scientific name of the genome. Overridden by
-           NCBI taxon id. taxon_id - the numeric ID of the NCBI taxon to
-           which this genome belongs. If defined, will try to link the Genome
-           to the specified taxonomy id in lieu of performing the lookup
-           during upload release - Release or version number of the data per
-           example Ensembl has numbered releases of all their data: Release
-           31 taxon_id - if defined, will try to link the Genome to the
-           specified taxonomy id in lieu of performing the lookup during
-           upload generate_ids_if_needed - If field used for feature id is
-           not there, generate ids (default behavior is raising an exception)
-           generate_missing_genes - Generate gene feature for CDSs that do
-           not have a parent in file genetic_code - Genetic code of organism.
-           Overwrites determined GC from taxon object type - Reference,
-           Representative or User upload) -> structure: parameter
-           "staging_file_subdir_path" of String, parameter "genome_name" of
-           String, parameter "workspace_name" of String, parameter "source"
-           of String, parameter "genome_type" of String, parameter "release"
-           of String, parameter "genetic_code" of Long, parameter "type" of
-           String, parameter "scientific_name" of String, parameter
-           "taxon_id" of String, parameter "generate_ids_if_needed" of
-           String, parameter "generate_missing_genes" of String
+           scientific_name - the scientific name of the genome. taxon_id -
+           the numeric ID of the NCBI taxon to which this genome belongs. If
+           defined, will try to link the Genome to the specified taxonomy id
+           in lieu of performing the lookup during upload release - Release
+           or version number of the data per example Ensembl has numbered
+           releases of all their data: Release 31 generate_ids_if_needed - If
+           field used for feature id is not there, generate ids (default
+           behavior is raising an exception) generate_missing_genes -
+           Generate gene feature for CDSs that do not have a parent in file
+           genetic_code - Genetic code of organism. Overwrites determined GC
+           from taxon object type - Reference, Representative or User upload)
+           -> structure: parameter "staging_file_subdir_path" of String,
+           parameter "genome_name" of String, parameter "workspace_name" of
+           String, parameter "source" of String, parameter "genome_type" of
+           String, parameter "release" of String, parameter "genetic_code" of
+           Long, parameter "type" of String, parameter "scientific_name" of
+           String, parameter "taxon_id" of String, parameter
+           "generate_ids_if_needed" of String, parameter
+           "generate_missing_genes" of String
         :returns: instance of type "GenomeSaveResult" -> structure: parameter
            "genome_ref" of String
         """
