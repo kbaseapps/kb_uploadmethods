@@ -1,7 +1,7 @@
 ###Release Notes
 
 **1.0.50**
-Require at least one input file for SRA and non/interleaved reads
+Require at least one input file for SRA and non/interleaved reads, set valid_ws_types where missing
 
 **1.0.49**
 Add dynamic dropdown boxes for scientific_name ui input to address conflicting scientific_name/taxon_id issues. The dynamic dropdown will connect to the re_api_search service to match the ncbi_taxon_id for the scientific_name user types into the input box.
