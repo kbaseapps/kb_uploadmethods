@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.52**
+Directly copy files in the scratch folder to staging image. Instead of using staging API.
+
 **1.0.51**
 Set valid_ws_types for SRA and interleaved reads import apps
 
