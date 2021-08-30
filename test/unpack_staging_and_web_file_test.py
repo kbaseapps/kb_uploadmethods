@@ -117,6 +117,10 @@ class kb_uploadmethodsTest(unittest.TestCase):
         print('Mocking _file_to_staging')
         print("Mocking uploaded files to staging area:\n{}".format('\n'.join(file_path_list)))
 
+    def mock_file_to_staging_direct(file_path_list, subdir_folder=''):
+        print('Mocking _file_to_staging_direct')
+        print("Mocking uploaded files to staging area:\n{}".format('\n'.join(file_path_list)))
+
     def mock_download_staging_file(params):
         print('Mocking DataFileUtilClient.download_staging_file')
         print(params)
@@ -127,8 +131,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         return {'copy_file_path': fq_path}
 
-    @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
-    def test_unpack_web_file_direct_download_trailing_space(self, _file_to_staging):
+    @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
+    def test_unpack_web_file_direct_download_trailing_space(self, _file_to_staging_direct):
         file_url = 'https://anl.box.com/shared/static/'
         file_url += 'g0064wasgaoi3sax4os06paoyxay4l3r.zip   '
 
@@ -148,8 +152,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
                                 os.path.basename(file_path),
                                 'file[1-6]\.txt')
 
-    @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
-    def test_unpack_web_file_direct_download_multiple_urls(self, _file_to_staging):
+    @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
+    def test_unpack_web_file_direct_download_multiple_urls(self, _file_to_staging_direct):
         file_url = '  https://anl.box.com/shared/static/'
         file_url += 'g0064wasgaoi3sax4os06paoyxay4l3r.zip'
         params = {
@@ -175,8 +179,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
                             os.path.basename(file_path),
                             'file[1-6]\.txt')
 
-    @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
-    def test_unpack_web_file_dropbox(self, _file_to_staging):
+    @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
+    def test_unpack_web_file_dropbox(self, _file_to_staging_direct):
         params = {
             'download_type': 'DropBox',
             'file_url': 'https://www.dropbox.com/s/cbiywh2aihjxdf5/Archive.zip?dl=0',
@@ -193,8 +197,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
                                 os.path.basename(file_path),
                                 'file[1-6]\.txt')
 
-    @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
-    def test_unpack_web_file_ftp(self, _file_to_staging):
+    @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
+    def test_unpack_web_file_ftp(self, _file_to_staging_direct):
         # copy test file to FTP
         fq_filename = "Archive.zip"
         with ftplib.FTP(self.ftp_domain) as ftp_connection:
@@ -219,8 +223,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
                         os.path.basename(file_path),
                         'file[1-6]\.txt')
 
-    @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
-    def test_unpack_web_file_google_drive(self, _file_to_staging):
+    @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
+    def test_unpack_web_file_google_drive(self, _file_to_staging_direct):
         file_url = 'https://drive.google.com/open?id=0B0exSa7ebQ0qSlJiWEVWYU5rYWM'
         params = {
             'download_type': 'Google Drive',
