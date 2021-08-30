@@ -1,7 +1,15 @@
 name: KBase SDK Tests
 
 on:
-  [push, pull_request]
+  push:
+    branches:
+    - master
+    - main
+  pull_request:
+    branches:
+    - master
+    - main
+    - develop
 
 jobs:
 
