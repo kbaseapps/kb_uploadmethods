@@ -193,9 +193,6 @@ class UnpackFileUtil:
         log("Unpacked files:\n  {}".format(
                           '\n  '.join(unpacked_file_path_list)))
 
-        # self._file_to_staging(unpacked_file_path_list, os.path.dirname(
-        #                                         params.get('staging_file_subdir_path')))
-
         self._file_to_staging_direct(unpacked_file_path_list, os.path.dirname(
                                                 params.get('staging_file_subdir_path')))
 
@@ -234,7 +231,6 @@ class UnpackFileUtil:
         log("Unpacked files:\n  {}".format(
                           '\n  '.join(unpacked_file_path_list)))
 
-        # self._file_to_staging(unpacked_file_path_list)
         self._file_to_staging_direct(unpacked_file_path_list)
 
         unpacked_file_path = ','.join(unpacked_file_path_list)
