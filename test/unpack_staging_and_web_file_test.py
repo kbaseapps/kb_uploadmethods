@@ -243,8 +243,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
                             'file[1-6]\.txt')
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    @patch.object(UnpackFileUtil, "_file_to_staging", side_effect=mock_file_to_staging)
-    def test_unpack_staging_file(self, _file_to_staging, download_staging_file):
+    @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
+    def test_unpack_staging_file(self, _file_to_staging_direct, download_staging_file):
         params = {
           'staging_file_subdir_path': 'Archive.zip',
           'workspace_name': self.getWsName()
