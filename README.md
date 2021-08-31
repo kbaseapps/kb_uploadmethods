@@ -1,6 +1,12 @@
 # kb_uploadmethods 
 
-[![Build Status](https://travis-ci.org/tgu/kb_uploadmethods.svg?branch=master)](https://travis-ci.org/tgu/kb_uploadmethods)  
+## Current Status
+
+| Branch  | Build | Coverage | LGTM Alerts |
+| --- | --- | --- | --- |
+| master  | [![KBase SDK Tests](https://github.com/kbaseapps/kb_uploadmethods/workflows/KBase%20SDK%20Tests/badge.svg)](https://github.com/kbaseapps/kb_uploadmethods/actions?query=workflow%3A%22KBase+SDK+Tests%22)  | [![codecov](https://codecov.io/gh/kbaseapps/kb_uploadmethods/branch/master/graph/badge.svg?token=GXuMPxDUP5)](https://codecov.io/gh/kbaseapps/kb_uploadmethods) | [![Total alerts](https://img.shields.io/lgtm/alerts/g/kbaseapps/kb_uploadmethods.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kbaseapps/kb_uploadmethods/alerts/) |
+
+
 [Release Notes](RELEASE_NOTES.md)
 
 ## Description
