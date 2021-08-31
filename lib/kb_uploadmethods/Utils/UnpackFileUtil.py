@@ -28,8 +28,8 @@ class UnpackFileUtil:
         """
         _get_staging_file_path: return staging area file path
 
-        directory pattern:
-            perfered to return user specific path: /staging/sub_dir/file_name
+        return:
+            preferred to return user specific path: /staging/sub_dir/file_name
             if this path is not visible to user, use global bulk path: /data/bulk/user_name/sub_dir/file_name
         """
 
