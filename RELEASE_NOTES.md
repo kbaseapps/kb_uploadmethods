@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.53**
+Change casing of the `ui-name` field to sentence case for importers used by the Bulk Import cell.
+
 **1.0.52**
 Directly copy files in the scratch folder to staging image. Instead of using staging API.
 
@@ -19,7 +22,7 @@ Fix `import_fastq_noninterleaved...` app always specifying `interleaved=true`
 Add support for uploading files > 2GB to the staging service
 
 **1.0.46**
-Fix tests from new UIs for FASTQ/SRA Importers 
+Fix tests from new UIs for FASTQ/SRA Importers
 
 **1.0.45**
 Add github actions tests

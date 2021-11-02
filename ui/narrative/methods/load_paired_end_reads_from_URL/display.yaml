@@ -22,39 +22,39 @@ suggestions :
 parameters :
 
     download_type :
-        ui-name : URL Type
+        ui-name : URL type
         short-hint : URL type - 'Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox/Box Public Shared Link', or 'Google Drive Public Shared Link'.
 
     sequencing_tech :
-        ui-name : Sequencing Technology
+        ui-name : Sequencing technology
         short-hint : The name of the sequencing technology used to create the reads file.
 
     fwd_file_url :
-        ui-name : URL for Forward/Left Reads (FASTA/FASTQ)
+        ui-name : URL for forward/left reads (FASTA/FASTQ)
         short-hint : The first download link containing a single end library in FASTA/FASTQ format. Valid file extensions for FASTA include .fasta, .fna, and .fa. Valid file extensions for FASTQ include .fastq, .fnq, and .fq. Compressed files (containing files with valid extensions) include .zip, .gz, .bz2, .tar.gz, and .tar.bz2.
 
     rev_file_url :
-        ui-name : URL for Reverse/Right Reads (FASTA/FASTQ)
+        ui-name : URL for reverse/right reads (FASTA/FASTQ)
         short-hint : The second download link containing a single end library in FASTA/FASTQ format. Valid file extensions for FASTA include .fasta, .fna, and .fa. Valid file extensions for FASTQ include .fastq, .fnq, and .fq. Compressed files (containing files with valid extensions) include .zip, .gz, .bz2, .tar.gz, and .tar.bz2.
 
     name :
-        ui-name : Reads Object Name
+        ui-name : Reads object name
         short-hint : Provide a name for the output object that will be created by this importer.
 
     single_genome :
-        ui-name: Single Genome
+        ui-name : Single genome
         short-hint: Select if the reads are from a single genome, and leave blank if they are from a metagenome.
 
     insert_size_mean :
-        ui-name : Mean Insert Size
+        ui-name : Mean insert size
         short-hint : The mean (average) insert length.
 
     insert_size_std_dev :
-        ui-name : St. Dev. of Insert Size
+        ui-name : St. dev. of insert size
         short-hint : The standard deviation of insert lengths.
 
     read_orientation_outward :
-        ui-name : Reads Orientation Outward
+        ui-name : Reads orientation outward
         short-hint : Select if the reads in a pair point outward.
 
 parameter-groups :
