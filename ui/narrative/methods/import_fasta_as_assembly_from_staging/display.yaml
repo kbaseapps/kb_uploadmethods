@@ -21,31 +21,27 @@ suggestions :
 
 parameters :
     staging_file_subdir_path :
-        ui-name : |
-            FASTA file path
+        ui-name : FASTA file path
         short-hint : |
             File with DNA data (one or more sequences) in FASTA format.
         long-hint  : |
             Recognized extensions for the FASTA input file are .fasta, .fna, .fa, or .gz
     type:
-        ui-name : |
-            Assembly Type
+        ui-name : Assembly type
         short-hint : |
             The type or source of this assembly
         long-hint  : |
             The type or source of this assembly
 
     min_contig_length :
-        ui-name : |
-            Minimum contig length
+        ui-name : Minimum contig length
         short-hint : |
             Contigs shorter than this length will be filtered out
         long-hint  : |
             Contigs shorter than this value will be filtered out. Try larger value if upload fails.
 
     assembly_name :
-        ui-name : |
-            Assembly object name
+        ui-name : Assembly object name
         short-hint : |
             Provide a name for the Assembly that will be created by this importer
         long-hint : |

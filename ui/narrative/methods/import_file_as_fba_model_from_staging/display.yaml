@@ -1,6 +1,6 @@
 name     : Import TSV/XLS/SBML File as an FBAModel from Staging Area
-subtitle : Import a file in TSV, XLS (Excel) or SBML format from your staging area into your Narrative as an FBAModel 
-tooltip  : Import a file in TSV, XLS (Excel) or SBML format from your staging area into your Narrative as an FBAModel 
+subtitle : Import a file in TSV, XLS (Excel) or SBML format from your staging area into your Narrative as an FBAModel
+tooltip  : Import a file in TSV, XLS (Excel) or SBML format from your staging area into your Narrative as an FBAModel
 
 icon: data-teal.png
 
@@ -21,48 +21,42 @@ suggestions :
 
 parameters :
     file_type :
-        ui-name : |
-            Model file type
+        ui-name : Model file type
         short-hint : |
             Format of model file to upload
         long-hint  : |
             Format of model file to upload
 
     model_file :
-        ui-name : |
-            Model file path (reactions if TSV)
+        ui-name : Model file path (reactions if TSV)
         short-hint : |
             Select a model file in TSV, Excel or SBML format.
         long-hint  : |
             Select a model file in TSV, Excel or SBML format.
 
     biomass :
-        ui-name : |
-            Biomass
+        ui-name : Biomass
         short-hint : |
             Provide the biomass reaction identifier in Model file
         long-hint  : |
             Provide the biomass reaction identifier in Model file
 
     compounds_file :
-        ui-name : |
-            Compounds file path (if uploading TSV)
+        ui-name : Compounds file path (if uploading TSV)
         short-hint : |
             Select a compounds file in TSV format.
         long-hint  : |
             Select a compounds file in TSV format.
 
     genome :
-      ui-name : |
-            Genome
+      ui-name : Genome
       short-hint : |
             Select the Genome object that contains features referenced by the FBAModel
       long-hint  : |
             Select the Genome object that contains features referenced by the FBAModel
 
     model_name :
-        ui-name : |
-            FBA Model object name
+        ui-name : FBA Model object name
         short-hint : |
             Provide a name for the Model that will be created by this importer
         long-hint : |

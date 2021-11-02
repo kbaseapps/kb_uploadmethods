@@ -22,44 +22,44 @@ suggestions :
 parameters :
 
     fastq_fwd_staging_file_name :
-        ui-name : Forward/Left FASTQ File Path
+        ui-name : Forward/left FASTQ file path
         short-hint : Short read file containing a paired end library in FASTQ format
         long-hint  : |
                 Valid file extensions for FASTQ: .fastq, .fnq, .fq;
 
     fastq_rev_staging_file_name :
-        ui-name : Reverse/Right FASTQ File Path
+        ui-name : Reverse/right FASTQ file path
         short-hint : Second short read file containing a paired end library in FASTQ format.
         long-hint  : |
                 Valid file extensions for FASTQ: .fastq, .fnq, .fq;
 
     sequencing_tech :
-        ui-name : Sequencing Technology
+        ui-name : Sequencing technology
         short-hint : The name of the sequencing technology used to create the reads file
         long-hint  : The name of the sequencing technology used to create the reads file
 
     name :
-        ui-name : Reads Object Name
+        ui-name : Reads object name
         short-hint : Provide a name for the Reads object that will be created by this importer
         long-hint  : Provide a name for the Reads object that will be created by this importer
 
     single_genome:
-        ui-name: Single Genome
+        ui-name : Single genome
         short-hint: Select if the reads are from a single genome, leave blank if from a metagenome
         long-hint: Select if the reads are from a single genome, leave blank if from a metagenome
 
     insert_size_mean :
-        ui-name : Mean Insert Size
+        ui-name : Mean insert size
         short-hint : The mean (average) insert length
         long-hint  : The mean (average) insert length
 
     insert_size_std_dev :
-        ui-name : St. Dev. of Insert Size
+        ui-name : St. dev. of insert size
         short-hint : The standard deviation of insert lengths
         long-hint  : The standard deviation of insert lengths
 
     read_orientation_outward :
-        ui-name : Reads Orientation Outward
+        ui-name : Reads orientation outward
         short-hint : Select if reads in a pair point outward
         long-hint  : Select if reads in a pair point outward
 

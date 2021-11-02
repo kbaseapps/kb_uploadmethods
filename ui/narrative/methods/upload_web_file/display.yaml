@@ -21,7 +21,7 @@ suggestions :
 
 parameters :
     download_type :
-        ui-name : URL Type
+        ui-name : URL type
         short-hint : URL type - 'Regular URL (Direct Download Link)', 'FTP Link', 'Dropbox Public Shared Link', or 'Google Drive Public Shared Link'.
 
     file_url :
