@@ -38,7 +38,7 @@ parameters :
             The type or source of this assembly
 
     min_contig_length :
-        ui-name : Minimum Contig Length
+        ui-name : Minimum contig length
         short-hint : |
             Contigs shorter than this length will be filtered out
         long-hint  : |
