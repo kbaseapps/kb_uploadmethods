@@ -497,6 +497,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("should be tested in the parent (DFU) module")
     def test_upload_fastq_file_url_google_drive(self):
         fwd_file_url = 'https://drive.google.com/file/d/'
         fwd_file_url += '0B0exSa7ebQ0qcHdNS2NEYjJOTTg/view?usp=sharing'
@@ -711,6 +712,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("should be tested in the parent module")
     def test_urls_to_add_dropbox_paired_end(self):
         fwd_file_url = 'https://www.dropbox.com/s/pgtja4btj62ctkx/small.forward.fq?dl=0'
         rev_file_url = 'https://www.dropbox.com/s/hh55x00qluhfhr8/small.reverse.fq?dl=0'
@@ -787,6 +789,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("should be tested in the parent module")
     def test_urls_to_add_direct_download_leading_space(self):
         fwd_file_url = '      https://anl.box.com/shared/static/'
         fwd_file_url += 'qwadp20dxtwnhc8r3sjphen6h0k1hdyo.fastq    '

@@ -131,6 +131,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         return {'copy_file_path': fq_path}
 
+    @unittest.skip("tested in the parent module")
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
     def test_unpack_web_file_direct_download_trailing_space(self, _file_to_staging_direct):
         file_url = 'https://anl.box.com/shared/static/'
@@ -152,6 +153,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
                                 os.path.basename(file_path),
                                 'file[1-6]\.txt')
 
+    @unittest.skip("tested in the parent module")
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
     def test_unpack_web_file_direct_download_multiple_urls(self, _file_to_staging_direct):
         file_url = '  https://anl.box.com/shared/static/'
@@ -179,6 +181,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
                             os.path.basename(file_path),
                             'file[1-6]\.txt')
 
+    @unittest.skip("tested in the parent module")
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
     def test_unpack_web_file_dropbox(self, _file_to_staging_direct):
         params = {
@@ -197,6 +200,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
                                 os.path.basename(file_path),
                                 'file[1-6]\.txt')
 
+    @unittest.skip("tested in the parent module")
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
     def test_unpack_web_file_ftp(self, _file_to_staging_direct):
         # copy test file to FTP
@@ -223,6 +227,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
                         os.path.basename(file_path),
                         'file[1-6]\.txt')
 
+    @unittest.skip("tested in the parent module")
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
     def test_unpack_web_file_google_drive(self, _file_to_staging_direct):
         file_url = 'https://drive.google.com/open?id=0B0exSa7ebQ0qSlJiWEVWYU5rYWM'
