@@ -1,3 +1,4 @@
+TARGET_TESTS = .
 SERVICE = kb_uploadmethods
 SERVICE_CAPS = kb_uploadmethods
 SPEC_FILE = kb_uploadmethods.spec
