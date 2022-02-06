@@ -150,7 +150,7 @@ class kb_uploadmethods_batchTest(unittest.TestCase):
 
     @patch.object(BatchUtil, "STAGING_USER_FILE_PREFIX", new='/kb/module/test/data/')
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    def test_batch_import_genomes_from_staging(self, download_staging_file, file_to_shock):
+    def test_batch_import_genomes_from_staging(self, download_staging_file):
         input_params = {
             'staging_subdir': 'test_batch',
             'workspace_name': self.getWsName(),
