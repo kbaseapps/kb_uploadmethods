@@ -480,8 +480,8 @@ class kb_uploadmethods_fastq_Test(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
-    def test_upload_fastq_file_url_dropbox_paired_end(self, file_to_shock):
+    @unittest.skip("should be tested in the parent module")
+    def test_upload_fastq_file_url_dropbox_paired_end(self):
         fwd_file_url = 'https://www.dropbox.com/s/'
         fwd_file_url += 'pgtja4btj62ctkx/small.forward.fq?dl=0'
         rev_file_url = 'https://www.dropbox.com/s/'
@@ -870,8 +870,8 @@ class kb_uploadmethods_fastq_Test(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
-    def test_upload_fastq_file_url_ftp_trailing_space(self, file_to_shock):
+    @unittest.skip("redundant test")
+    def test_upload_fastq_file_url_ftp_trailing_space(self):
         # copy test file to FTP
         fq_filename = "Sample1.fastq"
 
