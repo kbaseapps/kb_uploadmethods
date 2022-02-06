@@ -373,7 +373,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
     @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_import_sra_paired_end(self, download_staging_file,
                                    _validate_upload_staging_file_availability,
-                                   _run_command, update_staging_service):
+                                   _run_command, update_staging_service, file_to_shock):
 
         sra_path = 'empty.sra'
         obj_name = 'MyReads'
@@ -424,7 +424,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
     @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_import_sra_single_end(self, download_staging_file,
                                    _validate_upload_staging_file_availability,
-                                   _run_command, update_staging_service):
+                                   _run_command, update_staging_service, file_to_shock):
 
         sra_path = 'empty.sra'
         obj_name = 'MyReads'
@@ -548,7 +548,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_se)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
     @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
-    def test_import_web_sra_paired_end(self, _run_command, update_staging_service):
+    def test_import_web_sra_paired_end(self, _run_command, update_staging_service, file_to_shock):
 
         # copy test file to FTP
         fq_filename = "empty.sra"
