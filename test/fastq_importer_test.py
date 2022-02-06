@@ -352,8 +352,8 @@ class kb_uploadmethods_fastq_Test(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
-    def test_upload_fastq_file_url_direct_download_interleaved(self, file_to_shock):
+    @unittest.skip("should be tested in the parent module")
+    def test_upload_fastq_file_url_direct_download_interleaved(self):
         fwd_file_url = 'https://anl.box.com/shared/static/'
         fwd_file_url += 'pf0d0d7torv07qh2nogaay073udmiacr.fastq'
         params = {
@@ -408,8 +408,7 @@ class kb_uploadmethods_fastq_Test(unittest.TestCase):
         self.delete_shock_node(node)
 
     @unittest.skip("should be tested in the parent module")
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
-    def test_upload_fastq_file_url_direct_download_paired_end(self, file_to_shock):
+    def test_upload_fastq_file_url_direct_download_paired_end(self):
         fwd_file_url = 'https://anl.box.com/shared/static/'
         fwd_file_url += 'lph9l0ye6yqetnbk04cx33mqgrj4b85j.fq'
         rev_file_url = 'https://anl.box.com/shared/static/'
@@ -526,8 +525,7 @@ class kb_uploadmethods_fastq_Test(unittest.TestCase):
         self.delete_shock_node(node)
 
     @unittest.skip("should be tested in the parent module")
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
-    def test_upload_fastq_file_url_google_drive(self, file_to_shock):
+    def test_upload_fastq_file_url_google_drive(self):
         fwd_file_url = 'https://drive.google.com/file/d/'
         fwd_file_url += '0B0exSa7ebQ0qcHdNS2NEYjJOTTg/view?usp=sharing'
         params = {
@@ -556,8 +554,7 @@ class kb_uploadmethods_fastq_Test(unittest.TestCase):
         self.delete_shock_node(node)
 
     @unittest.skip("should be tested in the parent module")
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
-    def test_upload_fastq_file_url_google_drive_paired_end(self, file_to_shock):
+    def test_upload_fastq_file_url_google_drive_paired_end(self):
         fwd_file_url = 'https://drive.google.com/open?'
         fwd_file_url += 'id=0B0exSa7ebQ0qSGlmVzIwNXV5OWc'
         rev_file_url = 'https://drive.google.com/file/d/'
@@ -636,8 +633,8 @@ class kb_uploadmethods_fastq_Test(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
-    def test_upload_fastq_file_url_ftp_paired(self, file_to_shock):
+    @unittest.skip("should be tested in the parent module")
+    def test_upload_fastq_file_url_ftp_paired(self):
         # copy test file to FTP
         fw_fq_filename = "small.forward.fq"
         with ftplib.FTP(self.ftp_domain) as ftp_connection:
@@ -690,8 +687,8 @@ class kb_uploadmethods_fastq_Test(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
 
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
-    def test_urls_to_add_direct_download(self, file_to_shock):
+    @unittest.skip("redundant test")
+    def test_urls_to_add_direct_download(self):
         fwd_file_url = 'https://anl.box.com/shared/static/'
         fwd_file_url += 'qwadp20dxtwnhc8r3sjphen6h0k1hdyo.fastq'
         params = {
@@ -820,8 +817,8 @@ class kb_uploadmethods_fastq_Test(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
 
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
-    def test_urls_to_add_direct_download_leading_space(self, file_to_shock):
+    @unittest.skip("redundant test")
+    def test_urls_to_add_direct_download_leading_space(self):
         fwd_file_url = '      https://anl.box.com/shared/static/'
         fwd_file_url += 'qwadp20dxtwnhc8r3sjphen6h0k1hdyo.fastq    '
         params = {
