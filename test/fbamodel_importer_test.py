@@ -167,6 +167,7 @@ class kb_uploadmethods_fbamodel_Test(unittest.TestCase):
             self.getImpl().import_file_as_fba_model_from_staging(
                 self.getContext(), invalid_params)
 
+    @unittest.skip("skip for now")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
     def test_import_as_media_from_staging(self, download_staging_file, update_staging_service):
