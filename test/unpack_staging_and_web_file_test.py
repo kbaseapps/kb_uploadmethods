@@ -155,7 +155,6 @@ class kb_uploadmethods_unpack_Test(unittest.TestCase):
 
         return kb_uploadmethods_unpack_Test().test_shock
 
-    # @unittest.skip("tested in the parent module")
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
     @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_unpack_web_file_direct_download_trailing_space(self, _file_to_staging_direct,
@@ -179,7 +178,6 @@ class kb_uploadmethods_unpack_Test(unittest.TestCase):
                                 os.path.basename(file_path),
                                 'file[1-6]\.txt')
 
-    # @unittest.skip("tested in the parent module")
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
     @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_unpack_web_file_direct_download_multiple_urls(self, _file_to_staging_direct,
@@ -209,7 +207,6 @@ class kb_uploadmethods_unpack_Test(unittest.TestCase):
                             os.path.basename(file_path),
                             'file[1-6]\.txt')
 
-    # @unittest.skip("tested in the parent module")
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
     @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_unpack_web_file_dropbox(self, _file_to_staging_direct, file_to_shock):
@@ -229,7 +226,6 @@ class kb_uploadmethods_unpack_Test(unittest.TestCase):
                                 os.path.basename(file_path),
                                 'file[1-6]\.txt')
 
-    # @unittest.skip("tested in the parent module")
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
     @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_unpack_web_file_ftp(self, _file_to_staging_direct, file_to_shock):
@@ -257,7 +253,6 @@ class kb_uploadmethods_unpack_Test(unittest.TestCase):
                         os.path.basename(file_path),
                         'file[1-6]\.txt')
 
-    # @unittest.skip("tested in the parent module")
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
     @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_unpack_web_file_google_drive(self, _file_to_staging_direct, file_to_shock):
@@ -280,7 +275,9 @@ class kb_uploadmethods_unpack_Test(unittest.TestCase):
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
-    def test_unpack_staging_file(self, _file_to_staging_direct, download_staging_file):
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
+    def test_unpack_staging_file(self, _file_to_staging_direct, download_staging_file,
+                                 file_to_shock):
         params = {
           'staging_file_subdir_path': 'Archive.zip',
           'workspace_name': self.getWsName()
