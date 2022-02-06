@@ -1,4 +1,8 @@
 [ {
+  "module_name" : "AbstractHandle",
+  "type" : "core",
+  "file_path" : "https://raw.githubusercontent.com/kbase/handle_service2/develop/handle_service.spec"
+}, {
   "module_name" : "AssemblyUtil",
   "type" : "sdk",
   "version_tag" : "release"
