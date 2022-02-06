@@ -740,7 +740,7 @@ class kb_uploadmethods_fastq_Test(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
+    @unittest.skip("redundant test")
     def test_urls_to_add_dropbox_paired_end(self, file_to_shock):
         fwd_file_url = 'https://www.dropbox.com/s/pgtja4btj62ctkx/small.forward.fq?dl=0'
         rev_file_url = 'https://www.dropbox.com/s/hh55x00qluhfhr8/small.reverse.fq?dl=0'
