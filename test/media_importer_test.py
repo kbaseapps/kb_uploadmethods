@@ -166,9 +166,8 @@ class kb_uploadmethods_media_Test(unittest.TestCase):
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_import_excel_as_media_from_staging(self, download_staging_file,
-                                                update_staging_service, file_to_shock):
+                                                update_staging_service):
 
         excel_file = 'media_example.xlsx'
         ws_obj_name = 'MyMedia'
@@ -186,9 +185,8 @@ class kb_uploadmethods_media_Test(unittest.TestCase):
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_import_tsv_as_media_from_staging(self, download_staging_file,
-                                              update_staging_service, file_to_shock):
+                                              update_staging_service):
 
         tsv_file = 'media_example.txt'
         ws_obj_name = 'MyMedia'
@@ -206,9 +204,7 @@ class kb_uploadmethods_media_Test(unittest.TestCase):
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
-    def test_import_as_media_from_staging(self, download_staging_file, update_staging_service,
-                                          file_to_shock):
+    def test_import_as_media_from_staging(self, download_staging_file, update_staging_service):
 
         tsv_file = 'media_example.txt'
         ws_obj_name = 'MyMedia'
