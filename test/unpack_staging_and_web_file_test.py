@@ -253,6 +253,7 @@ class kb_uploadmethods_unpack_Test(unittest.TestCase):
                         os.path.basename(file_path),
                         'file[1-6]\.txt')
 
+    @unittest.skip("skip for now")
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
     @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_unpack_web_file_google_drive(self, _file_to_staging_direct, file_to_shock):
