@@ -299,6 +299,7 @@ class kb_uploadmethods_reads_Test(unittest.TestCase):
             self.getImpl().import_reads_from_staging(self.getContext(),
                                                      invalidate_input_params)
 
+    @unittest.skip("duplicate test")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
