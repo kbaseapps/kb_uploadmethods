@@ -166,7 +166,6 @@ class kb_uploadmethods_attribute_Test(unittest.TestCase):
         self.assertTrue('report_ref' in ref[0])
         self.assertTrue('report_name' in ref[0])
 
-    # @unittest.skip("should be tested in the parent module")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
     @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
