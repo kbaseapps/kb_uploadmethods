@@ -1,5 +1,4 @@
 import os
-import json
 import time
 import logging
 import uuid
@@ -11,6 +10,7 @@ from installed_clients.KBaseReportClient import KBaseReport
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from . import handler_utils
 
+
 class ImportMetagenomeGFFFastaUtil:
     def __init__(self, config):
         self.callback_url = config['SDK_CALLBACK_URL']
@@ -20,7 +20,6 @@ class ImportMetagenomeGFFFastaUtil:
         self.uploader_utils = UploaderUtil(config)
         self.scratch = os.path.join(config['scratch'], 'import_Metagenome_' + str(uuid.uuid4()))
         handler_utils._mkdir_p(self.scratch)
-
 
     def import_metagenome_gff_fasta_from_staging(self, params):
         """
@@ -98,7 +97,7 @@ class ImportMetagenomeGFFFastaUtil:
         result_file_path = os.path.join(tmp_dir, 'report.html')
 
         genome_name = str(genome_obj.get('data')[0].get('info')[1])
-        genome_file = params.get('staging_file_subdir_path')
+        # genome_file = params.get('staging_file_subdir_path')
 
         genome_data = genome_obj.get('data')[0].get('data')
         genome_info = genome_obj.get('data')[0].get('info')
@@ -115,7 +114,7 @@ class ImportMetagenomeGFFFastaUtil:
         genome_overview_data = collections.OrderedDict()
 
         genome_overview_data['Name'] = '{} ({})'.format(genome_name, genome_ref)
-        #genome_overview_data['Uploaded File'] = genome_file
+        # genome_overview_data['Uploaded File'] = genome_file
         genome_overview_data['Date Uploaded'] = time.strftime("%c")
         genome_overview_data['Source'] = source
         genome_overview_data['Number of Contigs'] = num_contigs
@@ -149,7 +148,6 @@ class ImportMetagenomeGFFFastaUtil:
                 report_template = report_template.replace('*CONTIG_DATA*',
                                                           contig_content)
                 result_file.write(report_template)
-
 
         report_shock_id = self.dfu.file_to_shock({'file_path': tmp_dir,
                                                   'pack': 'zip'})['shock_id']
@@ -187,4 +185,3 @@ class ImportMetagenomeGFFFastaUtil:
         report_output = {'report_name': output['name'], 'report_ref': output['ref']}
 
         return report_output
-

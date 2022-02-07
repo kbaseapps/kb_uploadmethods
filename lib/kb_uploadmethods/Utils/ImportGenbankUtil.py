@@ -100,7 +100,7 @@ class ImportGenbankUtil:
         result_file_path = os.path.join(tmp_dir, 'report.html')
 
         genome_name = str(genome_obj.get('data')[0].get('info')[1])
-        genome_file = params.get('staging_file_subdir_path')
+        # genome_file = params.get('staging_file_subdir_path')
 
         genome_data = genome_obj.get('data')[0].get('data')
         genome_info = genome_obj.get('data')[0].get('info')
@@ -114,7 +114,7 @@ class ImportGenbankUtil:
         genome_overview_data = collections.OrderedDict()
 
         genome_overview_data['Name'] = '{} ({})'.format(genome_name, genome_ref)
-        #genome_overview_data['Uploaded File'] = genome_file
+        # genome_overview_data['Uploaded File'] = genome_file
         genome_overview_data['Date Uploaded'] = time.strftime("%c")
         genome_overview_data['Source'] = source
         genome_overview_data['Number of Contigs'] = num_contigs
@@ -187,4 +187,3 @@ class ImportGenbankUtil:
         report_output = {'report_name': output['name'], 'report_ref': output['ref']}
 
         return report_output
-

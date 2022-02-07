@@ -65,9 +65,9 @@ class ImportEscherMapUtil:
 
             for seg_uid in rxn_node['segments']:
                 seg = rxn_node['segments'][seg_uid]
-                if seg['b1'] == None:
+                if seg['b1'] is None:
                     del seg['b1']
-                if seg['b2'] == None:
+                if seg['b2'] is None:
                     del seg['b2']
 
         for node_uid in refactored_escher_data[1]['nodes']:
@@ -76,8 +76,8 @@ class ImportEscherMapUtil:
                 node['node_is_primary'] = 1 if node['node_is_primary'] else 0
 
         refactored_escher_data = {
-            "metadata" : refactored_escher_data[0],
-            "layout" : refactored_escher_data[1]
+            "metadata": refactored_escher_data[0],
+            "layout": refactored_escher_data[1]
         }
 
         if refactored_escher_data == escher_data:
