@@ -163,20 +163,21 @@ class kb_uploadmethods_genbankTest(unittest.TestCase):
                 '"source" parameter is required, but missing'):
             self.getImpl().import_genbank_from_staging(self.getContext(), invalidate_input_params)
 
-    @unittest.skip("skip for now")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
-    def test_genbank_to_genome(self, download_staging_file, update_staging_service):
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
+    def test_genbank_to_genome(self, download_staging_file, update_staging_service, file_to_shock):
 
         gbk_path = 'small_genbank.gbff'
         ws_obj_name = 'MyGenome'
-        expected_scientific_name = 'Escherichia coli str. K-12 substr. MG1655'
+        expected_scientific_name = 'Arabidopsis thaliana'
 
         params = {
           'staging_file_subdir_path': gbk_path,
           'genome_name': ws_obj_name,
-          'taxon_id': '28077',
+          'taxon_id': '3702',
           'workspace_name': self.getWsName(),
+          'generate_ids_if_needed': 1,
           'source': 'RefSeq'
         }
 
@@ -188,14 +189,16 @@ class kb_uploadmethods_genbankTest(unittest.TestCase):
         self.assertTrue('report_name' in ref[0])
 
         genome_info = ref[0]['genome_info']
-        self.assertEqual(genome_info[10]['Domain'], 'Bacteria')
+        print('fsdafads')
+        print(genome_info)
+        self.assertEqual(genome_info[10]['Domain'], 'Eukaryota')
         self.assertEqual(genome_info[10]['Genetic code'], '11')
         self.assertEqual(genome_info[10]['Name'], expected_scientific_name)
         self.assertEqual(genome_info[10]['Source'], 'RefSeq')
-        self.assertEqual(genome_info[10]['Source ID'], 'NC_000913')
+        self.assertEqual(genome_info[10]['Source ID'], 'NC_000932')
         self.assertTrue('GC content' in genome_info[10])
         self.assertTrue(re.match("^\d+?\.\d+?$", genome_info[10]['GC content']) is not None)
         self.assertTrue('Size' in genome_info[10])
         self.assertTrue(genome_info[10]['Size'].isdigit())
-        self.assertIn('Bacteria', genome_info[10]['Taxonomy'])
-        self.assertIn('Nitrospirillum', genome_info[10]['Taxonomy'])
+        self.assertIn('Arabidopsis', genome_info[10]['Taxonomy'])
+        self.assertIn('Camelineae', genome_info[10]['Taxonomy'])
