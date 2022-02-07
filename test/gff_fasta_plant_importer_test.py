@@ -164,9 +164,7 @@ class kb_uploadmethods_plant_Test(unittest.TestCase):
     # @unittest.skip("skip for now")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
-    def test_upload_fasta_gff_file(self, download_staging_file, update_staging_service,
-                                   file_to_shock):
+    def test_upload_fasta_gff_file(self, download_staging_file, update_staging_service):
 
         fasta_file = 'Test_v1.0.fa.gz'
         gff_file = 'Test_v1.0.gene.gff3.gz'
