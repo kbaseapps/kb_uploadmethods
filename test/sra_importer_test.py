@@ -416,6 +416,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("duplicate test")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
@@ -457,6 +458,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("duplicate test")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
@@ -504,6 +506,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().import_sra_from_staging(self.getContext(), invalidate_input_params)
 
+    @unittest.skip("duplicate test")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
@@ -545,6 +548,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().import_sra_from_staging(self.getContext(), invalidate_input_params)
 
+    @unittest.skip("duplicate test")
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_se)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
     @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
@@ -598,4 +602,3 @@ class kb_uploadmethodsTest(unittest.TestCase):
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
-
