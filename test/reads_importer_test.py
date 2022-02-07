@@ -17,9 +17,10 @@ from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
+from installed_clients.AbstractHandleClient import AbstractHandle as HandleService
 
 
-class kb_uploadmethodsTest(unittest.TestCase):
+class kb_uploadmethods_reads_Test(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -49,14 +50,31 @@ class kb_uploadmethodsTest(unittest.TestCase):
         cls.wsClient = workspaceService(cls.wsURL, token=cls.token)
         cls.serviceImpl = kb_uploadmethods(cls.cfg)
         cls.dfu = DataFileUtil(os.environ['SDK_CALLBACK_URL'], token=cls.token)
+        cls.hs = HandleService(url=cls.cfg['handle-service-url'],
+                               token=cls.token)
         cls.scratch = cls.cfg['scratch']
         cls.shockURL = cls.cfg['shock-url']
+
+        small_file = os.path.join(cls.scratch, 'test.txt')
+        with open(small_file, "w") as f:
+            f.write("empty content")
+        cls.test_shock = cls.dfu.file_to_shock({'file_path': small_file, 'make_handle': True})
+        cls.handles_to_delete = []
+        cls.nodes_to_delete = []
+        cls.handles_to_delete.append(cls.test_shock['handle']['hid'])
+        cls.nodes_to_delete.append(cls.test_shock['shock_id'])
 
     @classmethod
     def tearDownClass(cls):
         if hasattr(cls, 'wsName'):
             cls.wsClient.delete_workspace({'workspace': cls.wsName})
             print('Test workspace was deleted')
+        if hasattr(cls, 'nodes_to_delete'):
+            for node in cls.nodes_to_delete:
+                cls.delete_shock_node(node)
+        if hasattr(cls, 'handles_to_delete'):
+            cls.hs.delete_handles(cls.hs.hids_to_handles(cls.handles_to_delete))
+            print('Deleted handles ' + str(cls.handles_to_delete))
 
     @classmethod
     def delete_shock_node(cls, node_id):
@@ -120,6 +138,12 @@ class kb_uploadmethodsTest(unittest.TestCase):
         shutil.copy(os.path.join("data", fq_filename), fq_path)
 
         return {'copy_file_path': fq_path}
+
+    def mock_file_to_shock(params):
+        print('Mocking DataFileUtilClient.file_to_shock')
+        print(params)
+
+        return kb_uploadmethods_reads_Test().test_shock
 
     def mock_validate_upload_staging_file_availability(staging_file_subdir_path):
         print('Mocking ImportSRAUtil._validate_upload_staging_file_availability')
@@ -309,6 +333,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
     #     node = d['lib']['file']['id']
     #     self.delete_shock_node(node)
 
+    @unittest.skip("skip for now")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
@@ -360,6 +385,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("skip for now")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)

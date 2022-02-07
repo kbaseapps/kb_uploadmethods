@@ -13,15 +13,17 @@ from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import ThreadedFTPServer
 import threading
 import socket
+from mock import patch
 from biokbase.workspace.client import Workspace as workspaceService
 
 from installed_clients.DataFileUtilClient import DataFileUtil
 from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
+from installed_clients.AbstractHandleClient import AbstractHandle as HandleService
 
 
-class kb_uploadmethodsTest(unittest.TestCase):
+class kb_uploadmethods_fastq_Test(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -51,6 +53,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         cls.wsClient = workspaceService(cls.wsURL, token=cls.token)
         cls.serviceImpl = kb_uploadmethods(cls.cfg)
         cls.dfu = DataFileUtil(os.environ['SDK_CALLBACK_URL'], token=cls.token)
+        cls.hs = HandleService(url=cls.cfg['handle-service-url'],
+                               token=cls.token)
         cls.scratch = cls.cfg['scratch']
         cls.shockURL = cls.cfg['shock-url']
         cls.ftp_domain = socket.gethostbyname(socket.gethostname())
@@ -60,6 +64,15 @@ class kb_uploadmethodsTest(unittest.TestCase):
         thread.daemon = True
         thread.start()
         time.sleep(5)
+
+        small_file = os.path.join(cls.scratch, 'test.txt')
+        with open(small_file, "w") as f:
+            f.write("empty content")
+        cls.test_shock = cls.dfu.file_to_shock({'file_path': small_file, 'make_handle': True})
+        cls.handles_to_delete = []
+        cls.nodes_to_delete = []
+        cls.handles_to_delete.append(cls.test_shock['handle']['hid'])
+        cls.nodes_to_delete.append(cls.test_shock['shock_id'])
 
     @classmethod
     def start_ftp_service(cls, domain, port):
@@ -80,6 +93,12 @@ class kb_uploadmethodsTest(unittest.TestCase):
         if hasattr(cls, 'wsName'):
             cls.wsClient.delete_workspace({'workspace': cls.wsName})
             print('Test workspace was deleted')
+        if hasattr(cls, 'nodes_to_delete'):
+            for node in cls.nodes_to_delete:
+                cls.delete_shock_node(node)
+        if hasattr(cls, 'handles_to_delete'):
+            cls.hs.delete_handles(cls.hs.hids_to_handles(cls.handles_to_delete))
+            print('Deleted handles ' + str(cls.handles_to_delete))
 
     @classmethod
     def make_ref(self, objinfo):
@@ -109,6 +128,12 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
     def getContext(self):
         return self.__class__.ctx
+
+    def mock_file_to_shock(params):
+        print('Mocking DataFileUtilClient.file_to_shock')
+        print(params)
+
+        return kb_uploadmethods_fastq_Test().test_shock
 
     def getDefaultParams(self, file_path=True):
         if file_path:
@@ -298,7 +323,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().upload_fastq_file(self.getContext(), invalidate_input_params)
 
-    def test_upload_fastq_file_url_direct_download(self):
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
+    def test_upload_fastq_file_url_direct_download(self, file_to_shock):
         fwd_file_url = 'https://anl.box.com/shared/static/'
         fwd_file_url += 'qwadp20dxtwnhc8r3sjphen6h0k1hdyo.fastq'
         params = {
@@ -425,7 +451,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
 
-    def test_upload_fastq_file_url_dropbox(self):
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
+    def test_upload_fastq_file_url_dropbox(self, file_to_shock):
         fwd_file_url = 'https://www.dropbox.com/s/'
         fwd_file_url += 'lv7jx1vh6yky3o0/Sample1.fastq?dl=0'
         params = {
@@ -497,6 +524,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("should be tested in the parent module")
     def test_upload_fastq_file_url_google_drive(self):
         fwd_file_url = 'https://drive.google.com/file/d/'
         fwd_file_url += '0B0exSa7ebQ0qcHdNS2NEYjJOTTg/view?usp=sharing'
@@ -569,7 +597,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
 
-    def test_upload_fastq_file_url_ftp(self):
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
+    def test_upload_fastq_file_url_ftp(self, file_to_shock):
         # copy test file to FTP
         fq_filename = "Sample1.fastq"
 
@@ -711,7 +740,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
-    def test_urls_to_add_dropbox_paired_end(self):
+    @unittest.skip("redundant test")
+    def test_urls_to_add_dropbox_paired_end(self, file_to_shock):
         fwd_file_url = 'https://www.dropbox.com/s/pgtja4btj62ctkx/small.forward.fq?dl=0'
         rev_file_url = 'https://www.dropbox.com/s/hh55x00qluhfhr8/small.reverse.fq?dl=0'
         params = {
@@ -787,6 +817,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("redundant test")
     def test_urls_to_add_direct_download_leading_space(self):
         fwd_file_url = '      https://anl.box.com/shared/static/'
         fwd_file_url += 'qwadp20dxtwnhc8r3sjphen6h0k1hdyo.fastq    '

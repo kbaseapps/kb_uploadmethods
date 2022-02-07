@@ -21,9 +21,10 @@ from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
 from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
+from installed_clients.AbstractHandleClient import AbstractHandle as HandleService
 
 
-class kb_uploadmethodsTest(unittest.TestCase):
+class kb_uploadmethods_unpack_Test(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -53,6 +54,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         cls.wsClient = workspaceService(cls.wsURL, token=cls.token)
         cls.serviceImpl = kb_uploadmethods(cls.cfg)
         cls.dfu = DataFileUtil(os.environ['SDK_CALLBACK_URL'], token=cls.token)
+        cls.hs = HandleService(url=cls.cfg['handle-service-url'],
+                               token=cls.token)
         cls.scratch = cls.cfg['scratch']
         cls.shockURL = cls.cfg['shock-url']
 
@@ -63,6 +66,15 @@ class kb_uploadmethodsTest(unittest.TestCase):
         thread.daemon = True
         thread.start()
         time.sleep(5)
+
+        small_file = os.path.join(cls.scratch, 'test.txt')
+        with open(small_file, "w") as f:
+            f.write("empty content")
+        cls.test_shock = cls.dfu.file_to_shock({'file_path': small_file, 'make_handle': True})
+        cls.handles_to_delete = []
+        cls.nodes_to_delete = []
+        cls.handles_to_delete.append(cls.test_shock['handle']['hid'])
+        cls.nodes_to_delete.append(cls.test_shock['shock_id'])
 
     @classmethod
     def start_ftp_service(cls, domain, port):
@@ -83,6 +95,12 @@ class kb_uploadmethodsTest(unittest.TestCase):
         if hasattr(cls, 'wsName'):
             cls.wsClient.delete_workspace({'workspace': cls.wsName})
             print('Test workspace was deleted')
+        if hasattr(cls, 'nodes_to_delete'):
+            for node in cls.nodes_to_delete:
+                cls.delete_shock_node(node)
+        if hasattr(cls, 'handles_to_delete'):
+            cls.hs.delete_handles(cls.hs.hids_to_handles(cls.handles_to_delete))
+            print('Deleted handles ' + str(cls.handles_to_delete))
 
     @classmethod
     def make_ref(self, objinfo):
@@ -131,8 +149,16 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         return {'copy_file_path': fq_path}
 
+    def mock_file_to_shock(params):
+        print('Mocking DataFileUtilClient.file_to_shock')
+        print(params)
+
+        return kb_uploadmethods_unpack_Test().test_shock
+
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
-    def test_unpack_web_file_direct_download_trailing_space(self, _file_to_staging_direct):
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
+    def test_unpack_web_file_direct_download_trailing_space(self, _file_to_staging_direct,
+                                                            file_to_shock):
         file_url = 'https://anl.box.com/shared/static/'
         file_url += 'g0064wasgaoi3sax4os06paoyxay4l3r.zip   '
 
@@ -153,7 +179,9 @@ class kb_uploadmethodsTest(unittest.TestCase):
                                 'file[1-6]\.txt')
 
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
-    def test_unpack_web_file_direct_download_multiple_urls(self, _file_to_staging_direct):
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
+    def test_unpack_web_file_direct_download_multiple_urls(self, _file_to_staging_direct,
+                                                           file_to_shock):
         file_url = '  https://anl.box.com/shared/static/'
         file_url += 'g0064wasgaoi3sax4os06paoyxay4l3r.zip'
         params = {
@@ -180,7 +208,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
                             'file[1-6]\.txt')
 
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
-    def test_unpack_web_file_dropbox(self, _file_to_staging_direct):
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
+    def test_unpack_web_file_dropbox(self, _file_to_staging_direct, file_to_shock):
         params = {
             'download_type': 'DropBox',
             'file_url': 'https://www.dropbox.com/s/cbiywh2aihjxdf5/Archive.zip?dl=0',
@@ -198,7 +227,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
                                 'file[1-6]\.txt')
 
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
-    def test_unpack_web_file_ftp(self, _file_to_staging_direct):
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
+    def test_unpack_web_file_ftp(self, _file_to_staging_direct, file_to_shock):
         # copy test file to FTP
         fq_filename = "Archive.zip"
         with ftplib.FTP(self.ftp_domain) as ftp_connection:
@@ -223,8 +253,10 @@ class kb_uploadmethodsTest(unittest.TestCase):
                         os.path.basename(file_path),
                         'file[1-6]\.txt')
 
+    @unittest.skip("skip for now")
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
-    def test_unpack_web_file_google_drive(self, _file_to_staging_direct):
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
+    def test_unpack_web_file_google_drive(self, _file_to_staging_direct, file_to_shock):
         file_url = 'https://drive.google.com/open?id=0B0exSa7ebQ0qSlJiWEVWYU5rYWM'
         params = {
             'download_type': 'Google Drive',
@@ -244,7 +276,9 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UnpackFileUtil, "_file_to_staging_direct", side_effect=mock_file_to_staging_direct)
-    def test_unpack_staging_file(self, _file_to_staging_direct, download_staging_file):
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
+    def test_unpack_staging_file(self, _file_to_staging_direct, download_staging_file,
+                                 file_to_shock):
         params = {
           'staging_file_subdir_path': 'Archive.zip',
           'workspace_name': self.getWsName()

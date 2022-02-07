@@ -16,9 +16,10 @@ from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
+from installed_clients.AbstractHandleClient import AbstractHandle as HandleService
 
 
-class kb_uploadmethodsTest(unittest.TestCase):
+class kb_uploadmethods_assmblyTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -48,14 +49,31 @@ class kb_uploadmethodsTest(unittest.TestCase):
         cls.wsClient = workspaceService(cls.wsURL, token=cls.token)
         cls.serviceImpl = kb_uploadmethods(cls.cfg)
         cls.dfu = DataFileUtil(os.environ['SDK_CALLBACK_URL'], token=cls.token)
+        cls.hs = HandleService(url=cls.cfg['handle-service-url'],
+                               token=cls.token)
         cls.scratch = cls.cfg['scratch']
         cls.shockURL = cls.cfg['shock-url']
+
+        small_file = os.path.join(cls.scratch, 'test.txt')
+        with open(small_file, "w") as f:
+            f.write("empty content")
+        cls.test_shock = cls.dfu.file_to_shock({'file_path': small_file, 'make_handle': True})
+        cls.handles_to_delete = []
+        cls.nodes_to_delete = []
+        cls.handles_to_delete.append(cls.test_shock['handle']['hid'])
+        cls.nodes_to_delete.append(cls.test_shock['shock_id'])
 
     @classmethod
     def tearDownClass(cls):
         if hasattr(cls, 'wsName'):
             cls.wsClient.delete_workspace({'workspace': cls.wsName})
             print('Test workspace was deleted')
+        if hasattr(cls, 'nodes_to_delete'):
+            for node in cls.nodes_to_delete:
+                cls.delete_shock_node(node)
+        if hasattr(cls, 'handles_to_delete'):
+            cls.hs.delete_handles(cls.hs.hids_to_handles(cls.handles_to_delete))
+            print('Deleted handles ' + str(cls.handles_to_delete))
 
     @classmethod
     def delete_shock_node(cls, node_id):
@@ -92,6 +110,12 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
         return {'copy_file_path': fq_path}
 
+    def mock_file_to_shock(params):
+        print('Mocking DataFileUtilClient.file_to_shock')
+        print(params)
+
+        return kb_uploadmethods_assmblyTest().test_shock
+
     def test_bad_import_fasta_as_assembly_from_staging_params(self):
         invalidate_input_params = {
           'missing_staging_file_subdir_path': 'staging_file_subdir_path',
@@ -127,7 +151,9 @@ class kb_uploadmethodsTest(unittest.TestCase):
 
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
-    def test_import_fasta_as_assembly_from_staging(self, download_staging_file, update_staging_service):
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
+    def test_import_fasta_as_assembly_from_staging(self, download_staging_file,
+                                                   update_staging_service, file_to_shock):
 
         fasta_file = 'small_fasta.fna'
         ws_obj_name = 'MyAssembly'
