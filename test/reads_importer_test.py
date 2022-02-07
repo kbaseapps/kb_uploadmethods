@@ -299,40 +299,6 @@ class kb_uploadmethods_reads_Test(unittest.TestCase):
             self.getImpl().import_reads_from_staging(self.getContext(),
                                                      invalidate_input_params)
 
-    # @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
-    # def test_fastq_to_reads_se(self, download_staging_file):
-
-    #     fastq_file = 'Sample1.fastq'
-    #     ws_obj_name = 'MyReads'
-
-    #     params = {
-    #       'import_type': 'FASTQ/FASTA',
-    #       'fastq_fwd_staging_file_name': fastq_file,
-    #       'sequencing_tech': 'PacBio CCS',
-    #       'workspace_name': self.getWsName(),
-    #       'name': ws_obj_name
-    #     }
-
-    #     ref = self.getImpl().import_reads_from_staging(self.getContext(), params)
-    #     self.assertTrue('obj_ref' in ref[0])
-    #     self.assertTrue('report_ref' in ref[0])
-    #     self.assertTrue('report_name' in ref[0])
-
-    #     obj = self.dfu.get_objects(
-    #         {'object_refs': [self.getWsName() + '/MyReads']})['data'][0]
-    #     self.assertEqual(ref[0]['obj_ref'], self.make_ref(obj['info']))
-    #     self.assertEqual(obj['info'][2].startswith(
-    #         'KBaseFile.SingleEndLibrary'), True)
-    #     d = obj['data']
-    #     self.assertEqual(d['sequencing_tech'], 'PacBio CCS')
-    #     self.assertEqual(d['single_genome'], 1)
-    #     self.assertEqual('source' not in d, True)
-    #     self.assertEqual('strain' not in d, True)
-    #     self.check_lib(d['lib'], 2835, 'Sample1.fastq.gz',
-    #                    'f118ee769a5e1b40ec44629994dfc3cd')
-    #     node = d['lib']['file']['id']
-    #     self.delete_shock_node(node)
-
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
@@ -385,6 +351,7 @@ class kb_uploadmethods_reads_Test(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.nodes_to_delete.append(node)
 
+    @unittest.skip("duplicate test")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
