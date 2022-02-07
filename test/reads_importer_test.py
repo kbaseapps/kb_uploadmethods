@@ -333,15 +333,15 @@ class kb_uploadmethods_reads_Test(unittest.TestCase):
     #     node = d['lib']['file']['id']
     #     self.delete_shock_node(node)
 
-    @unittest.skip("skip for now")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_pe)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_import_sra_reads_paired_end(self, download_staging_file,
                                          _validate_upload_staging_file_availability,
-                                         _run_command, update_staging_service):
+                                         _run_command, update_staging_service, file_to_shock):
 
         sra_path = 'empty.sra'
         ws_obj_name = 'MyReads'
@@ -383,17 +383,17 @@ class kb_uploadmethods_reads_Test(unittest.TestCase):
         self.check_lib(d['lib1'], 2696029, file_name,
                        '1c58d7d59c656db39cedcb431376514b')
         node = d['lib1']['file']['id']
-        self.delete_shock_node(node)
+        self.nodes_to_delete.append(node)
 
-    @unittest.skip("skip for now")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_se)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_import_sra_reads_single_end(self, download_staging_file,
                                          _validate_upload_staging_file_availability,
-                                         _run_command, update_staging_service):
+                                         _run_command, update_staging_service, file_to_shock):
 
         sra_path = 'empty.sra'
         ws_obj_name = 'MyReads'
@@ -425,4 +425,4 @@ class kb_uploadmethods_reads_Test(unittest.TestCase):
         self.check_lib(d['lib'], 2964, 'fastq.fastq.gz',
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
-        self.delete_shock_node(node)
+        self.nodes_to_delete.append(node)
