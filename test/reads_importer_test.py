@@ -333,6 +333,7 @@ class kb_uploadmethods_reads_Test(unittest.TestCase):
     #     node = d['lib']['file']['id']
     #     self.delete_shock_node(node)
 
+    @unittest.skip("skip for now")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
@@ -384,6 +385,7 @@ class kb_uploadmethods_reads_Test(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("skip for now")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
