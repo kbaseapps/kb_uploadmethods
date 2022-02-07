@@ -113,7 +113,7 @@ class kb_uploadmethods_plant_Test(unittest.TestCase):
         print('Mocking DataFileUtilClient.file_to_shock')
         print(params)
 
-        return kb_uploadmethodsTest().test_shock
+        return kb_uploadmethods_plant_Test().test_shock
 
     def test_bad_upload_fasta_gff_file_params(self):
 

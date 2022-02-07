@@ -338,10 +338,9 @@ class kb_uploadmethods_reads_Test(unittest.TestCase):
                   side_effect=mock_validate_upload_staging_file_availability)
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_pe)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_import_sra_reads_paired_end(self, download_staging_file,
                                          _validate_upload_staging_file_availability,
-                                         _run_command, update_staging_service, file_to_shock):
+                                         _run_command, update_staging_service):
 
         sra_path = 'empty.sra'
         ws_obj_name = 'MyReads'
@@ -390,10 +389,9 @@ class kb_uploadmethods_reads_Test(unittest.TestCase):
                   side_effect=mock_validate_upload_staging_file_availability)
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_se)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
-    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_import_sra_reads_single_end(self, download_staging_file,
                                          _validate_upload_staging_file_availability,
-                                         _run_command, update_staging_service, file_to_shock):
+                                         _run_command, update_staging_service):
 
         sra_path = 'empty.sra'
         ws_obj_name = 'MyReads'
