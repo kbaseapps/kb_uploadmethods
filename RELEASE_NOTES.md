@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.54**
+Add `exact_match_on` field to the Genbank uploader.
+
 **1.0.53**
 Change casing of the `ui-name` field to sentence case for importers used by the Bulk Import cell.
 

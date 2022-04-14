@@ -135,6 +135,7 @@
           "result_array_index": 0,
           "path_to_selection_items": ["results"],
           "selection_id": "ncbi_taxon_id",
+          "exact_match_on": "scientific_name",
           "description_template": "NCBI Tax ID {{ncbi_taxon_id}}:&nbsp<strong>{{scientific_name}}</strong>",
           "multiselection": false
       }
