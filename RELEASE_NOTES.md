@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.55**
+Add `exact_match_on` field to the GFF Genome uploader.
+
 **1.0.54**
 Add `exact_match_on` field to the Genbank uploader.
 
