@@ -106,7 +106,7 @@
       "dynamic_dropdown_options": {
           "data_source": "custom",
           "service_function": "taxonomy_re_api.search_species",
-          "service_version": "dev",
+          "service_version": "release",
           "service_params": [
               {
                   "search_text": "prefix:{{dynamic_dropdown_input}}",
