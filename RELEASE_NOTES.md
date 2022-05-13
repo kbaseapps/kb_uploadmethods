@@ -1,4 +1,4 @@
-###Release Notes
+# Release Notes
 
 **1.0.56**
 Force usage of taxonomy_re_api widget in spec.json to use the "release" version instead of "dev"
