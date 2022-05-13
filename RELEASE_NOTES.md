@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.56**
+Force usage of taxonomy_re_api widget in spec.json to use the "release" version instead of "dev"
+
 **1.0.55**
 Add `exact_match_on` field to the GFF Genome uploader.
 
