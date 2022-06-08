@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.56**
+Updated SRA Toolkit to 2.11.0.
+
 **1.0.55**
 Add `exact_match_on` field to the GFF Genome uploader.
 
