@@ -21,30 +21,28 @@ suggestions :
 
 parameters :
     staging_subdir :
-        ui-name : Staging Directory
-        short-hint : Staging Subfolder
-        long-hint  : Staging Subfolder
+        ui-name : Staging directory
+        short-hint : Staging subfolder
+        long-hint  : Staging subfolder
 
     assembly_set_name :
-        ui-name : AssemblySet Object Name
+        ui-name : AssemblySet object name
         short-hint : Provide a name for the output object that will be created by this upload
         long-hint  : Provide a name for the output object that will be created by this upload
 
     type:
-        ui-name : |
-            Assembly Type
+        ui-name : Assembly type
         short-hint : |
             The type or source of this assembly
         long-hint  : |
             The type or source of this assembly
 
     min_contig_length :
-        ui-name : |
-            Minimum Contig Length
+        ui-name : Minimum contig length
         short-hint : |
             Contigs shorter than this length will be filtered out
         long-hint  : |
-            Contigs shorter than this value will be filtered out. Try larger value if upload fails.
+            Contigs shorter than this value will be filtered out. Try a larger value if upload fails.
 
 description : |
     <p> Import files (FASTA) from your staging area into your Narrative as an Assembly data object.

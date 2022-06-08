@@ -21,16 +21,14 @@ suggestions :
 
 parameters :
     staging_file_subdir_path :
-        ui-name : |
-            JSON File Path
+        ui-name : JSON file path
         short-hint : |
             File with EscherMap data in JSON format.
         long-hint  : |
             File with EscherMap data in JSON format.
 
     escher_map_name :
-        ui-name : |
-            EscherMap Object Name
+        ui-name : EscherMap object name
         short-hint : |
             Provide a name for the EscherMap that will be created by this importer
         long-hint : |

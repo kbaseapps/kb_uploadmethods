@@ -1,6 +1,12 @@
-# kb_uploadmethods 
+# kb_uploadmethods
 
-[![Build Status](https://travis-ci.org/tgu/kb_uploadmethods.svg?branch=master)](https://travis-ci.org/tgu/kb_uploadmethods)  
+## Current Status
+
+| Branch  | Build | Coverage | LGTM Alerts |
+| --- | --- | --- | --- |
+| master  | [![KBase SDK Tests](https://github.com/kbaseapps/kb_uploadmethods/workflows/KBase%20SDK%20Tests/badge.svg)](https://github.com/kbaseapps/kb_uploadmethods/actions?query=workflow%3A%22KBase+SDK+Tests%22)  | [![codecov](https://codecov.io/gh/kbaseapps/kb_uploadmethods/branch/master/graph/badge.svg?token=GXuMPxDUP5)](https://codecov.io/gh/kbaseapps/kb_uploadmethods) | [![Total alerts](https://img.shields.io/lgtm/alerts/g/kbaseapps/kb_uploadmethods.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kbaseapps/kb_uploadmethods/alerts/) |
+
+
 [Release Notes](RELEASE_NOTES.md)
 
 ## Description
@@ -22,7 +28,7 @@ This module can be tested with the following steps, common to all KBase SDK modu
 1.  Install the [KBase SDK](https://kbase.github.io/kb_sdk_docs/).
 2.  Fetch this module and navigate to it from the console.
 3.  Run `kb-sdk test` once - this will initialize the `test_local/test.cfg` file.
-4.  Populate the `test_local/test.cfg` file with a KBase authentication token (see [here](https://kbase.github.io/kb_sdk_docs/tutorial/3_initialize.html?highlight=token#set-up-your-developer-credentials) for details). 
+4.  Populate the `test_local/test.cfg` file with a KBase authentication token (see [here](https://kbase.github.io/kb_sdk_docs/tutorial/3_initialize.html?highlight=token#set-up-your-developer-credentials) for details).
 5.  Run `kb-sdk test` again.
 
 Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the test suite any time.
@@ -31,30 +37,30 @@ Once steps 1-4 have been run once, you can just run `kb-sdk test` to run the tes
 
 Each app is listed below with the following format:
 **Display name** - what the user sees - links to module doc page, if available
-**app id**: id - how the app is identified to the system, including the directory under ui/narrative/methods  
-**entrypoint**: function - name of the function that gets run in this module, as described in `kb_uploadmethods.spec`  
-**output type**: typed object(s) created  
+**app id**: id - how the app is identified to the system, including the directory under ui/narrative/methods
+**entrypoint**: function - name of the function that gets run in this module, as described in `kb_uploadmethods.spec`
+**output type**: typed object(s) created
 
 ### [Batch Import Assembly from Staging Area](https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/batch_import_assembly_from_staging)
 
--   **app id**: batch_import_assembly_from_staging  
--   **entrypoint**: batch_import_assemblies_from_staging  
--   **description**: Import FASTA files from your staging area into your Narrative as an Assembly data object.  
+-   **app id**: batch_import_assembly_from_staging
+-   **entrypoint**: batch_import_assemblies_from_staging
+-   **description**: Import FASTA files from your staging area into your Narrative as an Assembly data object.
 -   **input file type**: FASTA
 -   **output type**: KBaseSets.AssemblySet
 
 ### [Batch Import Genome from Staging Area](https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/batch_import_genome_from_staging)
 
--   **app id**: batch_import_genome_from_staging  
--   **entrypoint**: batch_import_genomes_from_staging  
--   **description:**: Import files (Genbank or GFF + FASTA) from your staging area into your Narrative as a Genome data object  
--   **input file types**: Genbank, GFF with FASTA
+-   **app id**: batch_import_genome_from_staging
+-   **entrypoint**: batch_import_genomes_from_staging
+-   **description:**: Import files (GenBank or GFF + FASTA) from your staging area into your Narrative as a Genome data object
+-   **input file types**: GenBank, GFF with FASTA
 -   **output type**: KBaseSearch.GenomeSet
 
 ### [Import TSV/Excel File as Attribute Mapping from Staging Area](https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/import_attribute_mapping_from_staging)
 
--   **app id**: import_attribute_mapping_from_staging  
--   **entrypoint**: import_attribute_mapping_from_staging  
+-   **app id**: import_attribute_mapping_from_staging
+-   **entrypoint**: import_attribute_mapping_from_staging
 -   **description**: Import a TSV or Excel file from your staging area into your Narrative as an Attribute Mapping data object.
 -   **input file types**: TSV, Excel
 -   **output type**: KBaseExperiments.AttributeMapping
@@ -96,14 +102,14 @@ Each app is listed below with the following format:
 -   **app id**: import_genbank_as_genome_from_staging
 -   **entrypoint**: import_genbank_from_staging
 -   **description**: Import a GenBank file from your staging area into your Narrative as a Genome data object.
--   **input file types**: Genbank
+-   **input file types**: GenBank
 -   **output type**: KBaseGenomes.Genome
 
 ### [Import GFF3/FASTA file as Genome from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_gff_fasta_as_genome_from_staging)
 
 -   **app id**: import_gff_fasta_as_genome_from_staging
 -   **entrypoint**: upload_fasta_gff_file
--   **description**: Import a GFF or FASTA file from your staging area into your Narrative as a Genome data object. 
+-   **description**: Import a GFF or FASTA file from your staging area into your Narrative as a Genome data object.
 -   **input file types**: GFF3 and FASTA
 -   **output type**: KBaseGenomes.Genome
 
@@ -153,7 +159,7 @@ Each app is listed below with the following format:
 -   **entrypoint**: upload_fastq_file
 -   **description**: This App allows users to load FASTQ format paired-end read libraries directly into the workspace from sources on the web. In addition to standard HTTP and anonymous FTP links, the user may also obtain files from Google drive and Dropbox links.
 -   **input file types**: FASTQ, FASTA
--   **output type**: KBaseFile.PairedEndLibrary 
+-   **output type**: KBaseFile.PairedEndLibrary
 
 ### [Import Single-End Reads from Web - v1.0.12](https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/load_single_end_reads_from_URL)
 
