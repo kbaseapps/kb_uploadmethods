@@ -1,4 +1,4 @@
-name     : Import SRA File as Reads From Web - v1.0.7
+name     : Import SRA File as Reads From Web - v1.0.10
 
 tooltip  : Import an SRA file from a web URL into your Narrative as a Reads data object.
 
@@ -21,7 +21,7 @@ suggestions :
 
 parameters :
     download_type :
-        ui-name : URL Type
+        ui-name : URL type
         short-hint : URL type - 'Regular URL (Direct Download Link)', 'FTP Link (Note NCBI SRA FTP no longer supported)', 'Dropbox/Box Public Shared Link', or 'Google Drive Public Shared Link.'
 
     file_url:
@@ -29,27 +29,27 @@ parameters :
         short-hint : URL for source of SRA reads.
 
     sequencing_tech :
-        ui-name : Sequencing Technology
+        ui-name : Sequencing technology
         short-hint : The name of the sequencing technology used to create the reads file.
 
     name :
-        ui-name : Reads Object Name
+        ui-name : Reads object name
         short-hint : Provide a name for the Reads that will be created by this importer.
 
     single_genome :
-        ui-name: Single Genome
+        ui-name : Single genome
         short-hint: Select if the reads are from a single genome, and leave blank if the reads are from a metagenome.
 
     insert_size_mean :
-        ui-name : Mean Insert Size
+        ui-name : Mean insert size
         short-hint : The mean (average) insert length.
 
     insert_size_std_dev :
-        ui-name : St. Dev. of Insert Size
+        ui-name : St. dev. of insert size
         short-hint : The standard deviation of insert lengths.
 
     read_orientation_outward :
-        ui-name : Reads Orientation Outward
+        ui-name : Reads orientation outward
         short-hint : Select if reads in a pair point outward.
 
 parameter-groups :

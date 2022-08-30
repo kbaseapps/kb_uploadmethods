@@ -21,7 +21,7 @@ suggestions :
 
 parameters :
     staging_file_subdir_path :
-        ui-name : File Path
+        ui-name : File path
         short-hint : The staging file subdirectory file path.
 
 description : |

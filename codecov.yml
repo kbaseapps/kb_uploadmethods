@@ -1,0 +1,5 @@
+ignore:
+  - "lib/installed_clients"
+  - "lib/kb_uploadmethods/kb_uploadmethodsServer.py"
+  - "lib/kb_uploadmethods/authclient.py"
+  - "lib/kb_uploadmethods/baseclient.py"

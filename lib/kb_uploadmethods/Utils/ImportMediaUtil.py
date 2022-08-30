@@ -8,6 +8,7 @@ from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.KBaseReportClient import KBaseReport
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 
+
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
     print((('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message)))
@@ -59,10 +60,10 @@ class ImportMediaUtil:
 
         try:
             ref = self.fba.tsv_file_to_media(import_media_params)
-        except:
+        except Exception:
             try:
                 ref = self.fba.excel_file_to_media(import_media_params)
-            except:
+            except Exception:
                 raise ValueError('"{}" is not a valid EXCEL nor TSV file'.format(
                                                 params.get('staging_file_subdir_path')))
         """

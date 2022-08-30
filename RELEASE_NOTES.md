@@ -1,7 +1,37 @@
 ###Release Notes
 
+**1.0.56**
+Updated SRA Toolkit to 2.11.0.
+
+**1.0.55**
+Add `exact_match_on` field to the GFF Genome uploader.
+
+**1.0.54**
+Add `exact_match_on` field to the Genbank uploader.
+
+**1.0.53**
+Change casing of the `ui-name` field to sentence case for importers used by the Bulk Import cell.
+
+**1.0.52**
+Directly copy files in the scratch folder to staging image. Instead of using staging API.
+
+**1.0.51**
+Set valid_ws_types for SRA and interleaved reads import apps
+
+**1.0.50**
+Require at least one input file for SRA and non/interleaved reads
+
+**1.0.49**
+Add dynamic dropdown boxes for scientific_name ui input to address conflicting scientific_name/taxon_id issues. The dynamic dropdown will connect to the re_api_search service to match the ncbi_taxon_id for the scientific_name user types into the input box.
+
+**1.0.48**
+Fix `import_fastq_noninterleaved...` app always specifying `interleaved=true`
+
+**1.0.47**
+Add support for uploading files > 2GB to the staging service
+
 **1.0.46**
-Fix tests from new UIs for FASTQ/SRA Importers 
+Fix tests from new UIs for FASTQ/SRA Importers
 
 **1.0.45**
 Add github actions tests

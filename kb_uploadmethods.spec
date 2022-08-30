@@ -100,11 +100,13 @@ module kb_uploadmethods {
     gff_file: gff file containing predicted gene models and corresponding features
 
     Optional params:
-    scientific_name: proper name for species, key for taxonomy lookup. Default to 'unknown_taxon'
+    scientific_name - the scientific name of the genome.
+    taxon_id - the numeric ID of the NCBI taxon to which this genome belongs.
+               If defined, will try to link the Genome to the specified
+               taxonomy id in lieu of performing the lookup during upload
+
     source: Source Of The GFF File. Default to 'User'
     taxon_wsname - where the reference taxons are. Default to 'ReferenceTaxons'
-    taxon_id - if defined, will try to link the Genome to the specified
-        taxonomy id in lieu of performing the lookup during upload
     release: Release Or Version Of The Source Data
     genetic_code: Genetic Code For The Organism
     type: 'Reference', 'User upload', 'Representative'
@@ -124,6 +126,7 @@ module kb_uploadmethods {
     int    genetic_code;
     string type;
     string generate_missing_genes;
+
   } UploadFastaGFFMethodParams;
 
   typedef structure {
@@ -291,12 +294,13 @@ module kb_uploadmethods {
     source - Source of the file typically something like RefSeq or Ensembl
 
     optional params:
+    scientific_name - the scientific name of the genome.
+    taxon_id - the numeric ID of the NCBI taxon to which this genome belongs.
+               If defined, will try to link the Genome to the specified
+               taxonomy id in lieu of performing the lookup during upload
+
     release - Release or version number of the data
         per example Ensembl has numbered releases of all their data: Release 31
-    scientific_name - will be used to set the scientific name of the genome
-        and link to a taxon
-    taxon_id - if defined, will try to link the Genome to the specified
-        taxonomy id in lieu of performing the lookup during upload
     generate_ids_if_needed - If field used for feature id is not there,
         generate ids (default behavior is raising an exception)
     generate_missing_genes - Generate gene feature for CDSs that do not have

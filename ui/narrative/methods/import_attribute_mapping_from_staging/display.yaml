@@ -21,16 +21,14 @@ suggestions :
 
 parameters :
     staging_file_subdir_path :
-        ui-name : |
-            File path
+        ui-name : File path
         short-hint : |
             File with tabular Attribute Mapping data.
         long-hint  : |
             Recognized extensions for the input file are .tsv or .xlsx
 
     attribute_mapping_name :
-        ui-name : |
-            Attribute Mapping object name
+        ui-name : Attribute Mapping object name
         short-hint : |
             Provide a name for the Attribute Mapping that will be created by this importer
         long-hint : |

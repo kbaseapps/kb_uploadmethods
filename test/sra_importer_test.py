@@ -23,6 +23,7 @@ from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 from kb_uploadmethods.authclient import KBaseAuth as _KBaseAuth
 from kb_uploadmethods.kb_uploadmethodsImpl import kb_uploadmethods
 from kb_uploadmethods.kb_uploadmethodsServer import MethodContext
+from installed_clients.AbstractHandleClient import AbstractHandle as HandleService
 
 
 class kb_uploadmethodsTest(unittest.TestCase):
@@ -55,6 +56,8 @@ class kb_uploadmethodsTest(unittest.TestCase):
         cls.wsClient = workspaceService(cls.wsURL, token=cls.token)
         cls.serviceImpl = kb_uploadmethods(cls.cfg)
         cls.dfu = DataFileUtil(os.environ['SDK_CALLBACK_URL'], token=cls.token)
+        cls.hs = HandleService(url=cls.cfg['handle-service-url'],
+                               token=cls.token)
         cls.scratch = cls.cfg['scratch']
         cls.shockURL = cls.cfg['shock-url']
 
@@ -65,6 +68,15 @@ class kb_uploadmethodsTest(unittest.TestCase):
         thread.daemon = True
         thread.start()
         time.sleep(5)
+
+        small_file = os.path.join(cls.scratch, 'test.txt')
+        with open(small_file, "w") as f:
+            f.write("empty content")
+        cls.test_shock = cls.dfu.file_to_shock({'file_path': small_file, 'make_handle': True})
+        cls.handles_to_delete = []
+        cls.nodes_to_delete = []
+        cls.handles_to_delete.append(cls.test_shock['handle']['hid'])
+        cls.nodes_to_delete.append(cls.test_shock['shock_id'])
 
     @classmethod
     def start_ftp_service(cls, domain, port):
@@ -85,6 +97,12 @@ class kb_uploadmethodsTest(unittest.TestCase):
         if hasattr(cls, 'wsName'):
             cls.wsClient.delete_workspace({'workspace': cls.wsName})
             print('Test workspace was deleted')
+        if hasattr(cls, 'nodes_to_delete'):
+            for node in cls.nodes_to_delete:
+                cls.delete_shock_node(node)
+        if hasattr(cls, 'handles_to_delete'):
+            cls.hs.delete_handles(cls.hs.hids_to_handles(cls.handles_to_delete))
+            print('Deleted handles ' + str(cls.handles_to_delete))
 
     @classmethod
     def make_ref(self, objinfo):
@@ -96,6 +114,12 @@ class kb_uploadmethodsTest(unittest.TestCase):
         requests.delete(cls.shockURL + '/node/' + node_id, headers=header,
                         allow_redirects=True)
         print(('Deleted shock node ' + node_id))
+
+    def mock_file_to_shock(params):
+        print('Mocking DataFileUtilClient.file_to_shock')
+        print(params)
+
+        return kb_uploadmethodsTest().test_shock
 
     def getWsClient(self):
         return self.__class__.wsClient
@@ -346,9 +370,10 @@ class kb_uploadmethodsTest(unittest.TestCase):
                   side_effect=mock_validate_upload_staging_file_availability)
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_pe)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_import_sra_paired_end(self, download_staging_file,
                                    _validate_upload_staging_file_availability,
-                                   _run_command, update_staging_service):
+                                   _run_command, update_staging_service, file_to_shock):
 
         sra_path = 'empty.sra'
         obj_name = 'MyReads'
@@ -391,14 +416,16 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib1']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("duplicate test")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_se)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_import_sra_single_end(self, download_staging_file,
                                    _validate_upload_staging_file_availability,
-                                   _run_command, update_staging_service):
+                                   _run_command, update_staging_service, file_to_shock):
 
         sra_path = 'empty.sra'
         obj_name = 'MyReads'
@@ -431,6 +458,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
 
+    @unittest.skip("duplicate test")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
@@ -478,6 +506,7 @@ class kb_uploadmethodsTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().import_sra_from_staging(self.getContext(), invalidate_input_params)
 
+    @unittest.skip("duplicate test")
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(ImportSRAUtil, "_validate_upload_staging_file_availability",
                   side_effect=mock_validate_upload_staging_file_availability)
@@ -519,9 +548,11 @@ class kb_uploadmethodsTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, error_msg):
             self.getImpl().import_sra_from_staging(self.getContext(), invalidate_input_params)
 
+    @unittest.skip("duplicate test")
     @patch.object(ImportSRAUtil, "_run_command", side_effect=mock_run_command_se)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
-    def test_import_web_sra_paired_end(self, _run_command, update_staging_service):
+    @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
+    def test_import_web_sra_paired_end(self, _run_command, update_staging_service, file_to_shock):
 
         # copy test file to FTP
         fq_filename = "empty.sra"
@@ -571,5 +602,3 @@ class kb_uploadmethodsTest(unittest.TestCase):
                        'f118ee769a5e1b40ec44629994dfc3cd')
         node = d['lib']['file']['id']
         self.delete_shock_node(node)
-
-

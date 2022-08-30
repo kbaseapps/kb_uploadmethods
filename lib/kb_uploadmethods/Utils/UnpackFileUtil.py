@@ -5,6 +5,7 @@ import time
 import uuid
 from configparser import SafeConfigParser
 import requests as _requests
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 import magic
 
@@ -19,6 +20,27 @@ def log(message, prefix_newline=False):
 
 class UnpackFileUtil:
 
+    # staging file prefix
+    STAGING_GLOBAL_FILE_PREFIX = '/data/bulk/'
+    STAGING_USER_FILE_PREFIX = '/staging/'
+
+    def _get_staging_file_path(self, token_user, staging_file_subdir_path=''):
+        """
+        _get_staging_file_path: return staging area file path
+
+        return:
+            preferred to return user specific path: /staging/sub_dir/file_name
+            if this path is not visible to user, use global bulk path: /data/bulk/user_name/sub_dir/file_name
+        """
+
+        user_path = os.path.join(self.STAGING_USER_FILE_PREFIX, staging_file_subdir_path.strip('/'))
+
+        if os.path.exists(user_path):
+            return user_path
+        else:
+            return os.path.join(self.STAGING_GLOBAL_FILE_PREFIX, token_user,
+                                staging_file_subdir_path.strip('/'))
+
     def _staging_service_host(self):
 
         deployment_path = os.environ["KB_DEPLOYMENT_CONFIG"]
@@ -31,6 +53,15 @@ class UnpackFileUtil:
 
         return staging_service_host
 
+    def _file_to_staging_direct(self, file_path_list, subdir_folder=''):
+
+        staging_dir = self._get_staging_file_path(self.user_id, subdir_folder)
+
+        for file_path in file_path_list:
+            shutil.copy2(file_path, staging_dir)
+            log('Copied file from %s to %s' %
+                (file_path, staging_dir))
+
     def _file_to_staging(self, file_path_list, subdir_folder=None):
         """
         _file_to_staging: upload file(s) to staging area
@@ -38,14 +69,30 @@ class UnpackFileUtil:
         subdir_folder_str = '/' if not subdir_folder else '/{}'.format(subdir_folder)
         staging_service_host = self._staging_service_host()
         end_point = staging_service_host + '/upload'
-        headers = {'Authorization': self.token}
 
         files = {'destPath': subdir_folder_str}
 
         for file_path in file_path_list:
             files.update({'uploads': (os.path.basename(file_path), open(file_path, 'rb'))})
-
-            resp = _requests.post(end_point, headers=headers, files=files)
+            
+            try:
+                resp = _requests.post(end_point, 
+                                      headers={
+                                          'Authorization': 
+                                          self.token
+                                      }, 
+                                      files=files)
+            except OverflowError:
+                # Support files over ~2gb (`requests` lib maximum)
+                multipart_encoded = MultipartEncoder(files)
+                resp = _requests.post(end_point,
+                                      data=multipart_encoded,
+                                      headers={
+                                          'Authorization':
+                                          self.token,
+                                          'Content-Type':
+                                          multipart_encoded.content_type
+                                      })
 
             if resp.status_code != 200:
                 raise ValueError('Upload file {} failed.\nError Code: {}\n{}\n'
@@ -146,7 +193,7 @@ class UnpackFileUtil:
         log("Unpacked files:\n  {}".format(
                           '\n  '.join(unpacked_file_path_list)))
 
-        self._file_to_staging(unpacked_file_path_list, os.path.dirname(
+        self._file_to_staging_direct(unpacked_file_path_list, os.path.dirname(
                                                 params.get('staging_file_subdir_path')))
 
         unpacked_file_path = ','.join(unpacked_file_path_list)
@@ -184,7 +231,8 @@ class UnpackFileUtil:
         log("Unpacked files:\n  {}".format(
                           '\n  '.join(unpacked_file_path_list)))
 
-        self._file_to_staging(unpacked_file_path_list)
+        self._file_to_staging_direct(unpacked_file_path_list)
+
         unpacked_file_path = ','.join(unpacked_file_path_list)
         returnVal = {'unpacked_file_path': unpacked_file_path}
 

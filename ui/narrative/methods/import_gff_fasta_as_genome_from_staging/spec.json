@@ -1,6 +1,6 @@
 {
   "ver" : "1.0.0",
-  "authors" : ["seaver","tgu2"],
+  "authors" : ["seaver", "tgu2", "qzhang"],
   "contact" : "http://kbase.us/contact-us/",
   "visble" : true,
   "categories" : [ "inactive","assembly","upload" ],
@@ -63,8 +63,20 @@
           "display": "Finished Isolate"
         },
         {
+          "value": "fungi",
+          "display": "Fungi"
+        },
+        {
           "value": "mag",
           "display": "Metagenome-assembled genome (MAG)"
+        },
+        {
+          "value": "other Eukaryote",
+          "display": "Other Eukaryote"
+        },
+        {
+          "value": "plant",
+          "display": "Plant"
         },
         {
           "value": "sag",
@@ -89,9 +101,27 @@
       "optional" : true,
       "advanced" : false,
       "allow_multiple" : false,
-      "default_values" : [ "unknown_taxon" ],
-      "field_type" : "text",
-      "text_options" : {}
+      "default_values" : [ "" ],
+      "field_type" : "dynamic_dropdown",
+      "dynamic_dropdown_options": {
+          "data_source": "custom",
+          "service_function": "taxonomy_re_api.search_species",
+          "service_version": "dev",
+          "service_params": [
+              {
+                  "search_text": "prefix:{{dynamic_dropdown_input}}",
+                  "ns": "ncbi_taxonomy",
+                  "limit": 20
+              }
+          ],
+          "query_on_empty_input": 0,
+          "result_array_index": 0,
+          "path_to_selection_items": ["results"],
+          "selection_id": "ncbi_taxon_id",
+          "exact_match_on": "scientific_name",
+          "description_template": "NCBI Tax ID {{ncbi_taxon_id}}:&nbsp<strong>{{scientific_name}}</strong>",
+          "multiselection": false
+      }
     },
     {
       "id" : "source",
@@ -111,6 +141,10 @@
           "display": "Ensembl"
         },
         {
+          "value": "JGI",
+          "display": "JGI"
+        },
+        {
           "value": "Other",
           "display": "Other"
         }
@@ -118,15 +152,6 @@
     },
     {
       "id" : "taxon_wsname",
-      "optional" : true,
-      "advanced" : true,
-      "allow_multiple" : false,
-      "default_values" : [ "" ],
-      "field_type" : "text",
-      "text_options" : {}
-    },
-    {
-      "id" : "taxon_id",
       "optional" : true,
       "advanced" : true,
       "allow_multiple" : false,
@@ -197,7 +222,7 @@
         },
         {
           "input_parameter": "scientific_name",
-          "target_property": "scientific_name"
+          "target_property": "taxon_id"
         },
         {
           "input_parameter": "source",
@@ -206,10 +231,6 @@
         {
           "input_parameter": "taxon_wsname",
           "target_property": "taxon_wsname"
-        },
-        {
-          "input_parameter": "taxon_id",
-          "target_property": "taxon_id"
         },
         {
           "input_parameter": "release",
