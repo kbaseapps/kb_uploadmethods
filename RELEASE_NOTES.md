@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.57**
+added "metagenome" as option for assembly import.
+
 **1.0.56**
 Updated SRA Toolkit to 2.11.0.
 
