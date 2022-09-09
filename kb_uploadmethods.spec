@@ -610,4 +610,13 @@ module kb_uploadmethods {
 
   funcdef import_eschermap_from_staging(EscherMapParams params)
           returns (UploadMethodResult returnVal) authentication required;
+          
+  typedef structure {
+    string staging_file_subdir_path;
+    int workspace_id;
+  } FASTAToProtSeqSetParams;
+
+  funcdef import_fasta_as_protseqset_from_staging(FASTAToProtSeqSetParams params)
+          returns (UploadMethodResult returnVal) authentication required;
+
 };

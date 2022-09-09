@@ -1,0 +1,169 @@
+{
+  "ver" : "",
+  "authors" : ["chenry"],
+  "contact" : "http://kbase.us/contact-us/",
+  "visible" : true,
+  "categories" : [ "inactive","upload" ],
+  "widgets": {
+    "input": "kbaseNarrativeMethodInput",
+    "output" : "no-display"
+  },
+  "parameters" : [ 
+    {
+		"id" : "staging_file_subdir_path",
+		"field_type" : "dynamic_dropdown",
+		"default_values" : [""],
+		"dynamic_dropdown_options" : {
+			"data_source": "ftp_staging"
+		},
+		"optional" : false,
+		"advanced" : false,
+		"allow_multiple" : false
+    },
+    {
+		"id" : "genome_refs",
+		"field_type" : "text",
+		"default_values" : [""],
+		"text_options" : {
+			"valid_ws_types" : [
+				"KBaseGenomes.Genome","KBaseSearch.GenomeSet"
+			]
+		},
+		"optional" : false,
+		"advanced" : false,
+		"allow_multiple" : true
+    },
+    {
+		"id" : "description",
+		"field_type" : "text",
+		"default_values" : [""],
+		"text_options" : {
+			"valid_ws_types" : []
+		},
+		"optional" : true,
+		"advanced" : false,
+		"allow_multiple" : false
+	},
+	{
+         "id" : "lookup_gene_matches",
+         "field_type" : "checkbox",
+         "default_values" : [
+            "1"
+         ],
+         "checkbox_options" : {
+            "unchecked_value" : "0",
+            "checked_value" : "1"
+         },
+         "text_options" : {
+            "valid_ws_types" : []
+         },
+         "optional" : false,
+         "advanced" : true,
+         "allow_multiple" : false
+	},
+	{
+		"id" : "min_similarity_threshold",
+		"field_type" : "text",
+		"default_values" : ["1"],
+		"text_options" : {
+			"validate_as" : "float"
+		},
+		"optional" : false,
+		"advanced" : true,
+		"allow_multiple" : false
+	},
+	{
+		"id" : "filter_nomatch",
+		"field_type" : "checkbox",
+		"default_values" : ["0"],
+		"checkbox_options" : {
+			"unchecked_value" : "0",
+			"checked_value" : "1"
+		},
+		"text_options" : {
+			"valid_ws_types" : []
+		},
+		"optional" : false,
+		"advanced" : true,
+		"allow_multiple" : false
+	},
+    {
+		"id" : "protseqset_name",
+		"field_type" : "text",
+		"default_values" : [ "" ],
+		"text_options" : {
+			"valid_ws_types" : [ "KBaseSequence.ProteinSequenceSet" ],
+			"is_output_name" : true
+		},
+		"optional" : false,
+		"advanced" : false,
+		"allow_multiple" : false
+    }
+  ],
+  "behavior" : {
+    "service-mapping" : {
+      "url" : "",
+      "name" : "kb_uploadmethods",
+      "method" : "import_fasta_as_protseqset_from_staging",
+      "input_mapping" : [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "staging_file_subdir_path",
+          "target_property": "staging_file_subdir_path"
+        },
+        {
+		  "input_parameter" : "genome_refs",
+		  "target_property" : "genome_refs",
+		  "target_type_transform": "list<resolved-ref>"
+        },
+        {
+          "input_parameter": "description",
+          "target_property": "description"
+        },
+        {
+          "input_parameter": "lookup_gene_matches",
+          "target_property": "lookup_gene_matches"
+        },
+        {
+          "input_parameter": "min_similarity_threshold",
+          "target_property": "min_similarity_threshold"
+        },
+        {
+          "input_parameter": "filter_nomatch",
+          "target_property": "filter_nomatch"
+        },
+        {
+          "input_parameter": "protseqset_name",
+          "target_property": "protseqset_name"
+        }
+      ],
+      "output_mapping" : [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "wsName"
+        },
+        {
+          "service_method_output_path": [0,"obj_ref"],
+          "target_property": "obj_ref",
+          "target_type_transform": "resolved-ref"
+        },
+        {
+            "service_method_output_path": [0, "report_name"],
+            "target_property": "report_name"
+        },
+        {
+            "service_method_output_path": [0, "report_ref"],
+            "target_property": "report_ref"
+        },
+        {
+            "constant_value": "16",
+            "target_property": "report_window_line_height"
+        }
+      ]
+    }
+  },
+  "job_id_output_field": "docker"
+}
