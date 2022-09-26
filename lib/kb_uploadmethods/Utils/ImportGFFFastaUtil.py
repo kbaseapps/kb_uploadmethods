@@ -11,7 +11,7 @@ class ImportGFFFastaUtil:
     def __init__(self, config):
         self.callback_url = config['SDK_CALLBACK_URL']
         self.dfu = DataFileUtil(self.callback_url)
-        self.gfu = GenomeFileUtil(self.callback_url, service_ver='beta')
+        self.gfu = GenomeFileUtil(self.callback_url, service_ver='release')
         self.uploader_utils = UploaderUtil(config)
 
     def import_gff_fasta_from_staging(self, params):

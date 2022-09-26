@@ -16,7 +16,7 @@ class ImportMetagenomeGFFFastaUtil:
         self.callback_url = config['SDK_CALLBACK_URL']
         self.token = config['KB_AUTH_TOKEN']
         self.dfu = DataFileUtil(self.callback_url)
-        self.gfu = GenomeFileUtil(self.callback_url, service_ver='dev')
+        self.gfu = GenomeFileUtil(self.callback_url, service_ver='release')
         self.uploader_utils = UploaderUtil(config)
         self.scratch = os.path.join(config['scratch'], 'import_Metagenome_' + str(uuid.uuid4()))
         handler_utils._mkdir_p(self.scratch)
