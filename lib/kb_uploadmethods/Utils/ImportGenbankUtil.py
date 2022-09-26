@@ -20,7 +20,7 @@ class ImportGenbankUtil:
         self.scratch = os.path.join(config['scratch'], 'import_GenBank_' + str(uuid.uuid4()))
         handler_utils._mkdir_p(self.scratch)
         self.dfu = DataFileUtil(self.callback_url)
-        self.gfu = GenomeFileUtil(self.callback_url, service_ver='beta')
+        self.gfu = GenomeFileUtil(self.callback_url, service_ver='release')
         self.uploader_utils = UploaderUtil(config)
 
     def import_genbank_from_staging(self, params):
