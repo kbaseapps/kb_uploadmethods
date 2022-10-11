@@ -1,6 +1,6 @@
-name     : Import FASTA File as Protein Sequence Set from Staging Area
-subtitle : Import a FASTA file from your staging area into your Narrative as a Protein Sequence Set data object
-tooltip  : Import a FASTA file from your staging area into your Narrative as a Protein Sequence Set data object
+name     : Import FASTA File as Protein/DNA Sequence Set from Staging Area
+subtitle : Import a FASTA file from your staging area into your Narrative as a Protein/DNA Sequence Set data object
+tooltip  : Import a FASTA file from your staging area into your Narrative as a Protein/DNA Sequence Set data object
 
 icon: data-blue.png
 
@@ -56,13 +56,13 @@ parameters :
             Remove proteins for which no match is found
         long-hint  : |
             Remove proteins for which no match is found
-    protseqset_name :
-        ui-name : Protein Sequence Set object name
+    seqset_name :
+        ui-name : Sequence Set object name
         short-hint : |
-            Provide a name for the Protein Sequence Set that will be created by this importer
+            Provide a name for the Protein/DNA Sequence Set that will be created by this importer
         long-hint : |
-            Provide a name for the Protein Sequence Set that will be created by this importer
+            Provide a name for the Protein/DNA Sequence Set that will be created by this importer
 
 description : |
-    <p> Import a FASTA file from your staging area into your Narrative as a Protein Sequence Set data object.
+    <p> Import a FASTA file from your staging area into your Narrative as a Protein/DNA Sequence Set data object.
     Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>

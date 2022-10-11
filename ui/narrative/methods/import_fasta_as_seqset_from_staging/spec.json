@@ -88,7 +88,7 @@
 		"allow_multiple" : false
 	},
     {
-		"id" : "protseqset_name",
+		"id" : "seqset_name",
 		"field_type" : "text",
 		"default_values" : [ "" ],
 		"text_options" : {
@@ -104,7 +104,7 @@
     "service-mapping" : {
       "url" : "",
       "name" : "kb_uploadmethods",
-      "method" : "import_fasta_as_protseqset_from_staging",
+      "method" : "import_fasta_as_seqset_from_staging",
       "input_mapping" : [
         {
           "narrative_system_variable": "workspace",
@@ -136,8 +136,8 @@
           "target_property": "filter_nomatch"
         },
         {
-          "input_parameter": "protseqset_name",
-          "target_property": "protseqset_name"
+          "input_parameter": "seqset_name",
+          "target_property": "seqset_name"
         }
       ],
       "output_mapping" : [

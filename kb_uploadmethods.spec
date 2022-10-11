@@ -613,10 +613,16 @@ module kb_uploadmethods {
           
   typedef structure {
     string staging_file_subdir_path;
-    int workspace_id;
-  } FASTAToProtSeqSetParams;
+    string workspace_name;
+    list<string> genome_refs;
+    string description;
+    int lookup_gene_matches;
+    float min_similarity_threshold;
+    int filter_nomatch;
+    string seqset_name;
+  } FASTAToSeqSetParams;
 
-  funcdef import_fasta_as_protseqset_from_staging(FASTAToProtSeqSetParams params)
+  funcdef import_fasta_as_seqset_from_staging(FASTAToSeqSetParams params)
           returns (UploadMethodResult returnVal) authentication required;
 
 };

@@ -19,7 +19,7 @@ from kb_uploadmethods.Utils.ImportReadsUtil import ImportReadsUtil
 from kb_uploadmethods.Utils.ImportSRAUtil import ImportSRAUtil
 from kb_uploadmethods.Utils.UnpackFileUtil import UnpackFileUtil
 from kb_uploadmethods.Utils.ImportEscherMapUtil import ImportEscherMapUtil
-from kb_uploadmethods.Utils.ImportProteinSequenceSet import ImportProteinSequenceSet
+from kb_uploadmethods.Utils.ImportSequenceSet import ImportSequenceSet
 from kb_uploadmethods.Utils.UploaderUtil import UploaderUtil
 #END_HEADER
 
@@ -41,7 +41,7 @@ class kb_uploadmethods:
     ######################################### noqa
     VERSION = "1.0.57"
     GIT_URL = "https://github.com/kbaseapps/kb_uploadmethods"
-    GIT_COMMIT_HASH = "89cae6d059d4d0ce7342d9ecae3903885ff99e08"
+    GIT_COMMIT_HASH = "dc1d59daecb07f0c07152246bf75cbbf59aea605"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -1035,18 +1035,22 @@ class kb_uploadmethods:
         # return the results
         return [returnVal]
 
-    def import_fasta_as_protseqset_from_staging(self, ctx, params):
+    def import_fasta_as_seqset_from_staging(self, ctx, params):
         """
-        :param params: instance of type "FASTAToProtSeqSetParams" ->
-           structure: parameter "staging_file_subdir_path" of String,
-           parameter "workspace_id" of Long
+        :param params: instance of type "FASTAToSeqSetParams" -> structure:
+           parameter "staging_file_subdir_path" of String, parameter
+           "workspace_name" of String, parameter "genome_refs" of list of
+           String, parameter "description" of String, parameter
+           "lookup_gene_matches" of Long, parameter
+           "min_similarity_threshold" of Double, parameter "filter_nomatch"
+           of Long, parameter "seqset_name" of String
         :returns: instance of type "UploadMethodResult" -> structure:
            parameter "obj_ref" of type "obj_ref", parameter "report_name" of
            type "report_name", parameter "report_ref" of type "report_ref"
         """
         # ctx is the context object
         # return variables are: returnVal
-        #BEGIN import_fasta_as_protseqset_from_staging
+        #BEGIN import_fasta_as_seqset_from_staging
         print('--->\nRunning uploadmethods.import_fasta_as_protseqset_from_staging\nparams:')
         print((json.dumps(params, indent=1)))
 
@@ -1054,16 +1058,16 @@ class kb_uploadmethods:
             if isinstance(value, str):
                 params[key] = value.strip()
 
-        importer = ImportProteinSequenceSet(self.config)
-        returnVal = importer.import_fasta_as_protseqset_from_staging(params)
+        importer = ImportSequenceSet(self.config)
+        returnVal = importer.import_fasta_as_seqset_from_staging(params)
 
         reportVal = importer.generate_report(returnVal['obj_ref'], params)
         returnVal.update(reportVal)
-        #END import_fasta_as_protseqset_from_staging
+        #END import_fasta_as_seqset_from_staging
 
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
-            raise ValueError('Method import_fasta_as_protseqset_from_staging return value ' +
+            raise ValueError('Method import_fasta_as_seqset_from_staging return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]

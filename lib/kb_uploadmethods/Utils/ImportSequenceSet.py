@@ -22,11 +22,12 @@ import sys
 from typing import List, Callable
 from collections import Counter
 from hashlib import md5
-
 from Bio import SeqIO
+from Bio.Seq import Seq
 
 #from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.WorkspaceClient import Workspace
+from numpy import True_
 
 _WSID = 'workspace_id'
 _INPUTS = 'inputs'
@@ -35,18 +36,18 @@ _DESCRIPTION = 'description'
 _LOOKUP_GENE_MATCHES = 'lookup_gene_matches'
 _MIN_SIMILARITY_THRESHOLD = 'min_similarity_threshold'
 _FILTER_NOMATCH = 'filter_nomatch'
-_PROTSEQSET_NAME = 'protseqset_name'
+_seqset_NAME = 'seqset_name'
 _FILE = 'file'
 _NODE = 'node'
 
 def _ref(object_info):
     return f'{object_info[6]}/{object_info[0]}/{object_info[4]}'
 
-class ImportProteinSequenceSet:
+class ImportSequenceSet:
 
     def __init__(self, config):
         self.callback_url = config['SDK_CALLBACK_URL']
-        self.scratch = os.path.join(config['scratch'], 'import_protseqset_' + str(uuid.uuid4()))
+        self.scratch = os.path.join(config['scratch'], 'import_seqset_' + str(uuid.uuid4()))
         handler_utils._mkdir_p(self.scratch)
         self.token = config['KB_AUTH_TOKEN']
         self.dfu = DataFileUtil(self.callback_url)
@@ -55,9 +56,9 @@ class ImportProteinSequenceSet:
         self._ws = Workspace()
         self._uuid_gen = Callable[[], uuid.UUID] = lambda: uuid.uuid4()):
         
-    def import_fasta_as_protseqset_from_staging(self, params):
+    def import_fasta_as_seqset_from_staging(self, params):
         """
-          import_fasta_as_protseqset_from_staging: importer for protein sequence set
+          import_fasta_as_seqset_from_staging: importer for protein sequence set
 
           required params:
           staging_file_subdir_path - subdirectory file path
@@ -66,23 +67,23 @@ class ImportProteinSequenceSet:
             staging_file_subdir_path is file_name
             for file: /data/bulk/user_name/subdir_1/subdir_2/file_name
             staging_file_subdir_path is subdir_1/subdir_2/file_name
-          protseqset_name - output ProteinSequenceSet file name
+          seqset_name - output SequenceSet file name
           workspace_name - the name of the workspace it gets saved to.
           
           optional params:
           genome_refs - array of genomes or genome sets whose genes should be mapped to proteins
           lookup_gene_matches - boolean lookup matching genes within KBase reference data
           min_similarity_threshold - minimum identity a gene must have to be mapped
-          description - description of the protein sequence set
+          description - description of the sequence set
           filter_nomatch - boolean indicating if proteins for which matches cannot be found should be removed from the set
 
           return:
           obj_ref: return object reference
         """
-        logging.info('--->\nrunning ImportProteinSequenceSet.import_fasta_as_protseqset_from_staging\n'
+        logging.info('--->\nrunning ImportSequenceSet.import_fasta_as_seqset_from_staging\n'
                      f'params:\n{json.dumps(params, indent=1)}')
 
-        params = self.validate_import_fasta_as_protseqset_from_staging(params)
+        params = self.validate_import_fasta_as_seqset_from_staging(params)
 
         download_staging_file_params = {
             'staging_file_subdir_path': params.get('staging_file_subdir_path')
@@ -99,10 +100,10 @@ class ImportProteinSequenceSet:
         file = {
             'path': scratch_file_path
         }
-        import_protseqset_params = params
-        import_protseqset_params['file'] = file
+        import_seqset_params = params
+        import_seqset_params['file'] = file
 
-        ref = self.import_fasta(import_protseqset_params)
+        ref = self.import_fasta(import_seqset_params)
 
         """
         Update the workspace object related meta-data for staged file
@@ -112,13 +113,13 @@ class ImportProteinSequenceSet:
         returnVal = {'obj_ref': ref}
         return returnVal
 
-    def validate_import_fasta_as_protseqset_from_staging(self, params):
+    def validate_import_fasta_as_seqset_from_staging(self, params):
         """
-        validate_import_fasta_as_protseqset_from_staging:
-                    validates params passed to import_fasta_as_protseqset_from_staging method
+        validate_import_fasta_as_seqset_from_staging:
+                    validates params passed to import_fasta_as_seqset_from_staging method
         """
         # check for required parameters
-        for p in ['staging_file_subdir_path', 'workspace_name', 'protseqset_name']:
+        for p in ['staging_file_subdir_path', 'workspace_name', 'seqset_name']:
             if p not in params:
                 raise ValueError(f'"{p}" parameter is required, but missing')
         optional = {
@@ -133,7 +134,7 @@ class ImportProteinSequenceSet:
                 params[p] = optional[p]
         return params
 
-    def generate_html_report(self, protseqset_ref, protseqset_object, params):#CHRIS-TODO
+    def generate_html_report(self, seqset_ref, seqset_object, params):#CHRIS-TODO
         """
         _generate_html_report: generate html summary report
         """
@@ -148,9 +149,9 @@ class ImportProteinSequenceSet:
         assembly_file = params.get('staging_file_subdir_path')
 
         overview_data = {
-            "ID":protseqset_object["id"],
-            "Description":protseqset_object["description"],
-            "Protein count":len(protseqset_object["sequences"])
+            "ID":seqset_object["id"],
+            "Description":seqset_object["description"],
+            "Protein count":len(seqset_object["sequences"])
         }
         overview_content = ['<br/><table>\n']
         for key, val in overview_data.items():
@@ -159,11 +160,11 @@ class ImportProteinSequenceSet:
         overview_content.append('</table>')
         with open(result_file_path, 'w') as result_file:
             with open(os.path.join(os.path.dirname(__file__), 'report_template',
-                                   'report_template_protseqset.html'),
+                                   'report_template_seqset.html'),
                       'r') as report_template_file:
                 report_template = report_template_file.read()
                 report_template = report_template.replace('<p>*Overview_Content*</p>',''.join(overview_content))
-                #report_template = report_template.replace('*PROTSEQSET_DATA*',contig_content)
+                #report_template = report_template.replace('*seqset_DATA*',contig_content)
                 result_file.write(report_template)
         result_file.close()
         report_shock_id = self.dfu.file_to_shock({'file_path': tmp_dir,
@@ -179,7 +180,7 @@ class ImportProteinSequenceSet:
         generate_report: generate summary report
 
         obj_ref: generated workspace object references. (return of
-                                                         import_fasta_as_protseqset_from_staging)
+                                                         import_fasta_as_seqset_from_staging)
         params:
         staging_file_subdir_path: subdirectory file path
           e.g.
@@ -196,7 +197,7 @@ class ImportProteinSequenceSet:
             'workspace_name': params.get('workspace_name'),
             'objects_created': [{'ref': obj_ref,
                                  'description': 'Imported Protein Sequence Set'}],
-            'report_object_name': f'kb_upload_protseqset_report_{uuid.uuid4()}'}
+            'report_object_name': f'kb_upload_seqset_report_{uuid.uuid4()}'}
         
         output_html_files = self.generate_html_report(obj_ref, object_data, params)
         report_params.update({
@@ -248,22 +249,26 @@ class ImportProteinSequenceSet:
         else:
             input_files = self._stage_blobstore_inputs(params[_INPUTS])
 
-        protseqset_objects = []
+        seqset_objects = []
+        datatype = 'KBaseSequences.DNASequenceSet'
         for i in range(len(input_files)):
             # Hmm, all through these printouts we should really put the blobstore node here as
             # well as the file if it exists... wait and see if that code path is still actually
             # used
             print(f'parsing FASTA file: {input_files[i]}')
             data = self._parse_fasta(input_files[i],params[_INPUTS][i])
+            if "protein" in data and data["protein"]:
+                datatype = 'KBaseSequences.ProteinSequenceSet'
+                del data["protein"]
             print(f' - parsed {len(data["sequences"]} proteins')
             if len(data["sequences"]):
                 raise ValueError("The FASTA file contained no valid sequences "
                                  + f"parameter for file {input_files[i]}")
-            protseqset_objects.append(data)
+            seqset_objects.append(data)
 
         # save to WS and return
-        protseqset_infos = self._save_protseqset_objects(params[_WSID],protseqset_objects)
-        return [_ref(ai) for ai in protseqset_infos]
+        seqset_infos = self._save_seqset_objects(params[_WSID],seqset_objects,datatype)
+        return [_ref(ai) for ai in seqset_infos]
 
     def _parse_fasta(self, fasta_file_path: Path,params):
         """ Parsing protein FASTA and building Protein Set object """
@@ -273,9 +278,9 @@ class ImportProteinSequenceSet:
         md5_list = []
         object = {
             "description":params["description"],
-            "id":params["protseqset_name"],
-            "sequence_set_id":params["protseqset_name"],
+            "id":params["seqset_name"],
             "sequences":[],
+            "included_types":[],
             "ontology_events":[]
         }
         for record in SeqIO.parse(str(fasta_file_path), "fasta"):
@@ -284,30 +289,59 @@ class ImportProteinSequenceSet:
             #           name='gi|113968346|ref|NC_008321.1|',
             #           description='gi|113968346|ref|NC_008321.1| Shewanella sp. MR-4 chromosome, complete genome',
             #           dbxrefs=[])
-
+            seqtype = None
+            type_description = ""
+            if re.search('(SO:\d+)', object.id) != None:
+                m = re.search('(SO:\d+)', object.id)
+                seqtype = m[1]
+            if re.search('(PR:\d+)', object.id) != None:
+                m = re.search('(PR:\d+)', object.id)
+                seqtype = m[1]
+            #Checking if DNA contains nonnucleotide characters
             sequence = str(record.seq).upper()
-            prot_obj = {
+            if re.search('^[ATGC\*]+$', object.id) == None:
+                object["protein"] = True
+                if seqtype = None:
+                    seqtype = "PR:000000001"
+                    type_description = "native protein"
+                #Genome_ref genome_ref;
+                #string mapped_feature_id;
+                #float mapped_sequence_identity;   
+            else:
+                if seqtype = None:
+                    seqtype = "SO:0000704"
+                    type_description = "A region that includes all of the sequence elements necessary to encode a functional transcript."
+                seqobj = Seq(sequence)
+                protein_translation = seqobj.translate()
+                #Genome_ref genome_ref;
+                #string mapped_feature_id;
+                #Assembly_ref assembly_ref;
+                #list<tuple<Contig_id,int,string,int>> location;
+                #float mapped_sequence_identity;     
+            feature_obj = {
                 "id":record.id,
-                "sequence_id":record.id,
+                "type":seqtype,
+                "type_description":type_description,
                 "description":record.description[len(record.id):].strip(),
                 "sequence":sequence,
                 "md5":md5(sequence.encode()).hexdigest(),
+                "aliases":[],
                 "ontology_terms":[]
             }
-            object["sequences"].append(prot_obj)
-            md5_list.append(prot_obj["md5"])
+            object["sequences"].append(feature_obj)
+            md5_list.append(feature_obj["md5"])
             #object_ref
             #object_feature_id
         object["md5"] = md5(",".join(sorted(md5_list)).encode()).hexdigest()
         return object
 
-    def _save_protseqset_objects(self, workspace_id, objects):
-        print('Saving Protein Sequence Sets to Workspace')
+    def _save_seqset_objects(self, workspace_id, objects, type):
+        print('Saving Sequence Sets to Workspace')
         sys.stdout.flush()
         ws_inputs = []
         for obj in objects:
             ws_inputs.append({
-                'type': 'KBaseSequences.SequenceSet',  #Replace with: KBaseSequences.ProteinSequenceSet
+                'type': type,  #Replace with: KBaseSequences.ProteinSequenceSet
                 'data': obj,
                 'name': obj["id"]
             })
@@ -324,7 +358,7 @@ class ImportProteinSequenceSet:
         for inp in inputs:
             if not os.path.isfile(inp[_FILE]):
                 raise ValueError(
-                    "KBase Sequence Set Utils tried to save an protein sequence set, but the calling "
+                    "KBase Sequence Set Utils tried to save an  sequence set, but the calling "
                     + f"application specified a file ('{inp[_FILE]}') that is missing. "
                     + "Please check the application logs for details.")
             # Ideally we'd have some sort of security check here but the DTN files could
@@ -371,8 +405,8 @@ class ImportProteinSequenceSet:
                   + "a workspace ID over a mutable workspace name that may cause race conditions")
             ws_id = self.dfu.ws_name_to_id(params['workspace_name'])
 
-        if not inputs.get(_PROTSEQSET_NAME):
-            raise ValueError(f"Required parameter {_PROTSEQSET_NAME} was not defined")
+        if not inputs.get(_seqset_NAME):
+            raise ValueError(f"Required parameter {_seqset_NAME} was not defined")
 
         # one and only one of either 'file' or 'shock_id' is required
         file_ = inputs.pop(_FILE, None)
@@ -412,8 +446,8 @@ class ImportProteinSequenceSet:
             if not inp.get(field):
                 raise ValueError(
                     f"Entry #{i} in {_INPUTS} must have a {field} field to match entry #1")
-            if not inp.get(_PROTSEQSET_NAME):
-                raise ValueError(f"Missing {_PROTSEQSET_NAME} field in {_INPUTS} entry #{i}")
+            if not inp.get(_seqset_NAME):
+                raise ValueError(f"Missing {_seqset_NAME} field in {_INPUTS} entry #{i}")
 
     def _get_int(self, putative_int, name):
         if putative_int is not None:
