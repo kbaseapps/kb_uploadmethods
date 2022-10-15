@@ -116,55 +116,38 @@ class kb_uploadmethods_fastaToSeqSet(unittest.TestCase):
 
         return kb_uploadmethods_fastaToSeqSet().test_shock
 
-    def test_bad_import_fasta_as_seqset_params(self):
-        invalidate_input_params = {
-          'missing_staging_file_subdir_path': 'staging_file_subdir_path',
-          'workspace_name': 'workspace_name',
-          'seqset_name': 'seqset_name'
-        }
-        with self.assertRaisesRegex(
-                    ValueError,
-                    '"staging_file_subdir_path" parameter is required, but missing'):
-            self.getImpl().import_fasta_as_seqset_from_staging(self.getContext(),
-                                                                 invalidate_input_params)
-
-        invalidate_input_params = {
-          'staging_file_subdir_path': 'staging_file_subdir_path',
-          'missing_workspace_name': 'workspace_name',
-          'seqset_name': 'seqset_name'
-        }
-        with self.assertRaisesRegex(
-                    ValueError,
-                    '"workspace_name" parameter is required, but missing'):
-            self.getImpl().import_fasta_as_seqset_from_staging(self.getContext(),
-                                                                 invalidate_input_params)
-        invalidate_input_params = {
-          'staging_file_subdir_path': 'staging_file_subdir_path',
-          'workspace_name': 'workspace_name',
-          'missing_seqset_name': 'seqset_name'
-        }
-        with self.assertRaisesRegex(
-                ValueError,
-                '"assembly_name" parameter is required, but missing'):
-            self.getImpl().import_fasta_as_seqset_from_staging(self.getContext(),
-                                                                 invalidate_input_params)
-
     @patch.object(DataFileUtil, "download_staging_file", side_effect=mock_download_staging_file)
     @patch.object(UploaderUtil, "update_staging_service", return_value=None)
     @patch.object(DataFileUtil, "file_to_shock", side_effect=mock_file_to_shock)
     def test_import_fasta_as_assembly_from_staging(self, download_staging_file,
                                                    update_staging_service, file_to_shock):
 
-        fasta_file = 'prot_fasta.fna'
+        fasta_file = 'prot_fasta.fa'
         ws_obj_name = 'MyProtSeqSet'
+        ws_name = "chenry:narrative_1665809488903"
+        #ws_name = self.getWsName()
 
         params = {
           'staging_file_subdir_path': fasta_file,
-          'workspace_name': self.getWsName(),
+          'workspace_name': ws_name,
           'seqset_name': ws_obj_name
         }
 
-        ref = self.getImpl().import_fasta_as_assembly_from_staging(self.getContext(), params)
+        ref = self.getImpl().import_fasta_as_seqset_from_staging(self.getContext(), params)
+        self.assertTrue('obj_ref' in ref[0])
+        self.assertTrue('report_ref' in ref[0])
+        self.assertTrue('report_name' in ref[0])
+        
+        fasta_file = 'dna_fasta.fna'
+        ws_obj_name = 'MyDNASeqSet'
+
+        params = {
+          'staging_file_subdir_path': fasta_file,
+          'workspace_name': ws_name,
+          'seqset_name': ws_obj_name
+        }
+
+        ref = self.getImpl().import_fasta_as_seqset_from_staging(self.getContext(), params)
         self.assertTrue('obj_ref' in ref[0])
         self.assertTrue('report_ref' in ref[0])
         self.assertTrue('report_name' in ref[0])

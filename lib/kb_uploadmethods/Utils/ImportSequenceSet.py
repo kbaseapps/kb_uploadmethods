@@ -3,6 +3,7 @@ import collections
 import json
 import logging
 import os
+import re
 import time
 import uuid
 
@@ -52,9 +53,7 @@ class ImportSequenceSet:
         self.token = config['KB_AUTH_TOKEN']
         self.dfu = DataFileUtil(self.callback_url)
         self.uploader_utils = UploaderUtil(config)
-        #Library properties
-        self._ws = Workspace()
-        self._uuid_gen = Callable[[], uuid.UUID] = lambda: uuid.uuid4()):
+        self._ws = Workspace(config["workspace-url"], token=self.token)
         
     def import_fasta_as_seqset_from_staging(self, params):
         """
@@ -145,9 +144,6 @@ class ImportSequenceSet:
         handler_utils._mkdir_p(tmp_dir)
         result_file_path = os.path.join(tmp_dir, 'report.html')
 
-        assembly_name = str(assembly_info[1])
-        assembly_file = params.get('staging_file_subdir_path')
-
         overview_data = {
             "ID":seqset_object["id"],
             "Description":seqset_object["description"],
@@ -158,12 +154,13 @@ class ImportSequenceSet:
             overview_content.append(f'<tr><td><b>{key}</b></td>')
             overview_content.append(f'<td>{val}</td></tr>\n')
         overview_content.append('</table>')
+        os.makedirs(os.path.join(os.path.dirname(__file__), 'report_template'), exist_ok=True)
         with open(result_file_path, 'w') as result_file:
             with open(os.path.join(os.path.dirname(__file__), 'report_template',
-                                   'report_template_seqset.html'),
+                                   'report_template.html'),
                       'r') as report_template_file:
                 report_template = report_template_file.read()
-                report_template = report_template.replace('<p>*Overview_Content*</p>',''.join(overview_content))
+                report_template = report_template.replace('<p>Overview_Content</p>',''.join(overview_content))
                 #report_template = report_template.replace('*seqset_DATA*',contig_content)
                 result_file.write(report_template)
         result_file.close()
@@ -192,14 +189,14 @@ class ImportSequenceSet:
 
         """
         object_data = self.dfu.get_objects({'object_refs': [obj_ref]})
-
+        print(json.dumps(object_data))
         report_params = {
             'workspace_name': params.get('workspace_name'),
             'objects_created': [{'ref': obj_ref,
                                  'description': 'Imported Protein Sequence Set'}],
             'report_object_name': f'kb_upload_seqset_report_{uuid.uuid4()}'}
         
-        output_html_files = self.generate_html_report(obj_ref, object_data, params)
+        output_html_files = self.generate_html_report(obj_ref, object_data["data"][0]["data"], params)
         report_params.update({
             'html_links': output_html_files,
             'direct_html_link_index': 0,
@@ -260,8 +257,10 @@ class ImportSequenceSet:
             if "protein" in data and data["protein"]:
                 datatype = 'KBaseSequences.ProteinSequenceSet'
                 del data["protein"]
-            print(f' - parsed {len(data["sequences"]} proteins')
-            if len(data["sequences"]):
+            else:
+                del data["dna"]
+            print(' - parsed ',len(data["sequences"]),' proteins')
+            if len(data["sequences"]) == 0:
                 raise ValueError("The FASTA file contained no valid sequences "
                                  + f"parameter for file {input_files[i]}")
             seqset_objects.append(data)
@@ -291,28 +290,33 @@ class ImportSequenceSet:
             #           dbxrefs=[])
             seqtype = None
             type_description = ""
-            if re.search('(SO:\d+)', object.id) != None:
-                m = re.search('(SO:\d+)', object.id)
+            if re.search('(SO:\d+)', record.description) != None:
+                m = re.search('(SO:\d+)', record.description)
                 seqtype = m[1]
-            if re.search('(PR:\d+)', object.id) != None:
-                m = re.search('(PR:\d+)', object.id)
+            if re.search('(PR:\d+)', record.description) != None:
+                m = re.search('(PR:\d+)', record.description)
                 seqtype = m[1]
             #Checking if DNA contains nonnucleotide characters
             sequence = str(record.seq).upper()
-            if re.search('^[ATGC\*]+$', object.id) == None:
+            if re.search('^[ATGC\*]+$', sequence) == None:
+                if "dna" in object:
+                    raise ValueError("FASTA file mixes protein and DNA sequences")
                 object["protein"] = True
-                if seqtype = None:
+                if seqtype == None:
                     seqtype = "PR:000000001"
                     type_description = "native protein"
                 #Genome_ref genome_ref;
                 #string mapped_feature_id;
                 #float mapped_sequence_identity;   
             else:
-                if seqtype = None:
+                if "protein" in object:
+                    raise ValueError("FASTA file mixes protein and DNA sequences")
+                object["dna"] = True
+                if seqtype == None:
                     seqtype = "SO:0000704"
                     type_description = "A region that includes all of the sequence elements necessary to encode a functional transcript."
-                seqobj = Seq(sequence)
-                protein_translation = seqobj.translate()
+                #seqobj = Seq(sequence)
+                protein_translation = record.seq.translate()
                 #Genome_ref genome_ref;
                 #string mapped_feature_id;
                 #Assembly_ref assembly_ref;
@@ -326,7 +330,7 @@ class ImportSequenceSet:
                 "sequence":sequence,
                 "md5":md5(sequence.encode()).hexdigest(),
                 "aliases":[],
-                "ontology_terms":[]
+                "ontology_terms":{}
             }
             object["sequences"].append(feature_obj)
             md5_list.append(feature_obj["md5"])
@@ -336,7 +340,7 @@ class ImportSequenceSet:
         return object
 
     def _save_seqset_objects(self, workspace_id, objects, type):
-        print('Saving Sequence Sets to Workspace')
+        print('Saving '+type+' to Workspace')
         sys.stdout.flush()
         ws_inputs = []
         for obj in objects:
@@ -367,7 +371,7 @@ class ImportSequenceSet:
             fp = Path(inp[_FILE]).resolve(strict=True)
             # make the downstream unpack call unpack into scratch rather than wherever the
             # source file might be
-            file_path = self._create_temp_dir() / fp.name
+            file_path = self._create_temp_dir()+"/"+fp.name
             # symlink doesn't work, because in DFU filemagic doesn't follow symlinks, and so
             # DFU won't unpack symlinked files
             os.link(fp, file_path)
@@ -390,7 +394,7 @@ class ImportSequenceSet:
         return [Path(dr['file_path']) for dr in dfu_res]
 
     def _create_temp_dir(self):
-        tmpdir = self.scratch / ("import_fasta_" + str(self._uuid_gen()))
+        tmpdir = self.scratch+ "/"+("import_seqset_" + str(uuid.uuid4()))
         os.makedirs(tmpdir, exist_ok=True)
         return tmpdir
 

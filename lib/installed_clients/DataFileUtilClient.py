@@ -123,26 +123,27 @@ class DataFileUtil(object):
         :param params: instance of type "FileToShockParams" (Input for the
            file_to_shock function. Required parameters: file_path - the
            location of the file (or directory if using the pack parameter) to
-           load to Shock. Optional parameters: attributes - user-specified
-           attributes to save to the Shock node along with the file.
-           make_handle - make a Handle Service handle for the shock node.
-           Default false. pack - compress a file or archive a directory
-           before loading to Shock. The file_path argument will be appended
-           with the appropriate file extension prior to writing. For gzips
-           only, if the file extension denotes that the file is already
-           compressed, it will be skipped. If file_path is a directory and
-           tarring or zipping is specified, the created file name will be set
-           to the directory name, possibly overwriting an existing file.
-           Attempting to pack the root directory is an error. Do not attempt
-           to pack the scratch space root as noted in the module description.
-           The allowed values are: gzip - gzip the file given by file_path.
-           targz - tar and gzip the directory specified by the directory
-           portion of the file_path into the file specified by the file_path.
-           zip - as targz but zip the directory.) -> structure: parameter
-           "file_path" of String, parameter "attributes" of mapping from
-           String to unspecified object, parameter "make_handle" of type
-           "boolean" (A boolean - 0 for false, 1 for true. @range (0, 1)),
-           parameter "pack" of String
+           load to Shock. Optional parameters: attributes - DEPRECATED:
+           attributes are currently ignored by the upload function and will
+           be removed entirely in a future version. User-specified attributes
+           to save to the Shock node along with the file. make_handle - make
+           a Handle Service handle for the shock node. Default false. pack -
+           compress a file or archive a directory before loading to Shock.
+           The file_path argument will be appended with the appropriate file
+           extension prior to writing. For gzips only, if the file extension
+           denotes that the file is already compressed, it will be skipped.
+           If file_path is a directory and tarring or zipping is specified,
+           the created file name will be set to the directory name, possibly
+           overwriting an existing file. Attempting to pack the root
+           directory is an error. Do not attempt to pack the scratch space
+           root as noted in the module description. The allowed values are:
+           gzip - gzip the file given by file_path. targz - tar and gzip the
+           directory specified by the directory portion of the file_path into
+           the file specified by the file_path. zip - as targz but zip the
+           directory.) -> structure: parameter "file_path" of String,
+           parameter "attributes" of mapping from String to unspecified
+           object, parameter "make_handle" of type "boolean" (A boolean - 0
+           for false, 1 for true. @range (0, 1)), parameter "pack" of String
         :returns: instance of type "FileToShockOutput" (Output of the
            file_to_shock function. shock_id - the ID of the new Shock node.
            handle - the new handle, if created. Null otherwise.
@@ -166,8 +167,8 @@ class DataFileUtil(object):
         """
         Using the same logic as unpacking a Shock file, this method will cause
         any bzip or gzip files to be uncompressed, and then unpack tar and zip
-        archive files (uncompressing gzipped or bzipped archive files if 
-        necessary). If the file is an archive, it will be unbundled into the 
+        archive files (uncompressing gzipped or bzipped archive files if
+        necessary). If the file is an archive, it will be unbundled into the
         directory containing the original output file.
         :param params: instance of type "UnpackFileParams" -> structure:
            parameter "file_path" of String
@@ -175,6 +176,42 @@ class DataFileUtil(object):
            "file_path" of String
         """
         return self._client.run_job('DataFileUtil.unpack_file',
+                                    [params], self._service_ver, context)
+
+    def unpack_files(self, params, context=None):
+        """
+        Using the same logic as unpacking a Shock file, this method will cause
+        any bzip or gzip files to be uncompressed, and then unpack tar and zip
+        archive files (uncompressing gzipped or bzipped archive files if 
+        necessary). If the file is an archive, it will be unbundled into the 
+        directory containing the original output file.
+        The ordering of the input and output files is preserved in the input and output lists.
+        :param params: instance of list of type "UnpackFilesParams" (Input
+           parameters for the unpack_files function. Required parameter:
+           file_path - the path to the file to unpack. The file will be
+           unpacked into the file's parent directory. Optional parameter:
+           unpack - either 'uncompress' or 'unpack'. 'uncompress' will cause
+           any bzip or gzip files to be uncompressed. 'unpack' will behave
+           the same way, but it will also unpack tar and zip archive files
+           (uncompressing gzipped or bzipped archive files if necessary). If
+           'uncompress' is specified and an archive file is encountered, an
+           error will be thrown. If the file is an archive, it will be
+           unbundled into the directory containing the original output file.
+           Defaults to 'unpack'. Note that if the file name (either as
+           provided by the user or by Shock) without the a decompression
+           extension (e.g. .gz, .zip or .tgz -> .tar) points to an existing
+           file and unpack is specified, that file will be overwritten by the
+           decompressed Shock file.) -> structure: parameter "file_path" of
+           String, parameter "unpack" of String
+        :returns: instance of list of type "UnpackFilesResult" (Output
+           parameters for the unpack_files function. file_path - the path to
+           either a) the unpacked file or b) in the case of archive files,
+           the path to the original archive file, possibly uncompressed, or
+           c) in the case of regular files that don't need processing, the
+           path to the input file.) -> structure: parameter "file_path" of
+           String
+        """
+        return self._client.run_job('DataFileUtil.unpack_files',
                                     [params], self._service_ver, context)
 
     def pack_file(self, params, context=None):
@@ -219,11 +256,13 @@ class DataFileUtil(object):
            produce info-files in JSON format containing workspace metadata
            and provenance structures. It produces new files in folder pointed
            by file_path (or folder containing file pointed by file_path if
-           it's not folder). Optional parameters: attributes - user-specified
-           attributes to save to the Shock node along with the file.) ->
-           structure: parameter "file_path" of String, parameter "attributes"
-           of mapping from String to unspecified object, parameter "ws_refs"
-           of list of String
+           it's not folder). Optional parameters: attributes - DEPRECATED:
+           attributes are currently ignored by the upload function and will
+           be removed entirely in a future version. User-specified attributes
+           to save to the Shock node along with the file.) -> structure:
+           parameter "file_path" of String, parameter "attributes" of mapping
+           from String to unspecified object, parameter "ws_refs" of list of
+           String
         :returns: instance of type "PackageForDownloadOutput" (Output of the
            package_for_download function. shock_id - the ID of the new Shock
            node. node_file_name - the name of the file stored in Shock. size
@@ -241,7 +280,9 @@ class DataFileUtil(object):
            for the file_to_shock function. Required parameters: file_path -
            the location of the file (or directory if using the pack
            parameter) to load to Shock. Optional parameters: attributes -
-           user-specified attributes to save to the Shock node along with the
+           DEPRECATED: attributes are currently ignored by the upload
+           function and will be removed entirely in a future version.
+           User-specified attributes to save to the Shock node along with the
            file. make_handle - make a Handle Service handle for the shock
            node. Default false. pack - compress a file or archive a directory
            before loading to Shock. The file_path argument will be appended
@@ -352,8 +393,13 @@ class DataFileUtil(object):
 
     def save_objects(self, params, context=None):
         """
-        Save objects to the workspace. Saving over a deleted object undeletes
-        it.
+        Save objects to the workspace.
+        The objects will be sorted prior to saving to avoid the Workspace sort memory limit.
+        Note that if the object contains workspace object refs in mapping keys that may cause
+        the Workspace to resort the data. To avoid this, convert any refs in mapping keys to UPA
+        format (e.g. #/#/#, where # is a positive integer).
+        If the data is very large, using the WSLargeDataIO SDK module is advised.
+        Saving over a deleted object undeletes it.
         :param params: instance of type "SaveObjectsParams" (Input parameters
            for the "save_objects" function. Required parameters: id - the
            numerical ID of the workspace. objects - the objects to save. The
@@ -362,15 +408,12 @@ class DataFileUtil(object):
            type "ObjectSaveData" (An object and associated data required for
            saving. Required parameters: type - the workspace type string for
            the object. Omit the version information to use the latest
-           version. data - the object data. Optional parameters: One of an
-           object name or id. If no name or id is provided the name will be
-           set to 'auto' with the object id appended as a string, possibly
-           with -\d+ appended if that object id already exists as a name.
-           name - the name of the object. objid - the id of the object to
-           save over. meta - arbitrary user-supplied metadata for the object,
-           not to exceed 16kb; if the object type specifies automatic
-           metadata extraction with the 'meta ws' annotation, and your
-           metadata name conflicts, then your metadata will be silently
+           version. data - the object data. One of an object name or id: name
+           - the name of the object. objid - the id of the object to save
+           over. Optional parameters: meta - arbitrary user-supplied metadata
+           for the object, not to exceed 16kb; if the object type specifies
+           automatic metadata extraction with the 'meta ws' annotation, and
+           your metadata name conflicts, then your metadata will be silently
            overwritten. hidden - true if this object should not be listed
            when listing workspace objects. extra_provenance_input_refs -
            (optional) if set, these refs will be appended to the primary
