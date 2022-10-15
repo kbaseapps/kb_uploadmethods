@@ -8,7 +8,7 @@ service-language:
     python
 
 module-version:
-    1.0.57
+    1.0.58
 
 owners:
-    [tgu2, slebras, gaprice, qzhang, dakota, dylan]
+    [tgu2, slebras, gaprice, qzhang, dakota, dylan, chenry]
