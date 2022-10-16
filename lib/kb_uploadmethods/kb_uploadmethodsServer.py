@@ -418,6 +418,10 @@ class Application(object):
                              name='kb_uploadmethods.import_eschermap_from_staging',
                              types=[dict])
         self.method_authentication['kb_uploadmethods.import_eschermap_from_staging'] = 'required'  # noqa
+        self.rpc_service.add(impl_kb_uploadmethods.import_fasta_as_seqset_from_staging,
+                             name='kb_uploadmethods.import_fasta_as_seqset_from_staging',
+                             types=[dict])
+        self.method_authentication['kb_uploadmethods.import_fasta_as_seqset_from_staging'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_uploadmethods.status,
                              name='kb_uploadmethods.status',
                              types=[dict])

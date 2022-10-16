@@ -81,6 +81,14 @@ Each app is listed below with the following format:
 -   **input file type**: FASTA
 -   **output type**: KBaseGenomeAnnotations.Assembly
 
+### [Import a FASTA file from your staging area into your Narrative as a Protein/DNA Sequence Set data object](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_fasta_as_seqset_from_staging)
+
+-   **app id**: import_fasta_as_seqset_from_staging
+-   **entrypoint**: import_fasta_as_seqset_from_staging
+-   **description**: Import a FASTA file from your staging area into your Narrative as a Protein/DNA Sequence Set data object
+-   **input file type**: FASTA
+-   **output type**: KBaseSequences.DNASequenceSet or KBaseSequences.ProteinSequenceSet
+
 ### [Import FASTQ/SRA File as Reads from Staging Area](https://narrative.kbase.us/#appcatalog/app/kb_uploadmethods/import_fastq_sra_as_reads_from_staging)
 
 -   **app id**: import_fastq_sra_as_reads_from_staging

@@ -1,5 +1,8 @@
 ###Release Notes
 
+**1.0.58**
+added new apps and utilities to support sequence set import.
+
 **1.0.57**
 added "metagenome" as option for assembly import.
 use released GenomeFileUtil API
