@@ -3,7 +3,7 @@
   "authors" : ["chenry"],
   "contact" : "http://kbase.us/contact-us/",
   "visible" : true,
-  "categories" : [ "inactive","upload" ],
+  "categories" : [ "active","upload" ],
   "widgets": {
     "input": "kbaseNarrativeMethodInput",
     "output" : "no-display"
