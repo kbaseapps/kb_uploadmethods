@@ -24,7 +24,7 @@ class GenomeFileUtil(object):
             password=None, token=None, ignore_authrc=False,
             trust_all_ssl_certificates=False,
             auth_svc='https://ci.kbase.us/services/auth/api/legacy/KBase/Sessions/Login',
-            service_ver='dev',
+            service_ver='release',
             async_job_check_time_ms=100, async_job_check_time_scale_percent=150, 
             async_job_check_max_time_ms=300000):
         if url is None:
@@ -99,7 +99,7 @@ class GenomeFileUtil(object):
            optional flag switching export to GTF format (default is 0, which
            means GFF) target_dir - optional target directory to create file
            in (default is temporary folder with name 'gff_<timestamp>'
-           created in scratch)) -> structure: parameter "genome_ref" of
+           created in scratch)) -> structure: parameter "metagenome_ref" of
            String, parameter "ref_path_to_genome" of list of String,
            parameter "is_gtf" of type "boolean" (A boolean - 0 for false, 1
            for true. @range (0, 1)), parameter "target_dir" of String
@@ -199,6 +199,17 @@ class GenomeFileUtil(object):
            "shock_id" of String
         """
         return self._client.run_job('GenomeFileUtil.export_genome_features_protein_to_fasta',
+                                    [params], self._service_ver, context)
+
+    def export_metagenome_as_gff(self, params, context=None):
+        """
+        :param params: instance of type "ExportParams" (input and output
+           structure functions for standard downloaders) -> structure:
+           parameter "input_ref" of String
+        :returns: instance of type "ExportOutput" -> structure: parameter
+           "shock_id" of String
+        """
+        return self._client.run_job('GenomeFileUtil.export_metagenome_as_gff',
                                     [params], self._service_ver, context)
 
     def fasta_gff_to_genome(self, params, context=None):
@@ -429,7 +440,7 @@ class GenomeFileUtil(object):
            String, parameter "eco" of String, parameter "ontologies_present"
            of mapping from String to mapping from String to String, parameter
            "features" of list of type "Feature" (Structure for a single CDS
-           encoding “gene” of a genome ONLY PUT GENES THAT HAVE A
+           encoding ?gene? of a genome ONLY PUT GENES THAT HAVE A
            CORRESPONDING CDS IN THIS ARRAY NOTE: Sequence is optional.
            Ideally we can keep it in here, but Recognize due to space
            constraints another solution may be needed. We may want to add
@@ -788,6 +799,28 @@ class GenomeFileUtil(object):
            parameter "metagenome_ref" of String
         """
         return self._client.run_job('GenomeFileUtil.ws_obj_gff_to_metagenome',
+                                    [params], self._service_ver, context)
+
+    def update_taxon_assignments(self, params, context=None):
+        """
+        Add, replace, or remove taxon assignments for a Genome object.
+        :param params: instance of type "UpdateTaxonAssignmentsParams"
+           (Parameters for the update_taxon_assignments function. Fields:
+           workspace_id: a workspace UPA of a Genome object
+           taxon_assignments: an optional mapping of assignments to add or
+           replace. This will perform a merge on the existing assignments.
+           Any new assignments are added, while any existing assignments are
+           replaced. remove_assignments: an optional list of assignment names
+           to remove. @optional taxon_assignments remove_assignments) ->
+           structure: parameter "workspace_id" of Long, parameter "object_id"
+           of Long, parameter "taxon_assignments" of mapping from String to
+           String, parameter "remove_assignments" of list of String
+        :returns: instance of type "UpdateTaxonAssignmentsResult" (Result of
+           the update_taxon_assignments function. Fields: ws_obj_ref: a
+           workspace UPA of a Genome object) -> structure: parameter
+           "ws_obj_ref" of String
+        """
+        return self._client.run_job('GenomeFileUtil.update_taxon_assignments',
                                     [params], self._service_ver, context)
 
     def status(self, context=None):

@@ -25,7 +25,7 @@
 }, {
   "module_name" : "GenomeFileUtil",
   "type" : "sdk",
-  "version_tag" : "dev"
+  "version_tag" : "release"
 }, {
   "module_name" : "KBaseFeatureValues",
   "type" : "sdk",
