@@ -29,8 +29,8 @@
 				"KBaseGenomes.Genome","KBaseSearch.GenomeSet"
 			]
 		},
-		"optional" : false,
-		"advanced" : false,
+		"optional" : true,
+		"advanced" : true,
 		"allow_multiple" : true
     },
     {
