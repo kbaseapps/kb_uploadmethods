@@ -65,6 +65,6 @@ parameters :
 
 description : |
     <p> Import a Interleaved FASTQ file from your staging area into your Narrative as an Assembly data object.
-    Please see the <a href="https://docs.kbase.us/data/upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
+    Please see the <a href="https://docs.kbase.us/data/upload-download-guide/" target="_blank">Data Upload/Download Guide</a> for more information. </p>
 
 technical-description : none

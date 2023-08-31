@@ -1,5 +1,9 @@
 ###Release Notes
 
+**1.0.59**
+modify links to all have `target="_blank"` for consistency (some did, many didn't).  
+update links to the docs site for uploading and downloading data.  
+
 **1.0.58**
 added new apps and utilities to support sequence set import.
 
