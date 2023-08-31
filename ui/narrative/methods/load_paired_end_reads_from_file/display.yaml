@@ -64,6 +64,6 @@ parameters :
 
 description : |
     <p> Import Paired-End Reads from Staging Area
-    Please see the <a href="http://kbase.us/data-upload-download-guide/">Data Upload/Download Guide</a> for more information. </p>
+    Please see the <a href="https://docs.kbase.us/data/upload-download-guide/" target="_blank">Data Upload/Download Guide</a> for more information. </p>
 
 technical-description : none

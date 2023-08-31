@@ -54,8 +54,8 @@ parameters :
 description : |
     <p> Import TSV File as Expression Matrix From Staging Area </p><br>
     <p>This uploader enables you to upload a gene expression data matrix in TSV (Tab-Separated Values) format.</p><br>
-    <p> The .tsv file is a tab-delimited text file, with genes down the rows and sample/observations across the columns (see <a href="http://kbase.us/data-upload-download-guide/expression-matrix/"" target="_blank">http://kbase.us/data-upload-download-guide/expression-matrix/</a> for more information). Make sure the first label in the first column
+    <p> The .tsv file is a tab-delimited text file, with genes down the rows and sample/observations across the columns (see <a href="https://docs.kbase.us/data/upload-download-guide/expression-matrix" target="_blank">https://docs.kbase.us/data/upload-download-guide/expression-matrix</a> for more information). Make sure the first label in the first column
     is "gene-id" followed by tab-delimited labels for samples. Each row (gene) should have an identifier (in green) that always goes in the first column. Each column
     (sample) should have a label (in blue) that is always in the first row. The remaining cells in the table contain expression values for the appropriate gene and sample.
     Be sure to exclude gene features for which all expressions are missing or are the same for all the conditions/samples.  See the
-    <a href="http://kbase.us/data-upload-download-guide/" target="_blank">Data Upload and Download Guide</a> for more information about formatting your expression data file.</p>
+    <a href="https://docs.kbase.us/data/upload-download-guide/" target="_blank">Data Upload and Download Guide</a> for more information about formatting your expression data file.</p>

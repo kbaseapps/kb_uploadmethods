@@ -58,13 +58,13 @@ parameter-groups :
         short-hint : SRA file URL and output Reads file name.
 
 description : |
-    <p>This App allows the user to load SRA format read libraries directly into the workspace from sources on the web. In addition to standard HTTP and anonymous FTP links, the user may also obtain files from Google drive and Dropbox links. Please see the <a href="http://kbase.us/data-upload-download-guide/short-reads//">FASTQ/SRA Reads Data Upload/Download Guide</a> for more information about SRA reads libraries.</p>
+    <p>This App allows the user to load SRA format read libraries directly into the workspace from sources on the web. In addition to standard HTTP and anonymous FTP links, the user may also obtain files from Google drive and Dropbox links. Please see the <a href="https://docs.kbase.us/data/upload-download-guide/reads" target="_blank">FASTQ/SRA Reads Data Upload/Download Guide</a> for more information about SRA reads libraries.</p>
 
     <p><strong>Using the app</strong><br>The user must inform KBase about the nature of the URL link by selecting one of the choices in the “URL Type” pulldown menu.  “Direct” means the link is a standard WWW URL, “FTP link” means anonymous FTP, and “Dropbox” and “Google Drive” Public Shared Links are for shared files in those two sources (see below for more instructions in those two cases).</p>
 
     <p> Once the link type is selected, the user can enter one or more URL links of that type. For each link, hit the “+” button to open a new sub-panel for the link. In each sub-panel, mandatory or required entries are indicated by a red vertical bar on the right. The first entry field takes the actual web link URL (by typing or pasting). The second is the object name you want to give to the reads object once it is loaded into KBase. The third mandatory field is a checkbox indicating whether or not the reads belong to a single genome. The remaining optional information are metadata describing the reads. More detail can be found under the hints for each field.</p>
 
-    <p>If your reads are in a publicly accessible URL, you can directly import the reads into your Narrative using either this App, the <a href=”https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/load_paired_end_reads_from_URL/release”>Import Paired-End Reads from Web</a> App, or the <a href=”https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/load_single_end_reads_from_URL/release”>Import Single-End Reads from Web</a> Apps.</p>
+    <p>If your reads are in a publicly accessible URL, you can directly import the reads into your Narrative using either this App, the <a href=”https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/load_paired_end_reads_from_URL/release” target="_blank">Import Paired-End Reads from Web</a> App, or the <a href=”https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/load_single_end_reads_from_URL/release” target="_blank">Import Single-End Reads from Web</a> Apps.</p>
 
     <p><u>How to Use a ‘Google Drive Public Shared Link’</u><br>In the source location in Google Drive:
       <ol>

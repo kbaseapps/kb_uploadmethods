@@ -46,9 +46,9 @@ parameter-groups :
         short-hint : FASTQ file URL and output Reads file name.
 
 description : |
-    <p>This App allows users to load FASTQ format single-end read libraries directly into the workspace from sources on the web. In addition to standard HTTP and anonymous FTP links, the user may also obtain files from Google drive and Dropbox links. Please see the <a href="http://kbase.us/data-upload-download-guide/short-reads//">FASTQ/SRA Reads Data Upload/Download Guide</a> for more information.</p>
+    <p>This App allows users to load FASTQ format single-end read libraries directly into the workspace from sources on the web. In addition to standard HTTP and anonymous FTP links, the user may also obtain files from Google drive and Dropbox links. Please see the <a href="https://docs.kbase.us/data/upload-download-guide/reads" target="_blank">FASTQ/SRA Reads Data Upload/Download Guide</a> for more information.</p>
 
-    <p>If your reads are in a publicly accessible URL, you can  directly import the reads into your Narrative using either this App, the <a href=”https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/load_paired_end_reads_from_URL/release”>Import Paired-End Reads from Web</a> App, or the <a href=”https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/import_sra_as_reads_from_web/release”>Import SRA File as Reads from Web</a>App.</p>
+    <p>If your reads are in a publicly accessible URL, you can  directly import the reads into your Narrative using either this App, the <a href=”https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/load_paired_end_reads_from_URL/release” target="_blank">Import Paired-End Reads from Web</a> App, or the <a href=”https://narrative.kbase.us/#catalog/apps/kb_uploadmethods/import_sra_as_reads_from_web/release” target="_blank">Import SRA File as Reads from Web</a>App.</p>
 
     <p><u>How to Use a ‘Google Drive Public Shared Link’</u><br>In the source location in Google Drive:
       <ol>
